@@ -1,0 +1,9 @@
+domain: KINH DOANH
+description: Dữ liệu bán hàng, doanh số, kênh phân phối, đại lý và thị trường
+business_objective: Tăng trưởng doanh số, mở rộng thị trường và tối ưu kênh phân phối
+owner: pham-minh-hoang
+technical_owner: pham-viet-hung
+tags:
+  - Gold
+  - Internal
+  - CRM

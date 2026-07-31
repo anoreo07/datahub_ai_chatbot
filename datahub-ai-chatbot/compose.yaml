@@ -1,0 +1,137 @@
+x-opensearch-config: &opensearch-config
+  discovery.type: single-node
+  DISABLE_SECURITY_PLUGIN: "true"
+  OPENSEARCH_JAVA_OPTS: "-Xms512m -Xmx512m"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: chatbot
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - chatbot-network
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - chatbot-network
+    restart: unless-stopped
+
+  opensearch:
+    image: opensearchproject/opensearch:2.15.0
+    environment:
+      <<: *opensearch-config
+    ports:
+      - "9201:9200"
+    volumes:
+      - opensearch_data:/usr/share/opensearch/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "-s", "http://localhost:9200/_cluster/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+    networks:
+      - chatbot-network
+    mem_limit: 1g
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres:5432/chatbot
+      REDIS_URL: redis://redis:6379/0
+      OPENSEARCH_URL: http://opensearch:9200
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      opensearch:
+        condition: service_healthy
+    networks:
+      - chatbot-network
+      - datahub_network
+    restart: unless-stopped
+
+  sync-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: python -m workers.sync_worker
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres:5432/chatbot
+      REDIS_URL: redis://redis:6379/0
+      OPENSEARCH_URL: http://opensearch:9200
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - chatbot-network
+      - datahub_network
+    restart: unless-stopped
+
+  indexing-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: python -m workers.indexing_worker
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres:5432/chatbot
+      REDIS_URL: redis://redis:6379/0
+      OPENSEARCH_URL: http://opensearch:9200
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      opensearch:
+        condition: service_healthy
+    networks:
+      - chatbot-network
+      - datahub_network
+    restart: unless-stopped
+
+
+volumes:
+  postgres_data:
+  redis_data:
+  opensearch_data:
+
+networks:
+  chatbot-network:
+    driver: bridge
+  datahub_network:
+    external: true

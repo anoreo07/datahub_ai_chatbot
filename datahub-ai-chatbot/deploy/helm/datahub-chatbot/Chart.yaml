@@ -1,0 +1,17 @@
+apiVersion: v2
+name: datahub-chatbot
+description: AI Chatbot for DataHub – RAG-based natural language query for DataHub metadata
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+keywords:
+  - datahub
+  - chatbot
+  - rag
+  - ai
+home: https://github.com/example/datahub-ai-chatbot
+sources:
+  - https://github.com/example/datahub-ai-chatbot
+maintainers:
+  - name: DataHub AI Team
+    email: team@example.com

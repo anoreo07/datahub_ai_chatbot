@@ -1,0 +1,10 @@
+domain: TÀI CHÍNH
+description: Dữ liệu tài chính kế toán, chi phí sản xuất, doanh thu, quản lý ngân sách và báo cáo tài chính
+business_objective: Đảm bảo tính chính xác của báo cáo tài chính, kiểm soát chi phí và tối ưu dòng tiền
+owner: tran-thi-huong
+technical_owner: le-hai-nam
+tags:
+  - Finance
+  - Gold
+  - Critical
+  - Confidential

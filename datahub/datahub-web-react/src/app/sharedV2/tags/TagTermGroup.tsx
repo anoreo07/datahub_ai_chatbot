@@ -1,0 +1,364 @@
+import { Text } from '@components';
+import { Plus } from '@phosphor-icons/react/dist/csr/Plus';
+import { Typography } from 'antd';
+import React, { useState } from 'react';
+import Highlight from 'react-highlighter';
+import { useTranslation } from 'react-i18next';
+import styled, { useTheme } from 'styled-components';
+
+import { EMPTY_MESSAGES } from '@app/entity/shared/constants';
+import AddTagTerm from '@app/sharedV2/tags/AddTagTerm';
+import { DomainLink } from '@app/sharedV2/tags/DomainLink';
+import Tag from '@app/sharedV2/tags/tag/Tag';
+import Term from '@app/sharedV2/tags/term/Term';
+import { useEntityRegistry } from '@app/useEntityRegistry';
+import { Tooltip } from '@src/alchemy-components';
+
+import { Domain as DomainEntity, EntityType, GlobalTags, GlossaryTerms } from '@types';
+
+type Props = {
+    numberOfTags?: number;
+    directTags?: GlobalTags | null;
+    uneditableTags?: GlobalTags | null;
+    editableTags?: GlobalTags | null;
+    numberOfTerms?: number;
+    directGlossaryTerms?: GlossaryTerms | null;
+    editableGlossaryTerms?: GlossaryTerms | null;
+    uneditableGlossaryTerms?: GlossaryTerms | null;
+    domain?: DomainEntity | undefined | null;
+    canRemove?: boolean;
+    canAddTag?: boolean;
+    canAddTerm?: boolean;
+    showEmptyMessage?: boolean;
+    buttonProps?: Record<string, unknown>;
+    onOpenModal?: () => void;
+    maxShow?: number;
+    entityUrn?: string;
+    entityType?: EntityType;
+    entitySubresource?: string;
+    highlightText?: string;
+    fontSize?: number;
+    refetch?: () => Promise<any>;
+    readOnly?: boolean;
+    showOneAndCount?: boolean;
+    showAddButton?: boolean;
+};
+
+const NoElementButton = styled.div`
+    :not(:last-child) {
+        margin-right: 8px;
+    }
+
+    margin: 0px;
+    padding: 0px;
+    flex-basis: 100%;
+    color: ${(props) => props.theme.colors.text};
+
+    :hover {
+        cursor: pointer;
+        color: ${(props) => props.theme.colors.hyperlinks};
+    }
+`;
+const TagTermWrapper = styled.div<{ $showOneAndCount?: boolean }>`
+    display: flex;
+    flex-wrap: ${(props) => (!props.$showOneAndCount ? 'wrap' : '')};
+    align-items: center;
+    row-gap: 4px;
+    column-gap: 4px;
+    max-width: 100%;
+`;
+
+const TagText = styled.span`
+    color: ${(props) => props.theme.colors.text};
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 8px;
+`;
+
+const StyledPlusIcon = styled(Plus).attrs({ size: 10, weight: 'bold' })`
+    margin-right: 8px;
+`;
+
+const EmptyText = styled(Text)`
+    && {
+        margin-right: 8px;
+    }
+`;
+
+const Count = styled(Typography.Text)`
+    color: ${(props) => props.theme.colors.text};
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 24px;
+    overflow: hidden;
+    white-space: nowrap;
+`;
+
+const AddText = styled.span`
+    color: ${(props) => props.theme.colors.text};
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 16px;
+
+    :hover {
+        color: ${(props) => props.theme.colors.hyperlinks};
+    }
+`;
+
+export default function TagTermGroup({
+    numberOfTags,
+    directTags,
+    uneditableTags,
+    editableTags,
+    canRemove,
+    canAddTag,
+    canAddTerm,
+    showEmptyMessage,
+    buttonProps,
+    onOpenModal,
+    maxShow,
+    numberOfTerms,
+    directGlossaryTerms,
+    uneditableGlossaryTerms,
+    editableGlossaryTerms,
+    domain,
+    entityUrn,
+    entityType,
+    entitySubresource,
+    highlightText,
+    fontSize,
+    refetch,
+    readOnly,
+    showOneAndCount,
+    showAddButton = true,
+}: Props) {
+    const { t } = useTranslation('shared.tags');
+    const theme = useTheme();
+    const entityRegistry = useEntityRegistry();
+    const [showAddModal, setShowAddModal] = useState(false);
+    const [addModalType, setAddModalType] = useState(EntityType.Tag);
+    const highlightMatchStyle = { background: theme.colors.bgHighlight, padding: '0' };
+
+    const tagsEmpty = !directTags?.tags?.length && !editableTags?.tags?.length && !uneditableTags?.tags?.length;
+
+    const termsEmpty =
+        !directGlossaryTerms?.terms?.length &&
+        !editableGlossaryTerms?.terms?.length &&
+        !uneditableGlossaryTerms?.terms?.length;
+
+    const tagsLength = numberOfTags ?? 0;
+    const termsLength = numberOfTerms ?? 0;
+
+    let renderedTags = 0;
+    let renderedTerms = 0;
+
+    return (
+        <TagTermWrapper $showOneAndCount={showOneAndCount}>
+            {domain && (
+                <DomainLink domain={domain} name={entityRegistry.getDisplayName(EntityType.Domain, domain) || ''} />
+            )}
+            {uneditableGlossaryTerms?.terms?.map((term) => {
+                renderedTerms += 1;
+                if (showOneAndCount && renderedTerms === 2) {
+                    return <Count>{`+${termsLength - 1}`}</Count>;
+                }
+                if (showOneAndCount && renderedTerms > 2) return null;
+                if (maxShow && renderedTerms === maxShow + 1)
+                    return (
+                        <TagText>
+                            <Highlight matchStyle={highlightMatchStyle} search={highlightText}>
+                                {uneditableGlossaryTerms?.terms
+                                    ? `+${uneditableGlossaryTerms?.terms?.length - maxShow}`
+                                    : null}
+                            </Highlight>
+                        </TagText>
+                    );
+                if (maxShow && renderedTerms > maxShow) return null;
+
+                return (
+                    <Term
+                        term={term}
+                        entityUrn={entityUrn}
+                        entitySubresource={entitySubresource}
+                        canRemove={false}
+                        readOnly={readOnly}
+                        highlightText={highlightText}
+                        onOpenModal={onOpenModal}
+                        refetch={refetch}
+                        fontSize={fontSize}
+                        showOneAndCount={showOneAndCount}
+                    />
+                );
+            })}
+            {directGlossaryTerms?.terms?.map((term) => {
+                renderedTerms += 1;
+                if (showOneAndCount && renderedTerms === 2) {
+                    return <Count>{`+${termsLength - 1}`}</Count>;
+                }
+                if (showOneAndCount && renderedTerms > 2) return null;
+                return (
+                    <Term
+                        term={term}
+                        entityUrn={entityUrn}
+                        entitySubresource={undefined}
+                        canRemove={canRemove}
+                        readOnly={readOnly}
+                        highlightText={highlightText}
+                        onOpenModal={onOpenModal}
+                        refetch={refetch}
+                        fontSize={fontSize}
+                        showOneAndCount={showOneAndCount}
+                    />
+                );
+            })}
+            {editableGlossaryTerms?.terms?.map((term) => {
+                renderedTerms += 1;
+                if (showOneAndCount && renderedTerms === 2) {
+                    return <Count>{`+${termsLength - 1}`}</Count>;
+                }
+                if (showOneAndCount && renderedTerms > 2) return null;
+                return (
+                    <Term
+                        term={term}
+                        entityUrn={entityUrn}
+                        entitySubresource={entitySubresource}
+                        canRemove={canRemove}
+                        readOnly={readOnly}
+                        highlightText={highlightText}
+                        onOpenModal={onOpenModal}
+                        refetch={refetch}
+                        fontSize={fontSize}
+                        showOneAndCount={showOneAndCount}
+                    />
+                );
+            })}
+
+            {/* uneditable tags are provided by ingestion pipelines or merged in from v2 fields  */}
+
+            {uneditableTags?.tags?.map((tag) => {
+                renderedTags += 1;
+                if (showOneAndCount && renderedTags === 2) {
+                    return <Count>{`+${tagsLength - 1}`}</Count>;
+                }
+                if (showOneAndCount && renderedTags > 2) return null;
+                if (maxShow && renderedTags === maxShow + 1)
+                    return (
+                        <TagText>{uneditableTags?.tags ? `+${uneditableTags?.tags?.length - maxShow}` : null}</TagText>
+                    );
+                if (maxShow && renderedTags > maxShow) return null;
+
+                return (
+                    <Tooltip title={t('managedTagTooltip')}>
+                        <Tag
+                            tag={tag}
+                            entityUrn={entityUrn}
+                            entitySubresource={entitySubresource}
+                            canRemove={false}
+                            readOnly={readOnly}
+                            highlightText={highlightText}
+                            onOpenModal={onOpenModal}
+                            refetch={refetch}
+                            fontSize={fontSize}
+                            showOneAndCount={showOneAndCount}
+                        />
+                    </Tooltip>
+                );
+            })}
+            {directTags?.tags?.map((tag) => {
+                renderedTags += 1;
+                if (showOneAndCount && renderedTags === 2) {
+                    return <Count>{`+${tagsLength - 1}`}</Count>;
+                }
+                if (showOneAndCount && renderedTags > 2) return null;
+                if (maxShow && renderedTags > maxShow) return null;
+
+                return (
+                    <Tag
+                        tag={tag}
+                        entityUrn={entityUrn}
+                        entitySubresource={undefined}
+                        canRemove={canRemove}
+                        readOnly={readOnly}
+                        highlightText={highlightText}
+                        onOpenModal={onOpenModal}
+                        refetch={refetch}
+                        fontSize={fontSize}
+                        showOneAndCount={showOneAndCount}
+                    />
+                );
+            })}
+            {/* editable tags may be provided by ingestion pipelines or the UI */}
+            {editableTags?.tags?.map((tag) => {
+                renderedTags += 1;
+                if (showOneAndCount && renderedTags === 2) {
+                    return <Count>{`+${tagsLength - 1}`}</Count>;
+                }
+                if (showOneAndCount && renderedTags > 2) return null;
+                if (maxShow && renderedTags > maxShow) return null;
+
+                return (
+                    <Tag
+                        tag={tag}
+                        entityUrn={entityUrn}
+                        entitySubresource={entitySubresource}
+                        canRemove={canRemove}
+                        readOnly={readOnly}
+                        highlightText={highlightText}
+                        onOpenModal={onOpenModal}
+                        refetch={refetch}
+                        fontSize={fontSize}
+                        showOneAndCount={showOneAndCount}
+                    />
+                );
+            })}
+            {showEmptyMessage && canAddTag && tagsEmpty && (
+                /* eslint-disable i18next/no-literal-string -- empty-state text lives in EMPTY_MESSAGES constants (out of scope); only the trailing "." is local punctuation */
+                <EmptyText type="span" color="textSecondary">
+                    {EMPTY_MESSAGES.tags.title}.
+                </EmptyText>
+                /* eslint-enable i18next/no-literal-string */
+            )}
+            {showEmptyMessage && canAddTerm && termsEmpty && (
+                /* eslint-disable i18next/no-literal-string -- empty-state text lives in EMPTY_MESSAGES constants (out of scope); only the trailing "." is local punctuation */
+                <EmptyText type="span" color="textSecondary">
+                    {EMPTY_MESSAGES.terms.title}.
+                </EmptyText>
+                /* eslint-enable i18next/no-literal-string */
+            )}
+            {canAddTag && !readOnly && showAddButton && (
+                <NoElementButton
+                    onClick={() => {
+                        setAddModalType(EntityType.Tag);
+                        setShowAddModal(true);
+                    }}
+                    {...buttonProps}
+                >
+                    <StyledPlusIcon />
+                    <AddText data-testid="schema-field-add-tags-button">{t('addTagsButtonLower')}</AddText>
+                </NoElementButton>
+            )}
+            {canAddTerm && !readOnly && showAddButton && (
+                <NoElementButton
+                    onClick={() => {
+                        setAddModalType(EntityType.GlossaryTerm);
+                        setShowAddModal(true);
+                    }}
+                    {...buttonProps}
+                >
+                    <StyledPlusIcon />
+                    <AddText data-testid="schema-field-add-terms-button">{t('addTermsButtonLower')}</AddText>
+                </NoElementButton>
+            )}
+            <AddTagTerm
+                onOpenModal={onOpenModal}
+                entityUrn={entityUrn}
+                entityType={entityType}
+                entitySubresource={entitySubresource}
+                showAddModal={showAddModal}
+                setShowAddModal={setShowAddModal}
+                addModalType={addModalType}
+                refetch={refetch}
+            />
+        </TagTermWrapper>
+    );
+}

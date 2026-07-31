@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: full-sync
+  namespace: datahub-chatbot
+spec:
+  schedule: "0 2 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: sync
+              image: registry.example.com/datahub-ai-chatbot:latest
+              command: ["python", "-m", "scripts.full_sync"]
+              envFrom:
+                - configMapRef:
+                    name: chatbot-config
+                - secretRef:
+                    name: chatbot-secret
+          restartPolicy: OnFailure

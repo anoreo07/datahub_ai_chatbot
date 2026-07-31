@@ -1,0 +1,1449 @@
+datasets:
+  - name: dim_project
+    description: Danh mục dự án phát triển xe của VinFast
+    domain: Phát triển xe (R&D)
+    platform: Redshift
+    tags:
+      - project
+      - rnd
+      - master_data
+    columns:
+      - name: project_id
+        description: Mã dự án
+        data_type: varchar
+        nullable: false
+        business_definition: Mã duy nhất cho mỗi dự án phát triển sản phẩm mới
+        example: PRJ-VFE-001
+      - name: project_name
+        description: Tên dự án
+        data_type: varchar
+        nullable: false
+        business_definition: Tên mã của dự án phát triển xe
+        example: Dự án VF 9 nâng cấp 2026
+      - name: project_type
+        description: Loại dự án
+        data_type: varchar
+        nullable: false
+        business_definition: Phân loại (New Model/Facelift/Model Year/Engine Variant)
+        example: Facelift
+      - name: product_line
+        description: Dòng sản phẩm
+        data_type: varchar
+        nullable: true
+        business_definition: Dòng xe áp dụng (VF 3, VF 5, VF 6, VF 7, VF 8, VF 9)
+        example: VF 9
+      - name: program_manager
+        description: Quản lý chương trình
+        data_type: varchar
+        nullable: true
+        business_definition: Mã nhân viên quản lý dự án
+        example: EMP00123
+      - name: start_date
+        description: Ngày bắt đầu
+        data_type: date
+        nullable: false
+        business_definition: Ngày dự án chính thức khởi động
+        example: 2025-01-01
+      - name: planned_end_date
+        description: Ngày kết thúc dự kiến
+        data_type: date
+        nullable: true
+        business_definition: Ngày kết thúc dự án theo kế hoạch
+        example: 2025-12-31
+      - name: actual_end_date
+        description: Ngày kết thúc thực tế
+        data_type: date
+        nullable: true
+        business_definition: Ngày dự án hoàn thành thực tế
+        example: null
+      - name: budget
+        description: Ngân sách dự án
+        data_type: decimal
+        nullable: true
+        business_definition: Tổng ngân sách được phê duyệt cho dự án (USD)
+        example: 25000000.00
+      - name: budget_consumed
+        description: Ngân sách đã sử dụng
+        data_type: decimal
+        nullable: true
+        business_definition: Ngân sách đã giải ngân đến thời điểm hiện tại
+        example: 15000000.00
+      - name: project_status
+        description: Trạng thái dự án
+        data_type: varchar
+        nullable: false
+        business_definition: Trạng thái (Initiated/Planning/Execution/Testing/Closed/Cancelled)
+        example: Execution
+      - name: gate_review_level
+        description: Mức gate review
+        data_type: varchar
+        nullable: true
+        business_definition: Giai đoạn phê duyệt dự án (Gate 0 đến Gate 7)
+        example: Gate 4
+      - name: risk_level
+        description: Mức độ rủi ro
+        data_type: varchar
+        nullable: true
+        business_definition: Đánh giá rủi ro tổng thể dự án (Low/Medium/High/Critical)
+        example: Medium
+    owners:
+      - RD_PROJECT_MGMT
+    refresh_frequency: Daily
+
+  - name: dim_platform
+    description: Danh mục nền tảng khung gầm xe điện
+    domain: Phát triển xe (R&D)
+    platform: Redshift
+    tags:
+      - platform
+      - chassis
+      - architecture
+    columns:
+      - name: platform_id
+        description: Mã nền tảng
+        data_type: varchar
+        nullable: false
+        business_definition: Mã duy nhất cho mỗi nền tảng khung gầm xe
+        example: PLT-B-SUV
+      - name: platform_name
+        description: Tên nền tảng
+        data_type: varchar
+        nullable: false
+        business_definition: Tên mã nền tảng phát triển
+        example: Nền tảng B-SUV điện
+      - name: vehicle_type
+        description: Loại xe
+        data_type: varchar
+        nullable: true
+        business_definition: Phân loại xe sử dụng nền tảng (SUV/Sedan/Hatchback/MPV/Pickup)
+        example: SUV
+      - name: segment
+        description: Phân khúc
+        data_type: varchar
+        nullable: true
+        business_definition: Phân khúc xe (A/B/C/D/E)
+        example: B
+      - name: wheelbase_mm
+        description: Chiều dài cơ sở
+        data_type: int
+        nullable: true
+        business_definition: Khoảng cách giữa 2 trục bánh xe (mm)
+        example: 2700
+      - name: battery_format
+        description: Định dạng pin
+        data_type: varchar
+        nullable: true
+        business_definition: Loại pin sử dụng trên nền tảng (LFP/NCM/Blade/Pouch/Cylindrical)
+        example: NCM 21700
+      - name: motor_placement
+        description: Vị trí motor
+        data_type: varchar
+        nullable: true
+        business_definition: Cấu hình motor (FWD/RWD/AWD/Dual Motor/Tri Motor)
+        example: AWD
+      - name: max_power_kw
+        description: Công suất tối đa
+        data_type: int
+        nullable: true
+        business_definition: Công suất motor tối đa nền tảng hỗ trợ (kW)
+        example: 300
+      - name: max_battery_kwh
+        description: Dung lượng pin tối đa
+        data_type: decimal
+        nullable: true
+        business_definition: Dung lượng pin tối đa nền tảng hỗ trợ (kWh)
+        example: 123.00
+      - name: platform_status
+        description: Trạng thái nền tảng
+        data_type: varchar
+        nullable: true
+        business_definition: Trạng thái (Active/Deprecated/Under Development)
+        example: Active
+      - name: launch_date
+        description: Ngày ra mắt
+        data_type: date
+        nullable: true
+        business_definition: Ngày nền tảng đầu tiên được ra mắt
+        example: 2024-03-15
+      - name: derived_models
+        description: Số mẫu xe phát triển
+        data_type: int
+        nullable: true
+        business_definition: Số mẫu xe đã và đang phát triển trên nền tảng này
+        example: 3
+    owners:
+      - RD_VEHICLE_ARCH
+    refresh_frequency: Weekly
+
+  - name: dim_engineering_change
+    description: Danh mục thay đổi kỹ thuật trên sản phẩm
+    domain: Phát triển xe (R&D)
+    platform: Redshift
+    tags:
+      - engineering
+      - change
+      - ecc
+    columns:
+      - name: change_id
+        description: Mã thay đổi kỹ thuật
+        data_type: varchar
+        nullable: false
+        business_definition: Mã duy nhất cho mỗi đề xuất thay đổi kỹ thuật (ECO/ECN)
+        example: ECO-2025-00456
+      - name: project_id
+        description: Mã dự án
+        data_type: varchar
+        nullable: false
+        business_definition: Mã dự án áp dụng thay đổi kỹ thuật
+        example: PRJ-VFE-001
+      - name: change_type
+        description: Loại thay đổi
+        data_type: varchar
+        nullable: false
+        business_definition: Phân loại (Design Change/Process Change/Material Change/Supplier Change)
+        example: Design Change
+      - name: component_code
+        description: Mã linh kiện thay đổi
+        data_type: varchar
+        nullable: false
+        business_definition: Mã linh kiện bị ảnh hưởng bởi thay đổi
+        example: BAT-PACK-VF9-001
+      - name: change_reason
+        description: Lý do thay đổi
+        data_type: varchar
+        nullable: true
+        business_definition: Lý do thực hiện thay đổi (Cost Reduction/Quality Improvement/Regulatory/New Feature)
+        example: Quality Improvement
+      - name: description
+        description: Mô tả thay đổi
+        data_type: varchar
+        nullable: true
+        business_definition: Mô tả chi tiết nội dung thay đổi kỹ thuật
+        example: Thay đổi cell pin từ NCM 622 sang NCM 811 để tăng mật độ năng lượng
+      - name: change_owner
+        description: Người phụ trách
+        data_type: varchar
+        nullable: true
+        business_definition: Mã nhân viên kỹ thuật phụ trách thay đổi
+        example: EMP00678
+      - name: priority
+        description: Mức ưu tiên
+        data_type: varchar
+        nullable: true
+        business_definition: Mức độ ưu tiên (Critical/High/Medium/Low)
+        example: High
+      - name: submitted_date
+        description: Ngày đề xuất
+        data_type: date
+        nullable: false
+        business_definition: Ngày đề xuất thay đổi được gửi lên
+        example: 2025-04-10
+      - name: approval_date
+        description: Ngày phê duyệt
+        data_type: date
+        nullable: true
+        business_definition: Ngày thay đổi được phê duyệt
+        example: 2025-05-01
+      - name: implementation_date
+        description: Ngày triển khai
+        data_type: date
+        nullable: true
+        business_definition: Ngày thay đổi được áp dụng vào sản xuất
+        example: 2025-06-15
+      - name: change_status
+        description: Trạng thái
+        data_type: varchar
+        nullable: false
+        business_definition: Trạng thái của ECO (Draft/Submitted/Under Review/Approved/Implemented/Cancelled)
+        example: Approved
+      - name: cost_impact
+        description: Tác động chi phí
+        data_type: decimal
+        nullable: true
+        business_definition: Thay đổi chi phí trên mỗi đơn vị sản phẩm (USD)
+        example: -15.50
+      - name: phase_in_method
+        description: Phương thức áp dụng
+        data_type: varchar
+        nullable: true
+        business_definition: Cách thức áp dụng thay đổi (Running Change/Cut-in VIN/Phase-out)
+        example: Cut-in VIN
+      - name: affected_models
+        description: Mẫu xe bị ảnh hưởng
+        data_type: varchar
+        nullable: true
+        business_definition: Danh sách mẫu xe bị ảnh hưởng bởi thay đổi
+        example: VF 9, VF 8
+    owners:
+      - RD_ENGINEERING
+    refresh_frequency: Daily
+
+  - name: fact_design_release
+    description: Phát hành thiết kế bản vẽ và tài liệu kỹ thuật
+    domain: Phát triển xe (R&D)
+    platform: Redshift
+    tags:
+      - design
+      - release
+      - drawing
+    columns:
+      - name: release_id
+        description: Mã phát hành
+        data_type: varchar
+        nullable: false
+        business_definition: Mã duy nhất cho mỗi lần phát hành thiết kế
+        example: DR-VF9-2025-001
+      - name: drawing_number
+        description: Số bản vẽ
+        data_type: varchar
+        nullable: false
+        business_definition: Số hiệu bản vẽ kỹ thuật được phát hành
+        example: DWG-VF9-BAT-00123
+      - name: project_id
+        description: Mã dự án
+        data_type: varchar
+        nullable: false
+        business_definition: Mã dự án liên quan đến phát hành
+        example: PRJ-VFE-001
+      - name: revision
+        description: Phiên bản
+        data_type: varchar
+        nullable: false
+        business_definition: Số phiên bản của bản vẽ hoặc tài liệu
+        example: Rev C
+      - name: document_type
+        description: Loại tài liệu
+        data_type: varchar
+        nullable: true
+        business_definition: Phân loại (3D Model/2D Drawing/Specification/Report/Schematic)
+        example: 2D Drawing
+      - name: release_date
+        description: Ngày phát hành
+        data_type: date
+        nullable: false
+        business_definition: Ngày phát hành chính thức bản vẽ lên hệ thống PLM
+        example: 2025-05-20
+      - name: designed_by
+        description: Người thiết kế
+        data_type: varchar
+        nullable: true
+        business_definition: Mã kỹ sư thiết kế
+        example: EMP00543
+      - name: checked_by
+        description: Người kiểm tra
+        data_type: varchar
+        nullable: true
+        business_definition: Mã kỹ sư kiểm tra thiết kế
+        example: EMP00789
+      - name: approved_by
+        description: Người phê duyệt
+        data_type: varchar
+        nullable: true
+        business_definition: Mã quản lý phê duyệt phát hành
+        example: EMP00123
+      - name: release_status
+        description: Trạng thái phát hành
+        data_type: varchar
+        nullable: false
+        business_definition: Trạng thái (Draft/In Review/Released/Obsolete/Superseded)
+        example: Released
+      - name: plm_system
+        description: Hệ thống PLM
+        data_type: varchar
+        nullable: true
+        business_definition: Hệ thống quản lý vòng đời sản phẩm lưu trữ
+        example: Siemens Teamcenter
+      - name: effective_date
+        description: Ngày hiệu lực
+        data_type: date
+        nullable: true
+        business_definition: Ngày bắt đầu áp dụng bản vẽ vào sản xuất
+        example: 2025-06-01
+    owners:
+      - RD_DESIGN
+    refresh_frequency: Daily
+
+  - name: fact_prototype
+    description: Quản lý nguyên mẫu xe trong quá trình phát triển
+    domain: Phát triển xe (R&D)
+    platform: Redshift
+    tags:
+      - prototype
+      - build
+      - testing
+    columns:
+      - name: prototype_id
+        description: Mã nguyên mẫu
+        data_type: varchar
+        nullable: false
+        business_definition: Mã duy nhất cho mỗi nguyên mẫu xe được chế tạo
+        example: PROTO-VF9-2025-012
+      - name: project_id
+        description: Mã dự án
+        data_type: varchar
+        nullable: false
+        business_definition: Mã dự án phát triển của nguyên mẫu
+        example: PRJ-VFE-001
+      - name: prototype_phase
+        description: Giai đoạn nguyên mẫu
+        data_type: varchar
+        nullable: false
+        business_definition: Phân loại (Alpha/Beta/Pre-Pilot/Pilot/PPAP)
+        example: Beta
+      - name: build_number
+        description: Số lần chế tạo
+        data_type: int
+        nullable: true
+        business_definition: Số thứ tự lần chế tạo nguyên mẫu
+        example: 3
+      - name: vin_number
+        description: Số VIN
+        data_type: varchar
+        nullable: true
+        business_definition: Số nhận dạng xe gán cho nguyên mẫu
+        example: VIN-PROTO-VF9-00012
+      - name: build_date
+        description: Ngày chế tạo
+        data_type: date
+        nullable: false
+        business_definition: Ngày hoàn thành chế tạo nguyên mẫu
+        example: 2025-06-20
+      - name: body_style
+        description: Kiểu thân xe
+        data_type: varchar
+        nullable: true
+        business_definition: Kiểu dáng thân xe nguyên mẫu
+        example: SUV 5 chỗ
+      - name: color
+        description: Màu sắc
+        data_type: varchar
+        nullable: true
+        business_definition: Màu sơn thân xe nguyên mẫu
+        example: Đỏ VinFast
+      - name: battery_type
+        description: Loại pin
+        data_type: varchar
+        nullable: true
+        business_definition: Loại pin trang bị trên nguyên mẫu
+        example: NCM 811 100kWh
+      - name: motor_type
+        description: Loại motor
+        data_type: varchar
+        nullable: true
+        business_definition: Loại motor điện trang bị trên nguyên mẫu
+        example: Motor đồng bộ nam châm vĩnh cửu
+      - name: purpose
+        description: Mục đích chế tạo
+        data_type: varchar
+        nullable: true
+        business_definition: Mục đích của nguyên mẫu (Validation/Durability/Crash/Emissions)
+        example: Validation
+      - name: current_location
+        description: Vị trí hiện tại
+        data_type: varchar
+        nullable: true
+        business_definition: Vị trí lưu giữ nguyên mẫu hiện tại
+        example: Trung tâm thử nghiệm Vũng Tàu
+      - name: prototype_status
+        description: Trạng thái
+        data_type: varchar
+        nullable: false
+        business_definition: Trạng thái (Planned/Building/Completed/In Test/Scrapped/Retired)
+        example: In Test
+      - name: created_at
+        description: Thời gian tạo
+        data_type: timestamp
+        nullable: false
+        business_definition: Thời điểm tạo bản ghi nguyên mẫu
+        example: 2025-05-01 08:00:00
+    owners:
+      - RD_PROTOTYPE
+    refresh_frequency: Daily
+
+  - name: fact_test_result
+    description: Kết quả thử nghiệm xe và linh kiện
+    domain: Phát triển xe (R&D)
+    platform: Redshift
+    tags:
+      - test
+      - result
+      - validation
+    columns:
+      - name: test_result_id
+        description: Mã kết quả thử nghiệm
+        data_type: varchar
+        nullable: false
+        business_definition: Mã duy nhất cho mỗi kết quả thử nghiệm
+        example: TR-VF9-BAT-001
+      - name: prototype_id
+        description: Mã nguyên mẫu
+        data_type: varchar
+        nullable: true
+        business_definition: Mã nguyên mẫu được thử nghiệm
+        example: PROTO-VF9-2025-012
+      - name: component_code
+        description: Mã linh kiện
+        data_type: varchar
+        nullable: true
+        business_definition: Mã linh kiện thử nghiệm (nếu là thử nghiệm linh kiện)
+        example: BAT-PACK-VF9-001
+      - name: test_case_code
+        description: Mã ca thử
+        data_type: varchar
+        nullable: false
+        business_definition: Mã kịch bản thử nghiệm theo tiêu chuẩn
+        example: TC-BAT-DUR-001
+      - name: test_name
+        description: Tên thử nghiệm
+        data_type: varchar
+        nullable: false
+        business_definition: Tên thử nghiệm cụ thể
+        example: Thử nghiệm chu kỳ sạc-xả pin ở nhiệt độ cao
+      - name: test_date
+        description: Ngày thử nghiệm
+        data_type: date
+        nullable: false
+        business_definition: Ngày thực hiện thử nghiệm
+        example: 2025-07-10
+      - name: test_location
+        description: Địa điểm thử
+        data_type: varchar
+        nullable: true
+        business_definition: Phòng thí nghiệm hoặc địa điểm thử nghiệm
+        example: Phòng thử nghiệm pin Lab 1
+      - name: test_duration_hours
+        description: Thời gian thử
+        data_type: decimal
+        nullable: true
+        business_definition: Tổng thời gian thực hiện thử nghiệm (giờ)
+        example: 240.00
+      - name: measured_value
+        description: Giá trị đo được
+        data_type: varchar
+        nullable: true
+        business_definition: Giá trị đo được chính của thử nghiệm
+        example: 95.50
+      - name: unit
+        description: Đơn vị đo
+        data_type: varchar
+        nullable: true
+        business_definition: Đơn vị của giá trị đo
+        example: '%'
+      - name: specification_min
+        description: Giới hạn dưới
+        data_type: varchar
+        nullable: true
+        business_definition: Giá trị tối thiểu yêu cầu của thông số
+        example: 90.00
+      - name: specification_max
+        description: Giới hạn trên
+        data_type: varchar
+        nullable: true
+        business_definition: Giá trị tối đa cho phép của thông số
+        example: 100.00
+      - name: test_result
+        description: Kết quả
+        data_type: varchar
+        nullable: false
+        business_definition: Kết quả đánh giá (Pass/Fail/Inconclusive)
+        example: Pass
+      - name: failure_mode
+        description: Chế độ lỗi
+        data_type: varchar
+        nullable: true
+        business_definition: Mô tả chế độ lỗi nếu kết quả Fail
+        example: null
+      - name: test_engineer
+        description: Kỹ sư thử nghiệm
+        data_type: varchar
+        nullable: true
+        business_definition: Mã kỹ sư chịu trách nhiệm thử nghiệm
+        example: EMP00901
+    owners:
+      - RD_TEST_VALIDATION
+    refresh_frequency: Daily
+
+  - name: dim_specification
+    description: Danh mục thông số kỹ thuật của xe và linh kiện
+    domain: Phát triển xe (R&D)
+    platform: Redshift
+    tags:
+      - specification
+      - technical
+      - parameter
+    columns:
+      - name: spec_id
+        description: Mã thông số
+        data_type: varchar
+        nullable: false
+        business_definition: Mã duy nhất cho mỗi thông số kỹ thuật
+        example: SPEC-BAT-CAP-001
+      - name: spec_code
+        description: Mã thông số kỹ thuật
+        data_type: varchar
+        nullable: false
+        business_definition: Mã thông số kỹ thuật viết tắt theo chuẩn VinFast
+        example: BAT_NOM_CAP
+      - name: spec_name
+        description: Tên thông số
+        data_type: varchar
+        nullable: false
+        business_definition: Tên đầy đủ của thông số kỹ thuật
+        example: Dung lượng pin danh định
+      - name: component_code
+        description: Mã linh kiện
+        data_type: varchar
+        nullable: true
+        business_definition: Mã linh kiện áp dụng thông số
+        example: BAT-PACK-VF9-001
+      - name: model_line
+        description: Dòng xe
+        data_type: varchar
+        nullable: true
+        business_definition: Dòng xe áp dụng thông số
+        example: VF 9
+      - name: unit
+        description: Đơn vị
+        data_type: varchar
+        nullable: true
+        business_definition: Đơn vị đo lường của thông số
+        example: kWh
+      - name: nominal_value
+        description: Giá trị danh định
+        data_type: varchar
+        nullable: true
+        business_definition: Giá trị thiết kế tiêu chuẩn của thông số
+        example: 100.00
+      - name: tolerance_min
+        description: Dung sai dưới
+        data_type: varchar
+        nullable: true
+        business_definition: Giới hạn dung sai dưới của thông số
+        example: -2.00
+      - name: tolerance_max
+        description: Dung sai trên
+        data_type: varchar
+        nullable: true
+        business_definition: Giới hạn dung sai trên của thông số
+        example: 2.00
+      - name: spec_category
+        description: Nhóm thông số
+        data_type: varchar
+        nullable: true
+        business_definition: Nhóm thông số (Hiệu suất/An toàn/Kích thước/Điện/Trọng lượng)
+        example: Điện
+      - name: test_method
+        description: Phương pháp kiểm tra
+        data_type: varchar
+        nullable: true
+        business_definition: Tiêu chuẩn hoặc quy trình kiểm tra thông số
+        example: ISO 12405-4
+      - name: spec_status
+        description: Trạng thái
+        data_type: varchar
+        nullable: true
+        business_definition: Trạng thái của thông số (Active/Draft/Obsolete)
+        example: Active
+      - name: customer_facing
+        description: Hiển thị khách hàng
+        data_type: varchar
+        nullable: true
+        business_definition: Thông số có được công bố cho khách hàng không
+        example: Yes
+    owners:
+      - RD_SYSTEM_ENG
+    refresh_frequency: Daily
+
+  - name: fact_fmea
+    description: Phân tích chế độ lỗi và ảnh hưởng (FMEA)
+    domain: Phát triển xe (R&D)
+    platform: Redshift
+    tags:
+      - fmea
+      - quality
+      - risk
+    columns:
+      - name: fmea_id
+        description: Mã FMEA
+        data_type: varchar
+        nullable: false
+        business_definition: Mã duy nhất cho mỗi bản phân tích FMEA
+        example: FMEA-BAT-2025-001
+      - name: fmea_type
+        description: Loại FMEA
+        data_type: varchar
+        nullable: false
+        business_definition: Phân loại (Design FMEA/Process FMEA/System FMEA)
+        example: Design FMEA
+      - name: component_code
+        description: Mã linh kiện
+        data_type: varchar
+        nullable: false
+        business_definition: Mã linh kiện hoặc hệ thống được phân tích
+        example: BAT-PACK-VF9-001
+      - name: function_description
+        description: Mô tả chức năng
+        data_type: varchar
+        nullable: true
+        business_definition: Mô tả chức năng của bộ phận được phân tích
+        example: Lưu trữ và cung cấp năng lượng điện cho xe
+      - name: failure_mode
+        description: Chế độ lỗi
+        data_type: varchar
+        nullable: false
+        business_definition: Cách thức lỗi có thể xảy ra
+        example: Quá nhiệt pin khi sạc nhanh
+      - name: failure_effect
+        description: Ảnh hưởng của lỗi
+        data_type: varchar
+        nullable: true
+        business_definition: Hậu quả nếu lỗi xảy ra
+        example: Giảm tuổi thọ pin, nguy cơ cháy nổ
+      - name: failure_cause
+        description: Nguyên nhân lỗi
+        data_type: varchar
+        nullable: true
+        business_definition: Nguyên nhân gốc rễ gây ra lỗi
+        example: Thiếu kiểm soát nhiệt độ BMS
+      - name: severity
+        description: Mức độ nghiêm trọng
+        data_type: int
+        nullable: false
+        business_definition: Điểm đánh giá mức độ nghiêm trọng (thang 1-10)
+        example: 9
+      - name: occurrence
+        description: Tần suất xảy ra
+        data_type: int
+        nullable: false
+        business_definition: Điểm đánh giá khả năng xảy ra (thang 1-10)
+        example: 3
+      - name: detection
+        description: Khả năng phát hiện
+        data_type: int
+        nullable: false
+        business_definition: Điểm đánh giá khả năng phát hiện lỗi (thang 1-10)
+        example: 4
+      - name: rpn
+        description: Chỉ số RPN
+        data_type: int
+        nullable: false
+        business_definition: Risk Priority Number = Severity x Occurrence x Detection
+        example: 108
+      - name: recommended_action
+        description: Hành động đề xuất
+        data_type: varchar
+        nullable: true
+        business_definition: Hành động khắc phục đề xuất để giảm RPN
+        example: Bổ sung cảm biến nhiệt và cập nhật thuật toán BMS
+      - name: action_owner
+        description: Người phụ trách
+        data_type: varchar
+        nullable: true
+        business_definition: Mã nhân viên phụ trách hành động khắc phục
+        example: EMP00678
+      - name: rpn_after_action
+        description: RPN sau khắc phục
+        data_type: int
+        nullable: true
+        business_definition: RPN dự kiến sau khi áp dụng biện pháp khắc phục
+        example: 36
+      - name: review_date
+        description: Ngày xem xét
+        data_type: date
+        nullable: false
+        business_definition: Ngày tiến hành phân tích FMEA
+        example: 2025-03-20
+    owners:
+      - RD_QUALITY_ENG
+    refresh_frequency: Daily
+
+  - name: fact_homologation
+    description: Chứng nhận kiểu (Homologation) cho xe điện
+    domain: Phát triển xe (R&D)
+    platform: Redshift
+    tags:
+      - homologation
+      - certification
+      - regulatory
+    columns:
+      - name: homologation_id
+        description: Mã chứng nhận
+        data_type: varchar
+        nullable: false
+        business_definition: Mã duy nhất cho mỗi chứng nhận kiểu
+        example: HOM-VF9-2025-001
+      - name: model_code
+        description: Mã mẫu xe
+        data_type: varchar
+        nullable: false
+        business_definition: Mã sản phẩm của mẫu xe
+        example: VF9-ECO-AWD
+      - name: certifying_body
+        description: Cơ quan chứng nhận
+        data_type: varchar
+        nullable: false
+        business_definition: Tổ chức chứng nhận (VR, TÜV, IDIADA, DEKRA,...)
+        example: Cục Đăng kiểm Việt Nam
+      - name: certificate_number
+        description: Số chứng nhận
+        data_type: varchar
+        nullable: true
+        business_definition: Số hiệu giấy chứng nhận kiểu
+        example: 12345/2025/GCN-TK
+      - name: regulation_type
+        description: Loại quy định
+        data_type: varchar
+        nullable: false
+        business_definition: Tiêu chuẩn áp dụng (UN R100, UN R13, UN R10, QCVN,...)
+        example: UN R100 (Pin xe điện)
+      - name: test_standard
+        description: Tiêu chuẩn thử
+        data_type: varchar
+        nullable: true
+        business_definition: Tiêu chuẩn thử nghiệm cụ thể
+        example: ECE R100.02
+      - name: application_date
+        description: Ngày nộp đơn
+        data_type: date
+        nullable: false
+        business_definition: Ngày nộp hồ sơ xin chứng nhận
+        example: 2025-02-01
+      - name: certificate_date
+        description: Ngày cấp chứng nhận
+        data_type: date
+        nullable: true
+        business_definition: Ngày được cấp giấy chứng nhận
+        example: 2025-06-15
+      - name: expiry_date
+        description: Ngày hết hạn
+        data_type: date
+        nullable: true
+        business_definition: Ngày hết hạn chứng nhận
+        example: 2028-06-15
+      - name: scope
+        description: Phạm vi chứng nhận
+        data_type: varchar
+        nullable: true
+        business_definition: Phạm vi áp dụng (Toàn bộ xe/ Hệ thống pin/ Hệ thống phanh/ Khí thải)
+        example: Hệ thống pin lithium-ion
+      - name: test_laboratory
+        description: Phòng thử nghiệm
+        data_type: varchar
+        nullable: true
+        business_definition: Phòng thí nghiệm được chỉ định thực hiện thử nghiệm
+        example: Phòng thử nghiệm pin - Đăng kiểm
+      - name: approval_status
+        description: Trạng thái
+        data_type: varchar
+        nullable: false
+        business_definition: Trạng thái (In Progress/Approved/Rejected/Expired/Suspended)
+        example: Approved
+      - name: remarks
+        description: Ghi chú
+        data_type: varchar
+        nullable: true
+        business_definition: Ghi chú về điều kiện chứng nhận
+        example: Chứng nhận kèm điều kiện theo dõi hàng năm
+      - name: created_at
+        description: Ngày tạo
+        data_type: timestamp
+        nullable: false
+        business_definition: Thời điểm tạo bản ghi trong hệ thống
+        example: 2025-02-01 09:00:00
+    owners:
+      - RD_REGULATORY
+    refresh_frequency: Daily
+
+  - name: fact_dvp
+    description: Kế hoạch xác nhận thiết kế (DVP)
+    domain: Phát triển xe (R&D)
+    platform: Redshift
+    tags:
+      - dvp
+      - test_plan
+      - validation
+    columns:
+      - name: dvp_id
+        description: Mã DVP
+        data_type: varchar
+        nullable: false
+        business_definition: Mã duy nhất cho mỗi kế hoạch xác nhận thiết kế
+        example: DVP-BAT-2025-001
+      - name: project_id
+        description: Mã dự án
+        data_type: varchar
+        nullable: false
+        business_definition: Mã dự án liên quan
+        example: PRJ-VFE-001
+      - name: component_code
+        description: Mã linh kiện
+        data_type: varchar
+        nullable: false
+        business_definition: Mã linh kiện hoặc hệ thống được xác nhận
+        example: BAT-PACK-VF9-001
+      - name: test_item
+        description: Hạng mục thử
+        data_type: varchar
+        nullable: false
+        business_definition: Hạng mục thử nghiệm cụ thể
+        example: Chu kỳ sạc-xả nhiệt độ cao
+      - name: test_method
+        description: Phương pháp thử
+        data_type: varchar
+        nullable: true
+        business_definition: Tiêu chuẩn hoặc quy trình thử nghiệm
+        example: ISO 12405-4 Section 7.3
+      - name: sample_qty
+        description: Số lượng mẫu
+        data_type: int
+        nullable: true
+        business_definition: Số lượng mẫu thử yêu cầu
+        example: 5
+      - name: planned_start_date
+        description: Ngày bắt đầu dự kiến
+        data_type: date
+        nullable: true
+        business_definition: Ngày dự kiến bắt đầu thử nghiệm
+        example: 2025-07-01
+      - name: planned_end_date
+        description: Ngày kết thúc dự kiến
+        data_type: date
+        nullable: true
+        business_definition: Ngày dự kiến hoàn thành thử nghiệm
+        example: 2025-08-30
+      - name: actual_start_date
+        description: Ngày bắt đầu thực tế
+        data_type: date
+        nullable: true
+        business_definition: Ngày thực tế bắt đầu thử nghiệm
+        example: 2025-07-05
+      - name: actual_end_date
+        description: Ngày kết thúc thực tế
+        data_type: date
+        nullable: true
+        business_definition: Ngày thực tế hoàn thành thử nghiệm
+        example: null
+      - name: test_status
+        description: Trạng thái thử
+        data_type: varchar
+        nullable: false
+        business_definition: Trạng thái (Not Started/In Progress/Completed/Blocked/Cancelled)
+        example: In Progress
+      - name: result
+        description: Kết quả
+        data_type: varchar
+        nullable: true
+        business_definition: Kết quả tổng thể (Pass/Fail/Inconclusive)
+        example: null
+      - name: dvp_engineer
+        description: Kỹ sư phụ trách
+        data_type: varchar
+        nullable: true
+        business_definition: Mã kỹ sư phụ trách kế hoạch DVP
+        example: EMP00901
+      - name: dvp_version
+        description: Phiên bản DVP
+        data_type: varchar
+        nullable: true
+        business_definition: Số phiên bản của kế hoạch DVP
+        example: Rev 2.1
+    owners:
+      - RD_DVP
+    refresh_frequency: Daily
+
+  - name: dim_drawing
+    description: Danh mục bản vẽ kỹ thuật
+    domain: Phát triển xe (R&D)
+    platform: Redshift
+    tags:
+      - drawing
+      - cad
+      - document
+    columns:
+      - name: drawing_id
+        description: Mã bản vẽ
+        data_type: varchar
+        nullable: false
+        business_definition: Mã duy nhất cho mỗi bản vẽ kỹ thuật
+        example: DWG-VF9-BAT-00123
+      - name: drawing_title
+        description: Tiêu đề bản vẽ
+        data_type: varchar
+        nullable: false
+        business_definition: Tên mô tả nội dung bản vẽ
+        example: Bộ pin VF9 - Bố trí tổng thể
+      - name: project_id
+        description: Mã dự án
+        data_type: varchar
+        nullable: true
+        business_definition: Mã dự án sở hữu bản vẽ
+        example: PRJ-VFE-001
+      - name: component_code
+        description: Mã linh kiện
+        data_type: varchar
+        nullable: true
+        business_definition: Mã linh kiện được thể hiện trên bản vẽ
+        example: BAT-PACK-VF9-001
+      - name: drawing_type
+        description: Loại bản vẽ
+        data_type: varchar
+        nullable: false
+        business_definition: Phân loại (Assembly/Detail/Schematic/Installation/Wiring/Harness)
+        example: Assembly
+      - name: format
+        description: Định dạng
+        data_type: varchar
+        nullable: true
+        business_definition: Định dạng file (.CATPart/.CATProduct/.DWG/.PDF/.STEP)
+        example: .CATProduct
+      - name: cad_system
+        description: Hệ thống CAD
+        data_type: varchar
+        nullable: true
+        business_definition: Phần mềm CAD sử dụng (Catia V5/Catia V6/NX/Creo/SolidWorks)
+        example: Catia V5
+      - name: sheet_size
+        description: Khổ giấy
+        data_type: varchar
+        nullable: true
+        business_definition: Kích thước khổ bản vẽ (A0/A1/A2/A3/A4)
+        example: A1
+      - name: scale
+        description: Tỷ lệ
+        data_type: varchar
+        nullable: true
+        business_definition: Tỷ lệ thể hiện trên bản vẽ
+        example: 1:5
+      - name: current_revision
+        description: Phiên bản hiện tại
+        data_type: varchar
+        nullable: false
+        business_definition: Số phiên bản hiện hành
+        example: C
+      - name: file_path
+        description: Đường dẫn file
+        data_type: varchar
+        nullable: true
+        business_definition: Đường dẫn lưu trữ file bản vẽ trong hệ thống PLM
+        example: /PLM/VF9/Battery/Assembly/VF9_BAT_00123.CATProduct
+      - name: created_by
+        description: Người tạo
+        data_type: varchar
+        nullable: true
+        business_definition: Mã kỹ sư tạo bản vẽ
+        example: EMP00543
+      - name: created_date
+        description: Ngày tạo
+        data_type: date
+        nullable: false
+        business_definition: Ngày tạo bản vẽ lần đầu
+        example: 2025-02-15
+      - name: drawing_status
+        description: Trạng thái
+        data_type: varchar
+        nullable: false
+        business_definition: Trạng thái (Preliminary/Released/Obsolete/Under Change)
+        example: Released
+    owners:
+      - RD_CAD
+    refresh_frequency: Daily
+
+  - name: fact_bom_engineering
+    description: BOM kỹ thuật (Engineering BOM)
+    domain: Phát triển xe (R&D)
+    platform: Redshift
+    tags:
+      - bom
+      - engineering
+      - parts_list
+    columns:
+      - name: ebom_id
+        description: Mã dòng BOM
+        data_type: varchar
+        nullable: false
+        business_definition: Mã duy nhất cho mỗi dòng trong BOM kỹ thuật
+        example: EBOM-VF9-2025-001
+      - name: parent_assembly_code
+        description: Mã cụm lắp ráp cha
+        data_type: varchar
+        nullable: false
+        business_definition: Mã của cụm lắp ráp cấp trên
+        example: BAT-PACK-VF9-000
+      - name: component_code
+        description: Mã linh kiện
+        data_type: varchar
+        nullable: false
+        business_definition: Mã linh kiện con trong cụm
+        example: CELL-NCM-811-001
+      - name: component_name
+        description: Tên linh kiện
+        data_type: varchar
+        nullable: true
+        business_definition: Tên linh kiện
+        example: Cell pin NCM 811 21700
+      - name: level
+        description: Cấp BOM
+        data_type: int
+        nullable: false
+        business_definition: Cấp độ trong cấu trúc BOM (0 là cao nhất)
+        example: 2
+      - name: quantity_per_parent
+        description: Số lượng trên cụm cha
+        data_type: decimal
+        nullable: false
+        business_definition: Số lượng linh kiện sử dụng trong một cụm cha
+        example: 192.00
+      - name: unit_of_measure
+        description: Đơn vị tính
+        data_type: varchar
+        nullable: true
+        business_definition: Đơn vị của linh kiện (chiếc, bộ, kg, m)
+        example: chiếc
+      - name: part_type
+        description: Loại linh kiện
+        data_type: varchar
+        nullable: true
+        business_definition: Phân loại (Manufactured/Purchased/Assembly/Reference)
+        example: Purchased
+      - name: drawing_number
+        description: Số bản vẽ
+        data_type: varchar
+        nullable: true
+        business_definition: Số bản vẽ kỹ thuật của linh kiện
+        example: DWG-VF9-BAT-00123
+      - name: engineering_material
+        description: Vật liệu kỹ thuật
+        data_type: varchar
+        nullable: true
+        business_definition: Vật liệu chế tạo linh kiện
+        example: NCM 811 + Graphite
+      - name: weight_kg
+        description: Trọng lượng
+        data_type: decimal
+        nullable: true
+        business_definition: Trọng lượng đơn vị linh kiện (kg)
+        example: 0.07
+      - name: effectivity_start
+        description: Hiệu lực từ
+        data_type: varchar
+        nullable: true
+        business_definition: Số VIN/ngày bắt đầu hiệu lực của BOM
+        example: VIN VF9000001
+      - name: effectivity_end
+        description: Hiệu lực đến
+        data_type: varchar
+        nullable: true
+        business_definition: Số VIN/ngày hết hiệu lực của BOM
+        example: null
+      - name: bom_version
+        description: Phiên bản BOM
+        data_type: varchar
+        nullable: true
+        business_definition: Phiên bản BOM hiện tại
+        example: Rev 3
+      - name: created_at
+        description: Ngày tạo
+        data_type: timestamp
+        nullable: false
+        business_definition: Thời điểm tạo dòng BOM
+        example: 2025-03-01 10:30:00
+    owners:
+      - RD_BOM_MGMT
+    refresh_frequency: Daily
+
+  - name: fact_change_request
+    description: Yêu cầu thay đổi sản phẩm/quy trình
+    domain: Phát triển xe (R&D)
+    platform: Redshift
+    tags:
+      - cr
+      - change_request
+      - engineering
+    columns:
+      - name: cr_id
+        description: Mã yêu cầu thay đổi
+        data_type: varchar
+        nullable: false
+        business_definition: Mã duy nhất cho mỗi yêu cầu thay đổi (ECR)
+        example: ECR-2025-0089
+      - name: project_id
+        description: Mã dự án
+        data_type: varchar
+        nullable: false
+        business_definition: Mã dự án nhận yêu cầu thay đổi
+        example: PRJ-VFE-001
+      - name: cr_title
+        description: Tiêu đề yêu cầu
+        data_type: varchar
+        nullable: false
+        business_definition: Tiêu đề ngắn gọn của yêu cầu thay đổi
+        example: Thay đổi cell pin sang NCM 811
+      - name: cr_type
+        description: Loại yêu cầu
+        data_type: varchar
+        nullable: false
+        business_definition: Phân loại (Design/Process/Material/Cost/Safety/Performance)
+        example: Material
+      - name: priority
+        description: Mức ưu tiên
+        data_type: varchar
+        nullable: false
+        business_definition: Mức độ ưu tiên (Critical/High/Medium/Low)
+        example: High
+      - name: source
+        description: Nguồn yêu cầu
+        data_type: varchar
+        nullable: true
+        business_definition: Nguồn phát sinh yêu cầu (Customer/Marketing/Production/Supplier/Legal)
+        example: Production
+      - name: description
+        description: Mô tả chi tiết
+        data_type: varchar
+        nullable: true
+        business_definition: Mô tả đầy đủ về yêu cầu thay đổi
+        example: Đề xuất thay cell pin NCM 622 bằng NCM 811 để tăng dung lượng từ 92 lên 100kWh
+      - name: justification
+        description: Căn cứ đề xuất
+        data_type: varchar
+        nullable: true
+        business_definition: Lý do và lợi ích của thay đổi (dẫn chứng kèm theo)
+        example: Tăng phạm vi hoạt động 12%, cạnh tranh với đối thủ
+      - name: requested_by
+        description: Người yêu cầu
+        data_type: varchar
+        nullable: true
+        business_definition: Mã nhân viên gửi yêu cầu
+        example: EMP00678
+      - name: request_date
+        description: Ngày yêu cầu
+        data_type: date
+        nullable: false
+        business_definition: Ngày gửi yêu cầu thay đổi
+        example: 2025-03-15
+      - name: review_date
+        description: Ngày xem xét
+        data_type: date
+        nullable: true
+        business_definition: Ngày họp xem xét yêu cầu thay đổi
+        example: 2025-04-01
+      - name: decision
+        description: Quyết định
+        data_type: varchar
+        nullable: true
+        business_definition: Quyết định từ hội đồng (Approve/Reject/Defer/More Info Required)
+        example: Approve
+      - name: decision_by
+        description: Người quyết định
+        data_type: varchar
+        nullable: true
+        business_definition: Mã người phê duyệt (thường là trưởng bộ phận/giám đốc)
+        example: EMP00123
+      - name: linked_eco
+        description: ECO liên quan
+        data_type: varchar
+        nullable: true
+        business_definition: Mã ECO được sinh ra từ yêu cầu thay đổi này
+        example: ECO-2025-00456
+      - name: cr_status
+        description: Trạng thái
+        data_type: varchar
+        nullable: false
+        business_definition: Trạng thái (Open/Under Review/Approved/Rejected/Closed/Cancelled)
+        example: Approved
+    owners:
+      - RD_CCB
+    refresh_frequency: Daily
+
+  - name: dim_component
+    description: Danh mục linh kiện sử dụng trong thiết kế xe
+    domain: Phát triển xe (R&D)
+    platform: Redshift
+    tags:
+      - component
+      - parts
+      - master_data
+    columns:
+      - name: component_code
+        description: Mã linh kiện
+        data_type: varchar
+        nullable: false
+        business_definition: Mã duy nhất cho mỗi linh kiện trong hệ thống
+        example: CELL-NCM-811-001
+      - name: component_name
+        description: Tên linh kiện
+        data_type: varchar
+        nullable: false
+        business_definition: Tên mô tả linh kiện
+        example: Cell pin NCM 811 dạng 21700
+      - name: component_category
+        description: Nhóm linh kiện
+        data_type: varchar
+        nullable: true
+        business_definition: Nhóm linh kiện (Pin/Động cơ/Điện tử/Thân xe/Gầm/Nội thất/Ngoại thất)
+        example: Pin
+      - name: subcategory
+        description: Phân nhóm
+        data_type: varchar
+        nullable: true
+        business_definition: Phân nhóm chi tiết (Cell/Module/Pack/BMS/Inverter)
+        example: Cell
+      - name: material
+        description: Vật liệu
+        data_type: varchar
+        nullable: true
+        business_definition: Vật liệu chế tạo linh kiện
+        example: NCM 811
+      - name: unit
+        description: Đơn vị tính
+        data_type: varchar
+        nullable: true
+        business_definition: Đơn vị (chiếc, bộ, kg, m, lít)
+        example: chiếc
+      - name: weight_kg
+        description: Trọng lượng
+        data_type: decimal
+        nullable: true
+        business_definition: Trọng lượng đơn vị linh kiện (kg)
+        example: 0.07
+      - name: dimension_mm
+        description: Kích thước
+        data_type: varchar
+        nullable: true
+        business_definition: Kích thước (Dài x Rộng x Cao) tính bằng mm
+        example: 21 x 70
+      - name: procurement_type
+        description: Loại hình thu mua
+        data_type: varchar
+        nullable: true
+        business_definition: Phân loại mua sắm (Purchased/Manufactured/Subcontracted)
+        example: Purchased
+      - name: country_of_origin
+        description: Xuất xứ
+        data_type: varchar
+        nullable: true
+        business_definition: Quốc gia sản xuất linh kiện
+        example: Hàn Quốc
+      - name: component_status
+        description: Trạng thái
+        data_type: varchar
+        nullable: true
+        business_definition: Trạng thái (Active/In Development/Obsolete/Phase-out)
+        example: Active
+      - name: replacement_for
+        description: Thay thế cho
+        data_type: varchar
+        nullable: true
+        business_definition: Mã linh kiện cũ được thay thế bởi linh kiện này
+        example: CELL-NCM-622-001
+      - name: created_date
+        description: Ngày tạo
+        data_type: date
+        nullable: true
+        business_definition: Ngày linh kiện được tạo trong hệ thống
+        example: 2024-06-01
+    owners:
+      - RD_COMPONENT_ENG
+    refresh_frequency: Daily
+
+  - name: fact_test_cycle
+    description: Chu kỳ thử nghiệm xe điện và linh kiện
+    domain: Phát triển xe (R&D)
+    platform: Redshift
+    tags:
+      - test_cycle
+      - durability
+      - validation
+    columns:
+      - name: test_cycle_id
+        description: Mã chu kỳ thử
+        data_type: varchar
+        nullable: false
+        business_definition: Mã duy nhất cho mỗi chu kỳ thử nghiệm
+        example: TCYC-VF9-2025-001
+      - name: prototype_id
+        description: Mã nguyên mẫu
+        data_type: varchar
+        nullable: true
+        business_definition: Mã nguyên mẫu trải qua chu kỳ thử
+        example: PROTO-VF9-2025-012
+      - name: test_cycle_name
+        description: Tên chu kỳ
+        data_type: varchar
+        nullable: false
+        business_definition: Tên của chu kỳ thử nghiệm
+        example: Chu kỳ độ bền pin 1000 chu kỳ sạc
+      - name: cycle_type
+        description: Loại chu kỳ
+        data_type: varchar
+        nullable: false
+        business_definition: Phân loại (Durability/Performance/Environmental/Endurance/Life)
+        example: Durability
+      - name: test_standard
+        description: Tiêu chuẩn thử
+        data_type: varchar
+        nullable: true
+        business_definition: Tiêu chuẩn thử nghiệm áp dụng
+        example: ISO 12405-4
+      - name: total_cycles_planned
+        description: Tổng chu kỳ kế hoạch
+        data_type: int
+        nullable: false
+        business_definition: Số chu kỳ dự kiến thực hiện
+        example: 1000
+      - name: total_cycles_completed
+        description: Chu kỳ đã hoàn thành
+        data_type: int
+        nullable: true
+        business_definition: Số chu kỳ đã thực hiện đến thời điểm hiện tại
+        example: 450
+      - name: start_date
+        description: Ngày bắt đầu
+        data_type: date
+        nullable: false
+        business_definition: Ngày bắt đầu chu kỳ thử nghiệm
+        example: 2025-06-01
+      - name: end_date
+        description: Ngày kết thúc
+        data_type: date
+        nullable: true
+        business_definition: Ngày dự kiến kết thúc hoặc ngày kết thúc thực tế
+        example: 2025-09-30
+      - name: pass_criteria
+        description: Tiêu chí đạt
+        data_type: varchar
+        nullable: true
+        business_definition: Điều kiện được coi là Pass (dung lượng còn >80%)
+        example: Dung lượng pin sau thử > 80% danh định
+      - name: current_result
+        description: Kết quả hiện tại
+        data_type: varchar
+        nullable: true
+        business_definition: Kết quả tạm thời khi đang thử (Passing/Failing/Inconclusive)
+        example: Passing
+      - name: final_result
+        description: Kết quả cuối cùng
+        data_type: varchar
+        nullable: true
+        business_definition: Kết quả sau khi hoàn thành chu kỳ (Pass/Fail)
+        example: null
+      - name: test_engineer
+        description: Kỹ sư thử nghiệm
+        data_type: varchar
+        nullable: true
+        business_definition: Mã kỹ sư phụ trách chu kỳ thử
+        example: EMP00901
+      - name: test_equipment
+        description: Thiết bị thử
+        data_type: varchar
+        nullable: true
+        business_definition: Thiết bị sử dụng cho chu kỳ thử
+        example: Máy sạc-xả pin chu kỳ Arbin LBT-500
+      - name: remarks
+        description: Ghi chú
+        data_type: varchar
+        nullable: true
+        business_definition: Ghi chú về diễn biến bất thường trong chu kỳ thử
+        example: Nhiệt độ phòng thử dao động 25-30°C
+    owners:
+      - RD_TEST_LAB
+    refresh_frequency: Daily

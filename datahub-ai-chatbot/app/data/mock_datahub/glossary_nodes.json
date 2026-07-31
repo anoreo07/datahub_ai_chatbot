@@ -1,0 +1,17 @@
+[
+  {
+    "urn": "urn:li:glossaryNode:logistic",
+    "name": "Logistic Glossary",
+    "display_name": "Logistic Glossary",
+    "description": "Nhóm glossary terms cho domain Logistic.",
+    "domain_urn": "urn:li:domain:logistic",
+    "domain": "Logistic",
+    "children": [
+      "urn:li:glossaryTerm:ton_kho_min_max",
+      "urn:li:glossaryTerm:stock_on_hand",
+      "urn:li:glossaryTerm:goods_in_transit",
+      "urn:li:glossaryTerm:coverage_date",
+      "urn:li:glossaryTerm:safety_stock"
+    ]
+  }
+]

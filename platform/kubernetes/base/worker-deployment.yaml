@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chatbot-worker
+  namespace: datahub-chatbot
+  labels:
+    app: chatbot-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chatbot-worker
+  template:
+    metadata:
+      labels:
+        app: chatbot-worker
+    spec:
+      containers:
+        - name: worker
+          image: registry.example.com/datahub-ai-chatbot:latest
+          command: ["python", "-m", "workers.sync_worker"]
+          envFrom:
+            - configMapRef:
+                name: chatbot-config
+            - secretRef:
+                name: chatbot-secret
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"

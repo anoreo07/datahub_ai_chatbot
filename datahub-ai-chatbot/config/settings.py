@@ -1,0 +1,112 @@
+from pydantic import model_validator
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class Settings(BaseSettings):
+    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
+
+    APP_NAME: str = "DataHub AI Chatbot"
+    APP_ENV: str = "development"
+    APP_HOST: str = "0.0.0.0"
+    APP_PORT: int = 8000
+    LOG_LEVEL: str = "INFO"
+
+    USE_MOCK_DATAHUB: bool = False
+    MOCK_DATAHUB_FIXTURES_PATH: str = "app/data/mock_datahub"
+    MOCK_DATA_PATH: str = "app/data/mock_datahub"
+    DATAHUB_GMS_URL: str = "http://localhost:8080"
+    DATAHUB_FRONTEND_URL: str = "http://localhost:9002"
+    DATAHUB_TOKEN: str = ""
+    DATAHUB_PAGE_SIZE: int = 100
+    DATAHUB_REQUEST_TIMEOUT_SECONDS: int = 30
+    DATAHUB_MAX_RETRIES: int = 3
+    DATAHUB_SYNC_DRY_RUN: bool = False
+
+    USE_MOCK_LLM: bool = False
+    USE_MOCK_EMBEDDING: bool = False
+    USE_FAKE_OPENSEARCH: bool = False
+    USE_IN_MEMORY_DATABASE: bool = False
+    USE_IN_MEMORY_QUEUE: bool = False
+    ENABLE_NETWORK_ACCESS: bool = True
+
+    AUTH_MODE: str = "jwt"
+    AUTH_REQUIRED: bool = True
+    JWT_SECRET_KEY: str = ""
+    ENABLE_DEV_ENDPOINTS: bool = True
+
+    DATABASE_URL: str = "postgresql+asyncpg://postgres:postgres@localhost:5433/chatbot"
+    REDIS_URL: str = "redis://localhost:6380/0"
+
+    OPENSEARCH_URL: str = "http://localhost:9201"
+    OPENSEARCH_INDEX: str = "datahub-rag-chunks-v1"
+    OPENSEARCH_USERNAME: str = ""
+    OPENSEARCH_PASSWORD: str = ""
+
+    EMBEDDING_PROVIDER: str = "ollama"
+    EMBEDDING_MODEL: str = "nomic-embed-text"
+    EMBEDDING_DIMENSION: int = 768
+    OLLAMA_BASE_URL: str = "http://localhost:11434/v1"
+
+    LLM_PROVIDER: str = "fireworks"
+    LLM_MODEL: str = "accounts/fireworks/models/deepseek-v4-flash"
+
+    COHERE_API_KEY: str = ""
+    AWS_REGION: str = "us-east-1"
+    OPENAI_API_KEY: str = ""
+
+    FIREWORKS_API_KEY: str = ""
+    FIREWORKS_MODEL_ID: str = "accounts/fireworks/models/deepseek-v4-flash"
+
+    SEARCH_CACHE_TTL_SECONDS: int = 300
+    INDEX_MAX_RETRIES: int = 3
+    INDEX_BATCH_SIZE: int = 20
+    INDEX_POLL_INTERVAL_SECONDS: int = 2
+
+    LLM_TIMEOUT_SECONDS: int = 60
+    LLM_MAX_RETRIES: int = 2
+
+    MAX_CONTEXT_CHUNKS: int = 8
+    MAX_CONTEXT_CHARACTERS: int = 24000
+
+    EVALUATION_GOLDEN_DATASET_PATH: str = ""
+    EVALUATION_SIMILARITY_THRESHOLD: float = 0.5
+    ENTITY_RESOLVER_EXACT_THRESHOLD: float = 1.0
+    ENTITY_RESOLVER_HIGH_THRESHOLD: float = 0.9
+    ENTITY_RESOLVER_SUBSTRING_THRESHOLD: float = 0.7
+    ENTITY_RESOLVER_AMBIGUITY_MARGIN: float = 0.2
+
+    RATE_LIMIT_MAX_REQUESTS: int = 60
+    RATE_LIMIT_WINDOW_SECONDS: int = 60
+    RATE_LIMIT_ENABLED: bool = True
+    CACHE_ENABLED: bool = True
+    CACHE_DEFAULT_TTL_SECONDS: int = 300
+
+    LOCAL_STORAGE_PATH: str = "./data/documents"
+
+    @model_validator(mode="after")
+    def _validate_config(self) -> "Settings":
+        if self.AUTH_MODE == "jwt" and not self.JWT_SECRET_KEY:
+            raise ValueError("JWT_SECRET_KEY must be set when AUTH_MODE=jwt")
+        if not self.USE_MOCK_DATAHUB and not self.DATAHUB_GMS_URL:
+            raise ValueError("DATAHUB_GMS_URL must be set when USE_MOCK_DATAHUB=false")
+        if not self.USE_MOCK_LLM and not self.FIREWORKS_API_KEY and self.LLM_PROVIDER in ("fireworks",):
+            raise ValueError("FIREWORKS_API_KEY must be set when USE_MOCK_LLM=false and LLM_PROVIDER=fireworks")
+        return self
+
+    @property
+    def datahub_frontend_url_clean(self) -> str:
+        return self.DATAHUB_FRONTEND_URL.rstrip("/")
+
+    def datahub_entity_url(self, entity_type: str, urn: str) -> str:
+        base = self.datahub_frontend_url_clean
+        type_path = {
+            "dataset": "dataset",
+            "dashboard": "dashboard",
+            "glossary_term": "glossary",
+            "glossary_node": "glossaryNode",
+            "document": "document",
+        }.get(entity_type, "entity")
+        return f"{base}/{type_path}/{urn}"
+
+
+settings = Settings()

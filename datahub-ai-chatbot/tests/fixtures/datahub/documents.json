@@ -1,0 +1,19 @@
+[
+  {
+    "urn": "urn:li:document:MonthlyRevenueMethodology",
+    "entity_type": "document",
+    "name": "Monthly Revenue Methodology",
+    "display_name": "Monthly Revenue Methodology",
+    "description": "Tài liệu mô tả phương pháp tính doanh thu theo tháng.",
+    "platform": "confluence",
+    "environment": "PROD",
+    "domain": "Finance",
+    "owners": [{"name": "Finance Analytics", "type": "USER"}],
+    "glossary_terms": ["urn:li:glossaryTerm:NetRevenue"],
+    "schema_fields": [],
+    "upstreams": [],
+    "downstreams": [],
+    "linked_documents": [],
+    "datahub_url": "http://localhost:9002/document/urn:li:document:MonthlyRevenueMethodology"
+  }
+]

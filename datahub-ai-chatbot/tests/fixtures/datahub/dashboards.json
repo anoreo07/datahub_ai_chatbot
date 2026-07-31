@@ -1,0 +1,19 @@
+[
+  {
+    "urn": "urn:li:dashboard:MonthlyRevenue",
+    "entity_type": "dashboard",
+    "name": "Monthly Revenue",
+    "display_name": "Monthly Revenue",
+    "description": "Dashboard theo dõi doanh thu theo tháng.",
+    "platform": "mode",
+    "environment": "PROD",
+    "domain": "Finance",
+    "owners": [{"name": "Finance Analytics", "type": "USER"}],
+    "glossary_terms": [],
+    "schema_fields": [],
+    "upstreams": ["urn:li:dataset:(urn:li:dataPlatform:snowflake,finance.monthly_revenue,PROD)"],
+    "downstreams": [],
+    "linked_documents": ["Monthly Revenue Methodology"],
+    "datahub_url": "http://localhost:9002/dashboard/urn:li:dashboard:MonthlyRevenue"
+  }
+]

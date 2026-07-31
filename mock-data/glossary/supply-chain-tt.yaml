@@ -1,0 +1,200 @@
+glossary_terms:
+  - name: Supplier Evaluation
+    definition: Quy trình đánh giá năng lực nhà cung cấp dựa trên chất lượng, giao hàng, giá cả và dịch vụ
+    business_meaning: Giúp doanh nghiệp lựa chọn và duy trì nhà cung cấp đạt tiêu chuẩn, giảm rủi ro chuỗi cung ứng
+    example: Đánh giá nhà cung cấp A đạt 85/100 điểm sau audit QCD (Quality, Cost, Delivery)
+    related_terms:
+      - Vendor Scorecard
+      - Supplier Audit
+      - Approved Supplier List
+    domain: CUNG ỨNG (TT)
+
+  - name: Local Content
+    definition: Tỷ lệ giá trị linh kiện, nguyên vật liệu được sản xuất trong nước trên tổng giá trị sản phẩm
+    business_meaning: Đáp ứng yêu cầu pháp lý về tỷ lệ nội địa hóa, tối ưu chi phí logistics và thuế nhập khẩu
+    example: Xe mẫu X đạt tỷ lệ nội địa hóa 40% tính theo giá trị linh kiện
+    related_terms:
+      - Nội địa hóa
+      - CKD
+      - Import Substitution
+    domain: CUNG ỨNG (TT)
+
+  - name: Vendor Scorecard
+    definition: Bảng điểm đánh giá định kỳ hiệu quả hoạt động của nhà cung cấp theo các tiêu chí KPI
+    business_meaning: Công cụ quản lý và so sánh năng lực nhà cung cấp, làm cơ sở phân loại và phát triển nhà cung cấp
+    example: Scorecard tháng 6: Supplier B đạt điểm A (90%) ở chất lượng, B (80%) ở giao hàng
+    related_terms:
+      - Supplier Evaluation
+      - KPI
+      - Supplier Classification
+    domain: CUNG ỨNG (TT)
+
+  - name: RFQ (Request for Quotation)
+    definition: Yêu cầu báo giá gửi đến nhà cung cấp cho một lô hàng hoặc linh kiện cụ thể
+    business_meaning: Chuẩn hóa quy trình thu nhận báo giá, đảm bảo cạnh tranh công bằng và minh bạch về giá
+    example: Gửi RFQ cho 5 nhà cung cấp cửa xe để nhận báo giá trước khi đặt hàng 10.000 bộ
+    related_terms:
+      - PO
+      - Quotation
+      - Bid Evaluation
+    domain: CUNG ỨNG (TT)
+
+  - name: PO (Purchase Order)
+    definition: Đơn đặt hàng chính thức từ doanh nghiệp đến nhà cung cấp, xác nhận số lượng, giá cả và thời gian giao
+    business_meaning: Ràng buộc pháp lý giữa hai bên, kiểm soát ngân sách và kế hoạch sản xuất
+    example: PO số 2024-0856 đặt mua 5.000 bộ ghế da với đơn giá 2,5 triệu VNĐ/bộ
+    related_terms:
+      - RFQ
+      - Contract Management
+      - GRN
+    domain: CUNG ỨNG (TT)
+
+  - name: Contract Management
+    definition: Quy trình quản lý vòng đời hợp đồng từ đàm phán, ký kết, thực hiện đến thanh lý
+    business_meaning: Đảm bảo tuân thủ điều khoản, kiểm soát rủi ro pháp lý và tối ưu hiệu quả hợp đồng
+    example: Gia hạn hợp đồng khung với nhà cung cấp sơn thêm 2 năm với điều khoản giá cố định
+    related_terms:
+      - PO
+      - SLA
+      - Master Agreement
+    domain: CUNG ỨNG (TT)
+
+  - name: Preferred Supplier
+    definition: Nhà cung cấp ưu tiên được đánh giá cao và được ưu tiên trong việc trao đơn hàng mới
+    business_meaning: Xây dựng quan hệ đối tác chiến lược, giảm thời gian lựa chọn và chi phí giao dịch
+    example: Nhà cung cấp lốp xe P được xếp hạng Preferred Supplier cho năm tài chính 2025
+    related_terms:
+      - Approved Supplier List
+      - Strategic Partner
+      - Vendor Classification
+    domain: CUNG ỨNG (TT)
+
+  - name: Approved Supplier List
+    definition: Danh sách nhà cung cấp đã được phê duyệt đủ điều kiện cung ứng hàng hóa cho doanh nghiệp
+    business_meaning: Kiểm soát đầu vào, chỉ cho phép đặt hàng từ nhà cung cấp trong danh sách để đảm bảo chất lượng
+    example: ASL hiện có 120 nhà cung cấp được phân loại theo nhóm A, B, C
+    related_terms:
+      - Preferred Supplier
+      - Supplier Evaluation
+      - Vendor Registration
+    domain: CUNG ỨNG (TT)
+
+  - name: Lead Time
+    definition: Thời gian từ khi đặt hàng đến khi nhận được hàng từ nhà cung cấp
+    business_meaning: Ảnh hưởng trực tiếp đến kế hoạch sản xuất và mức tồn kho an toàn
+    example: Lead time đặt linh kiện nhập khẩu từ Nhật Bản là 45 ngày, bao gồm vận chuyển và thông quan
+    related_terms:
+      - Safety Stock
+      - Reorder Point
+      - Supply Chain Cycle Time
+    domain: CUNG ỨNG (TT)
+
+  - name: Safety Stock
+    definition: Lượng tồn kho dự phòng để đảm bảo sản xuất không bị gián đoạn khi nguồn cung bất ổn
+    business_meaning: Cân bằng giữa chi phí tồn kho và rủi ro gián đoạn sản xuất
+    example: Duy trì safety stock 500 bộ động cơ tương đương 5 ngày sản xuất
+    related_terms:
+      - Lead Time
+      - Reorder Point
+      - Inventory Buffer
+    domain: CUNG ỨNG (TT)
+
+  - name: MOQ (Minimum Order Quantity)
+    definition: Số lượng đặt hàng tối thiểu mà nhà cung cấp yêu cầu cho một đơn hàng
+    business_meaning: Ảnh hưởng đến quy mô đặt hàng, chi phí tồn kho và khả năng đáp ứng của doanh nghiệp
+    example: Nhà cung cấp ốc vít yêu cầu MOQ 10.000 cái/đơn cho mỗi mã hàng
+    related_terms:
+      - EOQ
+      - PO
+      - Lot Size
+    domain: CUNG ỨNG (TT)
+
+  - name: GRN (Goods Received Note)
+    definition: Biên bản nhận hàng ghi nhận số lượng và tình trạng hàng hóa khi nhập kho
+    business_meaning: Là cơ sở để đối chiếu với PO và chấp nhận thanh toán cho nhà cung cấp
+    example: GRN số 458 ghi nhận nhập kho 2.000 lốp xe, trong đó 50 lốp lỗi bề mặt
+    related_terms:
+      - PO
+      - Inspection
+      - 3-Way Matching
+    domain: CUNG ỨNG (TT)
+
+  - name: Supplier Audit
+    definition: Hoạt động kiểm tra thực địa nhà máy của nhà cung cấp về quy trình, chất lượng và điều kiện làm việc
+    business_meaning: Đảm bảo nhà cung cấp tuân thủ tiêu chuẩn ISO, an toàn lao động và trách nhiệm xã hội
+    example: Audit nhà cung cấp đệm ghế phát hiện 3 non-conformance về quy trình kiểm tra chất lượng
+    related_terms:
+      - Supplier Evaluation
+      - QMS
+      - Corrective Action
+    domain: CUNG ỨNG (TT)
+
+  - name: JIT (Just-In-Time)
+    definition: Phương pháp cung ứng vật tư đúng số lượng cần thiết, đúng thời điểm sử dụng trên dây chuyền
+    business_meaning: Giảm tồn kho, tối ưu không gian nhà xưởng và tăng hiệu suất vốn lưu động
+    example: Giao dây điện đến đúng vị trí lắp ráp theo nhịp 60 giây/xe, không lưu kho
+    related_terms:
+      - Kanban
+      - Lean Manufacturing
+      - Inventory Turnover
+    domain: CUNG ỨNG (TT)
+
+  - name: 3-Way Matching
+    definition: Quy trình đối chiếu ba chứng từ PO, GRN và Invoice trước khi thanh toán cho nhà cung cấp
+    business_meaning: Ngăn chặn thanh toán sai sót hoặc gian lận, đảm bảo tính chính xác của giao dịch
+    example: Hệ thống tự động từ chối thanh toán do lệch 100 đơn vị giữa số nhận và số hóa đơn
+    related_terms:
+      - GRN
+      - PO
+      - Invoice Matching
+    domain: CUNG ỨNG (TT)
+
+  - name: Vendor Managed Inventory
+    definition: Mô hình nhà cung cấp chịu trách nhiệm quản lý và tái bổ sung tồn kho tại kho của doanh nghiệp
+    business_meaning: Chuyển rủi ro tồn kho sang nhà cung cấp, giảm chi phí quản lý kho
+    example: Nhà cung cấp bulông giám sát mức tồn kho và tự động giao hàng khi xuống dưới ngưỡng
+    related_terms:
+      - Consignment Stock
+      - JIT
+      - Replenishment
+    domain: CUNG ỨNG (TT)
+
+  - name: Supplier Development
+    definition: Chương trình hỗ trợ nhà cung cấp cải thiện năng lực sản xuất, chất lượng và quản lý
+    business_meaning: Nâng cao chất lượng chuỗi cung ứng dài hạn, giảm phụ thuộc vào nguồn nhập khẩu
+    example: Cử chuyên gia tư vấn Lean Manufacturing hỗ trợ nhà cung cấp giảm 20% tỷ lệ phế phẩm
+    related_terms:
+      - Supplier Audit
+      - Capacity Building
+      - Technology Transfer
+    domain: CUNG ỨNG (TT)
+
+  - name: NCR (Non-Conformance Report)
+    definition: Báo cáo ghi nhận sự không phù hợp của hàng hóa hoặc quy trình so với yêu cầu kỹ thuật
+    business_meaning: Công cụ truy xuất và xử lý lỗi chất lượng, yêu cầu nhà cung cấp thực hiện khắc phục
+    example: NCR-2024-033: Phát hiện độ dày tôn không đạt spec, yêu cầu nhà cung cấp tái sản xuất lô hàng
+    related_terms:
+      - Corrective Action
+      - Supplier Audit
+      - Quality Alert
+    domain: CUNG ỨNG (TT)
+
+  - name: Make or Buy Decision
+    definition: Quyết định chiến lược tự sản xuất linh kiện hay mua từ nhà cung cấp bên ngoài
+    business_meaning: Tối ưu chi phí sản xuất, năng lực lõi và rủi ro chuỗi cung ứng
+    example: Do sản lượng 20.000 xe/năm không đủ lớn, quyết định mua ngoài hộp số thay vì tự sản xuất
+    related_terms:
+      - Outsourcing
+      - Vertical Integration
+      - Core Competency
+    domain: CUNG ỨNG (TT)
+
+  - name: Supplier Tier Management
+    definition: Quản lý phân cấp nhà cung cấp từ Tier 1 (giao trực tiếp) đến Tier 2, Tier 3 dọc chuỗi cung ứng
+    business_meaning: Kiểm soát chất lượng xuyên suốt chuỗi, giảm rủi ro gián đoạn từ nhà cung cấp cấp dưới
+    example: Nhà cung cấp Tier 1 báo nguy cơ thiếu chip từ Tier 2 ảnh hưởng đến giao hàng quý III
+    related_terms:
+      - Supply Chain Visibility
+      - Sub-tier Management
+      - Supply Chain Risk
+    domain: CUNG ỨNG (TT)

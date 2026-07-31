@@ -1,0 +1,77 @@
+[
+  {
+    "urn": "urn:li:dataset:(urn:li:dataPlatform:snowflake,sales.orders,PROD)",
+    "entity_type": "dataset",
+    "name": "sales.orders",
+    "display_name": "sales.orders",
+    "description": "Bảng lưu thông tin đơn hàng đã xác nhận.",
+    "platform": "snowflake",
+    "environment": "PROD",
+    "domain": "Sales",
+    "owners": [{"name": "Sales Analytics", "type": "USER"}],
+    "glossary_terms": [
+      "urn:li:glossaryTerm:Order",
+      "urn:li:glossaryTerm:Customer",
+      "urn:li:glossaryTerm:Revenue"
+    ],
+    "schema_fields": [
+      {"name": "order_id", "type": "string", "description": "Mã đơn hàng duy nhất"},
+      {"name": "customer_id", "type": "string", "description": "Mã khách hàng"},
+      {"name": "gross_revenue", "type": "decimal", "description": "Doanh thu gộp"},
+      {"name": "net_revenue", "type": "decimal", "description": "Doanh thu thuần"},
+      {"name": "created_at", "type": "timestamp", "description": "Thời gian tạo"}
+    ],
+    "upstreams": [],
+    "downstreams": ["urn:li:dataset:(urn:li:dataPlatform:snowflake,finance.monthly_revenue,PROD)"],
+    "linked_documents": [],
+    "datahub_url": "http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:snowflake,sales.orders,PROD)"
+  },
+  {
+    "urn": "urn:li:dataset:(urn:li:dataPlatform:snowflake,finance.monthly_revenue,PROD)",
+    "entity_type": "dataset",
+    "name": "finance.monthly_revenue",
+    "display_name": "finance.monthly_revenue",
+    "description": "Bảng tổng hợp doanh thu theo tháng.",
+    "platform": "snowflake",
+    "environment": "PROD",
+    "domain": "Finance",
+    "owners": [{"name": "Finance Analytics", "type": "USER"}],
+    "glossary_terms": ["urn:li:glossaryTerm:NetRevenue"],
+    "schema_fields": [
+      {"name": "month", "type": "date", "description": "Tháng báo cáo"},
+      {"name": "total_gross_revenue", "type": "decimal", "description": "Tổng doanh thu gộp"},
+      {"name": "total_net_revenue", "type": "decimal", "description": "Tổng doanh thu thuần"},
+      {"name": "order_count", "type": "integer", "description": "Số lượng đơn hàng"}
+    ],
+    "upstreams": [
+      "urn:li:dataset:(urn:li:dataPlatform:snowflake,sales.orders,PROD)",
+      "urn:li:dataset:(urn:li:dataPlatform:snowflake,raw.payments,PROD)"
+    ],
+    "downstreams": ["urn:li:dashboard:MonthlyRevenue"],
+    "linked_documents": ["Monthly Revenue Methodology"],
+    "datahub_url": "http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:snowflake,finance.monthly_revenue,PROD)"
+  },
+  {
+    "urn": "urn:li:dataset:(urn:li:dataPlatform:snowflake,raw.payments,PROD)",
+    "entity_type": "dataset",
+    "name": "raw.payments",
+    "display_name": "raw.payments",
+    "description": "Bảng lưu thông tin thanh toán raw.",
+    "platform": "snowflake",
+    "environment": "PROD",
+    "domain": "Finance",
+    "owners": [{"name": "Finance Analytics", "type": "USER"}],
+    "glossary_terms": [],
+    "schema_fields": [
+      {"name": "payment_id", "type": "string", "description": "Mã thanh toán"},
+      {"name": "order_id", "type": "string", "description": "Mã đơn hàng"},
+      {"name": "amount", "type": "decimal", "description": "Số tiền"},
+      {"name": "refund_amount", "type": "decimal", "description": "Số tiền hoàn lại"},
+      {"name": "payment_date", "type": "timestamp", "description": "Ngày thanh toán"}
+    ],
+    "upstreams": [],
+    "downstreams": ["urn:li:dataset:(urn:li:dataPlatform:snowflake,finance.monthly_revenue,PROD)"],
+    "linked_documents": [],
+    "datahub_url": "http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:snowflake,raw.payments,PROD)"
+  }
+]

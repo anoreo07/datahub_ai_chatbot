@@ -1,0 +1,27 @@
+[
+  {
+    "urn": "urn:li:domain:logistic",
+    "name": "Logistic",
+    "description": "Domain quản lý vận hành kho bãi, vận chuyển và chuỗi cung ứng nội bộ. Dữ liệu mẫu."
+  },
+  {
+    "urn": "urn:li:domain:finance",
+    "name": "Finance",
+    "description": "Domain tài chính gồm doanh thu, chi phí và kế toán. Dữ liệu mẫu."
+  },
+  {
+    "urn": "urn:li:domain:san_xuat",
+    "name": "Sản xuất",
+    "description": "Domain quản lý sản xuất bao gồm kế hoạch, điều độ và năng suất. Dữ liệu mẫu."
+  },
+  {
+    "urn": "urn:li:domain:cung_ung",
+    "name": "Cung ứng",
+    "description": "Domain quản lý nhà cung cấp, đặt hàng và đánh giá supplier. Dữ liệu mẫu."
+  },
+  {
+    "urn": "urn:li:domain:kinh_doanh",
+    "name": "Kinh doanh",
+    "description": "Domain thông tin doanh số và kênh bán hàng. Dữ liệu mẫu."
+  }
+]

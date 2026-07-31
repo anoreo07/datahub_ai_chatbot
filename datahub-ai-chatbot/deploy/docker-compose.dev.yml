@@ -1,0 +1,161 @@
+version: "3.9"
+
+x-opensearch-config: &opensearch-config
+  discovery.type: single-node
+  DISABLE_SECURITY_PLUGIN: "true"
+  OPENSEARCH_JAVA_OPTS: "-Xms512m -Xmx512m"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: chatbot
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - chatbot-dev
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_dev_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - chatbot-dev
+
+  opensearch:
+    image: opensearchproject/opensearch:2.15.0
+    environment:
+      <<: *opensearch-config
+    ports:
+      - "9201:9200"
+    volumes:
+      - opensearch_dev_data:/usr/share/opensearch/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "-s", "http://localhost:9200/_cluster/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+    mem_limit: 1g
+    restart: unless-stopped
+    networks:
+      - chatbot-dev
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      APP_ENV: development
+      USE_MOCK_DATAHUB: "true"
+      AUTH_MODE: mock
+      AUTH_REQUIRED: "false"
+      ENABLE_DEV_ENDPOINTS: "true"
+      LOG_LEVEL: DEBUG
+    volumes:
+      - ./app:/app/app:ro
+      - ./config:/app/config:ro
+      - ./data:/app/data
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      opensearch:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - chatbot-dev
+
+  sync-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: python -m workers.sync_worker
+    env_file:
+      - .env
+    environment:
+      APP_ENV: development
+      USE_MOCK_DATAHUB: "true"
+      LOG_LEVEL: DEBUG
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - chatbot-dev
+
+  indexing-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: python -m workers.indexing_worker
+    env_file:
+      - .env
+    environment:
+      APP_ENV: development
+      USE_MOCK_DATAHUB: "true"
+      LOG_LEVEL: DEBUG
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      opensearch:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - chatbot-dev
+
+  document-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: python -m workers.document_worker
+    env_file:
+      - .env
+    environment:
+      APP_ENV: development
+      LOG_LEVEL: DEBUG
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      opensearch:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - chatbot-dev
+
+volumes:
+  postgres_dev_data:
+  redis_dev_data:
+  opensearch_dev_data:
+
+networks:
+  chatbot-dev:
+    driver: bridge

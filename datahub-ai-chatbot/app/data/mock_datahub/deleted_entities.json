@@ -1,0 +1,46 @@
+[
+  {
+    "urn": "urn:li:dataset:(urn:li:dataPlatform:postgres,old.inventory_archive,PROD)",
+    "entity_type": "dataset",
+    "name": "old.inventory_archive",
+    "display_name": "old.inventory_archive",
+    "description": "Bảng archive tồn kho cũ, đã bị đánh dấu deleted. Dữ liệu mẫu.",
+    "platform": "postgres",
+    "environment": "PROD",
+    "domain_urn": "urn:li:domain:logistic",
+    "domain": "Logistic",
+    "owners": [],
+    "glossary_terms": [],
+    "tags": [],
+    "schema_fields": [
+      {"name": "archive_date", "type": "date", "description": "Ngày archive"},
+      {"name": "data", "type": "jsonb", "description": "Dữ liệu json gốc đã archive"}
+    ],
+    "upstreams": [],
+    "downstreams": [],
+    "deleted": true,
+    "datahub_url": ""
+  },
+  {
+    "urn": "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,DEV)",
+    "entity_type": "dataset",
+    "name": "logistic.fact_inventory",
+    "display_name": "fact_inventory (DEV)",
+    "description": "Bản DEV của fact_inventory để test environment filter.",
+    "platform": "postgres",
+    "environment": "DEV",
+    "domain_urn": "urn:li:domain:logistic",
+    "domain": "Logistic",
+    "owners": [],
+    "glossary_terms": [],
+    "tags": [],
+    "schema_fields": [
+      {"name": "inventory_date", "type": "date", "description": "Ngày ghi nhận tồn kho (DEV)"},
+      {"name": "stock_on_hand", "type": "decimal(18,2)", "description": "Số lượng tồn kho hiện có (DEV)"}
+    ],
+    "upstreams": [],
+    "downstreams": [],
+    "certified": false,
+    "datahub_url": "http://mock-datahub.local/dataset/logistic.fact_inventory_dev"
+  }
+]

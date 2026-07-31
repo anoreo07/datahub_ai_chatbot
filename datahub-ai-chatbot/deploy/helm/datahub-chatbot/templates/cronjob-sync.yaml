@@ -1,0 +1,35 @@
+{{- if .Values.syncCronjob.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "datahub-chatbot.fullname" . }}-sync
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    {{- include "datahub-chatbot.labels" . | nindent 4 }}
+    app.kubernetes.io/component: sync
+spec:
+  schedule: {{ .Values.syncCronjob.schedule | quote }}
+  jobTemplate:
+    spec:
+      backoffLimit: {{ .Values.syncCronjob.backoffLimit }}
+      template:
+        spec:
+          {{- include "datahub-chatbot.imagePullSecrets" . | nindent 10 }}
+          restartPolicy: {{ .Values.syncCronjob.restartPolicy }}
+          serviceAccountName: {{ include "datahub-chatbot.serviceAccountName" . }}
+          securityContext:
+            {{- toYaml .Values.podSecurityContext | nindent 12 }}
+          containers:
+            - name: sync
+              image: {{ include "datahub-chatbot.image" (dict "repository" "" "tag" "" "pullPolicy" "") }}
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              command:
+                {{- toYaml .Values.syncCronjob.command | nindent 16 }}
+              securityContext:
+                {{- toYaml .Values.containerSecurityContext | nindent 16 }}
+              env:
+                {{- include "datahub-chatbot.env" . | nindent 16 }}
+                {{- include "datahub-chatbot.secretEnv" . | nindent 16 }}
+              resources:
+                {{- toYaml .Values.syncCronjob.resources | nindent 16 }}
+{{- end }}

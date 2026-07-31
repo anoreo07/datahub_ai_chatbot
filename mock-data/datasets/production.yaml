@@ -1,0 +1,1314 @@
+datasets:
+  - name: dim_product
+    description: Danh mục sản phẩm xe ô tô, bao gồm tất cả phiên bản và tùy chọn
+    domain: Sản xuất
+    platform: Redshift
+    tags:
+      - master-data
+      - product
+    columns:
+      - name: product_id
+        description: Mã định danh duy nhất của sản phẩm xe
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa chính, mã sản phẩm được sinh tự động theo format VF-{dòng xe}-{phiên bản}
+        example: VF-VF8-PLUS
+      - name: model_name
+        description: Tên dòng xe
+        data_type: varchar
+        nullable: false
+        business_definition: Tên thương mại của dòng xe, ví dụ VF e34, VF 8, VF 9
+        example: VF 8
+      - name: variant
+        description: Phiên bản của dòng xe
+        data_type: varchar
+        nullable: true
+        business_definition: Phiên bản cấu hình như Eco, Plus, Premium
+        example: Plus
+      - name: body_type
+        description: Kiểu thân xe
+        data_type: varchar
+        nullable: false
+        business_definition: Phân loại theo cấu trúc thân xe như SUV, Sedan, Hatchback
+        example: SUV
+      - name: fuel_type
+        description: Loại nhiên liệu
+        data_type: varchar
+        nullable: false
+        business_definition: Động cơ sử dụng xăng, điện, hybrid hoặc xăng-điện kết hợp
+        example: Electric
+      - name: battery_capacity_kwh
+        description: Dung lượng pin tính bằng kWh
+        data_type: decimal
+        nullable: true
+        business_definition: Dung lượng pin của xe điện, áp dụng với dòng xe điện
+        example: 82.0
+      - name: engine_power_hp
+        description: Công suất động cơ tính bằng mã lực
+        data_type: decimal
+        nullable: true
+        business_definition: Công suất tối đa của động cơ
+        example: 349.0
+      - name: seating_capacity
+        description: Số chỗ ngồi
+        data_type: int
+        nullable: false
+        business_definition: Số ghế tối đa trên xe
+        example: 5
+      - name: exterior_color
+        description: Màu sắc ngoại thất
+        data_type: varchar
+        nullable: true
+        business_definition: Mã màu sơn ngoài thân xe theo danh mục màu VinFast
+        example: Đỏ
+      - name: interior_material
+        description: Chất liệu nội thất
+        data_type: varchar
+        nullable: true
+        business_definition: Loại vật liệu bọc ghế và trang trí nội thất
+        example: Da cao cấp
+      - name: standard_warranty_months
+        description: Thời gian bảo hành tiêu chuẩn tính bằng tháng
+        data_type: int
+        nullable: false
+        business_definition: Số tháng bảo hành chính hãng cho xe mới
+        example: 60
+      - name: base_price
+        description: Giá niêm yết cơ bản chưa bao gồm tùy chọn
+        data_type: decimal
+        nullable: false
+        business_definition: Giá bán lẻ đề xuất của nhà sản xuất
+        example: 1050000000.00
+      - name: product_status
+        description: Trạng thái sản phẩm
+        data_type: varchar
+        nullable: false
+        business_definition: Trạng thái vòng đời sản phẩm, Active là đang sản xuất, Discontinued là ngừng sản xuất
+        example: Active
+      - name: launch_date
+        description: Ngày ra mắt sản phẩm
+        data_type: date
+        nullable: true
+        business_definition: Ngày chính thức giới thiệu sản phẩm ra thị trường
+        example: 2023-06-15
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp tự động ghi nhận khi bản ghi được tạo trong hệ thống
+        example: 2024-01-01 08:00:00
+    owners:
+      - product-master-team
+    refresh_frequency: Daily
+
+  - name: dim_plant
+    description: Danh mục nhà máy sản xuất của VinFast
+    domain: Sản xuất
+    platform: Redshift
+    tags:
+      - master-data
+      - plant
+    columns:
+      - name: plant_id
+        description: Mã định danh nhà máy
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa chính, mã nhà máy gồm 4 ký tự
+        example: VFHP
+      - name: plant_name
+        description: Tên nhà máy
+        data_type: varchar
+        nullable: false
+        business_definition: Tên đầy đủ của nhà máy sản xuất
+        example: Nhà máy VinFast Hải Phòng
+      - name: plant_location
+        description: Địa điểm nhà máy
+        data_type: varchar
+        nullable: false
+        business_definition: Tỉnh/thành phố nơi đặt nhà máy
+        example: Hải Phòng
+      - name: plant_area_sqm
+        description: Diện tích nhà máy tính bằng mét vuông
+        data_type: decimal
+        nullable: true
+        business_definition: Tổng diện tích mặt bằng của nhà máy
+        example: 335000.00
+      - name: production_capacity_per_year
+        description: Công suất sản xuất hàng năm
+        data_type: int
+        nullable: true
+        business_definition: Số lượng xe tối đa có thể sản xuất trong một năm
+        example: 250000
+      - name: plant_status
+        description: Trạng thái hoạt động nhà máy
+        data_type: varchar
+        nullable: false
+        business_definition: Trạng thái vận hành của nhà máy, Active hoặc Inactive
+        example: Active
+      - name: operating_since
+        description: Ngày đi vào hoạt động
+        data_type: date
+        nullable: true
+        business_definition: Ngày nhà máy bắt đầu đi vào sản xuất chính thức
+        example: 2019-06-14
+      - name: plant_manager
+        description: Giám đốc nhà máy
+        data_type: varchar
+        nullable: true
+        business_definition: Họ tên người quản lý điều hành nhà máy
+        example: Nguyễn Văn A
+      - name: shift_model
+        description: Mô hình ca làm việc
+        data_type: varchar
+        nullable: false
+        business_definition: Số ca sản xuất mỗi ngày, thường là 2Shift, 3Shift
+        example: 3Shift
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp tự động ghi nhận khi bản ghi được tạo
+        example: 2024-01-01 08:00:00
+    owners:
+      - plant-operations
+    refresh_frequency: Daily
+
+  - name: dim_assembly_line
+    description: Danh mục dây chuyền lắp ráp trong nhà máy
+    domain: Sản xuất
+    platform: Redshift
+    tags:
+      - master-data
+      - assembly-line
+    columns:
+      - name: assembly_line_id
+        description: Mã định danh dây chuyền
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa chính, mã định danh duy nhất cho mỗi dây chuyền
+        example: AL-BODY-01
+      - name: plant_id
+        description: Mã nhà máy
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_plant, xác định nhà máy sở hữu dây chuyền
+        example: VFHP
+      - name: line_name
+        description: Tên dây chuyền
+        data_type: varchar
+        nullable: false
+        business_definition: Tên mô tả dây chuyền lắp ráp
+        example: Dây chuyền hàn thân xe số 1
+      - name: line_type
+        description: Loại dây chuyền
+        data_type: varchar
+        nullable: false
+        business_definition: Phân loại dây chuyền theo công đoạn sản xuất như BodyShop, PaintShop, Assembly, Trim
+        example: BodyShop
+      - name: cycle_time_seconds
+        description: Thời gian chu kỳ tính bằng giây
+        data_type: int
+        nullable: false
+        business_definition: Thời gian tối đa cho phép để hoàn thành một công đoạn trên dây chuyền
+        example: 120
+      - name: line_speed
+        description: Tốc độ dây chuyền
+        data_type: decimal
+        nullable: true
+        business_definition: Số lượng sản phẩm đi qua dây chuyền trong một giờ
+        example: 30.0
+      - name: length_meters
+        description: Chiều dài dây chuyền tính bằng mét
+        data_type: decimal
+        nullable: true
+        business_definition: Tổng chiều dài vật lý của dây chuyền lắp ráp
+        example: 450.00
+      - name: line_status
+        description: Trạng thái dây chuyền
+        data_type: varchar
+        nullable: false
+        business_definition: Trạng thái vận hành Running, Stopped, Maintenance
+        example: Running
+      - name: supervisor_id
+        description: Mã giám sát dây chuyền
+        data_type: varchar
+        nullable: true
+        business_definition: Khóa ngoại tham chiếu đến dim_worker, người chịu trách nhiệm dây chuyền
+        example: WRK0045
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp tự động ghi nhận khi bản ghi được tạo
+        example: 2024-01-01 08:00:00
+    owners:
+      - plant-operations
+    refresh_frequency: Daily
+
+  - name: dim_station
+    description: Danh mục trạm làm việc trên dây chuyền lắp ráp
+    domain: Sản xuất
+    platform: Redshift
+    tags:
+      - master-data
+      - station
+    columns:
+      - name: station_id
+        description: Mã định danh trạm làm việc
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa chính, mã duy nhất cho mỗi trạm làm việc
+        example: STN-WELD-015
+      - name: assembly_line_id
+        description: Mã dây chuyền
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_assembly_line, xác định dây chuyền chứa trạm
+        example: AL-BODY-01
+      - name: station_code
+        description: Mã trạm
+        data_type: varchar
+        nullable: false
+        business_definition: Mã ngắn gọn theo quy ước nhà máy
+        example: W015
+      - name: station_name
+        description: Tên trạm làm việc
+        data_type: varchar
+        nullable: false
+        business_definition: Mô tả công việc thực hiện tại trạm
+        example: Hàn cụm cửa trái
+      - name: station_type
+        description: Loại trạm
+        data_type: varchar
+        nullable: false
+        business_definition: Phân loại trạm Manual, SemiAuto, Auto
+        example: SemiAuto
+      - name: sequence_number
+        description: Số thứ tự trên dây chuyền
+        data_type: int
+        nullable: false
+        business_definition: Vị trí của trạm trên dây chuyền, số càng nhỏ càng đầu quy trình
+        example: 15
+      - name: standard_cycle_time
+        description: Thời gian chu kỳ tiêu chuẩn giây
+        data_type: int
+        nullable: false
+        business_definition: Thời gian tiêu chuẩn để hoàn thành thao tác tại trạm
+        example: 120
+      - name: min_workers_required
+        description: Số công nhân tối thiểu
+        data_type: int
+        nullable: false
+        business_definition: Số lượng công nhân tối thiểu cần bố trí tại trạm để vận hành
+        example: 2
+      - name: station_status
+        description: Trạng thái trạm
+        data_type: varchar
+        nullable: false
+        business_definition: Trạng thái hoạt động Operational, UnderMaintenance, Closed
+        example: Operational
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp tự động ghi nhận khi bản ghi được tạo
+        example: 2024-01-01 08:00:00
+    owners:
+      - plant-operations
+    refresh_frequency: Daily
+
+  - name: fact_production_order
+    description: Lệnh sản xuất xe, bao gồm thông tin chi tiết từng lô xe được sản xuất
+    domain: Sản xuất
+    platform: Redshift
+    tags:
+      - transaction
+      - production
+    columns:
+      - name: order_id
+        description: Mã định danh lệnh sản xuất
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa chính, mã lệnh sản xuất duy nhất được sinh từ hệ thống ERP
+        example: PO-2024-08-000123
+      - name: product_id
+        description: Mã sản phẩm
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_product, xác định dòng xe cần sản xuất
+        example: VF-VF8-PLUS
+      - name: plant_id
+        description: Mã nhà máy
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_plant, nơi thực hiện lệnh sản xuất
+        example: VFHP
+      - name: assembly_line_id
+        description: Mã dây chuyền
+        data_type: varchar
+        nullable: true
+        business_definition: Khóa ngoại tham chiếu đến dim_assembly_line, dây chuyền phụ trách sản xuất
+        example: AL-ASM-01
+      - name: order_quantity
+        description: Số lượng xe theo lệnh
+        data_type: int
+        nullable: false
+        business_definition: Tổng số lượng xe cần sản xuất theo lệnh
+        example: 50
+      - name: order_date
+        description: Ngày tạo lệnh
+        data_type: date
+        nullable: false
+        business_definition: Ngày lệnh sản xuất được khởi tạo trong hệ thống
+        example: 2024-08-15
+      - name: planned_start_date
+        description: Ngày bắt đầu kế hoạch
+        data_type: date
+        nullable: false
+        business_definition: Ngày dự kiến bắt đầu sản xuất theo kế hoạch sản xuất tổng thể
+        example: 2024-08-20
+      - name: planned_end_date
+        description: Ngày kết thúc kế hoạch
+        data_type: date
+        nullable: false
+        business_definition: Ngày dự kiến hoàn thành lệnh sản xuất
+        example: 2024-09-05
+      - name: actual_start_date
+        description: Ngày bắt đầu thực tế
+        data_type: date
+        nullable: true
+        business_definition: Ngày thực tế bắt đầu sản xuất lô xe
+        example: 2024-08-20
+      - name: actual_end_date
+        description: Ngày kết thúc thực tế
+        data_type: date
+        nullable: true
+        business_definition: Ngày thực tế hoàn thành lệnh sản xuất
+        example: 2024-09-06
+      - name: order_status
+        description: Trạng thái lệnh sản xuất
+        data_type: varchar
+        nullable: false
+        business_definition: Trạng thái của lệnh gồm Created, Released, InProgress, Completed, Cancelled
+        example: InProgress
+      - name: priority
+        description: Mức độ ưu tiên
+        data_type: varchar
+        nullable: false
+        business_definition: Mức ưu tiên xử lý lệnh, gồm Normal, High, Urgent
+        example: High
+      - name: customer_order_ref
+        description: Tham chiếu đơn hàng khách
+        data_type: varchar
+        nullable: true
+        business_definition: Mã đơn hàng của khách hàng nếu thuộc đơn đặt hàng cụ thể
+        example: SO-2024-08-005678
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp ghi nhận thời điểm nhập lệnh vào hệ thống
+        example: 2024-08-15 09:30:00
+    owners:
+      - production-planning
+    refresh_frequency: Daily
+
+  - name: fact_production_output
+    description: Sản lượng sản xuất thực tế theo từng ca và dây chuyền
+    domain: Sản xuất
+    platform: Redshift
+    tags:
+      - transaction
+      - output
+    columns:
+      - name: output_id
+        description: Mã định danh bản ghi sản lượng
+        data_type: bigint
+        nullable: false
+        business_definition: Khóa chính, sinh tự động từ sequence
+        example: 1000001
+      - name: order_id
+        description: Mã lệnh sản xuất
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến fact_production_order
+        example: PO-2024-08-000123
+      - name: shift_id
+        description: Mã ca làm việc
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_shift
+        example: SHIFT-A-20240820
+      - name: assembly_line_id
+        description: Mã dây chuyền
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_assembly_line
+        example: AL-ASM-01
+      - name: station_id
+        description: Mã trạm
+        data_type: varchar
+        nullable: true
+        business_definition: Khóa ngoại tham chiếu đến dim_station
+        example: STN-ASM-035
+      - name: output_date
+        description: Ngày sản xuất
+        data_type: date
+        nullable: false
+        business_definition: Ngày ghi nhận sản lượng
+        example: 2024-08-21
+      - name: product_id
+        description: Mã sản phẩm
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_product
+        example: VF-VF8-PLUS
+      - name: vin_number
+        description: Số VIN của xe
+        data_type: varchar
+        nullable: true
+        business_definition: Số nhận dạng xe duy nhất gồm 17 ký tự theo tiêu chuẩn quốc tế, được gán khi xe hoàn thiện
+        example: VLFV8P30XP80012345
+      - name: good_quantity
+        description: Số lượng đạt chuẩn
+        data_type: int
+        nullable: false
+        business_definition: Số sản phẩm đạt chất lượng sau kiểm tra
+        example: 45
+      - name: reject_quantity
+        description: Số lượng lỗi
+        data_type: int
+        nullable: false
+        business_definition: Số sản phẩm không đạt chất lượng cần sửa chữa hoặc loại bỏ
+        example: 2
+      - name: rework_quantity
+        description: Số lượng cần làm lại
+        data_type: int
+        nullable: false
+        business_definition: Số sản phẩm cần sửa lỗi trước khi đạt chuẩn
+        example: 3
+      - name: recorded_at
+        description: Thời điểm ghi nhận
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp ghi nhận thời điểm cập nhật sản lượng
+        example: 2024-08-21 16:30:00
+    owners:
+      - production-supervisor
+    refresh_frequency: Hourly
+
+  - name: fact_defect_tracking
+    description: Theo dõi lỗi phát sinh trong quá trình sản xuất và lắp ráp
+    domain: Sản xuất
+    platform: Redshift
+    tags:
+      - transaction
+      - quality
+    columns:
+      - name: defect_id
+        description: Mã định danh lỗi
+        data_type: bigint
+        nullable: false
+        business_definition: Khóa chính, mã duy nhất cho mỗi lỗi phát hiện
+        example: 5001234
+      - name: order_id
+        description: Mã lệnh sản xuất
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến fact_production_order
+        example: PO-2024-08-000123
+      - name: vin_number
+        description: Số VIN xe bị lỗi
+        data_type: varchar
+        nullable: true
+        business_definition: Số VIN của xe phát hiện lỗi, null nếu lỗi phát hiện trước khi gán VIN
+        example: VLFV8P30XP80012347
+      - name: station_id
+        description: Mã trạm phát hiện lỗi
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_station, trạm phát hiện ra lỗi
+        example: STN-PNT-022
+      - name: defect_code
+        description: Mã loại lỗi
+        data_type: varchar
+        nullable: false
+        business_definition: Mã phân loại lỗi theo danh mục chất lượng, ví dụ PAINT-SCRATCH, WELD-GAP
+        example: PAINT-DUST
+      - name: defect_description
+        description: Mô tả chi tiết lỗi
+        data_type: varchar
+        nullable: false
+        business_definition: Nội dung mô tả chi tiết về lỗi phát hiện được
+        example: Bụi bẩn trong lớp sơn cửa trái
+      - name: defect_severity
+        description: Mức độ nghiêm trọng
+        data_type: varchar
+        nullable: false
+        business_definition: Phân loại mức độ Critical, Major, Minor
+        example: Major
+      - name: defect_category
+        description: Nhóm lỗi
+        data_type: varchar
+        nullable: false
+        business_definition: Nhóm nguyên nhân gốc rễ như Material, Process, Equipment, Human
+        example: Process
+      - name: detected_at
+        description: Thời điểm phát hiện
+        data_type: timestamp
+        nullable: false
+        business_definition: Thời gian phát hiện lỗi tại trạm kiểm tra
+        example: 2024-08-21 10:15:00
+      - name: reported_by
+        description: Người phát hiện lỗi
+        data_type: varchar
+        nullable: true
+        business_definition: Mã công nhân hoặc hệ thống phát hiện lỗi
+        example: WRK0123
+      - name: root_cause
+        description: Nguyên nhân gốc rễ
+        data_type: varchar
+        nullable: true
+        business_definition: Kết quả phân tích nguyên nhân gốc rễ sau khi điều tra
+        example: Nhiệt độ sấy không đạt chuẩn
+      - name: corrective_action
+        description: Hành động khắc phục
+        data_type: varchar
+        nullable: true
+        business_definition: Biện pháp xử lý đã thực hiện để khắc phục lỗi
+        example: Điều chỉnh lại nhiệt độ buồng sấy
+      - name: defect_status
+        description: Trạng thái xử lý
+        data_type: varchar
+        nullable: false
+        business_definition: Trạng thái Open, InProgress, Resolved, Closed
+        example: Resolved
+      - name: resolved_at
+        description: Thời điểm khắc phục
+        data_type: timestamp
+        nullable: true
+        business_definition: Thời gian lỗi được xử lý xong
+        example: 2024-08-21 14:30:00
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp ghi nhận lỗi vào hệ thống
+        example: 2024-08-21 10:16:00
+    owners:
+      - quality-team
+    refresh_frequency: Hourly
+
+  - name: fact_quality_inspection
+    description: Kết quả kiểm tra chất lượng tại các trạm kiểm định
+    domain: Sản xuất
+    platform: Redshift
+    tags:
+      - transaction
+      - quality
+    columns:
+      - name: inspection_id
+        description: Mã định danh phiếu kiểm tra
+        data_type: bigint
+        nullable: false
+        business_definition: Khóa chính, mã duy nhất cho mỗi lần kiểm tra
+        example: 8000123
+      - name: order_id
+        description: Mã lệnh sản xuất
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến fact_production_order
+        example: PO-2024-08-000123
+      - name: vin_number
+        description: Số VIN xe
+        data_type: varchar
+        nullable: false
+        business_definition: Số VIN của xe được kiểm tra
+        example: VLFV8P30XP80012345
+      - name: inspection_type
+        description: Loại kiểm tra
+        data_type: varchar
+        nullable: false
+        business_definition: Phân loại kiểm tra Inline, Final, Audit, Random
+        example: Final
+      - name: inspection_station
+        description: Trạm kiểm tra
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_station, nơi thực hiện kiểm tra
+        example: STN-QC-001
+      - name: inspector_id
+        description: Mã người kiểm tra
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_worker, người thực hiện kiểm tra
+        example: WRK0088
+      - name: inspection_result
+        description: Kết quả kiểm tra
+        data_type: varchar
+        nullable: false
+        business_definition: Kết quả Pass, Fail, Rework, ConditionalPass
+        example: Pass
+      - name: score
+        description: Điểm chất lượng
+        data_type: decimal
+        nullable: true
+        business_definition: Điểm đánh giá chất lượng theo thang điểm 100
+        example: 92.50
+      - name: defect_count
+        description: Số lỗi phát hiện
+        data_type: int
+        nullable: false
+        business_definition: Tổng số lỗi phát hiện trong lần kiểm tra
+        example: 0
+      - name: inspection_date
+        description: Ngày kiểm tra
+        data_type: date
+        nullable: false
+        business_definition: Ngày thực hiện kiểm tra chất lượng
+        example: 2024-08-22
+      - name: inspection_at
+        description: Thời điểm kiểm tra
+        data_type: timestamp
+        nullable: false
+        business_definition: Thời gian thực tế tiến hành kiểm tra
+        example: 2024-08-22 11:00:00
+      - name: next_inspection_due
+        description: Ngày kiểm tra kế tiếp
+        data_type: date
+        nullable: true
+        business_definition: Ngày dự kiến cho lần kiểm tra định kỳ tiếp theo
+        example: 2024-08-29
+      - name: notes
+        description: Ghi chú bổ sung
+        data_type: varchar
+        nullable: true
+        business_definition: Ghi chú của người kiểm tra về các vấn đề đặc biệt
+        example: Xe đạt chuẩn xuất xưởng
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp nhập kết quả kiểm tra vào hệ thống
+        example: 2024-08-22 11:05:00
+    owners:
+      - quality-team
+    refresh_frequency: Hourly
+
+  - name: fact_downtime
+    description: Ghi nhận thời gian dừng máy và nguyên nhân ngừng sản xuất
+    domain: Sản xuất
+    platform: Redshift
+    tags:
+      - transaction
+      - maintenance
+    columns:
+      - name: downtime_id
+        description: Mã định danh sự cố dừng máy
+        data_type: bigint
+        nullable: false
+        business_definition: Khóa chính, mã duy nhất cho mỗi sự cố dừng máy
+        example: 3000456
+      - name: assembly_line_id
+        description: Mã dây chuyền
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_assembly_line, dây chuyền bị dừng
+        example: AL-PAINT-01
+      - name: station_id
+        description: Mã trạm
+        data_type: varchar
+        nullable: true
+        business_definition: Khóa ngoại tham chiếu đến dim_station, trạm gặp sự cố
+        example: STN-PNT-018
+      - name: shift_id
+        description: Mã ca
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_shift
+        example: SHIFT-A-20240821
+      - name: downtime_start
+        description: Thời điểm bắt đầu dừng
+        data_type: timestamp
+        nullable: false
+        business_definition: Thời gian máy bắt đầu ngừng hoạt động
+        example: 2024-08-21 08:45:00
+      - name: downtime_end
+        description: Thời điểm kết thúc dừng
+        data_type: timestamp
+        nullable: true
+        business_definition: Thời gian máy hoạt động trở lại
+        example: 2024-08-21 09:30:00
+      - name: duration_minutes
+        description: Thời gian dừng phút
+        data_type: int
+        nullable: false
+        business_definition: Tổng thời gian dừng máy tính bằng phút
+        example: 45
+      - name: downtime_category
+        description: Nhóm nguyên nhân
+        data_type: varchar
+        nullable: false
+        business_definition: Phân loại EquipmentFailure, MaterialShortage, SetupChange, Maintenance, NoOperator, Other
+        example: EquipmentFailure
+      - name: downtime_reason
+        description: Nguyên nhân chi tiết
+        data_type: varchar
+        nullable: false
+        business_definition: Mô tả chi tiết nguyên nhân dừng máy
+        example: Hỏng cảm biến nhiệt buồng sấy
+      - name: equipment_id
+        description: Mã thiết bị
+        data_type: varchar
+        nullable: true
+        business_definition: Mã thiết bị cụ thể gặp sự cố, tham chiếu đến hệ thống quản lý thiết bị
+        example: EQ-PNT-003
+      - name: reported_by
+        description: Người báo cáo
+        data_type: varchar
+        nullable: false
+        business_definition: Mã nhân viên báo cáo sự cố
+        example: WRK0056
+      - name: resolution_action
+        description: Hành động xử lý
+        data_type: varchar
+        nullable: true
+        business_definition: Biện pháp đã thực hiện để khắc phục sự cố
+        example: Thay thế cảm biến nhiệt
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp ghi nhận sự cố vào hệ thống
+        example: 2024-08-21 08:46:00
+    owners:
+      - maintenance-team
+    refresh_frequency: Hourly
+
+  - name: fact_oee_metrics
+    description: Chỉ số OEE tổng hợp hiệu quả thiết bị tổng thể
+    domain: Sản xuất
+    platform: Redshift
+    tags:
+      - transactional
+      - metrics
+    columns:
+      - name: oee_id
+        description: Mã định danh bản ghi OEE
+        data_type: bigint
+        nullable: false
+        business_definition: Khóa chính, sinh tự động
+        example: 9000001
+      - name: assembly_line_id
+        description: Mã dây chuyền
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_assembly_line
+        example: AL-ASM-01
+      - name: shift_id
+        description: Mã ca
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_shift
+        example: SHIFT-A-20240821
+      - name: oee_date
+        description: Ngày đo lường
+        data_type: date
+        nullable: false
+        business_definition: Ngày ghi nhận chỉ số OEE
+        example: 2024-08-21
+      - name: availability_pct
+        description: Tỷ lệ sẵn sàng phần trăm
+        data_type: decimal
+        nullable: false
+        business_definition: Thời gian máy hoạt động hiệu quả chia tổng thời gian kế hoạch, tính theo phần trăm
+        example: 92.50
+      - name: performance_pct
+        description: Tỷ lệ hiệu suất phần trăm
+        data_type: decimal
+        nullable: false
+        business_definition: Tốc độ sản xuất thực tế chia tốc độ lý thuyết, tính theo phần trăm
+        example: 88.70
+      - name: quality_pct
+        description: Tỷ lệ chất lượng phần trăm
+        data_type: decimal
+        nullable: false
+        business_definition: Sản phẩm đạt chuẩn chia tổng sản phẩm sản xuất, tính theo phần trăm
+        example: 97.80
+      - name: oee_pct
+        description: OEE tổng thể phần trăm
+        data_type: decimal
+        nullable: false
+        business_definition: Tích của Availability x Performance x Quality, chỉ số đo lường hiệu quả tổng thể
+        example: 80.30
+      - name: planned_production_time_min
+        description: Thời gian sản xuất kế hoạch phút
+        data_type: int
+        nullable: false
+        business_definition: Tổng thời gian sản xuất theo kế hoạch trong kỳ
+        example: 480
+      - name: actual_runtime_min
+        description: Thời gian chạy thực tế phút
+        data_type: int
+        nullable: false
+        business_definition: Tổng thời gian máy thực tế hoạt động
+        example: 444
+      - name: ideal_cycle_time_seconds
+        description: Thời gian chu kỳ lý tưởng giây
+        data_type: decimal
+        nullable: false
+        business_definition: Thời gian chu kỳ ngắn nhất có thể đạt được trong điều kiện lý tưởng
+        example: 120.00
+      - name: total_parts_produced
+        description: Tổng sản phẩm sản xuất
+        data_type: int
+        nullable: false
+        business_definition: Tổng số sản phẩm đầu ra trong ca
+        example: 220
+      - name: good_parts_produced
+        description: Sản phẩm đạt chuẩn
+        data_type: int
+        nullable: false
+        business_definition: Số sản phẩm không có lỗi
+        example: 215
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp ghi nhận chỉ số OEE vào hệ thống
+        example: 2024-08-21 17:00:00
+    owners:
+      - plant-operations
+    refresh_frequency: Daily
+
+  - name: fact_wip_tracking
+    description: Theo dõi sản phẩm dở dang trên dây chuyền sản xuất
+    domain: Sản xuất
+    platform: Redshift
+    tags:
+      - transactional
+      - wip
+    columns:
+      - name: wip_id
+        description: Mã định danh bản ghi WIP
+        data_type: bigint
+        nullable: false
+        business_definition: Khóa chính, mã duy nhất cho mỗi bản ghi theo dõi WIP
+        example: 7000123
+      - name: order_id
+        description: Mã lệnh sản xuất
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến fact_production_order
+        example: PO-2024-08-000123
+      - name: vin_number
+        description: Số VIN
+        data_type: varchar
+        nullable: true
+        business_definition: Số VIN của xe, có thể null nếu chưa qua trạm gán VIN
+        example: VLFV8P30XP80012345
+      - name: assembly_line_id
+        description: Mã dây chuyền hiện tại
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_assembly_line, dây chuyền xe đang ở
+        example: AL-PAINT-01
+      - name: station_id
+        description: Mã trạm hiện tại
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_station, trạm xe đang được xử lý
+        example: STN-PNT-025
+      - name: wip_status
+        description: Trạng thái WIP
+        data_type: varchar
+        nullable: false
+        business_definition: Trạng thái InQueue, InProcess, Completed, Held
+        example: InProcess
+      - name: quantity
+        description: Số lượng
+        data_type: int
+        nullable: false
+        business_definition: Số lượng sản phẩm tại vị trí này, thường là 1 đối với sản xuất đơn chiếc
+        example: 1
+      - name: entered_at
+        description: Thời điểm vào trạm
+        data_type: timestamp
+        nullable: false
+        business_definition: Thời gian sản phẩm bắt đầu vào trạm hiện tại
+        example: 2024-08-21 09:15:00
+      - name: exited_at
+        description: Thời điểm rời trạm
+        data_type: timestamp
+        nullable: true
+        business_definition: Thời gian sản phẩm rời khỏi trạm, null nếu chưa hoàn thành
+        example: 2024-08-21 10:20:00
+      - name: dwell_time_minutes
+        description: Thời gian lưu tại trạm phút
+        data_type: int
+        nullable: true
+        business_definition: Chênh lệch giữa exited_at và entered_at tính bằng phút
+        example: 65
+      - name: hold_reason
+        description: Lý do tạm giữ
+        data_type: varchar
+        nullable: true
+        business_definition: Lý do nếu sản phẩm bị giữ lại tại trạm, null nếu không
+        example: Chờ kiểm tra chất lượng bổ sung
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp ghi nhận thông tin WIP
+        example: 2024-08-21 09:16:00
+    owners:
+      - production-supervisor
+    refresh_frequency: Hourly
+
+  - name: dim_shift
+    description: Danh mục ca làm việc trong nhà máy
+    domain: Sản xuất
+    platform: Redshift
+    tags:
+      - master-data
+      - shift
+    columns:
+      - name: shift_id
+        description: Mã định danh ca làm việc
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa chính, mã ca theo format SHIFT-{ca}-{ngày}
+        example: SHIFT-A-20240821
+      - name: shift_code
+        description: Mã ca
+        data_type: varchar
+        nullable: false
+        business_definition: Ký hiệu ca A, B, C, D
+        example: A
+      - name: shift_name
+        description: Tên ca
+        data_type: varchar
+        nullable: false
+        business_definition: Tên đầy đủ của ca làm việc
+        example: Ca sáng
+      - name: plant_id
+        description: Mã nhà máy
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_plant
+        example: VFHP
+      - name: shift_date
+        description: Ngày làm việc
+        data_type: date
+        nullable: false
+        business_definition: Ngày diễn ra ca làm việc
+        example: 2024-08-21
+      - name: start_time
+        description: Giờ bắt đầu
+        data_type: time
+        nullable: false
+        business_definition: Thời gian bắt đầu ca làm việc
+        example: 06:00:00
+      - name: end_time
+        description: Giờ kết thúc
+        data_type: time
+        nullable: false
+        business_definition: Thời gian kết thúc ca làm việc
+        example: 14:00:00
+      - name: break_start
+        description: Giờ nghỉ giải lao
+        data_type: time
+        nullable: true
+        business_definition: Thời gian bắt đầu giờ nghỉ giữa ca
+        example: 09:30:00
+      - name: break_duration_minutes
+        description: Thời gian nghỉ phút
+        data_type: int
+        nullable: true
+        business_definition: Số phút nghỉ giải lao trong ca
+        example: 30
+      - name: overtime_minutes
+        description: Số phút tăng ca
+        data_type: int
+        nullable: true
+        business_definition: Số phút làm thêm ngoài giờ tiêu chuẩn
+        example: 60
+      - name: shift_status
+        description: Trạng thái ca
+        data_type: varchar
+        nullable: false
+        business_definition: Trạng thái Planned, Active, Completed, Cancelled
+        example: Completed
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp tạo bản ghi ca
+        example: 2024-08-20 17:00:00
+    owners:
+      - production-planning
+    refresh_frequency: Daily
+
+  - name: dim_worker
+    description: Danh mục công nhân sản xuất
+    domain: Sản xuất
+    platform: Redshift
+    tags:
+      - master-data
+      - worker
+    columns:
+      - name: worker_id
+        description: Mã định danh công nhân
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa chính, mã nhân viên duy nhất
+        example: WRK0123
+      - name: full_name
+        description: Họ và tên
+        data_type: varchar
+        nullable: false
+        business_definition: Họ tên đầy đủ của công nhân
+        example: Nguyễn Văn Bình
+      - name: plant_id
+        description: Mã nhà máy
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_plant, nơi công nhân làm việc
+        example: VFHP
+      - name: department
+        description: Bộ phận
+        data_type: varchar
+        nullable: false
+        business_definition: Bộ phận công tác như Hàn, Sơn, Lắp ráp, KCS, Bảo trì
+        example: Lắp ráp
+      - name: job_title
+        description: Chức danh
+        data_type: varchar
+        nullable: false
+        business_definition: Vị trí công việc như Thợ hàn, Kỹ thuật viên, Giám sát, Kiểm tra chất lượng
+        example: Kỹ thuật viên lắp ráp
+      - name: skill_level
+        description: Cấp bậc tay nghề
+        data_type: varchar
+        nullable: false
+        business_definition: Cấp bậc từ 1 đến 7, càng cao tay nghề càng giỏi
+        example: 4
+      - name: certification
+        description: Chứng chỉ nghề
+        data_type: varchar
+        nullable: true
+        business_definition: Các chứng chỉ chuyên môn đạt được
+        example: Thợ hàn áp lực bậc 6
+      - name: hire_date
+        description: Ngày vào làm
+        data_type: date
+        nullable: false
+        business_definition: Ngày bắt đầu làm việc tại công ty
+        example: 2021-03-15
+      - name: worker_status
+        description: Trạng thái
+        data_type: varchar
+        nullable: false
+        business_definition: Trạng thái Active, Inactive, OnLeave, Terminated
+        example: Active
+      - name: assigned_shift
+        description: Ca làm chính
+        data_type: varchar
+        nullable: true
+        business_definition: Ca làm việc chính của công nhân
+        example: A
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp tạo bản ghi
+        example: 2024-01-01 08:00:00
+    owners:
+      - hr-system
+    refresh_frequency: Daily
+
+  - name: fact_material_consumption
+    description: Tiêu hao vật tư trong quá trình sản xuất xe
+    domain: Sản xuất
+    platform: Redshift
+    tags:
+      - transaction
+      - material
+    columns:
+      - name: consumption_id
+        description: Mã định danh bản ghi tiêu hao
+        data_type: bigint
+        nullable: false
+        business_definition: Khóa chính, mã duy nhất cho mỗi giao dịch tiêu hao vật tư
+        example: 4000123
+      - name: order_id
+        description: Mã lệnh sản xuất
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến fact_production_order
+        example: PO-2024-08-000123
+      - name: material_code
+        description: Mã vật tư
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_material, mã vật tư sử dụng
+        example: MT-THEP-001
+      - name: assembly_line_id
+        description: Mã dây chuyền
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_assembly_line, nơi tiêu hao vật tư
+        example: AL-BODY-01
+      - name: unit_of_measure
+        description: Đơn vị tính
+        data_type: varchar
+        nullable: false
+        business_definition: Đơn vị như kg, m, liter, pcs
+        example: kg
+      - name: planned_quantity
+        description: Lượng kế hoạch
+        data_type: decimal
+        nullable: false
+        business_definition: Số lượng vật tư dự kiến sử dụng theo định mức
+        example: 150.00
+      - name: actual_quantity
+        description: Lượng thực tế
+        data_type: decimal
+        nullable: false
+        business_definition: Số lượng vật tư thực tế đã sử dụng
+        example: 152.50
+      - name: variance_quantity
+        description: Chênh lệch
+        data_type: decimal
+        nullable: true
+        business_definition: Chênh lệch giữa thực tế và kế hoạch
+        example: 2.50
+      - name: consumption_date
+        description: Ngày tiêu hao
+        data_type: date
+        nullable: false
+        business_definition: Ngày vật tư được xuất kho cho sản xuất
+        example: 2024-08-21
+      - name: shift_id
+        description: Mã ca
+        data_type: varchar
+        nullable: true
+        business_definition: Khóa ngoại tham chiếu đến dim_shift
+        example: SHIFT-A-20240821
+      - name: batch_number
+        description: Số lô vật tư
+        data_type: varchar
+        nullable: true
+        business_definition: Số lô sản xuất của vật tư sử dụng
+        example: L202408-001
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp ghi nhận tiêu hao vật tư
+        example: 2024-08-21 16:00:00
+    owners:
+      - material-control
+    refresh_frequency: Hourly
+
+  - name: fact_production_routing
+    description: Quy trình sản xuất và trình tự các công đoạn chế tạo xe
+    domain: Sản xuất
+    platform: Redshift
+    tags:
+      - transaction
+      - routing
+    columns:
+      - name: routing_id
+        description: Mã định danh bước quy trình
+        data_type: bigint
+        nullable: false
+        business_definition: Khóa chính, mã duy nhất cho mỗi bước trong quy trình
+        example: 6000123
+      - name: product_id
+        description: Mã sản phẩm
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_product
+        example: VF-VF8-PLUS
+      - name: operation_sequence
+        description: Số thứ tự bước
+        data_type: int
+        nullable: false
+        business_definition: Thứ tự thực hiện bước trong quy trình sản xuất
+        example: 5
+      - name: operation_code
+        description: Mã công đoạn
+        data_type: varchar
+        nullable: false
+        business_definition: Mã định danh công đoạn sản xuất
+        example: OP-WELD-DOOR
+      - name: operation_description
+        description: Mô tả công đoạn
+        data_type: varchar
+        nullable: false
+        business_definition: Mô tả chi tiết công việc thực hiện
+        example: Hàn cửa xe vào thân xe
+      - name: assembly_line_id
+        description: Mã dây chuyền
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_assembly_line, dây chuyền thực hiện công đoạn
+        example: AL-BODY-01
+      - name: station_id
+        description: Mã trạm
+        data_type: varchar
+        nullable: true
+        business_definition: Khóa ngoại tham chiếu đến dim_station, trạm thực hiện
+        example: STN-WELD-015
+      - name: standard_setup_time_min
+        description: Thời gian chuẩn bị phút
+        data_type: decimal
+        nullable: false
+        business_definition: Thời gian chuẩn bị máy móc, dụng cụ trước khi sản xuất
+        example: 10.00
+      - name: standard_run_time_min
+        description: Thời gian gia công phút
+        data_type: decimal
+        nullable: false
+        business_definition: Thời gian gia công cho một đơn vị sản phẩm
+        example: 15.00
+      - name: required_skill_level
+        description: Cấp bậc tay nghề yêu cầu
+        data_type: varchar
+        nullable: false
+        business_definition: Cấp bậc tối thiểu công nhân cần đạt để thực hiện công đoạn
+        example: 3
+      - name: routing_version
+        description: Phiên bản quy trình
+        data_type: varchar
+        nullable: false
+        business_definition: Số phiên bản của quy trình sản xuất khi có thay đổi
+        example: V2
+      - name: effective_from
+        description: Ngày hiệu lực
+        data_type: date
+        nullable: false
+        business_definition: Ngày bắt đầu áp dụng quy trình
+        example: 2024-06-01
+      - name: effective_to
+        description: Ngày hết hiệu lực
+        data_type: date
+        nullable: true
+        business_definition: Ngày kết thúc áp dụng quy trình, null nếu đang dùng
+        example: null
+      - name: is_active
+        description: Có hiệu lực hay không
+        data_type: boolean
+        nullable: false
+        business_definition: True nếu quy trình đang được áp dụng
+        example: true
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp tạo quy trình
+        example: 2024-06-01 08:00:00
+    owners:
+      - process-engineering
+    refresh_frequency: Daily

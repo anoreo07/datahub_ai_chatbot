@@ -1,0 +1,18 @@
+[
+  {"source": "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.dim_material,PROD)", "target": "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,PROD)"},
+  {"source": "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.dim_plant,PROD)", "target": "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,PROD)"},
+  {"source": "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.dim_supplier,PROD)", "target": "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,PROD)"},
+  {"source": "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,PROD)", "target": "urn:li:dashboard:(powerbi,logistic.ton_kho_min_max)"},
+  {"source": "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,PROD)", "target": "urn:li:dashboard:(powerbi,logistic.inventory_executive_summary)"},
+  {"source": "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.dim_material,PROD)", "target": "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_goods_in_transit,PROD)"},
+  {"source": "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.dim_plant,PROD)", "target": "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_goods_in_transit,PROD)"},
+  {"source": "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_goods_in_transit,PROD)", "target": "urn:li:dashboard:(powerbi,logistic.ton_kho_min_max)"},
+  {"source": "urn:li:dataset:(urn:li:dataPlatform:snowflake,sales.orders,PROD)", "target": "urn:li:dataset:(urn:li:dataPlatform:snowflake,finance.monthly_revenue,PROD)"},
+  {"source": "urn:li:dataset:(urn:li:dataPlatform:snowflake,raw.payments,PROD)", "target": "urn:li:dataset:(urn:li:dataPlatform:snowflake,finance.monthly_revenue,PROD)"},
+  {"source": "urn:li:dataset:(urn:li:dataPlatform:snowflake,finance.monthly_revenue,PROD)", "target": "urn:li:dashboard:finance.monthly_summary"},
+  {"source": "urn:li:dataset:(urn:li:dataPlatform:snowflake,sales.orders,PROD)", "target": "urn:li:dashboard:finance.monthly_summary"},
+  {"source": "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,DEV)", "target": "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,PROD)"},
+  {"source": "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,PROD)", "target": "urn:li:document:inventory_policy"},
+  {"source": "urn:li:dataset:(urn:li:dataPlatform:snowflake,finance.monthly_revenue,PROD)", "target": "urn:li:document:monthly_revenue_methodology"},
+  {"source": "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.dim_supplier,PROD)", "target": "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,PROD)"}
+]

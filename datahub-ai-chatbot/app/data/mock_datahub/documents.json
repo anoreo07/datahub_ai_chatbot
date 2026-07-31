@@ -1,0 +1,54 @@
+[
+  {
+    "urn": "urn:li:document:inventory_policy",
+    "entity_type": "document",
+    "name": "Inventory Management Policy",
+    "display_name": "Inventory Management Policy",
+    "description": "Chính sách quản lý tồn kho nội bộ.",
+    "platform": "confluence",
+    "environment": "PROD",
+    "domain_urn": "urn:li:domain:logistic",
+    "domain": "Logistic",
+    "owners": [
+      {"name": "Nguyễn Văn An", "email": "nguyenvan.an@company.example", "type": "BUSINESS_OWNER"}
+    ],
+    "linked_entities": [
+      "urn:li:dashboard:(powerbi,logistic.ton_kho_min_max)",
+      "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,PROD)"
+    ],
+    "datahub_url": "http://mock-datahub.local/document/inventory-policy"
+  },
+  {
+    "urn": "urn:li:document:monthly_revenue_methodology",
+    "entity_type": "document",
+    "name": "Monthly Revenue Methodology",
+    "display_name": "Monthly Revenue Methodology",
+    "description": "Phương pháp tính doanh thu hàng tháng.",
+    "platform": "confluence",
+    "environment": "PROD",
+    "domain_urn": "urn:li:domain:finance",
+    "domain": "Finance",
+    "owners": [
+      {"name": "Finance Analytics", "email": "finance.analytics@company.example", "type": "DATA_TECHNICAL_OWNER"}
+    ],
+    "linked_entities": [
+      "urn:li:dataset:(urn:li:dataPlatform:snowflake,finance.monthly_revenue,PROD)",
+      "urn:li:dashboard:finance.monthly_summary"
+    ],
+    "datahub_url": "http://mock-datahub.local/document/monthly-revenue-methodology"
+  },
+  {
+    "urn": "urn:li:document:no_owner_doc",
+    "entity_type": "document",
+    "name": "Unclaimed Document (Sample)",
+    "display_name": "Unclaimed Document (Sample)",
+    "description": "Tài liệu sample không có owner để test trường hợp không có documentation.",
+    "platform": "confluence",
+    "environment": "DEV",
+    "domain_urn": "urn:li:domain:san_xuat",
+    "domain": "Sản xuất",
+    "owners": [],
+    "linked_entities": [],
+    "datahub_url": "http://mock-datahub.local/document/unclaimed-doc"
+  }
+]

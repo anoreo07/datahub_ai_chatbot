@@ -1,0 +1,33 @@
+package com.linkedin.metadata.timeline;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.linkedin.common.urn.Urn;
+import com.linkedin.metadata.timeline.data.ChangeCategory;
+import com.linkedin.metadata.timeline.data.ChangeTransaction;
+import io.datahubproject.metadata.context.OperationContext;
+import java.util.List;
+import java.util.Set;
+import javax.annotation.Nonnull;
+
+public interface TimelineService {
+
+  int DEFAULT_MAX_CHANGE_TRANSACTIONS = 100;
+
+  List<ChangeTransaction> getTimeline(
+      @Nonnull OperationContext opContext,
+      @Nonnull final Urn urn,
+      @Nonnull Set<ChangeCategory> elements,
+      long startMillis,
+      long endMillis,
+      String startVersionStamp,
+      String endVersionStamp,
+      boolean rawDiffRequested)
+      throws JsonProcessingException;
+
+  List<ChangeTransaction> getTimeline(
+      @Nonnull OperationContext opContext,
+      @Nonnull final Urn urn,
+      @Nonnull Set<ChangeCategory> elements,
+      int maxChangeTransactions,
+      boolean rawDiffRequested);
+}

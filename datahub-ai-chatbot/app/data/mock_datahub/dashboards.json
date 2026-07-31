@@ -1,0 +1,94 @@
+[
+  {
+    "urn": "urn:li:dashboard:(powerbi,logistic.ton_kho_min_max)",
+    "entity_type": "dashboard",
+    "name": "Tồn Kho Min Max",
+    "display_name": "Tồn Kho Min Max",
+    "description": "Dashboard theo dõi tồn kho tối thiểu và tối đa. Hỗ trợ bộ phận cung ứng và nhà máy tránh thiếu tồn kho hoặc tồn kho vượt mức.",
+    "business_purpose": "Theo dõi tồn kho tối thiểu và tối đa",
+    "platform": "powerbi",
+    "environment": "PROD",
+    "domain_urn": "urn:li:domain:logistic",
+    "domain": "Logistic",
+    "owners": [
+      {"name": "Nguyễn Văn An", "email": "nguyenvan.an@company.example", "type": "BUSINESS_OWNER"},
+      {"name": "Trần Minh Khoa", "email": "tranminh.khoa@company.example", "type": "DATA_TECHNICAL_OWNER"},
+      {"name": "Lê Thu Hà", "email": "lethu.ha@company.example", "type": "SYSTEM_OWNER"}
+    ],
+    "glossary_terms": [
+      "urn:li:glossaryTerm:ton_kho_min_max",
+      "urn:li:glossaryTerm:stock_on_hand",
+      "urn:li:glossaryTerm:goods_in_transit",
+      "urn:li:glossaryTerm:coverage_date",
+      "urn:li:glossaryTerm:safety_stock"
+    ],
+    "tags": ["certified", "critical"],
+    "schema_fields": [],
+    "upstreams": [
+      "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,PROD)",
+      "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.dim_material,PROD)",
+      "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.dim_plant,PROD)",
+      "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.dim_supplier,PROD)",
+      "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_goods_in_transit,PROD)"
+    ],
+    "downstreams": [],
+    "linked_documents": ["Inventory Management Policy"],
+    "certified": true,
+    "datahub_url": "http://mock-datahub.local/dashboard/ton-kho-min-max"
+  },
+  {
+    "urn": "urn:li:dashboard:(powerbi,logistic.inventory_executive_summary)",
+    "entity_type": "dashboard",
+    "name": "Inventory Executive Summary",
+    "display_name": "Inventory Executive Summary",
+    "description": "Dashboard tổng quan tồn kho cho ban lãnh đạo.",
+    "business_purpose": "Tổng quan tồn kho cấp điều hành",
+    "platform": "powerbi",
+    "environment": "PROD",
+    "domain_urn": "urn:li:domain:logistic",
+    "domain": "Logistic",
+    "owners": [
+      {"name": "Nguyễn Văn An", "email": "nguyenvan.an@company.example", "type": "BUSINESS_OWNER"}
+    ],
+    "glossary_terms": [
+      "urn:li:glossaryTerm:stock_on_hand",
+      "urn:li:glossaryTerm:safety_stock"
+    ],
+    "tags": ["certified"],
+    "schema_fields": [],
+    "upstreams": [
+      "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,PROD)"
+    ],
+    "downstreams": [],
+    "linked_documents": [],
+    "certified": true,
+    "datahub_url": "http://mock-datahub.local/dashboard/inventory-executive-summary"
+  },
+  {
+    "urn": "urn:li:dashboard:finance.monthly_summary",
+    "entity_type": "dashboard",
+    "name": "Monthly Finance Summary",
+    "display_name": "Monthly Finance Summary",
+    "description": "Dashboard tổng hợp tài chính hàng tháng.",
+    "business_purpose": "Báo cáo tài chính định kỳ",
+    "platform": "powerbi",
+    "environment": "PROD",
+    "domain_urn": "urn:li:domain:finance",
+    "domain": "Finance",
+    "owners": [
+      {"name": "Finance Analytics", "email": "finance.analytics@company.example", "type": "DATA_TECHNICAL_OWNER"}
+    ],
+    "glossary_terms": [
+      "urn:li:glossaryTerm:doanh_thu"
+    ],
+    "tags": [],
+    "schema_fields": [],
+    "upstreams": [
+      "urn:li:dataset:(urn:li:dataPlatform:snowflake,finance.monthly_revenue,PROD)"
+    ],
+    "downstreams": [],
+    "linked_documents": [],
+    "certified": true,
+    "datahub_url": "http://mock-datahub.local/dashboard/monthly-finance-summary"
+  }
+]

@@ -1,0 +1,1266 @@
+datasets:
+  - name: dim_material
+    description: Danh mục vật tư nguyên vật liệu phục vụ sản xuất xe
+    domain: Logistic
+    platform: Redshift
+    tags:
+      - master-data
+      - material
+    columns:
+      - name: material_code
+        description: Mã vật tư
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa chính, mã vật tư duy nhất theo hệ thống quản lý vật tư
+        example: MT-THEP-CT03
+      - name: material_name
+        description: Tên vật tư
+        data_type: varchar
+        nullable: false
+        business_definition: Tên đầy đủ của vật tư, nguyên vật liệu
+        example: Thép cuộn cán nóng CT3 dày 3mm
+      - name: material_type
+        description: Loại vật tư
+        data_type: varchar
+        nullable: false
+        business_definition: Phân loại RawMaterial, SemiFinished, FinishedGoods, Packaging, Consumable, SparePart
+        example: RawMaterial
+      - name: material_group
+        description: Nhóm vật tư
+        data_type: varchar
+        nullable: false
+        business_definition: Nhóm hàng hóa theo tính chất như Thép, Nhựa, Điện tử, Cao su, Kính, Sơn
+        example: Thép
+      - name: base_unit
+        description: Đơn vị cơ bản
+        data_type: varchar
+        nullable: false
+        business_definition: Đơn vị tính cơ bản như kg, m, pcs, liter, m2
+        example: kg
+      - name: weight_per_unit_kg
+        description: Trọng lượng mỗi đơn vị kg
+        data_type: decimal
+        nullable: true
+        business_definition: Khối lượng của một đơn vị vật tư
+        example: 1.50
+      - name: standard_price
+        description: Giá tiêu chuẩn
+        data_type: decimal
+        nullable: false
+        business_definition: Đơn giá chuẩn của vật tư dùng để định giá tồn kho
+        example: 15500.00
+      - name: lead_time_days
+        description: Thời gian đặt hàng ngày
+        data_type: int
+        nullable: false
+        business_definition: Số ngày từ khi đặt hàng đến khi nhận được vật tư
+        example: 14
+      - name: safety_stock
+        description: Tồn kho an toàn
+        data_type: decimal
+        nullable: false
+        business_definition: Mức tồn kho tối thiểu để đảm bảo sản xuất liên tục
+        example: 50000.00
+      - name: reorder_point
+        description: Điểm tái đặt hàng
+        data_type: decimal
+        nullable: false
+        business_definition: Mức tồn kho kích hoạt cảnh báo đặt hàng lại
+        example: 150000.00
+      - name: sourcing_type
+        description: Nguồn cung
+        data_type: varchar
+        nullable: false
+        business_definition: Nguồn Domestic trong nước hoặc Import nhập khẩu
+        example: Domestic
+      - name: material_status
+        description: Trạng thái
+        data_type: varchar
+        nullable: false
+        business_definition: Active, Inactive, Obsolete
+        example: Active
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp tạo vật tư
+        example: 2024-01-01 08:00:00
+    owners:
+      - material-management
+    refresh_frequency: Daily
+
+  - name: dim_warehouse
+    description: Danh mục kho hàng trong hệ thống logistics
+    domain: Logistic
+    platform: Redshift
+    tags:
+      - master-data
+      - warehouse
+    columns:
+      - name: warehouse_id
+        description: Mã định danh kho
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa chính, mã kho duy nhất
+        example: WH-HP-01
+      - name: warehouse_name
+        description: Tên kho
+        data_type: varchar
+        nullable: false
+        business_definition: Tên đầy đủ của kho
+        example: Kho nguyên vật liệu Hải Phòng 1
+      - name: plant_id
+        description: Mã nhà máy
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_plant, nhà máy sở hữu kho
+        example: VFHP
+      - name: warehouse_type
+        description: Loại kho
+        data_type: varchar
+        nullable: false
+        business_definition: Phân loại RawMaterial, WIP, FinishedGood, Consignment, SupplierHub
+        example: RawMaterial
+      - name: location
+        description: Địa điểm
+        data_type: varchar
+        nullable: false
+        business_definition: Địa chỉ chi tiết của kho
+        example: KCN Đình Vũ, Hải Phòng
+      - name: total_capacity_sqm
+        description: Sức chứa mét vuông
+        data_type: decimal
+        nullable: true
+        business_definition: Diện tích chứa hàng tối đa của kho
+        example: 25000.00
+      - name: storage_type
+        description: Hình thức lưu trữ
+        data_type: varchar
+        nullable: true
+        business_definition: Loại hình kho như Rack, Bulk, Silo, ColdStorage, Outdoor
+        example: Rack
+      - name: warehouse_manager
+        description: Quản lý kho
+        data_type: varchar
+        nullable: true
+        business_definition: Mã nhân viên quản lý kho
+        example: EMP00777
+      - name: is_active
+        description: Đang hoạt động
+        data_type: boolean
+        nullable: false
+        business_definition: True nếu kho đang được sử dụng
+        example: true
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp tạo kho
+        example: 2024-01-01 08:00:00
+    owners:
+      - warehouse-management
+    refresh_frequency: Daily
+
+  - name: dim_supplier
+    description: Danh mục nhà cung cấp vật tư và linh kiện
+    domain: Logistic
+    platform: Redshift
+    tags:
+      - master-data
+      - supplier
+    columns:
+      - name: supplier_id
+        description: Mã định danh nhà cung cấp
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa chính, mã nhà cung cấp duy nhất
+        example: SUP-PIN-001
+      - name: supplier_name
+        description: Tên nhà cung cấp
+        data_type: varchar
+        nullable: false
+        business_definition: Tên đầy đủ theo đăng ký kinh doanh
+        example: Công ty TNHH Pin VinES
+      - name: supplier_category
+        description: Loại nhà cung cấp
+        data_type: varchar
+        nullable: false
+        business_definition: Phân loại Tier1, Tier2, Tier3 theo chuỗi cung ứng ô tô
+        example: Tier1
+      - name: supply_type
+        description: Nhóm hàng cung cấp
+        data_type: varchar
+        nullable: false
+        business_definition: Loại vật tư cung cấp như Battery, Tire, Steel, Electronic, Interior, Paint
+        example: Battery
+      - name: country
+        description: Quốc gia
+        data_type: varchar
+        nullable: false
+        business_definition: Quốc gia nơi nhà cung cấp đặt trụ sở
+        example: Việt Nam
+      - name: payment_terms
+        description: Điều khoản thanh toán
+        data_type: varchar
+        nullable: false
+        business_definition: Thời hạn thanh toán Net30, Net45, Net60, LetterOfCredit
+        example: Net30
+      - name: lead_time_days
+        description: Thời gian giao hàng ngày
+        data_type: int
+        nullable: false
+        business_definition: Thời gian trung bình từ đặt hàng đến nhận hàng
+        example: 7
+      - name: quality_rating
+        description: Xếp hạng chất lượng
+        data_type: decimal
+        nullable: true
+        business_definition: Điểm đánh giá chất lượng định kỳ từ 1 đến 100
+        example: 92.00
+      - name: supplier_status
+        description: Trạng thái
+        data_type: varchar
+        nullable: false
+        business_definition: Approved, Pending, Suspended, Blacklisted
+        example: Approved
+      - name: contract_expiry
+        description: Ngày hết hạn hợp đồng
+        data_type: date
+        nullable: true
+        business_definition: Ngày kết thúc hợp đồng cung cấp hiện tại
+        example: 2025-12-31
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp tạo nhà cung cấp
+        example: 2024-01-01 08:00:00
+    owners:
+      - procurement-team
+    refresh_frequency: Daily
+
+  - name: fact_inventory
+    description: Tồn kho hiện tại của từng vật tư tại từng kho
+    domain: Logistic
+    platform: Redshift
+    tags:
+      - transaction
+      - inventory
+    columns:
+      - name: inventory_id
+        description: Mã định danh bản ghi tồn kho
+        data_type: bigint
+        nullable: false
+        business_definition: Khóa chính, mã duy nhất cho mỗi bản ghi tồn kho
+        example: 1000001
+      - name: material_code
+        description: Mã vật tư
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_material
+        example: MT-THEP-CT03
+      - name: warehouse_id
+        description: Mã kho
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_warehouse
+        example: WH-HP-01
+      - name: batch_number
+        description: Số lô
+        data_type: varchar
+        nullable: true
+        business_definition: Số lô sản xuất của vật tư
+        example: LOT-2024-08-001
+      - name: quantity_on_hand
+        description: Số lượng tồn thực tế
+        data_type: decimal
+        nullable: false
+        business_definition: Số lượng vật tư hiện có trong kho
+        example: 125000.00
+      - name: quantity_reserved
+        description: Số lượng đã giữ cho sản xuất
+        data_type: decimal
+        nullable: false
+        business_definition: Số lượng đã được đặt trước cho lệnh sản xuất
+        example: 30000.00
+      - name: quantity_available
+        description: Số lượng khả dụng
+        data_type: decimal
+        nullable: false
+        business_definition: quantity_on_hand trừ quantity_reserved, có thể sử dụng ngay
+        example: 95000.00
+      - name: quantity_in_transit
+        description: Số lượng đang vận chuyển
+        data_type: decimal
+        nullable: false
+        business_definition: Số lượng đã xuất kho nhưng chưa nhập kho đích
+        example: 10000.00
+      - name: unit_cost
+        description: Đơn giá tồn
+        data_type: decimal
+        nullable: false
+        business_definition: Đơn giá bình quân gia quyền của vật tư tồn kho
+        example: 15500.00
+      - name: total_value
+        description: Giá trị tồn kho
+        data_type: decimal
+        nullable: false
+        business_definition: quantity_on_hand x unit_cost, tổng giá trị tồn kho
+        example: 1937500000.00
+      - name: last_movement_date
+        description: Ngày giao dịch gần nhất
+        data_type: date
+        nullable: true
+        business_definition: Ngày gần nhất có phát sinh nhập xuất tồn kho
+        example: 2024-08-30
+      - name: inventory_status
+        description: Trạng thái tồn kho
+        data_type: varchar
+        nullable: false
+        business_definition: Available, Blocked, Quarantine, Damaged
+        example: Available
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp cập nhật tồn kho
+        example: 2024-08-31 23:00:00
+    owners:
+      - inventory-management
+    refresh_frequency: Hourly
+
+  - name: fact_purchase_order
+    description: Đơn mua hàng đặt mua vật tư từ nhà cung cấp
+    domain: Logistic
+    platform: Redshift
+    tags:
+      - transaction
+      - procurement
+    columns:
+      - name: po_number
+        description: Số đơn mua hàng
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa chính, mã đơn mua hàng duy nhất
+        example: PO-2024-08-00250
+      - name: supplier_id
+        description: Mã nhà cung cấp
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_supplier
+        example: SUP-PIN-001
+      - name: material_code
+        description: Mã vật tư
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_material
+        example: MT-PIN-VF8-001
+      - name: material_description
+        description: Mô tả vật tư
+        data_type: varchar
+        nullable: false
+        business_definition: Mô tả chi tiết vật tư đặt mua
+        example: Pin Lithium VF 8 82kWh
+      - name: quantity_ordered
+        description: Số lượng đặt
+        data_type: decimal
+        nullable: false
+        business_definition: Số lượng vật tư đặt mua
+        example: 100.00
+      - name: quantity_received
+        description: Số lượng đã nhận
+        data_type: decimal
+        nullable: false
+        business_definition: Số lượng đã nhập kho từ đơn hàng này
+        example: 50.00
+      - name: quantity_invoiced
+        description: Số lượng đã xuất hóa đơn
+        data_type: decimal
+        nullable: false
+        business_definition: Số lượng nhà cung cấp đã xuất hóa đơn
+        example: 50.00
+      - name: unit_price
+        description: Đơn giá
+        data_type: decimal
+        nullable: false
+        business_definition: Đơn giá thỏa thuận trong hợp đồng, tính bằng VND
+        example: 350000000.00
+      - name: total_amount
+        description: Tổng giá trị
+        data_type: decimal
+        nullable: false
+        business_definition: quantity_ordered x unit_price
+        example: 35000000000.00
+      - name: order_date
+        description: Ngày đặt hàng
+        data_type: date
+        nullable: false
+        business_definition: Ngày đơn hàng được phê duyệt và gửi đi
+        example: 2024-08-10
+      - name: promised_delivery_date
+        description: Ngày giao hàng cam kết
+        data_type: date
+        nullable: false
+        business_definition: Ngày nhà cung cấp cam kết giao hàng
+        example: 2024-08-25
+      - name: actual_delivery_date
+        description: Ngày giao thực tế
+        data_type: date
+        nullable: true
+        business_definition: Ngày thực tế nhận hàng, null nếu chưa nhận đủ
+        example: 2024-08-24
+      - name: po_status
+        description: Trạng thái
+        data_type: varchar
+        nullable: false
+        business_definition: Trạng thái Open, PartiallyReceived, Completed, Cancelled, Closed
+        example: PartiallyReceived
+      - name: buyer_name
+        description: Người mua hàng
+        data_type: varchar
+        nullable: true
+        business_definition: Mã nhân viên thu mua phụ trách đơn hàng
+        example: EMP00333
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp tạo đơn mua hàng
+        example: 2024-08-10 09:00:00
+    owners:
+      - procurement-team
+    refresh_frequency: Hourly
+
+  - name: fact_goods_receipt
+    description: Phiếu nhập kho ghi nhận hàng hóa từ nhà cung cấp
+    domain: Logistic
+    platform: Redshift
+    tags:
+      - transaction
+      - inbound
+    columns:
+      - name: goods_receipt_id
+        description: Mã định danh phiếu nhập kho
+        data_type: bigint
+        nullable: false
+        business_definition: Khóa chính, mã phiếu nhập kho duy nhất
+        example: GR-2024-08-00500
+      - name: po_number
+        description: Số đơn mua hàng
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến fact_purchase_order
+        example: PO-2024-08-00250
+      - name: supplier_id
+        description: Mã nhà cung cấp
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_supplier
+        example: SUP-PIN-001
+      - name: material_code
+        description: Mã vật tư
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_material
+        example: MT-PIN-VF8-001
+      - name: warehouse_id
+        description: Mã kho nhập
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_warehouse
+        example: WH-HP-01
+      - name: receipt_date
+        description: Ngày nhập
+        data_type: date
+        nullable: false
+        business_definition: Ngày thực hiện nhập kho
+        example: 2024-08-24
+      - name: quantity_received
+        description: Số lượng nhập
+        data_type: decimal
+        nullable: false
+        business_definition: Số lượng thực tế nhập kho
+        example: 50.00
+      - name: unit_of_measure
+        description: Đơn vị tính
+        data_type: varchar
+        nullable: false
+        business_definition: Đơn vị của số lượng nhập
+        example: pcs
+      - name: batch_number
+        description: Số lô nhà sản xuất
+        data_type: varchar
+        nullable: true
+        business_definition: Số lô do nhà cung cấp cung cấp
+        example: BATCH-PIN-2024-08
+      - name: inspection_status
+        description: Trạng thái kiểm tra
+        data_type: varchar
+        nullable: false
+        business_definition: Pending, Passed, Failed, Quarantine
+        example: Passed
+      - name: receipt_note
+        description: Ghi chú nhập
+        data_type: varchar
+        nullable: true
+        business_definition: Ghi chú khi nhập hàng
+        example: Hàng đúng chủng loại, chất lượng tốt
+      - name: received_by
+        description: Người nhập
+        data_type: varchar
+        nullable: false
+        business_definition: Mã nhân viên thực hiện nhập kho
+        example: EMP00666
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp nhập kho
+        example: 2024-08-24 14:30:00
+    owners:
+      - warehouse-management
+    refresh_frequency: Hourly
+
+  - name: fact_goods_issue
+    description: Phiếu xuất kho cho sản xuất hoặc các mục đích khác
+    domain: Logistic
+    platform: Redshift
+    tags:
+      - transaction
+      - outbound
+    columns:
+      - name: goods_issue_id
+        description: Mã định danh phiếu xuất kho
+        data_type: bigint
+        nullable: false
+        business_definition: Khóa chính, mã phiếu xuất kho duy nhất
+        example: GI-2024-08-00300
+      - name: order_id
+        description: Mã lệnh sản xuất
+        data_type: varchar
+        nullable: true
+        business_definition: Khóa ngoại tham chiếu đến fact_production_order, null nếu xuất phi sản xuất
+        example: PO-2024-08-000123
+      - name: material_code
+        description: Mã vật tư
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_material
+        example: MT-THEP-CT03
+      - name: warehouse_id
+        description: Mã kho xuất
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_warehouse
+        example: WH-HP-01
+      - name: issue_date
+        description: Ngày xuất
+        data_type: date
+        nullable: false
+        business_definition: Ngày thực hiện xuất kho
+        example: 2024-08-21
+      - name: quantity_issued
+        description: Số lượng xuất
+        data_type: decimal
+        nullable: false
+        business_definition: Số lượng thực tế xuất kho
+        example: 5000.00
+      - name: unit_of_measure
+        description: Đơn vị tính
+        data_type: varchar
+        nullable: false
+        business_definition: Đơn vị của số lượng xuất
+        example: kg
+      - name: issue_type
+        description: Loại xuất
+        data_type: varchar
+        nullable: false
+        business_definition: Production, ReturnToSupplier, InternalTransfer, Scrap, Sample
+        example: Production
+      - name: cost_center_id
+        description: Mã trung tâm chi phí
+        data_type: varchar
+        nullable: true
+        business_definition: Khóa ngoại tham chiếu đến dim_cost_center, trung tâm nhận vật tư
+        example: CC-5002-BDY
+      - name: batch_number
+        description: Số lô
+        data_type: varchar
+        nullable: true
+        business_definition: Số lô xuất kho
+        example: LOT-2024-08-001
+      - name: issued_by
+        description: Người xuất
+        data_type: varchar
+        nullable: false
+        business_definition: Mã nhân viên thực hiện xuất kho
+        example: EMP00666
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp xuất kho
+        example: 2024-08-21 07:30:00
+    owners:
+      - warehouse-management
+    refresh_frequency: Hourly
+
+  - name: fact_inventory_movement
+    description: Nhật ký di chuyển tồn kho chi tiết từng giao dịch
+    domain: Logistic
+    platform: Redshift
+    tags:
+      - transaction
+      - movement
+    columns:
+      - name: movement_id
+        description: Mã định danh giao dịch
+        data_type: bigint
+        nullable: false
+        business_definition: Khóa chính, mã duy nhất cho mỗi giao dịch tồn kho
+        example: 2000001
+      - name: material_code
+        description: Mã vật tư
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_material
+        example: MT-THEP-CT03
+      - name: warehouse_id
+        description: Mã kho
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_warehouse
+        example: WH-HP-01
+      - name: movement_type
+        description: Loại giao dịch
+        data_type: varchar
+        nullable: false
+        business_definition: GoodsReceipt, GoodsIssue, TransferIn, TransferOut, Adjustment, PhysicalInventory
+        example: GoodsIssue
+      - name: quantity
+        description: Số lượng
+        data_type: decimal
+        nullable: false
+        business_definition: Số lượng thay đổi tồn kho, dương là nhập, âm là xuất
+        example: -5000.00
+      - name: unit_of_measure
+        description: Đơn vị tính
+        data_type: varchar
+        nullable: false
+        business_definition: Đơn vị tính của số lượng
+        example: kg
+      - name: movement_date
+        description: Ngày giao dịch
+        data_type: date
+        nullable: false
+        business_definition: Ngày thực hiện giao dịch tồn kho
+        example: 2024-08-21
+      - name: reference_document
+        description: Chứng từ tham chiếu
+        data_type: varchar
+        nullable: true
+        business_definition: Số phiếu nhập xuất kho tham chiếu GR hoặc GI
+        example: GI-2024-08-00300
+      - name: batch_number
+        description: Số lô
+        data_type: varchar
+        nullable: true
+        business_definition: Số lô vật tư giao dịch
+        example: LOT-2024-08-001
+      - name: created_by
+        description: Người tạo giao dịch
+        data_type: varchar
+        nullable: false
+        business_definition: Mã nhân viên thực hiện giao dịch
+        example: EMP00666
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp giao dịch tồn kho
+        example: 2024-08-21 07:30:00
+    owners:
+      - warehouse-management
+    refresh_frequency: Hourly
+
+  - name: fact_physical_inventory
+    description: Kết quả kiểm kê thực tế đối chiếu với tồn kho hệ thống
+    domain: Logistic
+    platform: Redshift
+    tags:
+      - transaction
+      - inventory
+    columns:
+      - name: physical_inventory_id
+        description: Mã định danh phiếu kiểm kê
+        data_type: bigint
+        nullable: false
+        business_definition: Khóa chính, mã duy nhất cho mỗi lần kiểm kê
+        example: PI-2024-08-00050
+      - name: material_code
+        description: Mã vật tư
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_material
+        example: MT-THEP-CT03
+      - name: warehouse_id
+        description: Mã kho
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_warehouse
+        example: WH-HP-01
+      - name: inventory_date
+        description: Ngày kiểm kê
+        data_type: date
+        nullable: false
+        business_definition: Ngày thực hiện kiểm kê thực tế
+        example: 2024-08-31
+      - name: system_quantity
+        description: Số lượng hệ thống
+        data_type: decimal
+        nullable: false
+        business_definition: Số lượng tồn kho ghi nhận trên hệ thống
+        example: 125000.00
+      - name: counted_quantity
+        description: Số lượng đếm thực tế
+        data_type: decimal
+        nullable: false
+        business_definition: Số lượng đếm được khi kiểm kê thực tế
+        example: 124850.00
+      - name: variance_quantity
+        description: Chênh lệch số lượng
+        data_type: decimal
+        nullable: false
+        business_definition: counted_quantity trừ system_quantity
+        example: -150.00
+      - name: variance_reason
+        description: Nguyên nhân chênh lệch
+        data_type: varchar
+        nullable: true
+        business_definition: Giải trình chênh lệch như sai sót nhập xuất, hao hụt, mất mát
+        example: Hao hụt trong quá trình sản xuất chưa cập nhật
+      - name: adjusted_quantity
+        description: Số lượng điều chỉnh
+        data_type: decimal
+        nullable: true
+        business_definition: Số lượng điều chỉnh sau kiểm kê
+        example: -150.00
+      - name: counted_by
+        description: Người kiểm kê
+        data_type: varchar
+        nullable: false
+        business_definition: Mã nhân viên thực hiện kiểm kê
+        example: EMP00888
+      - name: approved_by
+        description: Người phê duyệt
+        data_type: varchar
+        nullable: true
+        business_definition: Mã người phê duyệt kết quả kiểm kê
+        example: EMP00777
+      - name: pi_status
+        description: Trạng thái kiểm kê
+        data_type: varchar
+        nullable: false
+        business_definition: Draft, Counted, Reviewed, Approved, Posted
+        example: Posted
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp tạo phiếu kiểm kê
+        example: 2024-08-31 08:00:00
+    owners:
+      - inventory-management
+    refresh_frequency: Daily
+
+  - name: fact_lead_time
+    description: Theo dõi thời gian đặt hàng và giao hàng từ nhà cung cấp
+    domain: Logistic
+    platform: Redshift
+    tags:
+      - transaction
+      - procurement
+    columns:
+      - name: lead_time_id
+        description: Mã định danh bản ghi lead time
+        data_type: bigint
+        nullable: false
+        business_definition: Khóa chính, mã duy nhất cho mỗi bản ghi theo dõi
+        example: 3000001
+      - name: po_number
+        description: Số đơn mua hàng
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến fact_purchase_order
+        example: PO-2024-08-00250
+      - name: supplier_id
+        description: Mã nhà cung cấp
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_supplier
+        example: SUP-PIN-001
+      - name: material_code
+        description: Mã vật tư
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_material
+        example: MT-PIN-VF8-001
+      - name: order_date
+        description: Ngày đặt hàng
+        data_type: date
+        nullable: false
+        business_definition: Ngày gửi đơn hàng cho nhà cung cấp
+        example: 2024-08-10
+      - name: supplier_ack_date
+        description: Ngày xác nhận đơn hàng
+        data_type: date
+        nullable: true
+        business_definition: Ngày nhà cung cấp xác nhận đơn hàng
+        example: 2024-08-11
+      - name: promised_delivery_date
+        description: Ngày giao hàng cam kết
+        data_type: date
+        nullable: false
+        business_definition: Ngày nhà cung cấp cam kết giao
+        example: 2024-08-25
+      - name: actual_delivery_date
+        description: Ngày giao hàng thực tế
+        data_type: date
+        nullable: true
+        business_definition: Ngày thực tế nhận hàng
+        example: 2024-08-24
+      - name: order_to_ack_hours
+        description: Thời gian từ đặt hàng đến xác nhận giờ
+        data_type: int
+        nullable: true
+        business_definition: Số giờ từ khi đặt hàng đến khi nhà cung cấp xác nhận
+        example: 8
+      - name: actual_lead_time_days
+        description: Thời gian giao hàng thực tế ngày
+        data_type: int
+        nullable: true
+        business_definition: Số ngày từ đặt hàng đến nhận hàng thực tế
+        example: 14
+      - name: variance_days
+        description: Chênh lệch so với cam kết ngày
+        data_type: int
+        nullable: true
+        business_definition: actual_delivery_date trừ promised_delivery_date, âm là giao sớm
+        example: -1
+      - name: on_time_delivery
+        description: Giao hàng đúng hạn
+        data_type: boolean
+        nullable: false
+        business_definition: actual_delivery_date nho hon hoac bang promised_delivery_date
+        example: true
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp tạo bản ghi
+        example: 2024-08-24 15:00:00
+    owners:
+      - procurement-team
+    refresh_frequency: Daily
+
+  - name: dim_inventory_category
+    description: Phân loại tồn kho ABC theo giá trị sử dụng
+    domain: Logistic
+    platform: Redshift
+    tags:
+      - master-data
+      - classification
+    columns:
+      - name: material_code
+        description: Mã vật tư
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa chính, khóa ngoại tham chiếu đến dim_material
+        example: MT-THEP-CT03
+      - name: abc_classification
+        description: Phân loại ABC
+        data_type: varchar
+        nullable: false
+        business_definition: A là giá trị cao 70% tổng giá trị, B là trung bình 20%, C là thấp 10%
+        example: A
+      - name: annual_usage_value
+        description: Giá trị sử dụng hàng năm
+        data_type: decimal
+        nullable: false
+        business_definition: Tổng giá trị vật tư sử dụng trong một năm, tính bằng VND
+        example: 46500000000.00
+      - name: usage_percentage
+        description: Tỷ lệ phần trăm trên tổng giá trị
+        data_type: decimal
+        nullable: false
+        business_definition: Phần trăm đóng góp của vật tư vào tổng giá trị sử dụng
+        example: 12.50
+      - name: cumulative_percentage
+        description: Tỷ lệ lũy kế phần trăm
+        data_type: decimal
+        nullable: false
+        business_definition: Tỷ lệ cộng dồn khi sắp xếp theo thứ tự giảm dần giá trị
+        example: 45.80
+      - name: classification_date
+        description: Ngày phân loại
+        data_type: date
+        nullable: false
+        business_definition: Ngày thực hiện phân tích ABC
+        example: 2024-01-01
+      - name: review_cycle
+        description: Chu kỳ đánh giá
+        data_type: varchar
+        nullable: false
+        business_definition: Tần suất đánh giá lại Monthly, Quarterly, Yearly
+        example: Quarterly
+      - name: storage_priority
+        description: Ưu tiên lưu trữ
+        data_type: varchar
+        nullable: false
+        business_definition: Mức ưu tiên bố trí vị trí lưu trữ Highest, High, Medium, Low
+        example: Highest
+      - name: cycle_count_frequency
+        description: Tần suất đếm chu kỳ
+        data_type: varchar
+        nullable: false
+        business_definition: Tần suất kiểm đếm cho từng loại A hàng tháng, B hàng quý, C hàng năm
+        example: Monthly
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp tạo phân loại
+        example: 2024-01-01 08:00:00
+    owners:
+      - inventory-management
+    refresh_frequency: Daily
+
+  - name: fact_stock_transfer
+    description: Chuyển kho giữa các vị trí trong cùng nhà máy hoặc khác nhà máy
+    domain: Logistic
+    platform: Redshift
+    tags:
+      - transaction
+      - transfer
+    columns:
+      - name: transfer_id
+        description: Mã định danh phiếu chuyển kho
+        data_type: bigint
+        nullable: false
+        business_definition: Khóa chính, mã duy nhất cho mỗi lần chuyển kho
+        example: ST-2024-08-00100
+      - name: material_code
+        description: Mã vật tư
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_material
+        example: MT-THEP-CT03
+      - name: from_warehouse_id
+        description: Kho nguồn
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_warehouse, kho xuất
+        example: WH-HP-01
+      - name: to_warehouse_id
+        description: Kho đích
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_warehouse, kho nhập
+        example: WH-HP-02
+      - name: transfer_date
+        description: Ngày chuyển
+        data_type: date
+        nullable: false
+        business_definition: Ngày thực hiện chuyển kho
+        example: 2024-08-25
+      - name: quantity_transferred
+        description: Số lượng chuyển
+        data_type: decimal
+        nullable: false
+        business_definition: Số lượng vật tư được chuyển
+        example: 20000.00
+      - name: unit_of_measure
+        description: Đơn vị tính
+        data_type: varchar
+        nullable: false
+        business_definition: Đơn vị tính số lượng
+        example: kg
+      - name: transfer_type
+        description: Loại chuyển kho
+        data_type: varchar
+        nullable: false
+        business_definition: IntraPlant trong nhà máy, InterPlant giữa các nhà máy, Return trả lại
+        example: IntraPlant
+      - name: initiated_by
+        description: Người yêu cầu
+        data_type: varchar
+        nullable: false
+        business_definition: Mã nhân viên yêu cầu chuyển kho
+        example: EMP00555
+      - name: approved_by
+        description: Người phê duyệt
+        data_type: varchar
+        nullable: true
+        business_definition: Mã người phê duyệt chuyển kho
+        example: EMP00777
+      - name: transfer_status
+        description: Trạng thái
+        data_type: varchar
+        nullable: false
+        business_definition: Draft, Approved, InTransit, Completed, Cancelled
+        example: Completed
+      - name: notes
+        description: Ghi chú
+        data_type: varchar
+        nullable: true
+        business_definition: Lý do chuyển kho
+        example: Bổ sung hàng cho kho sản xuất
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp tạo phiếu chuyển
+        example: 2024-08-25 08:00:00
+    owners:
+      - warehouse-management
+    refresh_frequency: Hourly
+
+  - name: fact_reorder_alert
+    description: Cảnh báo tái đặt hàng khi tồn kho dưới điểm tái đặt hàng
+    domain: Logistic
+    platform: Redshift
+    tags:
+      - transaction
+      - alert
+    columns:
+      - name: alert_id
+        description: Mã định danh cảnh báo
+        data_type: bigint
+        nullable: false
+        business_definition: Khóa chính, mã duy nhất cho mỗi cảnh báo
+        example: 4000001
+      - name: material_code
+        description: Mã vật tư
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_material
+        example: MT-SON-VF8-001
+      - name: warehouse_id
+        description: Mã kho
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_warehouse
+        example: WH-HP-01
+      - name: alert_date
+        description: Ngày cảnh báo
+        data_type: date
+        nullable: false
+        business_definition: Ngày hệ thống phát sinh cảnh báo
+        example: 2024-08-29
+      - name: current_stock
+        description: Tồn kho hiện tại
+        data_type: decimal
+        nullable: false
+        business_definition: Số lượng tồn kho thực tế tại thời điểm cảnh báo
+        example: 120000.00
+      - name: reorder_point
+        description: Điểm tái đặt hàng
+        data_type: decimal
+        nullable: false
+        business_definition: Ngưỡng kích hoạt cảnh báo theo định mức
+        example: 150000.00
+      - name: safety_stock_level
+        description: Tồn kho an toàn
+        data_type: decimal
+        nullable: false
+        business_definition: Mức tồn kho an toàn yêu cầu
+        example: 50000.00
+      - name: suggested_order_qty
+        description: Số lượng đề xuất đặt hàng
+        data_type: decimal
+        nullable: false
+        business_definition: Số lượng đề xuất đặt mua để đưa tồn kho về mức tối ưu
+        example: 100000.00
+      - name: supplier_id
+        description: Mã nhà cung cấp ưu tiên
+        data_type: varchar
+        nullable: true
+        business_definition: Khóa ngoại tham chiếu đến dim_supplier, nhà cung cấp đề xuất
+        example: SUP-SON-003
+      - name: alert_priority
+        description: Mức ưu tiên cảnh báo
+        data_type: varchar
+        nullable: false
+        business_definition: Critical, High, Medium, Low
+        example: High
+      - name: alert_status
+        description: Trạng thái cảnh báo
+        data_type: varchar
+        nullable: false
+        business_definition: New, Acknowledged, Actioned, Resolved
+        example: New
+      - name: acknowledged_by
+        description: Người xác nhận
+        data_type: varchar
+        nullable: true
+        business_definition: Mã nhân viên đã xem và xác nhận cảnh báo
+        example: null
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp phát sinh cảnh báo
+        example: 2024-08-29 06:00:00
+    owners:
+      - procurement-team
+    refresh_frequency: Hourly
+
+  - name: dim_uom
+    description: Danh mục đơn vị tính sử dụng trong quản lý vật tư
+    domain: Logistic
+    platform: Redshift
+    tags:
+      - master-data
+      - uom
+    columns:
+      - name: uom_code
+        description: Mã đơn vị tính
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa chính, mã đơn vị tính duy nhất
+        example: KG
+      - name: uom_name
+        description: Tên đơn vị tính
+        data_type: varchar
+        nullable: false
+        business_definition: Tên đầy đủ của đơn vị tính
+        example: Kilogram
+      - name: uom_category
+        description: Nhóm đơn vị
+        data_type: varchar
+        nullable: false
+        business_definition: Phân nhóm Weight, Length, Volume, Quantity, Area
+        example: Weight
+      - name: base_uom
+        description: Đơn vị cơ sở
+        data_type: varchar
+        nullable: false
+        business_definition: Đơn vị gốc quy đổi, ví dụ KG là base của g, tấn
+        example: KG
+      - name: conversion_factor
+        description: Hệ số quy đổi
+        data_type: decimal
+        nullable: false
+        business_definition: Số đơn vị cơ sở tương đương 1 đơn vị này
+        example: 1.0000
+      - name: decimal_places
+        description: Số chữ số thập phân
+        data_type: int
+        nullable: false
+        business_definition: Số chữ số thập phân khi hiển thị và nhập liệu
+        example: 2
+      - name: is_active
+        description: Còn sử dụng
+        data_type: boolean
+        nullable: false
+        business_definition: True nếu đơn vị đang được sử dụng
+        example: true
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp tạo bản ghi
+        example: 2024-01-01 08:00:00
+    owners:
+      - master-data-team
+    refresh_frequency: Daily
+
+  - name: fact_inventory_forecast
+    description: Dự báo tồn kho dựa trên tiêu thụ lịch sử và kế hoạch sản xuất
+    domain: Logistic
+    platform: Redshift
+    tags:
+      - transaction
+      - forecast
+    columns:
+      - name: forecast_id
+        description: Mã định danh dự báo
+        data_type: bigint
+        nullable: false
+        business_definition: Khóa chính, mã duy nhất cho mỗi dòng dự báo
+        example: 5000001
+      - name: material_code
+        description: Mã vật tư
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_material
+        example: MT-THEP-CT03
+      - name: warehouse_id
+        description: Mã kho
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_warehouse
+        example: WH-HP-01
+      - name: forecast_month
+        description: Tháng dự báo
+        data_type: date
+        nullable: false
+        business_definition: Tháng đầu tiên của kỳ dự báo
+        example: 2024-09-01
+      - name: forecast_quantity
+        description: Số lượng dự báo tiêu thụ
+        data_type: decimal
+        nullable: false
+        business_definition: Số lượng dự kiến sẽ sử dụng trong tháng
+        example: 250000.00
+      - name: forecast_method
+        description: Phương pháp dự báo
+        data_type: varchar
+        nullable: false
+        business_definition: MovingAverage, ExponentialSmoothing, LinearRegression, MPS
+        example: MovingAverage
+      - name: confidence_level_pct
+        description: Mức độ tin cậy phần trăm
+        data_type: decimal
+        nullable: true
+        business_definition: Độ tin cậy của dự báo từ 0 đến 100 phần trăm
+        example: 85.00
+      - name: projected_beginning_inventory
+        description: Tồn đầu kỳ dự kiến
+        data_type: decimal
+        nullable: false
+        business_definition: Tồn kho dự kiến đầu kỳ sau khi trừ các đơn hàng đã cam kết
+        example: 95000.00
+      - name: projected_ending_inventory
+        description: Tồn cuối kỳ dự kiến
+        data_type: decimal
+        nullable: false
+        business_definition: projected_beginning_inventory cộng planned_receipts trừ forecast_quantity
+        example: 120000.00
+      - name: planned_receipts
+        description: Số lượng nhập kế hoạch
+        data_type: decimal
+        nullable: false
+        business_definition: Số lượng dự kiến nhập từ đơn mua hàng đã đặt
+        example: 275000.00
+      - name: recommended_order
+        description: Đề xuất đặt hàng
+        data_type: decimal
+        nullable: true
+        business_definition: Số lượng cần đặt thêm để đảm bảo không thiếu hàng
+        example: 0.00
+      - name: forecast_date
+        description: Ngày tạo dự báo
+        data_type: date
+        nullable: false
+        business_definition: Ngày thực hiện dự báo
+        example: 2024-08-25
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp tạo dự báo
+        example: 2024-08-25 23:00:00
+    owners:
+      - demand-planning
+    refresh_frequency: Daily

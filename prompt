@@ -1,0 +1,459 @@
+Bạn là Senior Data Architect, Data Governance Expert và Data Engineer.
+
+Bối cảnh:
+Tôi đang xây dựng một AI Chatbot tích hợp với DataHub (OpenMetadata/DataHub) để trả lời câu hỏi về metadata của doanh nghiệp.
+
+Hiện tại chưa được cấp quyền vào môi trường DataHub thật nên cần tạo một bộ dữ liệu MOCK hoàn chỉnh để import vào DataHub local.
+
+Mock data phải giống hệ thống thực tế nhất có thể.
+
+==================================================
+MỤC TIÊU
+==================================================
+
+Sinh toàn bộ metadata cho DataHub gồm:
+
+1. Domains
+2. Glossary
+3. Dataset (Tables)
+4. Dashboard (Power BI)
+5. Owners
+6. Lineage
+7. Schema
+8. Column descriptions
+9. Tags
+10. Business metadata
+
+Các metadata này sẽ là dữ liệu để chatbot RAG truy vấn.
+
+==================================================
+DOMAIN
+==================================================
+
+Tạo các Domain sau:
+
+- SẢN XUẤT
+- TÀI CHÍNH
+- LOGISTIC
+- CUNG ỨNG (TT)
+- KINH DOANH
+- HẬU MÃI
+- CUNG ỨNG (NĐH)
+- PHÁT TRIỂN XE
+- VGreen
+
+Mỗi Domain gồm:
+
+- Description
+- Business Objective
+- Owner
+- Technical Owner
+- Tags
+
+==================================================
+GLOSSARY
+==================================================
+
+Mỗi Domain tạo từ 10-20 Glossary Terms.
+
+Ví dụ Domain LOGISTIC:
+
+- Tồn kho Min Max
+- SOH
+- Coverage Date
+- Goods In Transit
+- Purchase Level
+- Shelf Life
+- Aging
+- Safety Stock
+- Maximum Stock
+- Minimum Stock
+- BOM
+- Non BOM
+- Critical Material
+...
+
+Mỗi Glossary gồm:
+
+- Name
+- Definition
+- Business Meaning
+- Example
+- Related Terms
+- Domain
+
+==================================================
+DATASETS
+==================================================
+
+Mỗi Domain sinh khoảng 20 datasets.
+
+Ví dụ:
+
+LOGISTIC
+
+dim_material
+
+Description:
+Master vật tư.
+
+Schema:
+
+material_id
+material_name
+material_group
+material_type
+uom
+plant
+supplier_id
+status
+created_date
+
+--------------------------------------------------
+
+fact_inventory
+
+Description:
+Theo dõi tồn kho hiện tại.
+
+Schema:
+
+material_id
+plant
+warehouse
+stock_qty
+min_stock
+max_stock
+safety_stock
+coverage_day
+goods_in_transit
+last_update
+
+--------------------------------------------------
+
+fact_purchase_order
+
+Description:
+Thông tin PO.
+
+Schema:
+
+po_no
+supplier
+material
+qty
+received_qty
+eta
+status
+
+--------------------------------------------------
+
+fact_consumption
+
+material
+daily_usage
+monthly_usage
+forecast_qty
+
+--------------------------------------------------
+
+fact_supplier_delivery
+
+supplier
+lead_time
+delivery_rate
+late_delivery
+
+==================================================
+COLUMN METADATA
+==================================================
+
+Mỗi column phải có:
+
+- Description
+- Data Type
+- Nullable
+- Business Definition
+- Example Value
+
+Ví dụ:
+
+Column:
+coverage_day
+
+Description:
+Số ngày tồn kho còn đủ để sản xuất.
+
+Business Definition:
+Coverage Day = Current Stock / Daily Consumption
+
+Example:
+18
+
+==================================================
+POWER BI DASHBOARD
+==================================================
+
+Mỗi Domain tạo từ 5-10 Dashboard.
+
+Ví dụ Dashboard:
+
+Tồn Kho Min Max
+
+Description:
+
+Theo dõi lượng tồn kho của từng vật liệu đang:
+
+- dưới Min
+- trên Max
+- trong ngưỡng an toàn
+
+Hiển thị:
+
+- Material
+- Plant
+- Supplier
+- Current Stock
+- Min
+- Max
+- Coverage Day
+- Goods In Transit
+
+Business Owner
+
+Data Technical Owner
+
+System Owner
+
+Update Frequency
+
+==================================================
+LINEAGE
+==================================================
+
+Sinh lineage đầy đủ.
+
+Ví dụ:
+
+Redshift.stg_material
+↓
+
+Redshift.dim_material
+↓
+
+PowerBI.dim_material
+
+↓
+
+Power BI Page
+
+↓
+
+Power BI Report
+
+↓
+
+Executive Dashboard
+
+Mỗi dashboard phải trace được về source.
+
+==================================================
+OWNERS
+==================================================
+
+Sinh owner giả lập.
+
+Ví dụ:
+
+Business Owner
+
+Nguyễn Văn Minh
+Supply Chain Director
+
+Technical Owner
+
+Trần Đức Anh
+Senior Data Engineer
+
+System Owner
+
+Lê Hải Nam
+Data Platform Team
+
+==================================================
+TAGS
+==================================================
+
+Sinh tag hợp lý.
+
+Ví dụ:
+
+PII
+
+Finance
+
+SupplyChain
+
+Manufacturing
+
+Gold
+
+Silver
+
+Bronze
+
+Critical
+
+Certified
+
+PowerBI
+
+Redshift
+
+==================================================
+BUSINESS METADATA
+==================================================
+
+Ví dụ:
+
+Refresh Frequency
+
+Daily
+
+Source System
+
+SAP
+
+Criticality
+
+High
+
+Data Quality SLA
+
+99%
+
+Sensitivity
+
+Internal
+
+==================================================
+RELATIONSHIPS
+==================================================
+
+Liên kết metadata đầy đủ.
+
+Ví dụ
+
+Domain
+
+↓
+
+Glossary
+
+↓
+
+Dataset
+
+↓
+
+Columns
+
+↓
+
+Dashboard
+
+↓
+
+Owners
+
+↓
+
+Lineage
+
+==================================================
+OUTPUT FORMAT
+==================================================
+
+Sinh dữ liệu dưới dạng nhiều file YAML hoặc JSON.
+
+Cấu trúc thư mục mong muốn:
+
+mock-data/
+
+domains/
+
+production.yaml
+
+finance.yaml
+
+logistic.yaml
+
+...
+
+glossary/
+
+logistic.yaml
+
+finance.yaml
+
+datasets/
+
+dim_material.yaml
+
+fact_inventory.yaml
+
+fact_purchase_order.yaml
+
+dashboards/
+
+inventory_min_max.yaml
+
+inventory_coverage.yaml
+
+owners/
+
+owners.yaml
+
+lineage/
+
+inventory_lineage.yaml
+
+tags/
+
+tags.yaml
+
+==================================================
+YÊU CẦU
+==================================================
+
+- Metadata phải giống doanh nghiệp sản xuất ô tô.
+- Tên bảng, cột, dashboard phải thực tế.
+- Không dùng dữ liệu lorem ipsum.
+- Các description phải đầy đủ như tài liệu DataHub thật.
+- Dashboard phải có documentation chi tiết.
+- Glossary phải có định nghĩa nghiệp vụ.
+- Dataset phải có schema đầy đủ.
+- Lineage phải logic.
+- Metadata có thể import vào DataHub/OpenMetadata.
+- Ưu tiên chuẩn enterprise metadata.
+
+==================================================
+BONUS
+==================================================
+
+Ngoài metadata, hãy sinh thêm khoảng 300-500 câu hỏi mẫu mà người dùng có thể hỏi chatbot, ví dụ:
+
+- Dashboard Tồn Kho Min Max dùng để làm gì?
+- Coverage Day được tính như thế nào?
+- Business Owner của dashboard này là ai?
+- Báo cáo này lấy dữ liệu từ bảng nào?
+- Table fact_inventory gồm những cột nào?
+- Material Group nghĩa là gì?
+- Dataset nào chứa Goods In Transit?
+- Dashboard nào sử dụng bảng dim_material?
+- Lineage của báo cáo này là gì?
+- Domain Logistics có những glossary nào?
+- Table nào thuộc SAP?
+- Dashboard nào refresh mỗi ngày?
+
+Kết quả cuối cùng phải tạo thành một bộ mock metadata hoàn chỉnh đủ để chatbot RAG trả lời giống môi trường doanh nghiệp thật.

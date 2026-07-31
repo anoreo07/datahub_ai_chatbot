@@ -1,0 +1,34 @@
+groups:
+  - name: chatbot-alerts
+    rules:
+      - alert: HighAPIErrorRate
+        expr: rate(http_requests_total{status=~"5.."}[5m]) / rate(http_requests_total[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "API error rate above 5%"
+
+      - alert: HighAPILatency
+        expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 2
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "P95 API latency above 2 seconds"
+
+      - alert: DataHubSyncOverdue
+        expr: time() - last_sync_timestamp_seconds > 86400
+        for: 1h
+        labels:
+          severity: warning
+        annotations:
+          summary: "DataHub sync overdue by more than 24 hours"
+
+      - alert: IndexingQueueBacklog
+        expr: indexing_queue_depth > 1000
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Indexing queue backlog above 1000 items"

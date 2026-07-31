@@ -1,0 +1,115 @@
+[
+  {
+    "urn": "urn:li:glossaryTerm:ton_kho_min_max",
+    "name": "Tồn kho Min Max",
+    "display_name": "Tồn kho Min Max",
+    "description": "Mô hình theo dõi tồn kho dựa trên ngưỡng tối thiểu và tối đa.",
+    "definition": "Mô hình theo dõi tồn kho dựa trên ngưỡng tối thiểu và tối đa nhằm đảm bảo không thiếu hàng và không tồn vượt mức.",
+    "domain_urn": "urn:li:domain:logistic",
+    "domain": "Logistic",
+    "owners": [
+      {"name": "Nguyễn Văn An", "email": "nguyenvan.an@company.example", "type": "BUSINESS_OWNER"}
+    ],
+    "datahub_url": "http://mock-datahub.local/glossary/ton-kho-min-max"
+  },
+  {
+    "urn": "urn:li:glossaryTerm:stock_on_hand",
+    "name": "Stock On Hand",
+    "display_name": "Stock On Hand",
+    "description": "Số lượng tồn kho hiện có tại một thời điểm.",
+    "definition": "Stock On Hand là số lượng hàng hóa hiện đang có trong kho tại một thời điểm xác định.",
+    "domain_urn": "urn:li:domain:logistic",
+    "domain": "Logistic",
+    "owners": [],
+    "datahub_url": "http://mock-datahub.local/glossary/stock-on-hand"
+  },
+  {
+    "urn": "urn:li:glossaryTerm:goods_in_transit",
+    "name": "Goods In Transit",
+    "display_name": "Goods In Transit",
+    "description": "Số lượng hàng đang được vận chuyển nhưng chưa nhập kho.",
+    "definition": "Goods In Transit là hàng hóa đã rời khỏi kho xuất nhưng chưa đến kho nhận.",
+    "domain_urn": "urn:li:domain:logistic",
+    "domain": "Logistic",
+    "owners": [],
+    "datahub_url": "http://mock-datahub.local/glossary/goods-in-transit"
+  },
+  {
+    "urn": "urn:li:glossaryTerm:coverage_date",
+    "name": "Coverage Date",
+    "display_name": "Coverage Date",
+    "description": "Số ngày lượng tồn kho hiện tại có thể đáp ứng nhu cầu dự kiến.",
+    "definition": "Coverage Date là khoảng thời gian (số ngày) mà lượng tồn kho hiện tại có thể đáp ứng nhu cầu sử dụng dự kiến, dựa trên mức tiêu thụ trung bình.",
+    "domain_urn": "urn:li:domain:logistic",
+    "domain": "Logistic",
+    "owners": [],
+    "datahub_url": "http://mock-datahub.local/glossary/coverage-date"
+  },
+  {
+    "urn": "urn:li:glossaryTerm:safety_stock",
+    "name": "Safety Stock",
+    "display_name": "Safety Stock",
+    "description": "Mức tồn kho dự phòng để giảm rủi ro thiếu hàng.",
+    "definition": "Safety Stock là lượng hàng tồn kho dự phòng được duy trì để giảm thiểu rủi ro hết hàng do biến động nhu cầu hoặc chậm trễ cung ứng.",
+    "domain_urn": "urn:li:domain:logistic",
+    "domain": "Logistic",
+    "owners": [],
+    "datahub_url": "http://mock-datahub.local/glossary/safety-stock"
+  },
+  {
+    "urn": "urn:li:glossaryTerm:don_hang",
+    "name": "Đơn hàng",
+    "display_name": "Đơn hàng",
+    "description": "Thông tin đơn hàng bán hàng.",
+    "definition": "Đơn hàng (Order) là giao dịch mua hàng được xác nhận giữa khách hàng và công ty.",
+    "domain_urn": "urn:li:domain:kinh_doanh",
+    "domain": "Kinh doanh",
+    "owners": [],
+    "datahub_url": "http://mock-datahub.local/glossary/don-hang"
+  },
+  {
+    "urn": "urn:li:glossaryTerm:khach_hang",
+    "name": "Khách hàng",
+    "display_name": "Khách hàng",
+    "description": "Thông tin khách hàng.",
+    "definition": "Khách hàng (Customer) là cá nhân hoặc tổ chức mua sản phẩm hoặc dịch vụ.",
+    "domain_urn": "urn:li:domain:kinh_doanh",
+    "domain": "Kinh doanh",
+    "owners": [],
+    "datahub_url": "http://mock-datahub.local/glossary/khach-hang"
+  },
+  {
+    "urn": "urn:li:glossaryTerm:doanh_thu",
+    "name": "Doanh thu",
+    "display_name": "Doanh thu",
+    "description": "Doanh thu từ hoạt động bán hàng.",
+    "definition": "Doanh thu (Revenue) là tổng giá trị thu được từ hoạt động bán hàng và cung cấp dịch vụ.",
+    "domain_urn": "urn:li:domain:finance",
+    "domain": "Finance",
+    "owners": [],
+    "datahub_url": "http://mock-datahub.local/glossary/doanh-thu"
+  },
+  {
+    "urn": "urn:li:glossaryTerm:deleted_term",
+    "name": "Deleted Term (Sample)",
+    "display_name": "Deleted Term (Sample)",
+    "description": "Glossary term mẫu đã bị đánh dấu deleted.",
+    "definition": "Term này là sample để test deleted entity.",
+    "domain_urn": "urn:li:domain:finance",
+    "domain": "Finance",
+    "owners": [],
+    "deleted": true,
+    "datahub_url": ""
+  },
+  {
+    "urn": "urn:li:glossaryTerm:ambiguous_inventory",
+    "name": "Inventory Turnover",
+    "display_name": "Inventory Turnover",
+    "description": "Chỉ số vòng quay tồn kho (tên gần giống với các entity Inventory khác để test ambiguity).",
+    "definition": "Inventory Turnover là chỉ số đo lường số lần hàng tồn kho được bán và thay thế trong một kỳ.",
+    "domain_urn": "urn:li:domain:logistic",
+    "domain": "Logistic",
+    "owners": [],
+    "datahub_url": "http://mock-datahub.local/glossary/inventory-turnover"
+  }
+]

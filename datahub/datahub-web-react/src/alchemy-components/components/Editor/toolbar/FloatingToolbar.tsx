@@ -1,0 +1,117 @@
+import {
+    BoldOutlined,
+    DisconnectOutlined,
+    EditOutlined,
+    ItalicOutlined,
+    LinkOutlined,
+    UnderlineOutlined,
+} from '@ant-design/icons';
+import { FloatingWrapper, useActive, useAttrs, useCommands } from '@remirror/react';
+import React, { useMemo, useState } from 'react';
+import { createMarkPositioner } from 'remirror/extensions';
+import styled from 'styled-components';
+
+import { CommandButton } from '@components/components/Editor/toolbar/CommandButton';
+import { CodeIcon } from '@components/components/Editor/toolbar/Icons';
+import { LinkModal } from '@components/components/Editor/toolbar/LinkModal';
+import { Text } from '@components/components/Text';
+
+export const ToolbarContainer = styled.span`
+    display: flex;
+    align-items: center;
+    padding: 2px;
+    background-color: ${(props) => props.theme.colors.bg};
+    border-radius: 4px;
+    box-shadow: ${(props) => props.theme.colors.shadowLg};
+    overflow: hidden;
+    z-index: 300;
+`;
+
+const LinkText = styled(Text)`
+    padding-left: 4px;
+    max-width: 250px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+`;
+
+export const FloatingToolbar = () => {
+    const [isModalVisible, setModalVisible] = useState(false);
+    const commands = useCommands();
+    const active = useActive(true);
+
+    const linkPositioner = useMemo(() => createMarkPositioner({ type: 'link' }), []);
+    const href = (useAttrs().link()?.href as string) ?? '';
+
+    const handleEditLink = () => {
+        setModalVisible(true);
+    };
+
+    const handleClose = () => setModalVisible(false);
+
+    const linkCommmands = (
+        <ToolbarContainer>
+            <LinkText type="span" color="textSecondary">
+                {href}
+            </LinkText>
+            <CommandButton size="small" icon={<EditOutlined />} commandName="editLink" onClick={handleEditLink} />
+            <CommandButton
+                size="small"
+                icon={<DisconnectOutlined />}
+                commandName="toggleLink"
+                onClick={() => commands.removeLink()}
+            />
+        </ToolbarContainer>
+    );
+
+    const shouldShowFloatingToolbar = !(active.link() || active.codeBlock());
+
+    return (
+        <>
+            <FloatingWrapper positioner={linkPositioner} placement="bottom-start">
+                {linkCommmands}
+            </FloatingWrapper>
+            {shouldShowFloatingToolbar && (
+                <FloatingWrapper positioner="selection" placement="top-start">
+                    <ToolbarContainer>
+                        <CommandButton
+                            size="small"
+                            icon={<BoldOutlined />}
+                            commandName="toggleBold"
+                            active={active.bold()}
+                            onClick={() => commands.toggleBold()}
+                        />
+                        <CommandButton
+                            size="small"
+                            icon={<ItalicOutlined />}
+                            commandName="toggleItalic"
+                            active={active.italic()}
+                            onClick={() => commands.toggleItalic()}
+                        />
+                        <CommandButton
+                            size="small"
+                            icon={<UnderlineOutlined />}
+                            commandName="toggleUnderline"
+                            active={active.underline()}
+                            onClick={() => commands.toggleUnderline()}
+                        />
+                        <CommandButton
+                            size="small"
+                            icon={<LinkOutlined />}
+                            commandName="updateLink"
+                            onClick={handleEditLink}
+                        />
+                        <CommandButton
+                            size="small"
+                            icon={<CodeIcon />}
+                            commandName="toggleCode"
+                            active={active.code()}
+                            onClick={() => commands.toggleCode()}
+                        />
+                    </ToolbarContainer>
+                </FloatingWrapper>
+            )}
+            <LinkModal visible={isModalVisible} handleClose={handleClose} />
+        </>
+    );
+};

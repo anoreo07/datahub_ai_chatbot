@@ -1,0 +1,180 @@
+glossary_terms:
+  - name: SOH (Stock On Hand)
+    definition: Lượng tồn kho hiện tại trong kho
+    business_meaning: Số lượng vật tư thực tế đang có tại thời điểm kiểm tra
+    example: SOH của lốp xe 195/65R15 là 2.500 cái tại kho Hải Phòng
+    related_terms:
+      - Safety Stock
+      - Min-Max Stock
+    domain: LOGISTIC
+
+  - name: Coverage Date
+    definition: Số ngày tồn kho dự kiến có thể đáp ứng sản xuất dựa trên mức tiêu thụ
+    business_meaning: Coverage Days = SOH / Daily Consumption, chỉ số quan trọng để đặt hàng
+    example: Tồn kho pin 1.200 bộ, tiêu thụ 40 bộ/ngày → Coverage 30 ngày
+    related_terms:
+      - SOH
+      - Safety Stock
+    domain: LOGISTIC
+
+  - name: Goods In Transit (GIT)
+    definition: Hàng đang trên đường vận chuyển, chưa nhập kho
+    business_meaning: Lượng hàng đã xuất kho nguồn nhưng chưa đến kho đích
+    example: GIT từ cảng Hải Phòng về kho là 3 container linh kiện
+    related_terms:
+      - Lead Time
+      - In-transit Inventory
+    domain: LOGISTIC
+
+  - name: Safety Stock
+    definition: Tồn kho an toàn để phòng ngừa biến động cung cầu
+    business_meaning: Lượng tồn kho dự phòng cho các trường hợp bất thường
+    example: Safety Stock lốp xe là 500 cái, đủ cho 5 ngày sản xuất
+    related_terms:
+      - Min-Max Stock
+      - Reorder Point
+    domain: LOGISTIC
+
+  - name: Min-Max Stock
+    definition: Ngưỡng tồn kho tối thiểu và tối đa cho mỗi vật tư
+    business_meaning: Phương pháp quản lý tồn kho theo ngưỡng: đặt hàng khi chạm Min
+    example: Vật tư có Min=200, Max=1.000, khi SOH chạm 200 thì đặt thêm
+    related_terms:
+      - Safety Stock
+      - Reorder Point
+    domain: LOGISTIC
+
+  - name: Reorder Point (ROP)
+    definition: Điểm đặt hàng lại khi tồn kho giảm đến một mức nhất định
+    business_meaning: ROP = Safety Stock + (Daily Usage × Lead Time)
+    example: ROP của kính chắn gió là 300 cái, khi SOH xuống 300 thì đặt hàng
+    related_terms:
+      - Safety Stock
+      - EOQ
+    domain: LOGISTIC
+
+  - name: EOQ (Economic Order Quantity)
+    definition: Số lượng đặt hàng kinh tế tối ưu
+    business_meaning: Lượng đặt hàng tối thiểu hóa tổng chi phí tồn trữ và đặt hàng
+    example: EOQ của ốc vít là 10.000 cái/lần đặt
+    related_terms:
+      - Reorder Point
+      - MOQ
+    domain: LOGISTIC
+
+  - name: MOQ (Minimum Order Quantity)
+    definition: Số lượng đặt hàng tối thiểu nhà cung cấp yêu cầu
+    business_meaning: Ràng buộc từ nhà cung cấp, ảnh hưởng đến quản lý tồn kho
+    example: MOQ của nhà cung cấp pin là 500 bộ/lần đặt
+    related_terms:
+      - EOQ
+      - Lot Size
+    domain: LOGISTIC
+
+  - name: Lead Time
+    definition: Thời gian từ khi đặt hàng đến khi nhận được hàng
+    business_meaning: Thời gian chờ nhận hàng, ảnh hưởng trực tiếp đến tồn kho an toàn
+    example: Lead Time nhập khẩu linh kiện từ Hàn Quốc là 45 ngày
+    related_terms:
+      - Reorder Point
+      - Safety Stock
+    domain: LOGISTIC
+
+  - name: FIFO (First In First Out)
+    definition: Phương pháp quản lý tồn kho theo nguyên tắc nhập trước xuất trước
+    business_meaning: Đảm bảo hàng lưu kho không bị quá hạn sử dụng
+    example: Lốp xe được xuất theo FIFO để tránh lưu kho quá lâu
+    related_terms:
+      - FEFO
+      - Shelf Life
+    domain: LOGISTIC
+
+  - name: FEFO (First Expiry First Out)
+    definition: Phương pháp quản lý tồn kho theo hạn sử dụng, xuất trước hạn trước
+    business_meaning: Áp dụng cho vật tư có hạn sử dụng như sơn, keo, nhựa
+    example: Sơn xe được quản lý theo FEFO vì có hạn sử dụng 6 tháng
+    related_terms:
+      - FIFO
+      - Shelf Life
+    domain: LOGISTIC
+
+  - name: Shelf Life
+    definition: Thời hạn sử dụng của vật tư từ khi sản xuất
+    business_meaning: Khoảng thời gian vật tư giữ được chất lượng trong điều kiện bảo quản tiêu chuẩn
+    example: Shelf Life của keo dán kính là 12 tháng từ ngày sản xuất
+    related_terms:
+      - FEFO
+      - Aging Inventory
+    domain: LOGISTIC
+
+  - name: Aging Inventory
+    definition: Hàng tồn kho lâu ngày, vượt quá thời gian quy định
+    business_meaning: Hàng chậm luân chuyển, có nguy cơ hết hạn hoặc lỗi thời
+    example: Aging Inventory trên 90 ngày cần được review để xử lý
+    related_terms:
+      - Shelf Life
+      - Inventory Turnover
+    domain: LOGISTIC
+
+  - name: Inventory Turnover
+    definition: Vòng quay tồn kho trong một kỳ
+    business_meaning: Chỉ số hiệu quả quản lý tồn kho: số lần tồn kho được luân chuyển trong kỳ
+    example: Inventory Turnover 12 lần/năm cho thấy hàng luân chuyển tốt
+    related_terms:
+      - DIO
+      - Aging Inventory
+    domain: LOGISTIC
+
+  - name: DIO (Days Inventory Outstanding)
+    definition: Số ngày tồn kho bình quân
+    business_meaning: Số ngày trung bình hàng tồn kho trước khi bán hoặc sử dụng
+    example: DIO 30 ngày trong ngành ô tô là chỉ số khá tốt
+    related_terms:
+      - Inventory Turnover
+      - Cash Conversion Cycle
+    domain: LOGISTIC
+
+  - name: Cycle Count
+    definition: Kiểm đếm tồn kho theo chu kỳ, không phải kiểm kê toàn bộ
+    business_meaning: Phương pháp kiểm tra tồn kho thường xuyên cho từng nhóm vật tư
+    example: Vật tư A được cycle count hàng tuần, vật tư C hàng tháng
+    related_terms:
+      - SOH
+      - Physical Inventory
+    domain: LOGISTIC
+
+  - name: ABC Classification
+    definition: Phân loại vật tư theo giá trị: A (cao), B (trung bình), C (thấp)
+    business_meaning: Phương pháp quản lý tồn kho ưu tiên theo giá trị
+    example: Pin (A) được quản lý chặt, kiểm đếm hàng ngày; ốc vít (C) kiểm đếm hàng tháng
+    related_terms:
+      - Cycle Count
+      - Pareto Analysis
+    domain: LOGISTIC
+
+  - name: Cross-docking
+    definition: Kỹ thuật chuyển hàng trực tiếp từ xe nhập sang xe xuất không qua lưu kho
+    business_meaning: Giảm chi phí lưu kho và thời gian xử lý hàng
+    example: Linh kiện từ cảng được cross-docking thẳng đến dây chuyền sản xuất
+    related_terms:
+      - JIT
+      - WMS
+    domain: LOGISTIC
+
+  - name: WMS (Warehouse Management System)
+    definition: Hệ thống quản lý kho hàng
+    business_meaning: Phần mềm quản lý toàn bộ hoạt động nhập xuất tồn kho
+    example: WMS quản lý 50.000 SKU tại kho trung tâm Hải Phòng
+    related_terms:
+      - Cycle Count
+      - Cross-docking
+    domain: LOGISTIC
+
+  - name: Drop Shipment
+    definition: Giao hàng thẳng từ nhà cung cấp đến khách hàng không qua kho trung gian
+    business_meaning: Mô hình giao hàng giảm chi phí vận chuyển và lưu kho
+    example: Phụ tùng được drop ship từ nhà máy sản xuất thẳng đến đại lý
+    related_terms:
+      - Cross-docking
+      - Lead Time
+    domain: LOGISTIC

@@ -1,0 +1,23 @@
+[
+  {
+    "urn": "urn:li:document:MonthlyRevenueMethodology",
+    "sections": [
+      {
+        "heading": "Overview",
+        "content": "Monthly Revenue is calculated by aggregating all confirmed sales orders within a calendar month. The revenue is recognized at the point of order confirmation."
+      },
+      {
+        "heading": "Net Revenue Calculation",
+        "content": "Net Revenue is calculated as Gross Revenue minus refunds, discounts, and chargebacks. Specifically: Net Revenue = Gross Revenue - SUM(refund_amount) - SUM(discount_amount) - SUM(chargeback_amount). This calculation is performed at month-end closing."
+      },
+      {
+        "heading": "Data Sources",
+        "content": "The primary data source for Monthly Revenue is the sales.orders table in Snowflake. Payment adjustments are sourced from the raw.payments table. Both datasets are joined on order_id."
+      },
+      {
+        "heading": "Reporting Schedule",
+        "content": "Monthly Revenue reports are generated on the first business day of each month. The report is available on the Monthly Revenue dashboard in Mode."
+      }
+    ]
+  }
+]

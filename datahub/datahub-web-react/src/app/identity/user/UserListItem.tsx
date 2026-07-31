@@ -1,0 +1,191 @@
+import { DeleteOutlined, MoreOutlined, UnlockOutlined } from '@ant-design/icons';
+import { Avatar, Text } from '@components';
+import { Dropdown, List, Tag, Tooltip, Typography } from 'antd';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
+import { useTheme } from 'styled-components';
+import styled from 'styled-components/macro';
+
+import { AvatarType } from '@components/components/AvatarStack/types';
+
+import useDeleteEntity from '@app/entity/shared/EntityDropdown/useDeleteEntity';
+import { MenuItemStyle } from '@app/entity/view/menu/item/styledComponent';
+import SelectRole from '@app/identity/user/SelectRole';
+import ViewResetTokenModal from '@app/identity/user/ViewResetTokenModal';
+import { USERS_ASSIGN_ROLE_ID } from '@app/onboarding/config/UsersOnboardingConfig';
+import { useEntityRegistry } from '@app/useEntityRegistry';
+
+import { CorpUser, CorpUserStatus, DataHubRole, EntityType } from '@types';
+
+type Props = {
+    user: CorpUser;
+    canManageUserCredentials: boolean;
+    selectRoleOptions: Array<DataHubRole>;
+    rolesLoading: boolean;
+    rolesHasMore: boolean;
+    rolesObserverRef: (node: HTMLDivElement | null) => void;
+    rolesSearchQuery: string;
+    setRolesSearchQuery: (query: string) => void;
+    onDelete?: () => void;
+    refetch?: () => void;
+};
+
+const UserItemContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    padding-left: 8px;
+    padding-right: 8px;
+    width: 100%;
+`;
+
+const UserHeaderContainer = styled.div`
+    display: flex;
+    justify-content: left;
+    align-items: center;
+`;
+
+const ButtonGroup = styled.div`
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+`;
+
+const MenuIcon = styled(MoreOutlined)<{ fontSize?: number }>`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: ${(props) => props.fontSize || '24'}px;
+    height: 32px;
+    margin-left: 5px;
+`;
+
+export default function UserListItem({
+    user,
+    canManageUserCredentials,
+    selectRoleOptions,
+    rolesLoading,
+    rolesHasMore,
+    rolesObserverRef,
+    rolesSearchQuery,
+    setRolesSearchQuery,
+    onDelete,
+    refetch,
+}: Props) {
+    const { t } = useTranslation('entity.identity');
+    const { t: tc } = useTranslation('common.actions');
+    const theme = useTheme();
+    const entityRegistry = useEntityRegistry();
+    const [isViewingResetToken, setIsViewingResetToken] = useState(false);
+    const displayName = entityRegistry.getDisplayName(EntityType.CorpUser, user);
+    const isNativeUser: boolean = user.isNativeUser as boolean;
+    const shouldShowPasswordReset: boolean = canManageUserCredentials && isNativeUser;
+    const castedCorpUser = user as any;
+    const userRelationships = castedCorpUser?.roles?.relationships;
+    const userRole = userRelationships && userRelationships.length > 0 && (userRelationships[0]?.entity as DataHubRole);
+    const userRoleUrn = userRole && userRole.urn;
+
+    const { onDeleteEntity } = useDeleteEntity(user.urn, EntityType.CorpUser, user, onDelete, false, true);
+
+    const getUserStatusToolTip = (userStatus: CorpUserStatus) => {
+        switch (userStatus) {
+            case CorpUserStatus.Active:
+                return t('users.activeStatusTooltip');
+            default:
+                return '';
+        }
+    };
+
+    const getUserStatusColor = (userStatus: CorpUserStatus) => {
+        switch (userStatus) {
+            case CorpUserStatus.Active:
+                return theme.colors.textBrand;
+            default:
+                return theme.colors.textDisabled;
+        }
+    };
+
+    const userStatus = user.status; // Support case where the user status is undefined.
+    const userStatusToolTip = userStatus && getUserStatusToolTip(userStatus);
+    const userStatusColor = userStatus && getUserStatusColor(userStatus);
+
+    const items = [
+        {
+            key: 'reset',
+            label: (
+                <MenuItemStyle
+                    disabled={!shouldShowPasswordReset}
+                    onClick={() => setIsViewingResetToken(true)}
+                    data-testid="reset-menu-item"
+                >
+                    <UnlockOutlined data-testid="resetButton" /> &nbsp; {t('users.resetPasswordMenu')}
+                </MenuItemStyle>
+            ),
+        },
+        {
+            key: 'delete',
+            label: (
+                <MenuItemStyle onClick={onDeleteEntity}>
+                    <DeleteOutlined /> &nbsp;{tc('delete')}
+                </MenuItemStyle>
+            ),
+        },
+    ];
+
+    return (
+        <List.Item>
+            <UserItemContainer>
+                <Link to={entityRegistry.getEntityUrl(EntityType.CorpUser, user.urn)}>
+                    <UserHeaderContainer>
+                        <Avatar
+                            name={displayName}
+                            imageUrl={user.editableProperties?.pictureLink || undefined}
+                            type={AvatarType.user}
+                            size="xl"
+                        />
+                        <div style={{ marginLeft: 16, marginRight: 20 }}>
+                            <div>
+                                <Typography.Text>{displayName}</Typography.Text>
+                            </div>
+                            <div data-testid={`email-${shouldShowPasswordReset ? 'native' : 'non-native'}`}>
+                                <Text type="span" color="textSecondary">
+                                    {user.username}
+                                </Text>
+                            </div>
+                        </div>
+                        {userStatus && (
+                            <Tooltip overlay={userStatusToolTip}>
+                                <Tag color={userStatusColor || theme.colors.textDisabled}>{userStatus}</Tag>
+                            </Tooltip>
+                        )}
+                    </UserHeaderContainer>
+                </Link>
+            </UserItemContainer>
+            <ButtonGroup id={USERS_ASSIGN_ROLE_ID}>
+                <SelectRole
+                    user={user}
+                    userRoleUrn={userRoleUrn || ''}
+                    selectRoleOptions={selectRoleOptions}
+                    rolesLoading={rolesLoading}
+                    rolesHasMore={rolesHasMore}
+                    rolesObserverRef={rolesObserverRef}
+                    rolesSearchQuery={rolesSearchQuery}
+                    setRolesSearchQuery={setRolesSearchQuery}
+                    refetch={refetch}
+                />
+                <Dropdown trigger={['click']} menu={{ items }}>
+                    <MenuIcon
+                        fontSize={20}
+                        data-testid={`userItem-${shouldShowPasswordReset ? 'native' : 'non-native'}`}
+                    />
+                </Dropdown>
+            </ButtonGroup>
+            <ViewResetTokenModal
+                open={isViewingResetToken}
+                userUrn={user.urn}
+                username={user.username}
+                onClose={() => setIsViewingResetToken(false)}
+            />
+        </List.Item>
+    );
+}

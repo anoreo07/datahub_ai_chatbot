@@ -1,0 +1,10 @@
+domain: LOGISTIC
+description: Dữ liệu quản lý kho bãi, tồn kho, vận chuyển, nhập xuất vật tư và quản lý nhà cung cấp
+business_objective: Tối ưu tồn kho, đảm bảo cung ứng vật tư kịp thời cho sản xuất, giảm chi phí logistics
+owner: nguyen-thanh-son
+technical_owner: tran-duc-anh
+tags:
+  - SupplyChain
+  - Gold
+  - Critical
+  - SAP

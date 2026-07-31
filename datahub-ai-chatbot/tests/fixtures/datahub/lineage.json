@@ -1,0 +1,5 @@
+[
+  {"source": "urn:li:dataset:(urn:li:dataPlatform:snowflake,sales.orders,PROD)", "target": "urn:li:dataset:(urn:li:dataPlatform:snowflake,finance.monthly_revenue,PROD)"},
+  {"source": "urn:li:dataset:(urn:li:dataPlatform:snowflake,raw.payments,PROD)", "target": "urn:li:dataset:(urn:li:dataPlatform:snowflake,finance.monthly_revenue,PROD)"},
+  {"source": "urn:li:dataset:(urn:li:dataPlatform:snowflake,finance.monthly_revenue,PROD)", "target": "urn:li:dashboard:MonthlyRevenue"}
+]

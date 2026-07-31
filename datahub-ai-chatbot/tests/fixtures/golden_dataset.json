@@ -1,0 +1,426 @@
+[
+  {
+    "id": "q001",
+    "question": "Có những domain nào?",
+    "expected_intent": "LIST_DOMAINS",
+    "expected_entity_urns": [],
+    "expected_answerable": true,
+    "expected_answer_contains": ["Logistic", "Finance", "Sản xuất", "Cung ứng", "Kinh doanh"],
+    "expected_citation_urns": [
+      "urn:li:domain:logistic",
+      "urn:li:domain:finance",
+      "urn:li:domain:san_xuat",
+      "urn:li:domain:cung_ung",
+      "urn:li:domain:kinh_doanh"
+    ]
+  },
+  {
+    "id": "q002",
+    "question": "Dashboard Tồn Kho Min Max thuộc domain nào?",
+    "expected_intent": "DOMAIN_LOOKUP",
+    "expected_entity_urns": ["urn:li:dashboard:(powerbi,logistic.ton_kho_min_max)"],
+    "expected_answerable": true,
+    "expected_answer_contains": ["Logistic"],
+    "expected_citation_urns": [
+      "urn:li:dashboard:(powerbi,logistic.ton_kho_min_max)",
+      "urn:li:domain:logistic"
+    ]
+  },
+  {
+    "id": "q003",
+    "question": "Có dataset nào trong Logistic?",
+    "expected_intent": "DOMAIN_LOOKUP",
+    "expected_entity_urns": ["urn:li:domain:logistic"],
+    "expected_answerable": true,
+    "expected_answer_contains": ["fact_inventory", "dim_material", "dim_plant", "dim_supplier", "fact_goods_in_transit"],
+    "expected_citation_urns": ["urn:li:domain:logistic"]
+  },
+  {
+    "id": "q004",
+    "question": "Domain Sản xuất có ý nghĩa gì?",
+    "expected_intent": "DOMAIN_LOOKUP",
+    "expected_entity_urns": ["urn:li:domain:san_xuat"],
+    "expected_answerable": true,
+    "expected_answer_contains": ["quản lý sản xuất", "kế hoạch", "năng suất"],
+    "expected_citation_urns": ["urn:li:domain:san_xuat"]
+  },
+  {
+    "id": "q005",
+    "question": "Domain Cung ứng gồm những gì?",
+    "expected_intent": "DOMAIN_LOOKUP",
+    "expected_entity_urns": ["urn:li:domain:cung_ung"],
+    "expected_answerable": true,
+    "expected_answer_contains": ["nhà cung cấp", "đặt hàng", "đánh giá supplier"],
+    "expected_citation_urns": ["urn:li:domain:cung_ung"]
+  },
+  {
+    "id": "q006",
+    "question": "Tồn Kho Min Max là loại entity gì?",
+    "expected_intent": "ENTITY_DETAILS",
+    "expected_entity_urns": ["urn:li:dashboard:(powerbi,logistic.ton_kho_min_max)"],
+    "expected_answerable": true,
+    "expected_answer_contains": ["dashboard"],
+    "expected_citation_urns": ["urn:li:dashboard:(powerbi,logistic.ton_kho_min_max)"]
+  },
+  {
+    "id": "q007",
+    "question": "Tìm dashboard liên quan tồn kho",
+    "expected_intent": "FIND_ENTITY",
+    "expected_entity_urns": [
+      "urn:li:dashboard:(powerbi,logistic.ton_kho_min_max)",
+      "urn:li:dashboard:(powerbi,logistic.inventory_executive_summary)"
+    ],
+    "expected_answerable": true,
+    "expected_answer_contains": ["Tồn Kho Min Max", "Inventory Executive Summary"],
+    "expected_citation_urns": [
+      "urn:li:dashboard:(powerbi,logistic.ton_kho_min_max)",
+      "urn:li:dashboard:(powerbi,logistic.inventory_executive_summary)"
+    ]
+  },
+  {
+    "id": "q008",
+    "question": "fact_inventory là dataset gì?",
+    "expected_intent": "ENTITY_DETAILS",
+    "expected_entity_urns": ["urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,PROD)"],
+    "expected_answerable": true,
+    "expected_answer_contains": ["Bảng fact tồn kho", "số lượng tồn"],
+    "expected_citation_urns": ["urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,PROD)"]
+  },
+  {
+    "id": "q009",
+    "question": "dim_material có mô tả không?",
+    "expected_intent": "ENTITY_DETAILS",
+    "expected_entity_urns": ["urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.dim_material,PROD)"],
+    "expected_answerable": true,
+    "expected_answer_contains": ["Danh mục vật tư", "nguyên vật liệu"],
+    "expected_citation_urns": ["urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.dim_material,PROD)"]
+  },
+  {
+    "id": "q010",
+    "question": "Inventory Executive Summary là gì?",
+    "expected_intent": "ENTITY_DETAILS",
+    "expected_entity_urns": ["urn:li:dashboard:(powerbi,logistic.inventory_executive_summary)"],
+    "expected_answerable": true,
+    "expected_answer_contains": ["dashboard", "tổng quan tồn kho", "ban lãnh đạo"],
+    "expected_citation_urns": ["urn:li:dashboard:(powerbi,logistic.inventory_executive_summary)"]
+  },
+  {
+    "id": "q011",
+    "question": "Ai là Business Owner của dashboard Tồn Kho Min Max?",
+    "expected_intent": "OWNER_LOOKUP",
+    "expected_entity_urns": ["urn:li:dashboard:(powerbi,logistic.ton_kho_min_max)"],
+    "expected_answerable": true,
+    "expected_answer_contains": ["Nguyễn Văn An"],
+    "expected_citation_urns": ["urn:li:dashboard:(powerbi,logistic.ton_kho_min_max)"]
+  },
+  {
+    "id": "q012",
+    "question": "Ai là System Owner của dim_plant?",
+    "expected_intent": "OWNER_LOOKUP",
+    "expected_entity_urns": ["urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.dim_plant,PROD)"],
+    "expected_answerable": true,
+    "expected_answer_contains": ["Lê Thu Hà"],
+    "expected_citation_urns": ["urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.dim_plant,PROD)"]
+  },
+  {
+    "id": "q013",
+    "question": "Trần Minh Khoa là owner của entity nào?",
+    "expected_intent": "OWNER_LOOKUP",
+    "expected_entity_urns": [],
+    "expected_answerable": true,
+    "expected_answer_contains": ["fact_inventory", "Tồn Kho Min Max", "fact_goods_in_transit"],
+    "expected_citation_urns": [
+      "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,PROD)",
+      "urn:li:dashboard:(powerbi,logistic.ton_kho_min_max)",
+      "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_goods_in_transit,PROD)"
+    ]
+  },
+  {
+    "id": "q014",
+    "question": "Lê Thu Hà sở hữu entity gì?",
+    "expected_intent": "OWNER_LOOKUP",
+    "expected_entity_urns": [],
+    "expected_answerable": true,
+    "expected_answer_contains": ["dim_plant", "dim_material", "Tồn Kho Min Max"],
+    "expected_citation_urns": [
+      "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.dim_plant,PROD)",
+      "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.dim_material,PROD)",
+      "urn:li:dashboard:(powerbi,logistic.ton_kho_min_max)"
+    ]
+  },
+  {
+    "id": "q015",
+    "question": "Dataset raw.payments có owner không?",
+    "expected_intent": "OWNER_LOOKUP",
+    "expected_entity_urns": ["urn:li:dataset:(urn:li:dataPlatform:snowflake,raw.payments,PROD)"],
+    "expected_answerable": true,
+    "expected_answer_contains": ["không"],
+    "expected_citation_urns": ["urn:li:dataset:(urn:li:dataPlatform:snowflake,raw.payments,PROD)"]
+  },
+  {
+    "id": "q016",
+    "question": "fact_inventory có những cột nào?",
+    "expected_intent": "SCHEMA_LOOKUP",
+    "expected_entity_urns": ["urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,PROD)"],
+    "expected_answerable": true,
+    "expected_answer_contains": ["inventory_date", "plant_code", "material_code", "stock_on_hand", "coverage_days"],
+    "expected_citation_urns": ["urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,PROD)"]
+  },
+  {
+    "id": "q017",
+    "question": "stock_on_hand nghĩa là gì?",
+    "expected_intent": "COLUMN_DESCRIPTION",
+    "expected_entity_urns": ["urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,PROD)"],
+    "expected_answerable": true,
+    "expected_answer_contains": ["Số lượng tồn kho hiện có"],
+    "expected_citation_urns": ["urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,PROD)"]
+  },
+  {
+    "id": "q018",
+    "question": "coverage_days có kiểu dữ liệu gì?",
+    "expected_intent": "COLUMN_DESCRIPTION",
+    "expected_entity_urns": ["urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,PROD)"],
+    "expected_answerable": true,
+    "expected_answer_contains": ["int"],
+    "expected_citation_urns": ["urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,PROD)"]
+  },
+  {
+    "id": "q019",
+    "question": "dim_material có schema không?",
+    "expected_intent": "SCHEMA_LOOKUP",
+    "expected_entity_urns": ["urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.dim_material,PROD)"],
+    "expected_answerable": true,
+    "expected_answer_contains": ["material_code", "material_name", "base_unit"],
+    "expected_citation_urns": ["urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.dim_material,PROD)"]
+  },
+  {
+    "id": "q020",
+    "question": "Cột material_code có ý nghĩa gì?",
+    "expected_intent": "COLUMN_DESCRIPTION",
+    "expected_entity_urns": ["urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,PROD)"],
+    "expected_answerable": true,
+    "expected_answer_contains": ["Mã vật tư"],
+    "expected_citation_urns": ["urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,PROD)"]
+  },
+  {
+    "id": "q021",
+    "question": "Tồn kho Min Max là gì?",
+    "expected_intent": "GLOSSARY_DEFINITION",
+    "expected_entity_urns": ["urn:li:glossaryTerm:ton_kho_min_max"],
+    "expected_answerable": true,
+    "expected_answer_contains": ["ngưỡng tối thiểu", "ngưỡng tối đa", "theo dõi tồn kho"],
+    "expected_citation_urns": ["urn:li:glossaryTerm:ton_kho_min_max"]
+  },
+  {
+    "id": "q022",
+    "question": "Goods In Transit là gì?",
+    "expected_intent": "GLOSSARY_DEFINITION",
+    "expected_entity_urns": ["urn:li:glossaryTerm:goods_in_transit"],
+    "expected_answerable": true,
+    "expected_answer_contains": ["hàng hóa đã rời khỏi kho xuất", "chưa đến kho nhận"],
+    "expected_citation_urns": ["urn:li:glossaryTerm:goods_in_transit"]
+  },
+  {
+    "id": "q023",
+    "question": "Safety Stock là gì?",
+    "expected_intent": "GLOSSARY_DEFINITION",
+    "expected_entity_urns": ["urn:li:glossaryTerm:safety_stock"],
+    "expected_answerable": true,
+    "expected_answer_contains": ["tồn kho dự phòng", "rủi ro hết hàng"],
+    "expected_citation_urns": ["urn:li:glossaryTerm:safety_stock"]
+  },
+  {
+    "id": "q024",
+    "question": "Coverage Date là gì?",
+    "expected_intent": "GLOSSARY_DEFINITION",
+    "expected_entity_urns": ["urn:li:glossaryTerm:coverage_date"],
+    "expected_answerable": true,
+    "expected_answer_contains": ["số ngày", "tồn kho", "đáp ứng nhu cầu"],
+    "expected_citation_urns": ["urn:li:glossaryTerm:coverage_date"]
+  },
+  {
+    "id": "q025",
+    "question": "Stock On Hand là gì?",
+    "expected_intent": "GLOSSARY_DEFINITION",
+    "expected_entity_urns": ["urn:li:glossaryTerm:stock_on_hand"],
+    "expected_answerable": true,
+    "expected_answer_contains": ["số lượng hàng hóa", "đang có trong kho"],
+    "expected_citation_urns": ["urn:li:glossaryTerm:stock_on_hand"]
+  },
+  {
+    "id": "q026",
+    "question": "Glossary nào liên quan đến fact_inventory?",
+    "expected_intent": "GLOSSARY_TO_ENTITY",
+    "expected_entity_urns": ["urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,PROD)"],
+    "expected_answerable": true,
+    "expected_answer_contains": ["Tồn kho Min Max", "Stock On Hand"],
+    "expected_citation_urns": [
+      "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,PROD)",
+      "urn:li:glossaryTerm:ton_kho_min_max",
+      "urn:li:glossaryTerm:stock_on_hand"
+    ]
+  },
+  {
+    "id": "q027",
+    "question": "Định nghĩa Doanh thu là gì?",
+    "expected_intent": "GLOSSARY_DEFINITION",
+    "expected_entity_urns": ["urn:li:glossaryTerm:doanh_thu"],
+    "expected_answerable": true,
+    "expected_answer_contains": ["tổng giá trị thu được từ hoạt động bán hàng"],
+    "expected_citation_urns": ["urn:li:glossaryTerm:doanh_thu"]
+  },
+  {
+    "id": "q028",
+    "question": "Dashboard Tồn Kho Min Max lấy dữ liệu từ đâu?",
+    "expected_intent": "UPSTREAM_LINEAGE",
+    "expected_entity_urns": ["urn:li:dashboard:(powerbi,logistic.ton_kho_min_max)"],
+    "expected_answerable": true,
+    "expected_answer_contains": ["fact_inventory", "dim_material", "dim_plant", "dim_supplier", "fact_goods_in_transit"],
+    "expected_citation_urns": ["urn:li:dashboard:(powerbi,logistic.ton_kho_min_max)"]
+  },
+  {
+    "id": "q029",
+    "question": "fact_inventory được dùng bởi dashboard nào?",
+    "expected_intent": "DOWNSTREAM_LINEAGE",
+    "expected_entity_urns": ["urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,PROD)"],
+    "expected_answerable": true,
+    "expected_answer_contains": ["Tồn Kho Min Max", "Inventory Executive Summary"],
+    "expected_citation_urns": ["urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,PROD)"]
+  },
+  {
+    "id": "q030",
+    "question": "Nếu fact_inventory lỗi thì dashboard nào bị ảnh hưởng?",
+    "expected_intent": "IMPACT_ANALYSIS",
+    "expected_entity_urns": ["urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,PROD)"],
+    "expected_answerable": true,
+    "expected_answer_contains": ["Tồn Kho Min Max", "Inventory Executive Summary"],
+    "expected_citation_urns": ["urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,PROD)"]
+  },
+  {
+    "id": "q031",
+    "question": "dim_material có upstream không?",
+    "expected_intent": "UPSTREAM_LINEAGE",
+    "expected_entity_urns": ["urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.dim_material,PROD)"],
+    "expected_answerable": true,
+    "expected_answer_contains": ["không"],
+    "expected_citation_urns": ["urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.dim_material,PROD)"]
+  },
+  {
+    "id": "q032",
+    "question": "Dataset nào là nguồn của fact_inventory?",
+    "expected_intent": "UPSTREAM_LINEAGE",
+    "expected_entity_urns": ["urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,PROD)"],
+    "expected_answerable": true,
+    "expected_answer_contains": ["dim_material", "dim_plant", "dim_supplier"],
+    "expected_citation_urns": ["urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,PROD)"]
+  },
+  {
+    "id": "q033",
+    "question": "Tìm inventory",
+    "expected_intent": "FIND_ENTITY",
+    "expected_entity_urns": [],
+    "expected_answerable": true,
+    "expected_answer_contains": ["fact_inventory", "Inventory Executive Summary", "Inventory Turnover"],
+    "expected_citation_urns": [
+      "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,PROD)",
+      "urn:li:dashboard:(powerbi,logistic.inventory_executive_summary)",
+      "urn:li:glossaryTerm:ambiguous_inventory"
+    ]
+  },
+  {
+    "id": "q034",
+    "question": "Mở báo cáo summary",
+    "expected_intent": "FIND_ENTITY",
+    "expected_entity_urns": [],
+    "expected_answerable": true,
+    "expected_answer_contains": ["Inventory Executive Summary", "Monthly Finance Summary"],
+    "expected_citation_urns": [
+      "urn:li:dashboard:(powerbi,logistic.inventory_executive_summary)",
+      "urn:li:dashboard:finance.monthly_summary"
+    ]
+  },
+  {
+    "id": "q035",
+    "question": "Entity nào tên gần giống inventory?",
+    "expected_intent": "FIND_ENTITY",
+    "expected_entity_urns": [],
+    "expected_answerable": true,
+    "expected_answer_contains": ["Inventory Turnover"],
+    "expected_citation_urns": ["urn:li:glossaryTerm:ambiguous_inventory"]
+  },
+  {
+    "id": "q036",
+    "question": "fact_inventory có mấy environment?",
+    "expected_intent": "ENTITY_DETAILS",
+    "expected_entity_urns": ["urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,PROD)"],
+    "expected_answerable": true,
+    "expected_answer_contains": ["PROD", "DEV"],
+    "expected_citation_urns": [
+      "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,PROD)",
+      "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,DEV)"
+    ]
+  },
+  {
+    "id": "q037",
+    "question": "Doanh thu năm 2035 là bao nhiêu?",
+    "expected_intent": "UNKNOWN",
+    "expected_entity_urns": [],
+    "expected_answerable": false,
+    "expected_answer_contains": [],
+    "expected_citation_urns": []
+  },
+  {
+    "id": "q038",
+    "question": "Mật khẩu database là gì?",
+    "expected_intent": "UNKNOWN",
+    "expected_entity_urns": [],
+    "expected_answerable": false,
+    "expected_answer_contains": [],
+    "expected_citation_urns": []
+  },
+  {
+    "id": "q039",
+    "question": "old.inventory_archive còn hoạt động không?",
+    "expected_intent": "ENTITY_DETAILS",
+    "expected_entity_urns": ["urn:li:dataset:(urn:li:dataPlatform:postgres,old.inventory_archive,PROD)"],
+    "expected_answerable": true,
+    "expected_answer_contains": ["đã bị đánh dấu deleted"],
+    "expected_citation_urns": ["urn:li:dataset:(urn:li:dataPlatform:postgres,old.inventory_archive,PROD)"]
+  },
+  {
+    "id": "q040",
+    "question": "Dataset raw.payments do ai sở hữu?",
+    "expected_intent": "OWNER_LOOKUP",
+    "expected_entity_urns": ["urn:li:dataset:(urn:li:dataPlatform:snowflake,raw.payments,PROD)"],
+    "expected_answerable": true,
+    "expected_answer_contains": ["không có owner"],
+    "expected_citation_urns": ["urn:li:dataset:(urn:li:dataPlatform:snowflake,raw.payments,PROD)"]
+  },
+  {
+    "id": "q041",
+    "question": "Finance user hỏi entity Logistic bị hạn chế",
+    "expected_intent": "FIND_ENTITY",
+    "expected_entity_urns": [],
+    "expected_answerable": true,
+    "expected_answer_contains": ["hạn chế", "Logistic"],
+    "expected_citation_urns": []
+  },
+  {
+    "id": "q042",
+    "question": "Inventory Management Policy nói về gì?",
+    "expected_intent": "DOCUMENT_QA",
+    "expected_entity_urns": ["urn:li:document:inventory_policy"],
+    "expected_answerable": true,
+    "expected_answer_contains": ["theo dõi và quản lý tồn kho", "không thiếu hàng", "không tồn vượt mức"],
+    "expected_citation_urns": ["urn:li:document:inventory_policy"]
+  },
+  {
+    "id": "q043",
+    "question": "Monthly Revenue Methodology có nội dung gì?",
+    "expected_intent": "DOCUMENT_QA",
+    "expected_entity_urns": ["urn:li:document:monthly_revenue_methodology"],
+    "expected_answerable": true,
+    "expected_answer_contains": ["tổng hợp từ bảng sales.orders", "Net Revenue"],
+    "expected_citation_urns": ["urn:li:document:monthly_revenue_methodology"]
+  }
+]

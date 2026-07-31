@@ -1,0 +1,1272 @@
+datasets:
+  - name: dim_cost_center
+    description: Danh mục trung tâm chi phí theo cấu trúc quản lý tài chính
+    domain: Tài chính
+    platform: Redshift
+    tags:
+      - master-data
+      - cost-center
+    columns:
+      - name: cost_center_id
+        description: Mã định danh trung tâm chi phí
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa chính, mã duy nhất theo hệ thống SAP
+        example: CC-5001-ASM
+      - name: cost_center_name
+        description: Tên trung tâm chi phí
+        data_type: varchar
+        nullable: false
+        business_definition: Tên mô tả đầy đủ của trung tâm chi phí
+        example: Chi phí lắp ráp dây chuyền số 1
+      - name: plant_id
+        description: Mã nhà máy
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_plant
+        example: VFHP
+      - name: department
+        description: Bộ phận quản lý
+        data_type: varchar
+        nullable: false
+        business_definition: Phòng ban chịu trách nhiệm quản lý trung tâm chi phí
+        example: Sản xuất
+      - name: cost_center_type
+        description: Loại trung tâm chi phí
+        data_type: varchar
+        nullable: false
+        business_definition: Phân loại trung tâm chi phí Production, Administration, Sales, RAndD
+        example: Production
+      - name: cost_center_manager
+        description: Người quản lý trung tâm
+        data_type: varchar
+        nullable: false
+        business_definition: Mã nhân viên quản lý trung tâm chi phí
+        example: EMP00123
+      - name: budget_owner
+        description: Chủ ngân sách
+        data_type: varchar
+        nullable: true
+        business_definition: Người phê duyệt và chịu trách nhiệm ngân sách của trung tâm chi phí
+        example: EMP00567
+      - name: is_active
+        description: Còn hoạt động không
+        data_type: boolean
+        nullable: false
+        business_definition: True nếu trung tâm chi phí đang được sử dụng
+        example: true
+      - name: effective_date
+        description: Ngày hiệu lực
+        data_type: date
+        nullable: false
+        business_definition: Ngày trung tâm chi phí bắt đầu hoạt động
+        example: 2024-01-01
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp tạo bản ghi trong hệ thống
+        example: 2024-01-01 08:00:00
+    owners:
+      - finance-controlling
+    refresh_frequency: Daily
+
+  - name: dim_gl_account
+    description: Danh mục tài khoản kế toán theo hệ thống tài khoản quốc gia
+    domain: Tài chính
+    platform: Redshift
+    tags:
+      - master-data
+      - gl-account
+    columns:
+      - name: gl_account_id
+        description: Mã tài khoản kế toán
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa chính, mã tài khoản theo chuẩn hệ thống tài khoản kế toán Việt Nam
+        example: 1121
+      - name: account_name
+        description: Tên tài khoản
+        data_type: varchar
+        nullable: false
+        business_definition: Tên đầy đủ của tài khoản kế toán
+        example: Tiền gửi ngân hàng VND
+      - name: account_type
+        description: Loại tài khoản
+        data_type: varchar
+        nullable: false
+        business_definition: Phân loại Asset, Liability, Equity, Revenue, Expense
+        example: Asset
+      - name: account_group
+        description: Nhóm tài khoản
+        data_type: varchar
+        nullable: false
+        business_definition: Nhóm con trong loại tài khoản, ví dụ Cash, Receivable, Inventory, FixedAsset
+        example: Cash
+      - name: is_control_account
+        description: Là tài khoản tổng hợp
+        data_type: boolean
+        nullable: false
+        business_definition: True nếu là tài khoản tổng hợp, False nếu là tài khoản chi tiết
+        example: true
+      - name: currency
+        description: Loại tiền tệ
+        data_type: varchar
+        nullable: false
+        business_definition: Đơn vị tiền tệ hạch toán theo chuẩn ISO, chủ yếu VND hoặc USD
+        example: VND
+      - name: is_active
+        description: Còn sử dụng
+        data_type: boolean
+        nullable: false
+        business_definition: True nếu tài khoản đang được sử dụng trong kỳ kế toán
+        example: true
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp tạo tài khoản trong hệ thống
+        example: 2024-01-01 08:00:00
+    owners:
+      - finance-controlling
+    refresh_frequency: Daily
+
+  - name: dim_profit_center
+    description: Danh mục trung tâm lợi nhuận theo dòng sản phẩm
+    domain: Tài chính
+    platform: Redshift
+    tags:
+      - master-data
+      - profit-center
+    columns:
+      - name: profit_center_id
+        description: Mã định danh trung tâm lợi nhuận
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa chính, mã duy nhất cho mỗi trung tâm lợi nhuận
+        example: PC-VF8
+      - name: profit_center_name
+        description: Tên trung tâm lợi nhuận
+        data_type: varchar
+        nullable: false
+        business_definition: Tên mô tả trung tâm lợi nhuận theo dòng xe
+        example: Dòng xe VF 8
+      - name: product_line
+        description: Dòng sản phẩm
+        data_type: varchar
+        nullable: false
+        business_definition: Dòng sản phẩm mà trung tâm lợi nhuận phụ trách
+        example: VF 8
+      - name: profit_center_manager
+        description: Người quản lý
+        data_type: varchar
+        nullable: true
+        business_definition: Mã nhân viên chịu trách nhiệm lợi nhuận dòng sản phẩm
+        example: EMP00999
+      - name: is_active
+        description: Còn hoạt động
+        data_type: boolean
+        nullable: false
+        business_definition: True nếu trung tâm lợi nhuận đang hoạt động
+        example: true
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp tạo bản ghi
+        example: 2024-01-01 08:00:00
+    owners:
+      - finance-controlling
+    refresh_frequency: Daily
+
+  - name: fact_general_ledger
+    description: Sổ cái ghi nhận tất cả bút toán kế toán của doanh nghiệp
+    domain: Tài chính
+    platform: Redshift
+    tags:
+      - transaction
+      - gl
+    columns:
+      - name: journal_entry_id
+        description: Mã định danh bút toán
+        data_type: bigint
+        nullable: false
+        business_definition: Khóa chính, mã duy nhất cho mỗi dòng bút toán sổ cái
+        example: 20000001
+      - name: gl_account_id
+        description: Mã tài khoản kế toán
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_gl_account
+        example: 1121
+      - name: cost_center_id
+        description: Mã trung tâm chi phí
+        data_type: varchar
+        nullable: true
+        business_definition: Khóa ngoại tham chiếu đến dim_cost_center
+        example: CC-5001-ASM
+      - name: profit_center_id
+        description: Mã trung tâm lợi nhuận
+        data_type: varchar
+        nullable: true
+        business_definition: Khóa ngoại tham chiếu đến dim_profit_center
+        example: PC-VF8
+      - name: posting_date
+        description: Ngày hạch toán
+        data_type: date
+        nullable: false
+        business_definition: Ngày ghi sổ của bút toán kế toán
+        example: 2024-08-31
+      - name: document_type
+        description: Loại chứng từ
+        data_type: varchar
+        nullable: false
+        business_definition: Phân loại chứng từ SA (Bán hàng), MM (Mua hàng), FI (Tài chính), CO (Kiểm soát)
+        example: FI
+      - name: document_number
+        description: Số chứng từ
+        data_type: varchar
+        nullable: false
+        business_definition: Số hiệu chứng từ gốc theo hệ thống
+        example: FI-2024-08-12345
+      - name: debit_amount
+        description: Số tiền nợ
+        data_type: decimal
+        nullable: false
+        business_definition: Số tiền phát sinh bên nợ của tài khoản, tính bằng VND
+        example: 500000000.00
+      - name: credit_amount
+        description: Số tiền có
+        data_type: decimal
+        nullable: false
+        business_definition: Số tiền phát sinh bên có của tài khoản, tính bằng VND
+        example: 0.00
+      - name: currency
+        description: Loại tiền
+        data_type: varchar
+        nullable: false
+        business_definition: Mã tiền tệ của bút toán
+        example: VND
+      - name: exchange_rate
+        description: Tỷ giá quy đổi
+        data_type: decimal
+        nullable: true
+        business_definition: Tỷ giá quy đổi từ ngoại tệ sang VND, 1 nếu là VND
+        example: 1.0000
+      - name: posting_text
+        description: Nội dung hạch toán
+        data_type: varchar
+        nullable: true
+        business_definition: Mô tả nội dung bút toán kế toán
+        example: Thu tiền bán xe VF 8 khách hàng A
+      - name: fiscal_year
+        description: Năm tài chính
+        data_type: int
+        nullable: false
+        business_definition: Năm tài chính của bút toán
+        example: 2024
+      - name: fiscal_period
+        description: Kỳ kế toán
+        data_type: int
+        nullable: false
+        business_definition: Tháng trong năm tài chính từ 1 đến 12
+        example: 8
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp ghi nhận bút toán vào hệ thống
+        example: 2024-08-31 14:30:00
+    owners:
+      - finance-accounting
+    refresh_frequency: Daily
+
+  - name: fact_actual_cost
+    description: Chi phí sản xuất thực tế phát sinh theo từng đối tượng
+    domain: Tài chính
+    platform: Redshift
+    tags:
+      - transaction
+      - cost
+    columns:
+      - name: actual_cost_id
+        description: Mã định danh chi phí thực tế
+        data_type: bigint
+        nullable: false
+        business_definition: Khóa chính, mã duy nhất cho mỗi bản ghi chi phí thực tế
+        example: 30000001
+      - name: cost_center_id
+        description: Mã trung tâm chi phí
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_cost_center
+        example: CC-5001-ASM
+      - name: gl_account_id
+        description: Mã tài khoản
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_gl_account
+        example: 6271
+      - name: order_id
+        description: Mã lệnh sản xuất
+        data_type: varchar
+        nullable: true
+        business_definition: Khóa ngoại tham chiếu đến fact_production_order nếu chi phí theo lệnh
+        example: PO-2024-08-000123
+      - name: cost_element
+        description: Yếu tố chi phí
+        data_type: varchar
+        nullable: false
+        business_definition: Phân loại Material, Labor, Overhead, Tooling, Energy
+        example: Material
+      - name: actual_amount
+        description: Số tiền thực tế
+        data_type: decimal
+        nullable: false
+        business_definition: Giá trị chi phí thực tế phát sinh, tính bằng VND
+        example: 850000000.00
+      - name: quantity
+        description: Số lượng
+        data_type: decimal
+        nullable: true
+        business_definition: Số lượng đơn vị phát sinh chi phí
+        example: 50.00
+      - name: unit_cost
+        description: Đơn giá thực tế
+        data_type: decimal
+        nullable: true
+        business_definition: Chi phí trên mỗi đơn vị sản phẩm hoặc dịch vụ
+        example: 17000000.00
+      - name: posting_date
+        description: Ngày hạch toán
+        data_type: date
+        nullable: false
+        business_definition: Ngày ghi nhận chi phí thực tế
+        example: 2024-08-31
+      - name: reference_document
+        description: Chứng từ tham chiếu
+        data_type: varchar
+        nullable: true
+        business_definition: Số chứng từ gốc liên quan đến chi phí như phiếu xuất kho, hóa đơn
+        example: MM-2024-08-54321
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp tạo bản ghi
+        example: 2024-08-31 17:00:00
+    owners:
+      - finance-controlling
+    refresh_frequency: Daily
+
+  - name: fact_standard_cost
+    description: Chi phí tiêu chuẩn được xây dựng cho từng sản phẩm
+    domain: Tài chính
+    platform: Redshift
+    tags:
+      - transaction
+      - cost
+    columns:
+      - name: standard_cost_id
+        description: Mã định danh chi phí tiêu chuẩn
+        data_type: bigint
+        nullable: false
+        business_definition: Khóa chính, mã duy nhất cho mỗi bản ghi định mức chi phí
+        example: 40000001
+      - name: product_id
+        description: Mã sản phẩm
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_product
+        example: VF-VF8-PLUS
+      - name: version
+        description: Phiên bản định mức
+        data_type: varchar
+        nullable: false
+        business_definition: Phiên bản của bộ định mức chi phí, thay đổi theo kỳ
+        example: 2024.08
+      - name: cost_component
+        description: Thành phần chi phí
+        data_type: varchar
+        nullable: false
+        business_definition: Cấu phần chi phí như RawMaterial, PurchasedParts, DirectLabor, MfgOverhead, SGandA
+        example: RawMaterial
+      - name: material_code
+        description: Mã vật tư
+        data_type: varchar
+        nullable: true
+        business_definition: Khóa ngoại tham chiếu đến dim_material, áp dụng cho thành phần vật tư
+        example: MT-THEP-001
+      - name: standard_quantity
+        description: Lượng tiêu chuẩn
+        data_type: decimal
+        nullable: false
+        business_definition: Số lượng vật tư hoặc giờ công định mức cho một sản phẩm
+        example: 320.00
+      - name: standard_unit_cost
+        description: Đơn giá tiêu chuẩn
+        data_type: decimal
+        nullable: false
+        business_definition: Đơn giá chuẩn cho mỗi đơn vị vật tư hoặc giờ công
+        example: 15000.00
+      - name: standard_total_cost
+        description: Tổng chi phí tiêu chuẩn
+        data_type: decimal
+        nullable: false
+        business_definition: Tích của standard_quantity x standard_unit_cost, tổng chi phí chuẩn cho một xe
+        example: 4800000.00
+      - name: valid_from
+        description: Hiệu lực từ ngày
+        data_type: date
+        nullable: false
+        business_definition: Ngày bắt đầu áp dụng bộ định mức chi phí
+        example: 2024-08-01
+      - name: valid_to
+        description: Hiệu lực đến ngày
+        data_type: date
+        nullable: true
+        business_definition: Ngày kết thúc áp dụng, null nếu đang dùng
+        example: 2024-08-31
+      - name: is_active
+        description: Còn hiệu lực
+        data_type: boolean
+        nullable: false
+        business_definition: True nếu định mức đang được áp dụng cho định giá tồn kho
+        example: false
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp tạo bản ghi
+        example: 2024-07-15 10:00:00
+    owners:
+      - finance-controlling
+    refresh_frequency: Daily
+
+  - name: fact_budget
+    description: Ngân sách chi phí và doanh thu theo từng trung tâm
+    domain: Tài chính
+    platform: Redshift
+    tags:
+      - transaction
+      - budget
+    columns:
+      - name: budget_id
+        description: Mã định danh dòng ngân sách
+        data_type: bigint
+        nullable: false
+        business_definition: Khóa chính, mã duy nhất cho mỗi dòng ngân sách
+        example: 50000001
+      - name: cost_center_id
+        description: Mã trung tâm chi phí
+        data_type: varchar
+        nullable: true
+        business_definition: Khóa ngoại tham chiếu đến dim_cost_center
+        example: CC-5001-ASM
+      - name: profit_center_id
+        description: Mã trung tâm lợi nhuận
+        data_type: varchar
+        nullable: true
+        business_definition: Khóa ngoại tham chiếu đến dim_profit_center
+        example: PC-VF8
+      - name: gl_account_id
+        description: Mã tài khoản ngân sách
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_gl_account
+        example: 6271
+      - name: fiscal_year
+        description: Năm ngân sách
+        data_type: int
+        nullable: false
+        business_definition: Năm tài chính của ngân sách
+        example: 2024
+      - name: fiscal_period
+        description: Kỳ ngân sách
+        data_type: int
+        nullable: false
+        business_definition: Tháng trong năm từ 1 đến 12, hoặc 0 cho ngân sách năm
+        example: 8
+      - name: budget_type
+        description: Loại ngân sách
+        data_type: varchar
+        nullable: false
+        business_definition: Phân loại Revenue, Cost, CapitalExpenditure, OperatingExpense
+        example: Cost
+      - name: budget_amount
+        description: Số tiền ngân sách
+        data_type: decimal
+        nullable: false
+        business_definition: Số tiền được phê duyệt trong ngân sách, tính bằng VND
+        example: 2000000000.00
+      - name: approved_by
+        description: Người phê duyệt
+        data_type: varchar
+        nullable: true
+        business_definition: Mã nhân viên phê duyệt ngân sách
+        example: EMP00567
+      - name: approval_date
+        description: Ngày phê duyệt
+        data_type: date
+        nullable: true
+        business_definition: Ngày ngân sách được phê duyệt
+        example: 2024-01-15
+      - name: notes
+        description: Ghi chú
+        data_type: varchar
+        nullable: true
+        business_definition: Mô tả căn cứ lập ngân sách
+        example: Ngân sách sản xuất quý 3 - dây chuyền lắp ráp
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp nhập ngân sách vào hệ thống
+        example: 2024-01-15 14:00:00
+    owners:
+      - finance-controlling
+    refresh_frequency: Daily
+
+  - name: fact_budget_variance
+    description: Chênh lệch giữa ngân sách và chi phí doanh thu thực tế
+    domain: Tài chính
+    platform: Redshift
+    tags:
+      - transaction
+      - variance
+    columns:
+      - name: variance_id
+        description: Mã định danh chênh lệch
+        data_type: bigint
+        nullable: false
+        business_definition: Khóa chính, mã duy nhất cho mỗi bản ghi chênh lệch
+        example: 60000001
+      - name: cost_center_id
+        description: Mã trung tâm chi phí
+        data_type: varchar
+        nullable: true
+        business_definition: Khóa ngoại tham chiếu đến dim_cost_center
+        example: CC-5001-ASM
+      - name: profit_center_id
+        description: Mã trung tâm lợi nhuận
+        data_type: varchar
+        nullable: true
+        business_definition: Khóa ngoại tham chiếu đến dim_profit_center
+        example: PC-VF8
+      - name: gl_account_id
+        description: Mã tài khoản
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_gl_account
+        example: 6271
+      - name: fiscal_year
+        description: Năm tài chính
+        data_type: int
+        nullable: false
+        business_definition: Năm tài chính đánh giá
+        example: 2024
+      - name: fiscal_period
+        description: Kỳ đánh giá
+        data_type: int
+        nullable: false
+        business_definition: Tháng đánh giá từ 1 đến 12
+        example: 8
+      - name: budget_amount
+        description: Ngân sách
+        data_type: decimal
+        nullable: false
+        business_definition: Số tiền ngân sách đã được phê duyệt cho kỳ
+        example: 2000000000.00
+      - name: actual_amount
+        description: Thực tế
+        data_type: decimal
+        nullable: false
+        business_definition: Số tiền thực tế phát sinh trong kỳ
+        example: 2150000000.00
+      - name: variance_amount
+        description: Chênh lệch
+        data_type: decimal
+        nullable: false
+        business_definition: actual_amount trừ budget_amount, dương là vượt ngân sách
+        example: 150000000.00
+      - name: variance_pct
+        description: Tỷ lệ chênh lệch phần trăm
+        data_type: decimal
+        nullable: true
+        business_definition: Variance_amount chia budget_amount nhân 100%
+        example: 7.50
+      - name: variance_type
+        description: Loại chênh lệch
+        data_type: varchar
+        nullable: false
+        business_definition: Unfavorable nếu chi vượt hoặc thu thấp hơn, Favorable nếu ngược lại
+        example: Unfavorable
+      - name: variance_reason
+        description: Nguyên nhân chênh lệch
+        data_type: varchar
+        nullable: true
+        business_definition: Giải trình lý do chênh lệch từ bộ phận quản lý
+        example: Tăng sản lượng ngoài kế hoạch
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp tạo bản ghi
+        example: 2024-09-05 10:00:00
+    owners:
+      - finance-controlling
+    refresh_frequency: Daily
+
+  - name: fact_revenue
+    description: Doanh thu bán xe và dịch vụ theo từng kỳ
+    domain: Tài chính
+    platform: Redshift
+    tags:
+      - transaction
+      - revenue
+    columns:
+      - name: revenue_id
+        description: Mã định danh doanh thu
+        data_type: bigint
+        nullable: false
+        business_definition: Khóa chính, mã duy nhất cho mỗi bản ghi doanh thu
+        example: 70000001
+      - name: product_id
+        description: Mã sản phẩm
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_product
+        example: VF-VF8-PLUS
+      - name: profit_center_id
+        description: Mã trung tâm lợi nhuận
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_profit_center
+        example: PC-VF8
+      - name: revenue_date
+        description: Ngày ghi nhận doanh thu
+        data_type: date
+        nullable: false
+        business_definition: Ngày ghi nhận doanh thu theo nguyên tắc kế toán
+        example: 2024-08-31
+      - name: revenue_type
+        description: Loại doanh thu
+        data_type: varchar
+        nullable: false
+        business_definition: Phân loại VehicleSale, AfterSalesService, Accessories, Export
+        example: VehicleSale
+      - name: quantity_sold
+        description: Số lượng bán
+        data_type: int
+        nullable: false
+        business_definition: Số lượng xe hoặc dịch vụ đã bán
+        example: 10
+      - name: unit_price
+        description: Đơn giá bán
+        data_type: decimal
+        nullable: false
+        business_definition: Giá bán một đơn vị sản phẩm chưa bao gồm thuế
+        example: 1050000000.00
+      - name: gross_revenue
+        description: Doanh thu gộp
+        data_type: decimal
+        nullable: false
+        business_definition: quantity_sold x unit_price, tổng doanh thu trước chiết khấu
+        example: 10500000000.00
+      - name: discount_amount
+        description: Chiết khấu
+        data_type: decimal
+        nullable: true
+        business_definition: Các khoản chiết khấu thương mại, khuyến mãi giảm trừ doanh thu
+        example: 500000000.00
+      - name: net_revenue
+        description: Doanh thu thuần
+        data_type: decimal
+        nullable: false
+        business_definition: gross_revenue trừ discount_amount, doanh thu thuần ghi nhận
+        example: 10000000000.00
+      - name: vat_amount
+        description: Thuế GTGT
+        data_type: decimal
+        nullable: true
+        business_definition: Thuế giá trị gia tăng đầu ra 10% trên doanh thu
+        example: 1000000000.00
+      - name: customer_id
+        description: Mã khách hàng
+        data_type: varchar
+        nullable: true
+        business_definition: Khóa ngoại tham chiếu đến hệ thống CRM
+        example: CUST001234
+      - name: invoice_number
+        description: Số hóa đơn
+        data_type: varchar
+        nullable: true
+        business_definition: Số hóa đơn bán hàng xuất cho khách
+        example: INV-2024-08-56789
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp ghi nhận doanh thu
+        example: 2024-08-31 16:00:00
+    owners:
+      - finance-accounting
+    refresh_frequency: Daily
+
+  - name: dim_fiscal_calendar
+    description: Lịch tài chính quy ước theo năm tài chính của doanh nghiệp
+    domain: Tài chính
+    platform: Redshift
+    tags:
+      - master-data
+      - calendar
+    columns:
+      - name: fiscal_date_id
+        description: Mã định danh ngày tài chính
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa chính, mã duy nhất theo format YYYYMMDD
+        example: 20240815
+      - name: calendar_date
+        description: Ngày dương lịch
+        data_type: date
+        nullable: false
+        business_definition: Ngày theo dương lịch tương ứng
+        example: 2024-08-15
+      - name: fiscal_year
+        description: Năm tài chính
+        data_type: int
+        nullable: false
+        business_definition: Năm tài chính theo quy định của doanh nghiệp
+        example: 2024
+      - name: fiscal_quarter
+        description: Quý tài chính
+        data_type: int
+        nullable: false
+        business_definition: Quý trong năm tài chính từ 1 đến 4
+        example: 3
+      - name: fiscal_period
+        description: Kỳ tài chính
+        data_type: int
+        nullable: false
+        business_definition: Tháng trong năm tài chính từ 1 đến 12
+        example: 8
+      - name: fiscal_week
+        description: Tuần tài chính
+        data_type: int
+        nullable: false
+        business_definition: Số tuần trong năm tài chính từ 1 đến 52
+        example: 33
+      - name: is_weekend
+        description: Có phải cuối tuần
+        data_type: boolean
+        nullable: false
+        business_definition: True nếu ngày đó là thứ Bảy hoặc Chủ nhật
+        example: false
+      - name: is_holiday
+        description: Có phải ngày lễ
+        data_type: boolean
+        nullable: false
+        business_definition: True nếu là ngày nghỉ lễ theo quy định công ty
+        example: false
+      - name: holiday_name
+        description: Tên ngày lễ
+        data_type: varchar
+        nullable: true
+        business_definition: Tên ngày lễ nếu is_holiday = true
+        example: null
+      - name: is_month_end
+        description: Có phải cuối tháng
+        data_type: boolean
+        nullable: false
+        business_definition: True nếu ngày đó là ngày cuối cùng của tháng
+        example: false
+      - name: is_quarter_end
+        description: Có phải cuối quý
+        data_type: boolean
+        nullable: false
+        business_definition: True nếu ngày đó là ngày cuối cùng của quý
+        example: false
+      - name: is_year_end
+        description: Có phải cuối năm
+        data_type: boolean
+        nullable: false
+        business_definition: True nếu ngày đó là ngày cuối cùng của năm tài chính
+        example: false
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp tạo dữ liệu lịch
+        example: 2023-12-31 23:00:00
+    owners:
+      - finance-controlling
+    refresh_frequency: Daily
+
+  - name: fact_ar_receivable
+    description: Công nợ phải thu từ khách hàng và đại lý
+    domain: Tài chính
+    platform: Redshift
+    tags:
+      - transaction
+      - ar
+    columns:
+      - name: receivable_id
+        description: Mã định danh khoản phải thu
+        data_type: bigint
+        nullable: false
+        business_definition: Khóa chính, mã duy nhất cho mỗi khoản phải thu
+        example: 80000001
+      - name: customer_id
+        description: Mã khách hàng
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến hệ thống CRM hoặc dim_customer
+        example: CUST001234
+      - name: customer_name
+        description: Tên khách hàng
+        data_type: varchar
+        nullable: false
+        business_definition: Tên đầy đủ của khách hàng hoặc đại lý
+        example: Đại lý VinFast Hà Nội
+      - name: invoice_number
+        description: Số hóa đơn
+        data_type: varchar
+        nullable: false
+        business_definition: Số hóa đơn bán hàng phát sinh khoản phải thu
+        example: INV-2024-08-56789
+      - name: invoice_date
+        description: Ngày hóa đơn
+        data_type: date
+        nullable: false
+        business_definition: Ngày xuất hóa đơn cho khách hàng
+        example: 2024-08-15
+      - name: due_date
+        description: Ngày đến hạn thanh toán
+        data_type: date
+        nullable: false
+        business_definition: Ngày khách hàng cần thanh toán theo điều khoản hợp đồng
+        example: 2024-09-14
+      - name: invoice_amount
+        description: Giá trị hóa đơn
+        data_type: decimal
+        nullable: false
+        business_definition: Tổng giá trị hóa đơn gồm thuế, tính bằng VND
+        example: 11000000000.00
+      - name: paid_amount
+        description: Số tiền đã thanh toán
+        data_type: decimal
+        nullable: false
+        business_definition: Số tiền khách hàng đã trả tính đến thời điểm hiện tại
+        example: 5000000000.00
+      - name: outstanding_amount
+        description: Số tiền còn nợ
+        data_type: decimal
+        nullable: false
+        business_definition: invoice_amount trừ paid_amount, số dư phải thu
+        example: 6000000000.00
+      - name: overdue_days
+        description: Số ngày quá hạn
+        data_type: int
+        nullable: false
+        business_definition: Số ngày từ due_date đến hiện tại, âm nếu chưa đến hạn
+        example: 5
+      - name: aging_bucket
+        description: Nhóm quá hạn
+        data_type: varchar
+        nullable: false
+        business_definition: Phân nhóm theo số ngày quá hạn Current, PastDue1to30, PastDue31to60, PastDue61Plus
+        example: PastDue1to30
+      - name: ar_status
+        description: Trạng thái
+        data_type: varchar
+        nullable: false
+        business_definition: Trạng thái Open, PartialPaid, Settled, WrittenOff
+        example: PartialPaid
+      - name: collection_notes
+        description: Ghi chú thu hồi
+        data_type: varchar
+        nullable: true
+        business_definition: Thông tin ghi chú về quá trình đòi nợ
+        example: Khách hẹn thanh toán ngày 20/09
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp tạo bản ghi
+        example: 2024-08-15 10:00:00
+    owners:
+      - finance-accounting
+    refresh_frequency: Daily
+
+  - name: fact_ap_payable
+    description: Công nợ phải trả nhà cung cấp vật tư và dịch vụ
+    domain: Tài chính
+    platform: Redshift
+    tags:
+      - transaction
+      - ap
+    columns:
+      - name: payable_id
+        description: Mã định danh khoản phải trả
+        data_type: bigint
+        nullable: false
+        business_definition: Khóa chính, mã duy nhất cho mỗi khoản phải trả
+        example: 90000001
+      - name: supplier_id
+        description: Mã nhà cung cấp
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_supplier
+        example: SUP-PIN-001
+      - name: supplier_name
+        description: Tên nhà cung cấp
+        data_type: varchar
+        nullable: false
+        business_definition: Tên đầy đủ của nhà cung cấp
+        example: Công ty TNHH Pin VinES
+      - name: invoice_number
+        description: Số hóa đơn nhà cung cấp
+        data_type: varchar
+        nullable: false
+        business_definition: Số hóa đơn đầu vào từ nhà cung cấp
+        example: INV-VINES-2024-00888
+      - name: invoice_date
+        description: Ngày hóa đơn
+        data_type: date
+        nullable: false
+        business_definition: Ngày nhà cung cấp xuất hóa đơn
+        example: 2024-08-10
+      - name: due_date
+        description: Ngày đến hạn thanh toán
+        data_type: date
+        nullable: false
+        business_definition: Ngày phải thanh toán cho nhà cung cấp
+        example: 2024-09-09
+      - name: invoice_amount
+        description: Giá trị hóa đơn
+        data_type: decimal
+        nullable: false
+        business_definition: Tổng giá trị hóa đơn đầu vào tính bằng VND
+        example: 35000000000.00
+      - name: paid_amount
+        description: Số tiền đã thanh toán
+        data_type: decimal
+        nullable: false
+        business_definition: Số tiền đã trả cho nhà cung cấp
+        example: 0.00
+      - name: outstanding_amount
+        description: Số tiền còn nợ
+        data_type: decimal
+        nullable: false
+        business_definition: invoice_amount trừ paid_amount, số dư phải trả
+        example: 35000000000.00
+      - name: payment_terms
+        description: Điều khoản thanh toán
+        data_type: varchar
+        nullable: false
+        business_definition: Thời hạn thanh toán theo hợp đồng như Net30, Net45, Net60
+        example: Net30
+      - name: ap_status
+        description: Trạng thái
+        data_type: varchar
+        nullable: false
+        business_definition: Trạng thái Open, ApprovedForPayment, Paid, Overdue
+        example: Open
+      - name: purchase_order_ref
+        description: Tham chiếu đơn hàng
+        data_type: varchar
+        nullable: true
+        business_definition: Số đơn mua hàng tham chiếu
+        example: PO-2024-08-00250
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp tạo bản ghi phải trả
+        example: 2024-08-10 14:00:00
+    owners:
+      - finance-accounting
+    refresh_frequency: Daily
+
+  - name: fact_fixed_asset
+    description: Tài sản cố định nhà xưởng, máy móc thiết bị sản xuất
+    domain: Tài chính
+    platform: Redshift
+    tags:
+      - transaction
+      - asset
+    columns:
+      - name: asset_id
+        description: Mã định danh tài sản
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa chính, mã tài sản duy nhất theo hệ thống quản lý tài sản
+        example: FA-ASM-ROBOT-001
+      - name: asset_name
+        description: Tên tài sản
+        data_type: varchar
+        nullable: false
+        business_definition: Mô tả chi tiết tài sản
+        example: Robot hàn ABB IRB 6700
+      - name: asset_category
+        description: Nhóm tài sản
+        data_type: varchar
+        nullable: false
+        business_definition: Phân loại Building, Machinery, Equipment, Vehicle, Computer, Furniture
+        example: Machinery
+      - name: plant_id
+        description: Mã nhà máy
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_plant, nơi tài sản được sử dụng
+        example: VFHP
+      - name: cost_center_id
+        description: Mã trung tâm chi phí
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_cost_center, trung tâm chi phí quản lý tài sản
+        example: CC-5002-BDY
+      - name: acquisition_date
+        description: Ngày mua sắm
+        data_type: date
+        nullable: false
+        business_definition: Ngày tài sản được mua hoặc đưa vào sử dụng
+        example: 2022-03-15
+      - name: acquisition_cost
+        description: Nguyên giá tài sản
+        data_type: decimal
+        nullable: false
+        business_definition: Giá trị ban đầu của tài sản khi mua, tính bằng VND
+        example: 8500000000.00
+      - name: accumulated_depreciation
+        description: Khấu hao lũy kế
+        data_type: decimal
+        nullable: false
+        business_definition: Tổng giá trị khấu hao đã trích lũy kế đến hiện tại
+        example: 2125000000.00
+      - name: net_book_value
+        description: Giá trị còn lại
+        data_type: decimal
+        nullable: false
+        business_definition: acquisition_cost trừ accumulated_depreciation
+        example: 6375000000.00
+      - name: depreciation_method
+        description: Phương pháp khấu hao
+        data_type: varchar
+        nullable: false
+        business_definition: Phương pháp tính khấu hao StraightLine, DecliningBalance
+        example: StraightLine
+      - name: useful_life_months
+        description: Thời gian sử dụng hữu ích tháng
+        data_type: int
+        nullable: false
+        business_definition: Số tháng dự kiến sử dụng tài sản, thường 60-120 tháng
+        example: 120
+      - name: monthly_depreciation
+        description: Khấu hao hàng tháng
+        data_type: decimal
+        nullable: false
+        business_definition: Số tiền khấu hao mỗi tháng nếu dùng phương pháp đường thẳng
+        example: 70833333.00
+      - name: asset_status
+        description: Trạng thái tài sản
+        data_type: varchar
+        nullable: false
+        business_definition: Trạng thái InUse, Idle, UnderMaintenance, Disposed
+        example: InUse
+      - name: last_depreciation_date
+        description: Ngày trích khấu hao cuối
+        data_type: date
+        nullable: true
+        business_definition: Ngày gần nhất trích khấu hao tài sản
+        example: 2024-08-31
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp tạo bản ghi
+        example: 2022-03-15 08:00:00
+    owners:
+      - finance-accounting
+    refresh_frequency: Daily
+
+  - name: dim_vendor_invoice
+    description: Hóa đơn mua hàng từ nhà cung cấp và dịch vụ
+    domain: Tài chính
+    platform: Redshift
+    tags:
+      - master-data
+      - vendor-invoice
+    columns:
+      - name: invoice_id
+        description: Mã định danh hóa đơn nhà cung cấp
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa chính, mã duy nhất cho mỗi hóa đơn đầu vào
+        example: AP-INV-2024-001234
+      - name: supplier_id
+        description: Mã nhà cung cấp
+        data_type: varchar
+        nullable: false
+        business_definition: Khóa ngoại tham chiếu đến dim_supplier
+        example: SUP-PIN-001
+      - name: invoice_type
+        description: Loại hóa đơn
+        data_type: varchar
+        nullable: false
+        business_definition: Phân loại Material, Service, Utility, Maintenance, Transport
+        example: Material
+      - name: invoice_number
+        description: Số hóa đơn gốc
+        data_type: varchar
+        nullable: false
+        business_definition: Số hóa đơn từ nhà cung cấp
+        example: INV-24680
+      - name: invoice_date
+        description: Ngày hóa đơn
+        data_type: date
+        nullable: false
+        business_definition: Ngày nhà cung cấp phát hành hóa đơn
+        example: 2024-08-20
+      - name: receipt_date
+        description: Ngày nhận hóa đơn
+        data_type: date
+        nullable: false
+        business_definition: Ngày doanh nghiệp nhận được hóa đơn từ nhà cung cấp
+        example: 2024-08-22
+      - name: total_amount
+        description: Tổng tiền
+        data_type: decimal
+        nullable: false
+        business_definition: Tổng giá trị hóa đơn bao gồm thuế, tính bằng VND
+        example: 25000000000.00
+      - name: tax_amount
+        description: Tiền thuế
+        data_type: decimal
+        nullable: false
+        business_definition: Thuế GTGT đầu vào trên hóa đơn
+        example: 2500000000.00
+      - name: net_amount
+        description: Tiền hàng chưa thuế
+        data_type: decimal
+        nullable: false
+        business_definition: total_amount trừ tax_amount
+        example: 22500000000.00
+      - name: currency
+        description: Loại tiền
+        data_type: varchar
+        nullable: false
+        business_definition: Loại tiền tệ của hóa đơn
+        example: VND
+      - name: payment_due_date
+        description: Ngày đến hạn thanh toán
+        data_type: date
+        nullable: false
+        business_definition: Ngày phải thanh toán theo thỏa thuận
+        example: 2024-09-19
+      - name: invoice_status
+        description: Trạng thái hóa đơn
+        data_type: varchar
+        nullable: false
+        business_definition: Trạng thái Pending, Verified, Approved, Paid, Cancelled
+        example: Verified
+      - name: verified_by
+        description: Người kiểm tra
+        data_type: varchar
+        nullable: true
+        business_definition: Mã nhân viên đối soát và xác thực hóa đơn
+        example: EMP00444
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp nhập hóa đơn
+        example: 2024-08-22 09:00:00
+    owners:
+      - finance-accounting
+    refresh_frequency: Daily
+
+  - name: fact_cash_flow
+    description: Dòng tiền thu chi của doanh nghiệp theo từng ngày
+    domain: Tài chính
+    platform: Redshift
+    tags:
+      - transaction
+      - cash-flow
+    columns:
+      - name: cash_flow_id
+        description: Mã định danh dòng tiền
+        data_type: bigint
+        nullable: false
+        business_definition: Khóa chính, mã duy nhất cho mỗi giao dịch dòng tiền
+        example: 100000001
+      - name: transaction_date
+        description: Ngày giao dịch
+        data_type: date
+        nullable: false
+        business_definition: Ngày phát sinh thu hoặc chi tiền
+        example: 2024-08-31
+      - name: cash_flow_type
+        description: Loại dòng tiền
+        data_type: varchar
+        nullable: false
+        business_definition: Phân loại Operating, Investing, Financing
+        example: Operating
+      - name: transaction_type
+        description: Loại giao dịch
+        data_type: varchar
+        nullable: false
+        business_definition: Thu chi cụ thể như CustomerPayment, SupplierPayment, Salary, TaxPayment, LoanReceipt
+        example: CustomerPayment
+      - name: amount
+        description: Số tiền
+        data_type: decimal
+        nullable: false
+        business_definition: Giá trị dòng tiền, dương là thu vào, âm là chi ra, tính bằng VND
+        example: 5000000000.00
+      - name: currency
+        description: Loại tiền
+        data_type: varchar
+        nullable: false
+        business_definition: Mã tiền tệ giao dịch
+        example: VND
+      - name: bank_account
+        description: Tài khoản ngân hàng
+        data_type: varchar
+        nullable: true
+        business_definition: Số tài khoản ngân hàng thực hiện giao dịch
+        example: 1234567890
+      - name: counterparty
+        description: Đối tác
+        data_type: varchar
+        nullable: false
+        business_definition: Tên đối tác thu hoặc chi tiền
+        example: Đại lý VinFast Hà Nội
+      - name: description
+        description: Nội dung
+        data_type: varchar
+        nullable: false
+        business_definition: Mô tả nội dung giao dịch
+        example: Thu tiền thanh toán hóa đơn INV-2024-08-56789
+      - name: reference_document
+        description: Chứng từ tham chiếu
+        data_type: varchar
+        nullable: true
+        business_definition: Số chứng từ gốc liên quan
+        example: RC-2024-08-00345
+      - name: cash_flow_category
+        description: Nhóm chi tiết
+        data_type: varchar
+        nullable: false
+        business_definition: Nhóm trong Operating như SalesCollection, SupplierPayment, EmployeeCost, Tax
+        example: SalesCollection
+      - name: created_at
+        description: Thời điểm tạo bản ghi
+        data_type: timestamp
+        nullable: false
+        business_definition: Timestamp ghi nhận giao dịch
+        example: 2024-08-31 23:00:00
+    owners:
+      - finance-treasury
+    refresh_frequency: Daily

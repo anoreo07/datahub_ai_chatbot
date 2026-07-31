@@ -1,0 +1,161 @@
+version: "3.9"
+
+x-opensearch-config: &opensearch-config
+  discovery.type: single-node
+  DISABLE_SECURITY_PLUGIN: "true"
+  OPENSEARCH_JAVA_OPTS: "-Xms512m -Xmx512m"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: chatbot
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_staging_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - chatbot-staging
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_staging_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - chatbot-staging
+
+  opensearch:
+    image: opensearchproject/opensearch:2.15.0
+    environment:
+      <<: *opensearch-config
+    ports:
+      - "9201:9200"
+    volumes:
+      - opensearch_staging_data:/usr/share/opensearch/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "-s", "http://localhost:9200/_cluster/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+    mem_limit: 1g
+    restart: unless-stopped
+    networks:
+      - chatbot-staging
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: registry.example.com/datahub-ai-chatbot:staging
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env.staging
+    environment:
+      APP_ENV: staging
+      USE_MOCK_DATAHUB: "true"
+      AUTH_MODE: header
+      LOG_LEVEL: INFO
+    volumes:
+      - document_staging_data:/data/documents
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      opensearch:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - chatbot-staging
+
+  sync-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: registry.example.com/datahub-ai-chatbot:staging
+    command: python -m workers.sync_worker
+    env_file:
+      - .env.staging
+    environment:
+      APP_ENV: staging
+      USE_MOCK_DATAHUB: "true"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - chatbot-staging
+
+  indexing-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: registry.example.com/datahub-ai-chatbot:staging
+    command: python -m workers.indexing_worker
+    env_file:
+      - .env.staging
+    environment:
+      APP_ENV: staging
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      opensearch:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - chatbot-staging
+
+  document-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: registry.example.com/datahub-ai-chatbot:staging
+    command: python -m workers.document_worker
+    env_file:
+      - .env.staging
+    environment:
+      APP_ENV: staging
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - chatbot-staging
+
+volumes:
+  postgres_staging_data:
+  redis_staging_data:
+  opensearch_staging_data:
+  document_staging_data:
+
+networks:
+  chatbot-staging:
+    driver: bridge

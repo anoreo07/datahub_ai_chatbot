@@ -1,0 +1,1131 @@
+datasets:
+  - name: dim_dealer
+    description: Thông tin chi tiết các đại lý ủy quyền của VinFast trên toàn quốc
+    domain: Kinh doanh
+    platform: Redshift
+    tags:
+      - dealer
+      - master-data
+    columns:
+      - name: dealer_id
+        description: Mã định danh duy nhất của đại lý
+        data_type: varchar
+        nullable: false
+        business_definition: Mã đại lý do hệ thống sinh tự động, dùng để tham chiếu đến đại lý trên toàn bộ hệ thống
+        example: DL_HN_00123
+      - name: dealer_code
+        description: Mã đại lý viết tắt
+        data_type: varchar
+        nullable: false
+        business_definition: Mã viết tắt của đại lý dùng trong giao dịch nội bộ và báo cáo
+        example: VF_HN_BA_DINH
+      - name: dealer_name
+        description: Tên đầy đủ của đại lý
+        data_type: varchar
+        nullable: false
+        business_definition: Tên thương mại đăng ký kinh doanh của đại lý
+        example: VinFast Hà Nội - Ba Đình
+      - name: dealer_type
+        description: Loại hình đại lý
+        data_type: varchar
+        nullable: true
+        business_definition: Phân loại đại lý theo quy mô và cấp độ: 3S, 2S, 1S, Showroom
+        example: 3S
+      - name: region_id
+        description: Mã khu vực địa lý
+        data_type: varchar
+        nullable: true
+        business_definition: Mã tham chiếu đến khu vực quản lý của đại lý
+        example: REG_MN
+      - name: province
+        description: Tỉnh/Thành phố
+        data_type: varchar
+        nullable: true
+        business_definition: Tỉnh hoặc thành phố trực thuộc trung ương nơi đại lý đặt trụ sở
+        example: Hà Nội
+      - name: district
+        description: Quận/Huyện
+        data_type: varchar
+        nullable: true
+        business_definition: Quận hoặc huyện nơi đại lý đặt trụ sở
+        example: Ba Đình
+      - name: address
+        description: Địa chỉ chi tiết
+        data_type: varchar
+        nullable: true
+        business_definition: Địa chỉ đầy đủ của đại lý bao gồm số nhà, đường, phường/xã
+        example: 123 Đường Láng, Phường Láng Thượng
+      - name: phone
+        description: Số điện thoại liên hệ
+        data_type: varchar
+        nullable: true
+        business_definition: Số điện thoại đường dây nóng của đại lý
+        example: 02438889999
+      - name: dealer_status
+        description: Trạng thái hoạt động
+        data_type: varchar
+        nullable: true
+        business_definition: Trạng thái hiện tại của đại lý: Hoạt động, Tạm ngưng, Chấm dứt hợp đồng
+        example: Hoạt động
+      - name: open_date
+        description: Ngày khai trương
+        data_type: date
+        nullable: true
+        business_definition: Ngày chính thức đi vào hoạt động của đại lý
+        example: "2022-06-15"
+      - name: tax_code
+        description: Mã số thuế
+        data_type: varchar
+        nullable: true
+        business_definition: Mã số thuế doanh nghiệp của đại lý
+        example: 0123456789
+      - name: sales_manager
+        description: Giám đốc kinh doanh
+        data_type: varchar
+        nullable: true
+        business_definition: Họ tên người phụ trách kinh doanh tại đại lý
+        example: Nguyễn Văn An
+    owners:
+      - sales_ops
+    refresh_frequency: Daily
+
+  - name: dim_customer
+    description: Thông tin khách hàng cá nhân và doanh nghiệp
+    domain: Kinh doanh
+    platform: Redshift
+    tags:
+      - customer
+      - master-data
+    columns:
+      - name: customer_id
+        description: Mã định danh khách hàng
+        data_type: varchar
+        nullable: false
+        business_definition: Mã khách hàng duy nhất trên toàn hệ thống, sinh tự động
+        example: KH_202403_0012345
+      - name: full_name
+        description: Họ và tên khách hàng
+        data_type: varchar
+        nullable: true
+        business_definition: Họ và tên đầy đủ của khách hàng cá nhân
+        example: Trần Thị Bích
+      - name: customer_type
+        description: Loại khách hàng
+        data_type: varchar
+        nullable: true
+        business_definition: Phân loại khách hàng: Cá nhân hoặc Doanh nghiệp
+        example: Cá nhân
+      - name: phone
+        description: Số điện thoại
+        data_type: varchar
+        nullable: true
+        business_definition: Số điện thoại di động hoặc cố định của khách hàng
+        example: 0987654321
+      - name: email
+        description: Địa chỉ email
+        data_type: varchar
+        nullable: true
+        business_definition: Địa chỉ email của khách hàng dùng để liên hệ và gửi thông tin
+        example: bich.tran@gmail.com
+      - name: identity_number
+        description: Số CMND/CCCD
+        data_type: varchar
+        nullable: true
+        business_definition: Số chứng minh nhân dân hoặc căn cước công dân
+        example: 001234567890
+      - name: date_of_birth
+        description: Ngày sinh
+        data_type: date
+        nullable: true
+        business_definition: Ngày tháng năm sinh của khách hàng
+        example: "1990-05-20"
+      - name: gender
+        description: Giới tính
+        data_type: varchar
+        nullable: true
+        business_definition: Giới tính của khách hàng: Nam, Nữ, Khác
+        example: Nữ
+      - name: province
+        description: Tỉnh/Thành phố nơi cư trú
+        data_type: varchar
+        nullable: true
+        business_definition: Địa chỉ thường trú của khách hàng
+        example: Hồ Chí Minh
+      - name: occupation
+        description: Nghề nghiệp
+        data_type: varchar
+        nullable: true
+        business_definition: Nghề nghiệp của khách hàng phục vụ phân tích hành vi
+        example: Kế toán
+      - name: customer_segment
+        description: Phân khúc khách hàng
+        data_type: varchar
+        nullable: true
+        business_definition: Phân khúc theo hành vi và giá trị: Vàng, Bạc, Đồng, Tiềm năng
+        example: Vàng
+      - name: registration_date
+        description: Ngày đăng ký
+        data_type: date
+        nullable: true
+        business_definition: Ngày khách hàng được tạo trên hệ thống CRM
+        example: "2023-08-01"
+      - name: dealer_id
+        description: Mã đại lý phụ trách
+        data_type: varchar
+        nullable: true
+        business_definition: Mã đại lý quản lý mối quan hệ với khách hàng này
+        example: DL_HN_00123
+    owners:
+      - crm_team
+    refresh_frequency: Daily
+
+  - name: dim_sales_channel
+    description: Danh mục kênh bán hàng của VinFast
+    domain: Kinh doanh
+    platform: Redshift
+    tags:
+      - channel
+      - master-data
+    columns:
+      - name: channel_id
+        description: Mã kênh bán hàng
+        data_type: varchar
+        nullable: false
+        business_definition: Mã định danh duy nhất của kênh bán hàng
+        example: CH_OTT
+      - name: channel_name
+        description: Tên kênh bán hàng
+        data_type: varchar
+        nullable: false
+        business_definition: Tên đầy đủ của kênh bán hàng
+        example: Online trực tiếp
+      - name: channel_group
+        description: Nhóm kênh
+        data_type: varchar
+        nullable: true
+        business_definition: Nhóm phân loại kênh: Online, Offline, Đối tác
+        example: Online
+      - name: channel_type
+        description: Loại kênh
+        data_type: varchar
+        nullable: true
+        business_definition: Loại hình cụ thể của kênh bán hàng
+        example: Website thương mại điện tử
+      - name: is_active
+        description: Kích hoạt
+        data_type: varchar
+        nullable: true
+        business_definition: Trạng thái kênh đang được sử dụng hay không: Y/N
+        example: Y
+      - name: commission_rate
+        description: Tỷ lệ hoa hồng
+        data_type: decimal
+        nullable: true
+        business_definition: Tỷ lệ hoa hồng chi trả cho kênh bán hàng trên mỗi đơn hàng
+        example: 0.02
+      - name: effective_date
+        description: Ngày hiệu lực
+        data_type: date
+        nullable: true
+        business_definition: Ngày bắt đầu áp dụng kênh bán hàng
+        example: "2021-01-01"
+    owners:
+      - sales_ops
+    refresh_frequency: Daily
+
+  - name: fact_sales_order
+    description: Thông tin chi tiết đơn đặt hàng xe và phụ kiện
+    domain: Kinh doanh
+    platform: Redshift
+    tags:
+      - sales
+      - transactional
+    columns:
+      - name: sales_order_id
+        description: Mã đơn hàng
+        data_type: varchar
+        nullable: false
+        business_definition: Mã số duy nhất của đơn đặt hàng, dùng để tra cứu toàn bộ thông tin đơn hàng
+        example: SO_202407_001234
+      - name: order_date
+        description: Ngày đặt hàng
+        data_type: date
+        nullable: false
+        business_definition: Ngày khách hàng đặt cọc và xác nhận đơn hàng
+        example: "2024-07-15"
+      - name: customer_id
+        description: Mã khách hàng
+        data_type: varchar
+        nullable: false
+        business_definition: Mã tham chiếu đến khách hàng đặt hàng
+        example: KH_202403_0012345
+      - name: dealer_id
+        description: Mã đại lý
+        data_type: varchar
+        nullable: false
+        business_definition: Mã đại lý tiếp nhận và xử lý đơn hàng
+        example: DL_HN_00123
+      - name: channel_id
+        description: Mã kênh bán hàng
+        data_type: varchar
+        nullable: true
+        business_definition: Kênh bán hàng phát sinh đơn hàng
+        example: CH_OTT
+      - name: model_id
+        description: Mã model xe
+        data_type: varchar
+        nullable: false
+        business_definition: Mã model xe khách hàng đặt mua
+        example: VF8
+      - name: quantity
+        description: Số lượng
+        data_type: int
+        nullable: true
+        business_definition: Số lượng xe đặt mua trong đơn hàng
+        example: 1
+      - name: unit_price
+        description: Đơn giá niêm yết
+        data_type: decimal
+        nullable: true
+        business_definition: Giá niêm yết của xe tại thời điểm đặt hàng (chưa bao gồm thuế, phí)
+        example: 1050000000.00
+      - name: discount_amount
+        description: Giá trị chiết khấu
+        data_type: decimal
+        nullable: true
+        business_definition: Tổng giá trị chiết khấu, khuyến mãi áp dụng cho đơn hàng
+        example: 50000000.00
+      - name: total_amount
+        description: Tổng giá trị đơn hàng
+        data_type: decimal
+        nullable: true
+        business_definition: Tổng giá trị thanh toán sau chiết khấu, bao gồm VAT
+        example: 1100000000.00
+      - name: order_status
+        description: Trạng thái đơn hàng
+        data_type: varchar
+        nullable: true
+        business_definition: Trạng thái xử lý đơn hàng: Chờ xác nhận, Đã xác nhận, Đang giao, Hoàn thành, Đã hủy
+        example: Đã xác nhận
+      - name: payment_method
+        description: Phương thức thanh toán
+        data_type: varchar
+        nullable: true
+        business_definition: Hình thức thanh toán khách hàng lựa chọn: Tiền mặt, Chuyển khoản, Trả góp
+        example: Trả góp
+      - name: expected_delivery_date
+        description: Ngày giao dự kiến
+        data_type: date
+        nullable: true
+        business_definition: Ngày dự kiến bàn giao xe cho khách hàng theo cam kết
+        example: "2024-08-15"
+      - name: promotion_id
+        description: Mã chương trình KM
+        data_type: varchar
+        nullable: true
+        business_definition: Mã chương trình khuyến mãi áp dụng cho đơn hàng (nếu có)
+        example: PROMO_T7_2024
+    owners:
+      - sales_ops
+    refresh_frequency: Daily
+
+  - name: fact_sales_delivery
+    description: Thông tin bàn giao xe cho khách hàng
+    domain: Kinh doanh
+    platform: Redshift
+    tags:
+      - sales
+      - delivery
+    columns:
+      - name: delivery_id
+        description: Mã giao hàng
+        data_type: varchar
+        nullable: false
+        business_definition: Mã phiếu bàn giao xe duy nhất
+        example: DEL_202408_000567
+      - name: sales_order_id
+        description: Mã đơn hàng
+        data_type: varchar
+        nullable: false
+        business_definition: Mã đơn hàng tham chiếu đến đơn đặt hàng tương ứng
+        example: SO_202407_001234
+      - name: delivery_date
+        description: Ngày giao xe thực tế
+        data_type: date
+        nullable: false
+        business_definition: Ngày thực tế bàn giao xe cho khách hàng
+        example: "2024-08-20"
+      - name: customer_id
+        description: Mã khách hàng
+        data_type: varchar
+        nullable: false
+        business_definition: Mã khách hàng nhận xe
+        example: KH_202403_0012345
+      - name: dealer_id
+        description: Mã đại lý
+        data_type: varchar
+        nullable: false
+        business_definition: Mã đại lý thực hiện bàn giao
+        example: DL_HN_00123
+      - name: vin_number
+        description: Số VIN của xe
+        data_type: varchar
+        nullable: true
+        business_definition: Số nhận dạng xe (Vehicle Identification Number) duy nhất cho mỗi xe
+        example: VIN6543210987654321
+      - name: license_plate
+        description: Biển số xe
+        data_type: varchar
+        nullable: true
+        business_definition: Biển số đăng ký của xe do cơ quan công an cấp
+        example: 30A-99999
+      - name: delivery_status
+        description: Trạng thái giao hàng
+        data_type: varchar
+        nullable: true
+        business_definition: Trạng thái: Đã lên lịch, Đang giao, Đã bàn giao, Trả lại
+        example: Đã bàn giao
+      - name: delivery_type
+        description: Hình thức bàn giao
+        data_type: varchar
+        nullable: true
+        business_definition: Hình thức: Tại đại lý, Tại nhà, Tại công ty
+        example: Tại đại lý
+      - name: delivery_notes
+        description: Ghi chú bàn giao
+        data_type: varchar
+        nullable: true
+        business_definition: Các ghi chú đặc biệt trong quá trình bàn giao xe
+        example: Khách hàng yêu cầu hướng dẫn sử dụng pin chi tiết
+    owners:
+      - sales_ops
+    refresh_frequency: Daily
+
+  - name: fact_sales_target
+    description: Chỉ tiêu bán hàng theo đại lý và thời gian
+    domain: Kinh doanh
+    platform: Redshift
+    tags:
+      - sales
+      - target
+      - kpi
+    columns:
+      - name: target_id
+        description: Mã chỉ tiêu
+        data_type: varchar
+        nullable: false
+        business_definition: Mã định danh duy nhất cho chỉ tiêu bán hàng
+        example: TGT_2024_Q3_DL123
+      - name: dealer_id
+        description: Mã đại lý
+        data_type: varchar
+        nullable: false
+        business_definition: Mã đại lý được giao chỉ tiêu
+        example: DL_HN_00123
+      - name: target_year
+        description: Năm chỉ tiêu
+        data_type: int
+        nullable: false
+        business_definition: Năm tài chính áp dụng chỉ tiêu
+        example: 2024
+      - name: target_month
+        description: Tháng chỉ tiêu
+        data_type: int
+        nullable: true
+        business_definition: Tháng áp dụng chỉ tiêu (NULL nếu chỉ tiêu năm)
+        example: 7
+      - name: model_id
+        description: Mã model xe
+        data_type: varchar
+        nullable: true
+        business_definition: Mã model xe được giao chỉ tiêu (NULL nếu chỉ tiêu tổng)
+        example: VF8
+      - name: target_quantity
+        description: Số lượng chỉ tiêu
+        data_type: int
+        nullable: false
+        business_definition: Số lượng xe cần bán trong kỳ
+        example: 50
+      - name: target_value
+        description: Giá trị chỉ tiêu
+        data_type: decimal
+        nullable: true
+        business_definition: Tổng doanh số chỉ tiêu theo giá trị (VNĐ)
+        example: 52500000000.00
+      - name: actual_quantity
+        description: Số lượng thực tế
+        data_type: int
+        nullable: true
+        business_definition: Số lượng xe đã bán thực tế trong kỳ
+        example: 42
+      - name: completion_rate
+        description: Tỷ lệ hoàn thành
+        data_type: decimal
+        nullable: true
+        business_definition: Tỷ lệ phần trăm hoàn thành chỉ tiêu (actual/target)
+        example: 0.84
+      - name: target_status
+        description: Trạng thái chỉ tiêu
+        data_type: varchar
+        nullable: true
+        business_definition: Trạng thái: Đang thực hiện, Hoàn thành, Không hoàn thành
+        example: Không hoàn thành
+    owners:
+      - sales_planning
+    refresh_frequency: Daily
+
+  - name: fact_dealer_performance
+    description: Đánh giá hiệu suất hoạt động của đại lý
+    domain: Kinh doanh
+    platform: Redshift
+    tags:
+      - dealer
+      - performance
+      - kpi
+    columns:
+      - name: performance_id
+        description: Mã đánh giá
+        data_type: varchar
+        nullable: false
+        business_definition: Mã định danh duy nhất cho bản ghi đánh giá hiệu suất
+        example: PERF_202407_DL123
+      - name: dealer_id
+        description: Mã đại lý
+        data_type: varchar
+        nullable: false
+        business_definition: Mã đại lý được đánh giá
+        example: DL_HN_00123
+      - name: review_period
+        description: Kỳ đánh giá
+        data_type: varchar
+        nullable: false
+        business_definition: Kỳ đánh giá hiệu suất theo tháng/quý/năm
+        example: 2024-07
+      - name: total_sales_quantity
+        description: Tổng số xe bán ra
+        data_type: int
+        nullable: true
+        business_definition: Tổng số xe đã bán trong kỳ đánh giá
+        example: 42
+      - name: target_achievement_rate
+        description: Tỷ lệ đạt chỉ tiêu
+        data_type: decimal
+        nullable: true
+        business_definition: Tỷ lệ hoàn thành chỉ tiêu bán hàng (%)
+        example: 84.00
+      - name: customer_satisfaction_score
+        description: Điểm hài lòng KH
+        data_type: decimal
+        nullable: true
+        business_definition: Điểm đánh giá mức độ hài lòng của khách hàng (thang 10)
+        example: 8.5
+      - name: inventory_turnover_days
+        description: Số ngày tồn kho
+        data_type: int
+        nullable: true
+        business_definition: Số ngày tồn kho trung bình của xe tại đại lý
+        example: 21
+      - name: test_drive_conversion_rate
+        description: Tỷ lệ chuyển đổi lái thử
+        data_type: decimal
+        nullable: true
+        business_definition: Tỷ lệ khách lái thử chuyển thành đơn hàng (%)
+        example: 35.50
+      - name: after_sales_revenue
+        description: Doanh thu hậu mãi
+        data_type: decimal
+        nullable: true
+        business_definition: Doanh thu từ dịch vụ sửa chữa, bảo dưỡng tại đại lý
+        example: 250000000.00
+      - name: overall_rating
+        description: Xếp hạng tổng thể
+        data_type: varchar
+        nullable: true
+        business_definition: Xếp hạng tổng thể hiệu suất: A, B, C, D
+        example: B
+    owners:
+      - dealer_management
+    refresh_frequency: Daily
+
+  - name: dim_product_model
+    description: Danh mục các model xe VinFast và thông số kỹ thuật
+    domain: Kinh doanh
+    platform: Redshift
+    tags:
+      - product
+      - master-data
+    columns:
+      - name: model_id
+        description: Mã model xe
+        data_type: varchar
+        nullable: false
+        business_definition: Mã định danh duy nhất cho từng dòng xe
+        example: VF8
+      - name: model_name
+        description: Tên thương mại
+        data_type: varchar
+        nullable: false
+        business_definition: Tên thương mại chính thức của dòng xe
+        example: VinFast VF 8
+      - name: model_year
+        description: Năm sản xuất
+        data_type: int
+        nullable: true
+        business_definition: Năm ra mắt của phiên bản xe
+        example: 2024
+      - name: vehicle_category
+        description: Phân khúc xe
+        data_type: varchar
+        nullable: true
+        business_definition: Phân khúc theo kích thước và mục đích: SUV, Sedan, Hatchback, MPV
+        example: SUV
+      - name: engine_type
+        description: Loại động cơ
+        data_type: varchar
+        nullable: true
+        business_definition: Loại động cơ: Điện, Xăng, Diesel, Hybrid
+        example: Điện
+      - name: battery_capacity
+        description: Dung lượng pin (kWh)
+        data_type: decimal
+        nullable: true
+        business_definition: Dung lượng pin của xe điện, tính bằng kWh
+        example: 82.0
+      - name: range_km
+        description: Tầm xa tối đa (km)
+        data_type: int
+        nullable: true
+        business_definition: Tầm xa di chuyển tối đa sau mỗi lần sạc đầy (tiêu chuẩn NEDC)
+        example: 459
+      - name: seating_capacity
+        description: Số chỗ ngồi
+        data_type: int
+        nullable: true
+        business_definition: Số chỗ ngồi tiêu chuẩn của xe
+        example: 5
+      - name: base_price
+        description: Giá niêm yết cơ bản
+        data_type: decimal
+        nullable: true
+        business_definition: Giá bán lẻ khuyến nghị của nhà sản xuất (chưa bao gồm pin)
+        example: 1050000000.00
+      - name: warranty_period
+        description: Thời gian bảo hành
+        data_type: varchar
+        nullable: true
+        business_definition: Thời hạn bảo hành tiêu chuẩn cho xe
+        example: 7 năm hoặc 160.000 km
+      - name: status
+        description: Trạng thái model
+        data_type: varchar
+        nullable: true
+        business_definition: Trạng thái sản xuất và bán hàng: Đang bán, Ngừng sản xuất, Sắp ra mắt
+        example: Đang bán
+    owners:
+      - product_management
+    refresh_frequency: Daily
+
+  - name: fact_market_share
+    description: Dữ liệu thị phần của VinFast theo khu vực và thời gian
+    domain: Kinh doanh
+    platform: Redshift
+    tags:
+      - market
+      - competitive
+    columns:
+      - name: market_share_id
+        description: Mã bản ghi thị phần
+        data_type: varchar
+        nullable: false
+        business_definition: Mã định danh duy nhất cho dữ liệu thị phần
+        example: MS_2024_Q3_MN
+      - name: region_id
+        description: Mã khu vực
+        data_type: varchar
+        nullable: false
+        business_definition: Khu vực địa lý tính thị phần
+        example: REG_MN
+      - name: year
+        description: Năm thống kê
+        data_type: int
+        nullable: false
+        business_definition: Năm tài chính của dữ liệu thị phần
+        example: 2024
+      - name: month
+        description: Tháng thống kê
+        data_type: int
+        nullable: true
+        business_definition: Tháng của dữ liệu thị phần
+        example: 7
+      - name: vehicle_category
+        description: Phân khúc xe
+        data_type: varchar
+        nullable: true
+        business_definition: Phân khúc xe áp dụng tính thị phần
+        example: SUV điện
+      - name: vinfast_units_sold
+        description: Số xe VinFast bán ra
+        data_type: int
+        nullable: true
+        business_definition: Tổng số xe VinFast bán được trong kỳ
+        example: 1250
+      - name: industry_total_units
+        description: Tổng thị trường
+        data_type: int
+        nullable: true
+        business_definition: Tổng số xe bán ra của toàn thị trường trong cùng phân khúc
+        example: 8500
+      - name: market_share_pct
+        description: Tỷ lệ thị phần
+        data_type: decimal
+        nullable: true
+        business_definition: Thị phần của VinFast tính bằng phần trăm (VinFast / Tổng thị trường)
+        example: 14.71
+      - name: rank
+        description: Xếp hạng
+        data_type: int
+        nullable: true
+        business_definition: Xếp hạng của VinFast trong phân khúc
+        example: 3
+      - name: data_source
+        description: Nguồn dữ liệu
+        data_type: varchar
+        nullable: true
+        business_definition: Tổ chức cung cấp số liệu thị phần (VAMA, BMI, v.v.)
+        example: VAMA
+    owners:
+      - market_intelligence
+    refresh_frequency: Daily
+
+  - name: fact_incentive_claim
+    description: Yêu cầu và chi trả ưu đãi, hỗ trợ cho đại lý và khách hàng
+    domain: Kinh doanh
+    platform: Redshift
+    tags:
+      - incentive
+      - claim
+    columns:
+      - name: claim_id
+        description: Mã yêu cầu ưu đãi
+        data_type: varchar
+        nullable: false
+        business_definition: Mã định danh duy nhất cho yêu cầu ưu đãi
+        example: INC_202408_000123
+      - name: sales_order_id
+        description: Mã đơn hàng
+        data_type: varchar
+        nullable: true
+        business_definition: Mã đơn hàng áp dụng ưu đãi
+        example: SO_202407_001234
+      - name: dealer_id
+        description: Mã đại lý yêu cầu
+        data_type: varchar
+        nullable: false
+        business_definition: Mã đại lý gửi yêu cầu ưu đãi
+        example: DL_HN_00123
+      - name: claim_date
+        description: Ngày yêu cầu
+        data_type: date
+        nullable: false
+        business_definition: Ngày đại lý gửi yêu cầu ưu đãi
+        example: "2024-08-01"
+      - name: incentive_type
+        description: Loại ưu đãi
+        data_type: varchar
+        nullable: true
+        business_definition: Loại ưu đãi: Hỗ trợ bán hàng, Hoa hồng, Khuyến mãi KH, Hỗ trợ tài chính
+        example: Hoa hồng
+      - name: claim_amount
+        description: Số tiền yêu cầu
+        data_type: decimal
+        nullable: true
+        business_definition: Số tiền đại lý yêu cầu ưu đãi
+        example: 15000000.00
+      - name: approved_amount
+        description: Số tiền duyệt
+        data_type: decimal
+        nullable: true
+        business_definition: Số tiền được phê duyệt chi trả
+        example: 12000000.00
+      - name: claim_status
+        description: Trạng thái
+        data_type: varchar
+        nullable: true
+        business_definition: Trạng thái xử lý: Đã gửi, Đang xét duyệt, Đã duyệt, Từ chối, Đã chi trả
+        example: Đã duyệt
+      - name: approved_by
+        description: Người duyệt
+        data_type: varchar
+        nullable: true
+        business_definition: Mã nhân viên phê duyệt yêu cầu
+        example: NV_QLBH_001
+      - name: payment_date
+        description: Ngày chi trả
+        data_type: date
+        nullable: true
+        business_definition: Ngày thực tế chi trả ưu đãi cho đại lý
+        example: "2024-08-15"
+    owners:
+      - sales_ops
+    refresh_frequency: Daily
+
+  - name: fact_customer_feedback
+    description: Phản hồi và khảo sát ý kiến khách hàng sau mua xe
+    domain: Kinh doanh
+    platform: Redshift
+    tags:
+      - customer
+      - feedback
+      - nps
+    columns:
+      - name: feedback_id
+        description: Mã phản hồi
+        data_type: varchar
+        nullable: false
+        business_definition: Mã định danh duy nhất cho mỗi phản hồi
+        example: FB_202408_000789
+      - name: customer_id
+        description: Mã khách hàng
+        data_type: varchar
+        nullable: false
+        business_definition: Mã khách hàng gửi phản hồi
+        example: KH_202403_0012345
+      - name: sales_order_id
+        description: Mã đơn hàng
+        data_type: varchar
+        nullable: true
+        business_definition: Mã đơn hàng khách hàng đánh giá
+        example: SO_202407_001234
+      - name: feedback_date
+        description: Ngày phản hồi
+        data_type: date
+        nullable: false
+        business_definition: Ngày khách hàng gửi phản hồi
+        example: "2024-08-25"
+      - name: feedback_channel
+        description: Kênh phản hồi
+        data_type: varchar
+        nullable: true
+        business_definition: Kênh khách hàng sử dụng: Điện thoại, Email, Website, Ứng dụng, Tại đại lý
+        example: Ứng dụng VinFast
+      - name: nps_score
+        description: Điểm NPS
+        data_type: int
+        nullable: true
+        business_definition: Điểm Net Promoter Score từ 0-10 đo lường mức độ sẵn sàng giới thiệu
+        example: 9
+      - name: satisfaction_rating
+        description: Điểm hài lòng
+        data_type: int
+        nullable: true
+        business_definition: Điểm đánh giá mức độ hài lòng tổng thể (thang 1-5)
+        example: 5
+      - name: feedback_category
+        description: Phân loại phản hồi
+        data_type: varchar
+        nullable: true
+        business_definition: Phân loại: Sản phẩm, Dịch vụ, Giao hàng, Giá cả, Khác
+        example: Sản phẩm
+      - name: feedback_content
+        description: Nội dung phản hồi
+        data_type: varchar
+        nullable: true
+        business_definition: Nội dung chi tiết khách hàng phản hồi dạng văn bản
+        example: Xe vận hành êm, tiết kiệm điện, rất hài lòng
+      - name: sentiment
+        description: Cảm xúc
+        data_type: varchar
+        nullable: true
+        business_definition: Phân tích cảm xúc tự động: Tích cực, Trung tính, Tiêu cực
+        example: Tích cực
+      - name: resolved_flag
+        description: Đã xử lý
+        data_type: varchar
+        nullable: true
+        business_definition: Cờ đánh dấu phản hồi đã được xử lý: Y/N
+        example: Y
+    owners:
+      - crm_team
+    refresh_frequency: Daily
+
+  - name: dim_promotion
+    description: Danh mục chương trình khuyến mãi và ưu đãi
+    domain: Kinh doanh
+    platform: Redshift
+    tags:
+      - promotion
+      - master-data
+    columns:
+      - name: promotion_id
+        description: Mã khuyến mãi
+        data_type: varchar
+        nullable: false
+        business_definition: Mã định danh duy nhất cho chương trình khuyến mãi
+        example: PROMO_T7_2024
+      - name: promotion_name
+        description: Tên chương trình
+        data_type: varchar
+        nullable: false
+        business_definition: Tên thương mại của chương trình khuyến mãi
+        example: Tháng 7 tri ân - Giảm 50 triệu VF 8
+      - name: promotion_type
+        description: Loại khuyến mãi
+        data_type: varchar
+        nullable: true
+        business_definition: Loại: Giảm giá, Tặng phụ kiện, Hỗ trợ lãi suất, Ưu đãi pin
+        example: Giảm giá
+      - name: discount_value
+        description: Giá trị ưu đãi
+        data_type: decimal
+        nullable: true
+        business_definition: Giá trị quy đổi bằng VNĐ của ưu đãi
+        example: 50000000.00
+      - name: start_date
+        description: Ngày bắt đầu
+        data_type: date
+        nullable: true
+        business_definition: Ngày bắt đầu áp dụng chương trình khuyến mãi
+        example: "2024-07-01"
+      - name: end_date
+        description: Ngày kết thúc
+        data_type: date
+        nullable: true
+        business_definition: Ngày kết thúc chương trình khuyến mãi
+        example: "2024-07-31"
+      - name: applicable_models
+        description: Model áp dụng
+        data_type: varchar
+        nullable: true
+        business_definition: Các model xe được áp dụng khuyến mãi
+        example: VF8, VF9
+      - name: status
+        description: Trạng thái
+        data_type: varchar
+        nullable: true
+        business_definition: Trạng thái chương trình: Lên kế hoạch, Đang chạy, Kết thúc, Hủy
+        example: Đang chạy
+      - name: budget
+        description: Ngân sách
+        data_type: decimal
+        nullable: true
+        business_definition: Tổng ngân sách phân bổ cho chương trình khuyến mãi
+        example: 5000000000.00
+      - name: created_by
+        description: Người tạo
+        data_type: varchar
+        nullable: true
+        business_definition: Mã nhân viên tạo chương trình khuyến mãi
+        example: NV_MKT_001
+    owners:
+      - marketing
+    refresh_frequency: Daily
+
+  - name: fact_lead_management
+    description: Quản lý khách hàng tiềm năng từ các chiến dịch marketing
+    domain: Kinh doanh
+    platform: Redshift
+    tags:
+      - lead
+      - crm
+    columns:
+      - name: lead_id
+        description: Mã khách hàng tiềm năng
+        data_type: varchar
+        nullable: false
+        business_definition: Mã định danh duy nhất cho mỗi khách hàng tiềm năng
+        example: LEAD_202408_005432
+      - name: customer_id
+        description: Mã khách hàng
+        data_type: varchar
+        nullable: true
+        business_definition: Mã khách hàng nếu lead đã chuyển đổi thành khách hàng
+        example: KH_202403_0012345
+      - name: lead_source
+        description: Nguồn lead
+        data_type: varchar
+        nullable: true
+        business_definition: Nguồn phát sinh khách hàng tiềm năng: Website, Facebook, Event, Giới thiệu, Đại lý
+        example: Website
+      - name: campaign_name
+        description: Chiến dịch marketing
+        data_type: varchar
+        nullable: true
+        business_definition: Tên chiến dịch marketing thu hút lead này
+        example: Google Ads VF8 2024
+      - name: full_name
+        description: Họ tên
+        data_type: varchar
+        nullable: true
+        business_definition: Họ và tên khách hàng tiềm năng
+        example: Lê Văn Hoàng
+      - name: phone
+        description: Số điện thoại
+        data_type: varchar
+        nullable: true
+        business_definition: Số điện thoại liên hệ
+        example: 0912345678
+      - name: email
+        description: Email
+        data_type: varchar
+        nullable: true
+        business_definition: Địa chỉ email
+        example: hoang.le@gmail.com
+      - name: interested_model
+        description: Model quan tâm
+        data_type: varchar
+        nullable: true
+        business_definition: Model xe khách hàng quan tâm
+        example: VF8
+      - name: lead_status
+        description: Trạng thái lead
+        data_type: varchar
+        nullable: true
+        business_definition: Trạng thái xử lý: Mới, Đang liên hệ, Hẹn lái thử, Đã đặt cọc, Chuyển đổi, Mất
+        example: Đang liên hệ
+      - name: assigned_to
+        description: Nhân viên phụ trách
+        data_type: varchar
+        nullable: true
+        business_definition: Mã nhân viên kinh doanh được phân công xử lý lead
+        example: NV_KD_001
+      - name: assigned_date
+        description: Ngày phân công
+        data_type: date
+        nullable: true
+        business_definition: Ngày lead được phân công cho nhân viên
+        example: "2024-08-05"
+      - name: conversion_date
+        description: Ngày chuyển đổi
+        data_type: date
+        nullable: true
+        business_definition: Ngày lead chuyển thành đơn hàng thành công
+        example: "2024-08-20"
+      - name: dealer_id
+        description: Mã đại lý
+        data_type: varchar
+        nullable: true
+        business_definition: Mã đại lý phụ trách lead này
+        example: DL_HN_00123
+    owners:
+      - marketing
+    refresh_frequency: Daily
+
+  - name: fact_test_drive
+    description: Thông tin lịch hẹn và kết quả lái thử xe
+    domain: Kinh doanh
+    platform: Redshift
+    tags:
+      - sales
+      - test-drive
+    columns:
+      - name: test_drive_id
+        description: Mã lịch lái thử
+        data_type: varchar
+        nullable: false
+        business_definition: Mã định danh duy nhất cho mỗi lịch lái thử
+        example: TD_202408_000345
+      - name: lead_id
+        description: Mã lead
+        data_type: varchar
+        nullable: true
+        business_definition: Mã khách hàng tiềm năng thực hiện lái thử
+        example: LEAD_202408_005432
+      - name: customer_id
+        description: Mã khách hàng
+        data_type: varchar
+        nullable: true
+        business_definition: Mã khách hàng nếu là khách hàng hiện hữu
+        example: KH_202403_0012345
+      - name: dealer_id
+        description: Mã đại lý
+        data_type: varchar
+        nullable: false
+        business_definition: Mã đại lý tổ chức lái thử
+        example: DL_HN_00123
+      - name: model_id
+        description: Mã model xe lái thử
+        data_type: varchar
+        nullable: false
+        business_definition: Model xe được lái thử
+        example: VF8
+      - name: scheduled_date
+        description: Ngày hẹn lái thử
+        data_type: date
+        nullable: false
+        business_definition: Ngày khách hàng hẹn đến lái thử
+        example: "2024-08-10"
+      - name: actual_date
+        description: Ngày lái thử thực tế
+        data_type: date
+        nullable: true
+        business_definition: Ngày khách hàng thực tế đến lái thử
+        example: "2024-08-10"
+      - name: test_drive_status
+        description: Trạng thái
+        data_type: varchar
+        nullable: true
+        business_definition: Trạng thái: Đã lên lịch, Đã lái thử, Vắng mặt, Hủy
+        example: Đã lái thử
+      - name: result
+        description: Kết quả
+        data_type: varchar
+        nullable: true
+        business_definition: Kết quả sau lái thử của khách hàng: Rất quan tâm, Cân nhắc, Chưa phù hợp
+        example: Rất quan tâm
+      - name: follow_up_action
+        description: Hành động tiếp theo
+        data_type: varchar
+        nullable: true
+        business_definition: Hành động tiếp theo của nhân viên kinh doanh
+        example: Gửi báo giá chi tiết
+      - name: sales_officer
+        description: Nhân viên phụ trách
+        data_type: varchar
+        nullable: true
+        business_definition: Mã nhân viên kinh doanh phụ trách buổi lái thử
+        example: NV_KD_001
+    owners:
+      - sales_ops
+    refresh_frequency: Daily
+
+  - name: dim_region
+    description: Danh mục khu vực địa lý và vùng miền quản lý
+    domain: Kinh doanh
+    platform: Redshift
+    tags:
+      - region
+      - master-data
+    columns:
+      - name: region_id
+        description: Mã khu vực
+        data_type: varchar
+        nullable: false
+        business_definition: Mã định danh duy nhất cho khu vực quản lý
+        example: REG_MN
+      - name: region_name
+        description: Tên khu vực
+        data_type: varchar
+        nullable: false
+        business_definition: Tên khu vực địa lý
+        example: Miền Nam
+      - name: region_manager
+        description: Giám đốc khu vực
+        data_type: varchar
+        nullable: true
+        business_definition: Họ tên giám đốc phụ trách khu vực
+        example: Phạm Văn Tuấn
+      - name: provinces_included
+        description: Các tỉnh phụ trách
+        data_type: varchar
+        nullable: true
+        business_definition: Danh sách tỉnh thành trong khu vực
+        example: Hồ Chí Minh, Bình Dương, Đồng Nai, Bà Rịa-Vũng Tàu
+      - name: total_dealers
+        description: Số lượng đại lý
+        data_type: int
+        nullable: true
+        business_definition: Tổng số đại lý đang hoạt động trong khu vực
+        example: 25
+    owners:
+      - sales_ops
+    refresh_frequency: Daily

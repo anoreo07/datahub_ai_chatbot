@@ -1,0 +1,39 @@
+[
+  {
+    "urn": "urn:li:glossaryNode:Finance",
+    "entity_type": "glossary_node",
+    "name": "Finance",
+    "display_name": "Finance",
+    "description": "Glossary node cho các thuật ngữ tài chính.",
+    "domain": "Finance",
+    "owners": [{"name": "Finance Analytics", "type": "USER"}],
+    "glossary_terms": [
+      "urn:li:glossaryTerm:Revenue",
+      "urn:li:glossaryTerm:GrossRevenue",
+      "urn:li:glossaryTerm:NetRevenue"
+    ],
+    "schema_fields": [],
+    "upstreams": [],
+    "downstreams": [],
+    "linked_documents": [],
+    "datahub_url": "http://localhost:9002/glossaryNode/urn:li:glossaryNode:Finance"
+  },
+  {
+    "urn": "urn:li:glossaryNode:Sales",
+    "entity_type": "glossary_node",
+    "name": "Sales",
+    "display_name": "Sales",
+    "description": "Glossary node cho các thuật ngữ bán hàng.",
+    "domain": "Sales",
+    "owners": [{"name": "Sales Analytics", "type": "USER"}],
+    "glossary_terms": [
+      "urn:li:glossaryTerm:Customer",
+      "urn:li:glossaryTerm:Order"
+    ],
+    "schema_fields": [],
+    "upstreams": [],
+    "downstreams": [],
+    "linked_documents": [],
+    "datahub_url": "http://localhost:9002/glossaryNode/urn:li:glossaryNode:Sales"
+  }
+]

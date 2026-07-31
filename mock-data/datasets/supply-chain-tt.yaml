@@ -1,0 +1,1124 @@
+datasets:
+  - name: dim_domestic_vendor
+    description: Thông tin các nhà cung cấp vật tư, linh kiện trong nước
+    domain: Cung ứng (TT)
+    platform: Redshift
+    tags:
+      - vendor
+      - master-data
+    columns:
+      - name: vendor_id
+        description: Mã nhà cung cấp
+        data_type: varchar
+        nullable: false
+        business_definition: Mã định danh duy nhất cho nhà cung cấp trong nước
+        example: NCC_VN_001234
+      - name: vendor_code
+        description: Mã viết tắt
+        data_type: varchar
+        nullable: false
+        business_definition: Mã viết tắt của nhà cung cấp dùng trong giao dịch
+        example: HOA_PHAT
+      - name: vendor_name
+        description: Tên nhà cung cấp
+        data_type: varchar
+        nullable: false
+        business_definition: Tên đầy đủ của nhà cung cấp đã đăng ký kinh doanh
+        example: Công ty CP Thép Hòa Phát
+      - name: vendor_category
+        description: Phân loại nhà cung cấp
+        data_type: varchar
+        nullable: true
+        business_definition: Loại: Linh kiện, Nguyên vật liệu, Dịch vụ, Logistics, Thiết bị
+        example: Linh kiện
+      - name: tax_code
+        description: Mã số thuế
+        data_type: varchar
+        nullable: true
+        business_definition: Mã số thuế của nhà cung cấp
+        example: 0123456789
+      - name: province
+        description: Tỉnh/Thành phố
+        data_type: varchar
+        nullable: true
+        business_definition: Địa chỉ trụ sở chính
+        example: Hải Phòng
+      - name: contact_person
+        description: Người liên hệ
+        data_type: varchar
+        nullable: true
+        business_definition: Người đại diện giao dịch
+        example: Nguyễn Văn Minh
+      - name: phone
+        description: Số điện thoại
+        data_type: varchar
+        nullable: true
+        business_definition: Số điện thoại đường dây nóng
+        example: 02253889999
+      - name: vendor_status
+        description: Trạng thái
+        data_type: varchar
+        nullable: true
+        business_definition: Đã phê duyệt, Tạm ngưng, Đang đánh giá, Chấm dứt
+        example: Đã phê duyệt
+      - name: approval_date
+        description: Ngày phê duyệt
+        data_type: date
+        nullable: true
+        business_definition: Ngày nhà cung cấp được phê duyệt chính thức
+        example: "2022-01-15"
+      - name: rating
+        description: Xếp hạng
+        data_type: varchar
+        nullable: true
+        business_definition: Xếp hạng tổng thể: A, B, C, D
+        example: A
+      - name: material_groups_supplied
+        description: Nhóm vật tư cung cấp
+        data_type: varchar
+        nullable: true
+        business_definition: Các nhóm vật tư mà nhà cung cấp có thể cung ứng
+        example: Thép tấm, Thép cuộn, Thép hình
+    owners:
+      - procurement
+    refresh_frequency: Daily
+
+  - name: dim_contract
+    description: Thông tin hợp đồng cung cấp vật tư với nhà cung cấp
+    domain: Cung ứng (TT)
+    platform: Redshift
+    tags:
+      - contract
+      - procurement
+    columns:
+      - name: contract_id
+        description: Mã hợp đồng
+        data_type: varchar
+        nullable: false
+        business_definition: Mã định danh duy nhất cho hợp đồng
+        example: HD_2024_VT_001234
+      - name: vendor_id
+        description: Mã nhà cung cấp
+        data_type: varchar
+        nullable: false
+        business_definition: Mã nhà cung cấp ký hợp đồng
+        example: NCC_VN_001234
+      - name: contract_name
+        description: Tên hợp đồng
+        data_type: varchar
+        nullable: false
+        business_definition: Tên hợp đồng cung cấp
+        example: Hợp đồng cung cấp thép tấm VF8 năm 2024
+      - name: contract_type
+        description: Loại hợp đồng
+        data_type: varchar
+        nullable: true
+        business_definition: Khung, Trọn gói, Theo đơn hàng, Dài hạn
+        example: Khung
+      - name: total_value
+        description: Tổng giá trị hợp đồng
+        data_type: decimal
+        nullable: true
+        business_definition: Tổng giá trị hợp đồng bằng VNĐ
+        example: 150000000000.00
+      - name: currency
+        description: Loại tiền tệ
+        data_type: varchar
+        nullable: true
+        business_definition: VND, USD
+        example: VND
+      - name: start_date
+        description: Ngày hiệu lực
+        data_type: date
+        nullable: true
+        business_definition: Ngày bắt đầu hiệu lực hợp đồng
+        example: "2024-01-01"
+      - name: end_date
+        description: Ngày kết thúc
+        data_type: date
+        nullable: true
+        business_definition: Ngày hết hạn hợp đồng
+        example: "2024-12-31"
+      - name: payment_terms
+        description: Điều khoản thanh toán
+        data_type: varchar
+        nullable: true
+        business_definition: Thời hạn thanh toán và phương thức thanh toán
+        example: Net 60 ngày sau khi nhận hàng
+      - name: contract_status
+        description: Trạng thái
+        data_type: varchar
+        nullable: true
+        business_definition: Soạn thảo, Đã ký, Đang thực hiện, Kết thúc, Hủy
+        example: Đang thực hiện
+      - name: procurement_category_id
+        description: Mã hạng mục mua sắm
+        data_type: varchar
+        nullable: true
+        business_definition: Hạng mục mua sắm của hợp đồng
+        example: PMC_VT_01
+      - name: created_by
+        description: Người tạo
+        data_type: varchar
+        nullable: true
+        business_definition: Mã nhân viên thu mua phụ trách
+        example: NV_TM_001
+    owners:
+      - procurement
+    refresh_frequency: Daily
+
+  - name: fact_vendor_evaluation
+    description: Đánh giá tổng quan nhà cung cấp theo từng kỳ
+    domain: Cung ứng (TT)
+    platform: Redshift
+    tags:
+      - vendor
+      - evaluation
+      - kpi
+    columns:
+      - name: evaluation_id
+        description: Mã đánh giá
+        data_type: varchar
+        nullable: false
+        business_definition: Mã định danh duy nhất cho đánh giá nhà cung cấp
+        example: EVAL_2024_Q3_NCC1234
+      - name: vendor_id
+        description: Mã nhà cung cấp
+        data_type: varchar
+        nullable: false
+        business_definition: Mã nhà cung cấp được đánh giá
+        example: NCC_VN_001234
+      - name: evaluation_period
+        description: Kỳ đánh giá
+        data_type: varchar
+        nullable: false
+        business_definition: Kỳ đánh giá: Q1-2024, Q2-2024, Năm 2024
+        example: Q2-2024
+      - name: quality_score
+        description: Điểm chất lượng
+        data_type: decimal
+        nullable: true
+        business_definition: Điểm chất lượng sản phẩm thang 100
+        example: 92.50
+      - name: delivery_score
+        description: Điểm giao hàng
+        data_type: decimal
+        nullable: true
+        business_definition: Điểm đánh giá đúng hạn và đầy đủ thang 100
+        example: 88.00
+      - name: price_score
+        description: Điểm giá cả
+        data_type: decimal
+        nullable: true
+        business_definition: Điểm cạnh tranh về giá thang 100
+        example: 85.00
+      - name: service_score
+        description: Điểm dịch vụ
+        data_type: decimal
+        nullable: true
+        business_definition: Điểm hỗ trợ và phản hồi từ nhà cung cấp thang 100
+        example: 90.00
+      - name: overall_score
+        description: Điểm tổng thể
+        data_type: decimal
+        nullable: true
+        business_definition: Điểm trung bình có trọng số từ các tiêu chí
+        example: 89.50
+      - name: rating
+        description: Xếp hạng
+        data_type: varchar
+        nullable: true
+        business_definition: A (>90), B (75-90), C (60-75), D (<60)
+        example: B
+      - name: evaluator
+        description: Người đánh giá
+        data_type: varchar
+        nullable: true
+        business_definition: Mã nhân viên thực hiện đánh giá
+        example: NV_TM_001
+    owners:
+      - procurement
+    refresh_frequency: Daily
+
+  - name: fact_purchase_requisition
+    description: Yêu cầu mua hàng nội bộ từ các bộ phận sản xuất
+    domain: Cung ứng (TT)
+    platform: Redshift
+    tags:
+      - procurement
+      - requisition
+    columns:
+      - name: requisition_id
+        description: Mã yêu cầu mua hàng
+        data_type: varchar
+        nullable: false
+        business_definition: Mã định danh duy nhất cho yêu cầu mua hàng
+        example: PR_202408_000789
+      - name: request_date
+        description: Ngày yêu cầu
+        data_type: date
+        nullable: false
+        business_definition: Ngày bộ phận gửi yêu cầu mua hàng
+        example: "2024-08-10"
+      - name: requested_by
+        description: Người yêu cầu
+        data_type: varchar
+        nullable: false
+        business_definition: Mã nhân viên gửi yêu cầu
+        example: NV_SX_001
+      - name: department
+        description: Bộ phận
+        data_type: varchar
+        nullable: true
+        business_definition: Bộ phận: Sản xuất, Kỹ thuật, Bảo trì, Chất lượng
+        example: Sản xuất
+      - name: material_group_id
+        description: Mã nhóm vật tư
+        data_type: varchar
+        nullable: true
+        business_definition: Nhóm vật tư yêu cầu
+        example: VT_THEP
+      - name: part_id
+        description: Mã vật tư
+        data_type: varchar
+        nullable: true
+        business_definition: Mã vật tư/linh kiện cụ thể
+        example: VT_THEP_TAM_2MM
+      - name: part_description
+        description: Mô tả vật tư
+        data_type: varchar
+        nullable: true
+        business_definition: Mô tả chi tiết vật tư cần mua
+        example: Thép tấm cán nóng 2mmx1500x3000
+      - name: quantity
+        description: Số lượng
+        data_type: int
+        nullable: false
+        business_definition: Số lượng vật tư cần mua
+        example: 500
+      - name: unit
+        description: Đơn vị tính
+        data_type: varchar
+        nullable: true
+        business_definition: Tấm, Kg, Mét, Cái, Bộ
+        example: Tấm
+      - name: required_date
+        description: Ngày cần có
+        data_type: date
+        nullable: true
+        business_definition: Ngày sản xuất cần vật tư
+        example: "2024-09-01"
+      - name: estimated_budget
+        description: Ngân sách dự kiến
+        data_type: decimal
+        nullable: true
+        business_definition: Ngân sách ước tính cho yêu cầu
+        example: 250000000.00
+      - name: status
+        description: Trạng thái
+        data_type: varchar
+        nullable: true
+        business_definition: Nháp, Chờ duyệt, Đã duyệt, Đã đặt hàng, Từ chối
+        example: Đã duyệt
+      - name: approved_by
+        description: Người duyệt
+        data_type: varchar
+        nullable: true
+        business_definition: Mã người phê duyệt yêu cầu
+        example: NV_TP_SX_001
+    owners:
+      - procurement
+    refresh_frequency: Daily
+
+  - name: fact_rfq
+    description: Yêu cầu báo giá gửi đến các nhà cung cấp
+    domain: Cung ứng (TT)
+    platform: Redshift
+    tags:
+      - rfq
+      - procurement
+    columns:
+      - name: rfq_id
+        description: Mã yêu cầu báo giá
+        data_type: varchar
+        nullable: false
+        business_definition: Mã định danh duy nhất cho yêu cầu báo giá
+        example: RFQ_202408_000456
+      - name: requisition_id
+        description: Mã yêu cầu mua hàng
+        data_type: varchar
+        nullable: true
+        business_definition: Mã yêu cầu mua hàng nguồn
+        example: PR_202408_000789
+      - name: rfq_date
+        description: Ngày gửi yêu cầu
+        data_type: date
+        nullable: false
+        business_definition: Ngày gửi yêu cầu báo giá đến nhà cung cấp
+        example: "2024-08-12"
+      - name: vendor_id
+        description: Mã nhà cung cấp
+        data_type: varchar
+        nullable: false
+        business_definition: Mã nhà cung cấp nhận yêu cầu báo giá
+        example: NCC_VN_001234
+      - name: part_id
+        description: Mã vật tư
+        data_type: varchar
+        nullable: false
+        business_definition: Mã vật tư yêu cầu báo giá
+        example: VT_THEP_TAM_2MM
+      - name: quantity
+        description: Số lượng
+        data_type: int
+        nullable: false
+        business_definition: Số lượng cần báo giá
+        example: 500
+      - name: quoted_unit_price
+        description: Đơn giá báo
+        data_type: decimal
+        nullable: true
+        business_definition: Đơn giá nhà cung cấp báo (chưa VAT)
+        example: 500000.00
+      - name: quoted_total
+        description: Tổng giá báo
+        data_type: decimal
+        nullable: true
+        business_definition: Tổng giá trị báo giá
+        example: 250000000.00
+      - name: lead_time_days
+        description: Thời gian giao hàng
+        data_type: int
+        nullable: true
+        business_definition: Số ngày giao hàng cam kết
+        example: 15
+      - name: valid_until
+        description: Hiệu lực đến
+        data_type: date
+        nullable: true
+        business_definition: Ngày hết hạn của báo giá
+        example: "2024-08-26"
+      - name: rfq_status
+        description: Trạng thái
+        data_type: varchar
+        nullable: true
+        business_definition: Đã gửi, Đã nhận báo giá, Đã chọn, Không chọn, Hết hạn
+        example: Đã nhận báo giá
+      - name: selected_flag
+        description: Được chọn
+        data_type: varchar
+        nullable: true
+        business_definition: Cờ xác định báo giá được chọn: Y/N
+        example: N
+    owners:
+      - procurement
+    refresh_frequency: Daily
+
+  - name: fact_vendor_scorecard
+    description: Bảng điểm tổng hợp hiệu suất nhà cung cấp theo thời gian
+    domain: Cung ứng (TT)
+    platform: Redshift
+    tags:
+      - vendor
+      - scorecard
+      - kpi
+    columns:
+      - name: scorecard_id
+        description: Mã bảng điểm
+        data_type: varchar
+        nullable: false
+        business_definition: Mã định danh duy nhất cho bảng điểm
+        example: SCORE_2024_Q2_NCC1234
+      - name: vendor_id
+        description: Mã nhà cung cấp
+        data_type: varchar
+        nullable: false
+        business_definition: Mã nhà cung cấp
+        example: NCC_VN_001234
+      - name: scorecard_period
+        description: Kỳ bảng điểm
+        data_type: varchar
+        nullable: false
+        business_definition: Kỳ đánh giá: Q1-2024, Q2-2024, Năm 2024
+        example: Q2-2024
+      - name: on_time_delivery_pct
+        description: Giao đúng hạn %
+        data_type: decimal
+        nullable: true
+        business_definition: Tỷ lệ phần trăm số lô hàng giao đúng hạn
+        example: 94.50
+      - name: defect_rate_ppm
+        description: Tỷ lệ lỗi PPM
+        data_type: int
+        nullable: true
+        business_definition: Số lỗi trên triệu đơn vị sản phẩm (Parts Per Million)
+        example: 1250
+      - name: reject_rate_pct
+        description: Tỷ lệ từ chối %
+        data_type: decimal
+        nullable: true
+        business_definition: Tỷ lệ lô hàng bị từ chối do không đạt chất lượng
+        example: 1.20
+      - name: cost_competitiveness
+        description: Cạnh tranh giá
+        data_type: varchar
+        nullable: true
+        business_definition: Cao, Trung bình, Thấp so với thị trường
+        example: Cao
+      - name: delivery_accuracy_pct
+        description: Độ chính xác giao hàng
+        data_type: decimal
+        nullable: true
+        business_definition: Tỷ lệ giao đúng số lượng và chủng loại
+        example: 97.80
+      - name: response_time_hours
+        description: Thời gian phản hồi
+        data_type: decimal
+        nullable: true
+        business_definition: Thời gian trung bình phản hồi yêu cầu (giờ)
+        example: 4.5
+      - name: overall_score
+        description: Điểm tổng hợp
+        data_type: decimal
+        nullable: true
+        business_definition: Điểm tổng hợp từ tất cả tiêu chí thang 100
+        example: 88.50
+      - name: tier_ranking
+        description: Xếp hạng bậc
+        data_type: varchar
+        nullable: true
+        business_definition: Tier 1 (Chiến lược), Tier 2 (Ưu tiên), Tier 3 (Cơ bản)
+        example: Tier 2
+    owners:
+      - procurement
+    refresh_frequency: Daily
+
+  - name: dim_material_group
+    description: Danh mục nhóm vật tư sử dụng trong sản xuất
+    domain: Cung ứng (TT)
+    platform: Redshift
+    tags:
+      - material
+      - master-data
+    columns:
+      - name: material_group_id
+        description: Mã nhóm vật tư
+        data_type: varchar
+        nullable: false
+        business_definition: Mã định danh duy nhất cho nhóm vật tư
+        example: VT_THEP
+      - name: material_group_name
+        description: Tên nhóm vật tư
+        data_type: varchar
+        nullable: false
+        business_definition: Tên gọi của nhóm vật tư
+        example: Thép và hợp kim thép
+      - name: procurement_category_id
+        description: Mã hạng mục mua sắm
+        data_type: varchar
+        nullable: true
+        business_definition: Hạng mục mua sắm của nhóm vật tư
+        example: PMC_VT_01
+      - name: storage_condition
+        description: Điều kiện lưu kho
+        data_type: varchar
+        nullable: true
+        business_definition: Yêu cầu lưu trữ: Khô ráo, Nhiệt độ thường, Môi trường lạnh
+        example: Khô ráo, thoáng mát
+      - name: hazardous_flag
+        description: Hàng nguy hiểm
+        data_type: varchar
+        nullable: true
+        business_definition: Cờ đánh dấu hàng nguy hiểm/cháy nổ: Y/N
+        example: N
+      - name: unit_default
+        description: Đơn vị mặc định
+        data_type: varchar
+        nullable: true
+        business_definition: Đơn vị tính mặc định khi nhập/xuất
+        example: Kg
+    owners:
+      - procurement
+    refresh_frequency: Daily
+
+  - name: fact_vendor_audit
+    description: Lịch sử kiểm toán và đánh giá nhà cung cấp
+    domain: Cung ứng (TT)
+    platform: Redshift
+    tags:
+      - vendor
+      - audit
+    columns:
+      - name: audit_id
+        description: Mã kiểm toán
+        data_type: varchar
+        nullable: false
+        business_definition: Mã định danh duy nhất cho đợt kiểm toán
+        example: AUDIT_2024_NCC1234
+      - name: vendor_id
+        description: Mã nhà cung cấp
+        data_type: varchar
+        nullable: false
+        business_definition: Mã nhà cung cấp được kiểm toán
+        example: NCC_VN_001234
+      - name: audit_date
+        description: Ngày kiểm toán
+        data_type: date
+        nullable: false
+        business_definition: Ngày thực hiện kiểm toán
+        example: "2024-06-20"
+      - name: audit_type
+        description: Loại kiểm toán
+        data_type: varchar
+        nullable: true
+        business_definition: Định kỳ, Đột xuất, Theo khiếu nại, Chứng nhận lại
+        example: Định kỳ
+      - name: audit_scope
+        description: Phạm vi kiểm toán
+        data_type: varchar
+        nullable: true
+        business_definition: Chất lượng, An toàn, Môi trường, Hệ thống quản lý, Toàn diện
+        example: Toàn diện
+      - name: auditor_name
+        description: Kiểm toán viên
+        data_type: varchar
+        nullable: true
+        business_definition: Họ tên hoặc đơn vị kiểm toán
+        example: Trung tâm Chứng nhận QUACERT
+      - name: total_score
+        description: Tổng điểm
+        data_type: decimal
+        nullable: true
+        business_definition: Điểm số đạt được trong kiểm toán thang 100
+        example: 86.00
+      - name: result
+        description: Kết quả
+        data_type: varchar
+        nullable: true
+        business_definition: Đạt, Đạt có điều kiện, Không đạt
+        example: Đạt
+      - name: major_non_conformities
+        description: Không phù hợp nghiêm trọng
+        data_type: int
+        nullable: true
+        business_definition: Số lượng điểm không phù hợp nghiêm trọng phát hiện
+        example: 0
+      - name: minor_non_conformities
+        description: Không phù hợp nhẹ
+        data_type: int
+        nullable: true
+        business_definition: Số lượng điểm không phù hợp nhẹ
+        example: 3
+      - name: next_audit_date
+        description: Ngày kiểm toán tiếp theo
+        data_type: date
+        nullable: true
+        business_definition: Ngày dự kiến kiểm toán định kỳ tiếp theo
+        example: "2025-06-20"
+      - name: findings_summary
+        description: Tổng hợp phát hiện
+        data_type: varchar
+        nullable: true
+        business_definition: Tóm tắt các điểm phát hiện chính trong kiểm toán
+        example: Nhà cung cấp duy trì hệ thống ISO 9001 đầy đủ, cần cải thiện kiểm soát quá trình nhiệt luyện
+    owners:
+      - quality_management
+    refresh_frequency: Daily
+
+  - name: fact_local_content
+    description: Tỷ lệ nội địa hóa và giá trị linh kiện trong nước
+    domain: Cung ứng (TT)
+    platform: Redshift
+    tags:
+      - local-content
+      - supply-chain
+    columns:
+      - name: local_content_id
+        description: Mã bản ghi nội địa hóa
+        data_type: varchar
+        nullable: false
+        business_definition: Mã định danh duy nhất cho dữ liệu nội địa hóa
+        example: LC_2024_Q3_VF8
+      - name: model_id
+        description: Mã model xe
+        data_type: varchar
+        nullable: false
+        business_definition: Model xe tính tỷ lệ nội địa hóa
+        example: VF8
+      - name: report_period
+        description: Kỳ báo cáo
+        data_type: varchar
+        nullable: false
+        business_definition: Kỳ báo cáo tỷ lệ nội địa hóa
+        example: Q3-2024
+      - name: total_part_count
+        description: Tổng số linh kiện
+        data_type: int
+        nullable: true
+        business_definition: Tổng số linh kiện cấu thành nên xe
+        example: 2500
+      - name: domestic_part_count
+        description: Số linh kiện nội địa
+        data_type: int
+        nullable: true
+        business_definition: Số linh kiện được sản xuất trong nước
+        example: 875
+      - name: local_part_pct
+        description: Tỷ lệ nội địa hóa theo linh kiện
+        data_type: decimal
+        nullable: true
+        business_definition: Tỷ lệ phần trăm linh kiện nội địa trên tổng số
+        example: 35.00
+      - name: domestic_value
+        description: Giá trị nội địa
+        data_type: decimal
+        nullable: true
+        business_definition: Tổng giá trị linh kiện nội địa hóa (VNĐ)
+        example: 85000000000.00
+      - name: total_material_value
+        description: Tổng giá trị nguyên vật liệu
+        data_type: decimal
+        nullable: true
+        business_definition: Tổng giá trị nguyên vật liệu đầu vào cho model
+        example: 320000000000.00
+      - name: local_value_pct
+        description: Tỷ lệ nội địa hóa theo giá trị
+        data_type: decimal
+        nullable: true
+        business_definition: Tỷ lệ phần trăm giá trị nội địa trên tổng giá trị
+        example: 26.56
+      - name: localization_target
+        description: Mục tiêu nội địa hóa
+        data_type: decimal
+        nullable: true
+        business_definition: Mục tiêu tỷ lệ nội địa hóa theo kế hoạch
+        example: 40.00
+    owners:
+      - localization_team
+    refresh_frequency: Daily
+
+  - name: fact_vendor_quality
+    description: Dữ liệu chất lượng hàng hóa từ nhà cung cấp
+    domain: Cung ứng (TT)
+    platform: Redshift
+    tags:
+      - quality
+      - vendor
+    columns:
+      - name: quality_id
+        description: Mã chất lượng
+        data_type: varchar
+        nullable: false
+        business_definition: Mã định danh duy nhất cho dữ liệu chất lượng
+        example: QL_202408_NCC1234_VT001
+      - name: vendor_id
+        description: Mã nhà cung cấp
+        data_type: varchar
+        nullable: false
+        business_definition: Mã nhà cung cấp
+        example: NCC_VN_001234
+      - name: part_id
+        description: Mã vật tư
+        data_type: varchar
+        nullable: false
+        business_definition: Mã vật tư được kiểm tra chất lượng
+        example: VT_THEP_TAM_2MM
+      - name: inspection_date
+        description: Ngày kiểm tra
+        data_type: date
+        nullable: false
+        business_definition: Ngày kiểm tra chất lượng hàng nhập
+        example: "2024-08-15"
+      - name: receipt_id
+        description: Mã phiếu nhập
+        data_type: varchar
+        nullable: true
+        business_definition: Mã phiếu nhập kho tham chiếu
+        example: PN_202408_000567
+      - name: lot_number
+        description: Số lô
+        data_type: varchar
+        nullable: true
+        business_definition: Số lô sản xuất của nhà cung cấp
+        example: LOT_T20240801
+      - name: quantity_received
+        description: Số lượng nhận
+        data_type: int
+        nullable: true
+        business_definition: Số lượng nhận kho
+        example: 500
+      - name: quantity_inspected
+        description: Số lượng kiểm tra
+        data_type: int
+        nullable: true
+        business_definition: Số lượng được lấy mẫu kiểm tra
+        example: 20
+      - name: defect_quantity
+        description: Số lượng lỗi
+        data_type: int
+        nullable: true
+        business_definition: Số lượng phát hiện lỗi trong mẫu kiểm tra
+        example: 1
+      - name: defect_rate
+        description: Tỷ lệ lỗi
+        data_type: decimal
+        nullable: true
+        business_definition: Tỷ lệ lỗi trong lô hàng (%)
+        example: 5.00
+      - name: inspection_result
+        description: Kết quả kiểm tra
+        data_type: varchar
+        nullable: true
+        business_definition: Đạt, Không đạt, Kiểm tra lại
+        example: Đạt
+      - name: defect_details
+        description: Chi tiết lỗi
+        data_type: varchar
+        nullable: true
+        business_definition: Mô tả chi tiết các lỗi phát hiện
+        example: 1 tấm có vết xước sâu vượt tiêu chuẩn cho phép
+      - name: inspector
+        description: Người kiểm tra
+        data_type: varchar
+        nullable: true
+        business_definition: Mã nhân viên kiểm tra chất lượng
+        example: NV_KCS_001
+    owners:
+      - quality_management
+    refresh_frequency: Daily
+
+  - name: dim_certification
+    description: Danh mục chứng chỉ của nhà cung cấp
+    domain: Cung ứng (TT)
+    platform: Redshift
+    tags:
+      - certification
+      - master-data
+    columns:
+      - name: certification_id
+        description: Mã chứng chỉ
+        data_type: varchar
+        nullable: false
+        business_definition: Mã định danh duy nhất cho chứng chỉ
+        example: CERT_ISO9001
+      - name: certification_name
+        description: Tên chứng chỉ
+        data_type: varchar
+        nullable: false
+        business_definition: Tên đầy đủ của chứng chỉ
+        example: ISO 9001:2015 Quản lý chất lượng
+      - name: certification_body
+        description: Tổ chức cấp
+        data_type: varchar
+        nullable: true
+        business_definition: Tổ chức chứng nhận
+        example: QUACERT
+      - name: industry_standard
+        description: Tiêu chuẩn ngành
+        data_type: varchar
+        nullable: true
+        business_definition: Tiêu chuẩn áp dụng: ISO, IATF, SAE, ASTM
+        example: ISO
+      - name: description
+        description: Mô tả
+        data_type: varchar
+        nullable: true
+        business_definition: Mô tả phạm vi và yêu cầu chứng chỉ
+        example: Hệ thống quản lý chất lượng dành cho tổ chức sản xuất
+      - name: required_by_vinfast
+        description: Bắt buộc bởi VinFast
+        data_type: varchar
+        nullable: true
+        business_definition: Chứng chỉ bắt buộc phải có: Y/N
+        example: Y
+    owners:
+      - procurement
+    refresh_frequency: Daily
+
+  - name: fact_vendor_payment
+    description: Lịch sử thanh toán cho nhà cung cấp
+    domain: Cung ứng (TT)
+    platform: Redshift
+    tags:
+      - payment
+      - vendor
+    columns:
+      - name: payment_id
+        description: Mã thanh toán
+        data_type: varchar
+        nullable: false
+        business_definition: Mã định danh duy nhất cho giao dịch thanh toán
+        example: PMT_202408_000345
+      - name: vendor_id
+        description: Mã nhà cung cấp
+        data_type: varchar
+        nullable: false
+        business_definition: Mã nhà cung cấp được thanh toán
+        example: NCC_VN_001234
+      - name: contract_id
+        description: Mã hợp đồng
+        data_type: varchar
+        nullable: true
+        business_definition: Mã hợp đồng tham chiếu
+        example: HD_2024_VT_001234
+      - name: invoice_number
+        description: Số hóa đơn
+        data_type: varchar
+        nullable: true
+        business_definition: Số hóa đơn giá trị gia tăng
+        example: INV_2024_00056789
+      - name: payment_date
+        description: Ngày thanh toán
+        data_type: date
+        nullable: false
+        business_definition: Ngày thực tế thanh toán
+        example: "2024-08-20"
+      - name: due_date
+        description: Ngày đến hạn
+        data_type: date
+        nullable: true
+        business_definition: Ngày đến hạn phải thanh toán
+        example: "2024-08-25"
+      - name: payment_amount
+        description: Số tiền thanh toán
+        data_type: decimal
+        nullable: false
+        business_definition: Số tiền thanh toán bằng VNĐ
+        example: 250000000.00
+      - name: payment_method
+        description: Hình thức thanh toán
+        data_type: varchar
+        nullable: true
+        business_definition: Chuyển khoản, Séc, Tín dụng thư
+        example: Chuyển khoản
+      - name: payment_status
+        description: Trạng thái
+        data_type: varchar
+        nullable: true
+        business_definition: Đã lên lịch, Đã duyệt, Đã thanh toán, Quá hạn
+        example: Đã thanh toán
+      - name: days_early_or_late
+        description: Số ngày trễ/sớm
+        data_type: int
+        nullable: true
+        business_definition: Số ngày thanh toán sớm (âm) hoặc trễ (dương) so với hạn
+        example: -5
+      - name: discount_taken
+        description: Chiết khấu thanh toán
+        data_type: decimal
+        nullable: true
+        business_definition: Chiết khấu thanh toán sớm được hưởng
+        example: 2500000.00
+    owners:
+      - finance
+    refresh_frequency: Daily
+
+  - name: fact_non_conformance
+    description: Biên bản không phù hợp khi nhập hàng hoặc trong sản xuất
+    domain: Cung ứng (TT)
+    platform: Redshift
+    tags:
+      - quality
+      - non-conformance
+    columns:
+      - name: ncr_id
+        description: Mã biên bản không phù hợp
+        data_type: varchar
+        nullable: false
+        business_definition: Mã định danh duy nhất cho biên bản không phù hợp
+        example: NCR_202408_000789
+      - name: vendor_id
+        description: Mã nhà cung cấp
+        data_type: varchar
+        nullable: true
+        business_definition: Mã nhà cung cấp gây ra không phù hợp
+        example: NCC_VN_001234
+      - name: part_id
+        description: Mã vật tư
+        data_type: varchar
+        nullable: true
+        business_definition: Mã vật tư không phù hợp
+        example: VT_THEP_TAM_2MM
+      - name: receipt_id
+        description: Mã phiếu nhập
+        data_type: varchar
+        nullable: true
+        business_definition: Mã phiếu nhập kho liên quan
+        example: PN_202408_000567
+      - name: ncr_date
+        description: Ngày lập biên bản
+        data_type: date
+        nullable: false
+        business_definition: Ngày phát hiện và lập biên bản
+        example: "2024-08-15"
+      - name: ncr_type
+        description: Loại
+        data_type: varchar
+        nullable: true
+        business_definition: Vật tư nhập, Sản phẩm dở dang, Sản phẩm cuối cùng
+        example: Vật tư nhập
+      - name: severity
+        description: Mức độ
+        data_type: varchar
+        nullable: true
+        business_definition: Critical, Major, Minor
+        example: Major
+      - name: defect_description
+        description: Mô tả lỗi
+        data_type: varchar
+        nullable: true
+        business_definition: Mô tả chi tiết sự không phù hợp
+        example: Kích thước thép tấm không đạt dung sai cho phép
+      - name: disposition
+        description: Xử lý
+        data_type: varchar
+        nullable: true
+        business_definition: Hướng xử lý: Trả hàng, Sửa lại, Chấp nhận có điều kiện, Loại bỏ
+        example: Trả hàng
+      - name: corrective_action
+        description: Hành động khắc phục
+        data_type: varchar
+        nullable: true
+        business_definition: Hành động khắc phục từ nhà cung cấp
+        example: Điều chỉnh khuôn dập theo đúng dung sai kỹ thuật
+      - name: closed_date
+        description: Ngày đóng
+        data_type: date
+        nullable: true
+        business_definition: Ngày biên bản được đóng sau khi khắc phục xong
+        example: "2024-08-25"
+      - name: status
+        description: Trạng thái
+        data_type: varchar
+        nullable: true
+        business_definition: Mở, Đang khắc phục, Đã đóng
+        example: Đã đóng
+    owners:
+      - quality_management
+    refresh_frequency: Daily
+
+  - name: dim_procurement_category
+    description: Danh mục hạng mục mua sắm của bộ phận thu mua
+    domain: Cung ứng (TT)
+    platform: Redshift
+    tags:
+      - procurement
+      - master-data
+    columns:
+      - name: procurement_category_id
+        description: Mã hạng mục mua sắm
+        data_type: varchar
+        nullable: false
+        business_definition: Mã định danh duy nhất cho hạng mục mua sắm
+        example: PMC_VT_01
+      - name: category_name
+        description: Tên hạng mục
+        data_type: varchar
+        nullable: false
+        business_definition: Tên hạng mục mua sắm
+        example: Vật tư thép
+      - name: category_group
+        description: Nhóm hạng mục
+        data_type: varchar
+        nullable: true
+        business_definition: Nhóm: Nguyên liệu chính, Linh kiện, Dịch vụ sản xuất, Gián tiếp
+        example: Nguyên liệu chính
+      - name: procurement_manager
+        description: Quản lý thu mua
+        data_type: varchar
+        nullable: true
+        business_definition: Mã nhân viên quản lý hạng mục
+        example: NV_TM_001
+      - name: annual_spend
+        description: Chi tiêu năm
+        data_type: decimal
+        nullable: true
+        business_definition: Tổng chi tiêu mua sắm năm hiện tại
+        example: 500000000000.00
+      - name: supplier_count
+        description: Số NCC
+        data_type: int
+        nullable: true
+        business_definition: Số lượng nhà cung cấp trong hạng mục
+        example: 5
+      - name: strategic_importance
+        description: Tầm quan trọng
+        data_type: varchar
+        nullable: true
+        business_definition: Cao, Trung bình, Thấp dựa trên rủi ro và chi tiêu
+        example: Cao
+    owners:
+      - procurement
+    refresh_frequency: Daily
+
+  - name: fact_contract_performance
+    description: Đánh giá hiệu suất thực hiện hợp đồng
+    domain: Cung ứng (TT)
+    platform: Redshift
+    tags:
+      - contract
+      - performance
+    columns:
+      - name: contract_performance_id
+        description: Mã hiệu suất hợp đồng
+        data_type: varchar
+        nullable: false
+        business_definition: Mã định danh duy nhất cho bản ghi hiệu suất hợp đồng
+        example: CP_2024_Q2_HD001234
+      - name: contract_id
+        description: Mã hợp đồng
+        data_type: varchar
+        nullable: false
+        business_definition: Mã hợp đồng tham chiếu
+        example: HD_2024_VT_001234
+      - name: vendor_id
+        description: Mã nhà cung cấp
+        data_type: varchar
+        nullable: false
+        business_definition: Mã nhà cung cấp thực hiện hợp đồng
+        example: NCC_VN_001234
+      - name: period
+        description: Kỳ đánh giá
+        data_type: varchar
+        nullable: false
+        business_definition: Kỳ đánh giá: Q1-2024, Q2-2024, Năm 2024
+        example: Q2-2024
+      - name: contract_value_released
+        description: Giá trị giải ngân
+        data_type: decimal
+        nullable: true
+        business_definition: Tổng giá trị đã giải ngân trong kỳ
+        example: 37500000000.00
+      - name: fulfillment_rate
+        description: Tỷ lệ thực hiện
+        data_type: decimal
+        nullable: true
+        business_definition: Tỷ lệ giá trị đã giải ngân trên tổng giá trị hợp đồng (%)
+        example: 25.00
+      - name: delivery_performance
+        description: Hiệu suất giao hàng
+        data_type: varchar
+        nullable: true
+        business_definition: Đánh giá: Vượt mức, Đạt, Dưới mức, Kém
+        example: Đạt
+      - name: quality_performance
+        description: Hiệu suất chất lượng
+        data_type: varchar
+        nullable: true
+        business_definition: Đánh giá chất lượng: Tốt, Đạt, Cần cải thiện, Kém
+        example: Đạt
+      - name: compliance_score
+        description: Điểm tuân thủ
+        data_type: decimal
+        nullable: true
+        business_definition: Điểm tuân thủ các điều khoản hợp đồng thang 100
+        example: 95.00
+      - name: overall_performance
+        description: Hiệu suất tổng thể
+        data_type: varchar
+        nullable: true
+        business_definition: Xuất sắc, Khá, Đạt yêu cầu, Cần cải thiện, Kém
+        example: Khá
+    owners:
+      - procurement
+    refresh_frequency: Daily

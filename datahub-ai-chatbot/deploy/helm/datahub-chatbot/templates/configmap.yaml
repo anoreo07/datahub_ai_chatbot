@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "datahub-chatbot.fullname" . }}-config
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    {{- include "datahub-chatbot.labels" . | nindent 4 }}
+data:
+  APP_NAME: {{ .Values.app.name | default "DataHub AI Chatbot" | quote }}
+  APP_ENV: {{ .Values.app.env | quote }}
+  APP_HOST: {{ .Values.app.host | quote }}
+  APP_PORT: {{ .Values.app.port | quote }}
+  LOG_LEVEL: {{ .Values.app.logLevel | quote }}
+  AUTH_MODE: {{ .Values.app.authMode | quote }}
+  AUTH_REQUIRED: {{ .Values.app.authRequired | quote }}
+  USE_MOCK_DATAHUB: {{ .Values.app.useMockDatahub | quote }}
+  DATAHUB_GMS_URL: {{ .Values.datahub.gmsUrl | quote }}
+  DATAHUB_FRONTEND_URL: {{ .Values.datahub.frontendUrl | quote }}
+  DATAHUB_PAGE_SIZE: {{ .Values.datahub.pageSize | quote }}
+  DATAHUB_REQUEST_TIMEOUT_SECONDS: {{ .Values.datahub.requestTimeoutSeconds | quote }}
+  DATAHUB_MAX_RETRIES: {{ .Values.datahub.maxRetries | quote }}
+  DATAHUB_SYNC_DRY_RUN: {{ .Values.datahub.syncDryRun | quote }}
+  EMBEDDING_PROVIDER: {{ .Values.app.embeddingProvider | quote }}
+  EMBEDDING_MODEL: {{ .Values.app.embeddingModel | quote }}
+  LLM_PROVIDER: {{ .Values.app.llmProvider | quote }}
+  LLM_MODEL: {{ .Values.app.llmModel | quote }}
+  ENABLE_DEV_ENDPOINTS: {{ .Values.app.enableDevEndpoints | quote }}
+  CACHE_ENABLED: {{ .Values.app.cacheEnabled | quote }}
+  CACHE_DEFAULT_TTL_SECONDS: {{ .Values.app.cacheDefaultTtlSeconds | quote }}
+  RATE_LIMIT_MAX_REQUESTS: {{ .Values.app.rateLimitMaxRequests | quote }}
+  RATE_LIMIT_WINDOW_SECONDS: {{ .Values.app.rateLimitWindowSeconds | quote }}
+  MAX_CONTEXT_CHUNKS: {{ .Values.app.maxContextChunks | quote }}
+  MAX_CONTEXT_CHARACTERS: {{ .Values.app.maxContextCharacters | quote }}
+  SEARCH_CACHE_TTL_SECONDS: {{ .Values.app.searchCacheTtlSeconds | quote }}
+  INDEX_MAX_RETRIES: {{ .Values.app.indexMaxRetries | quote }}
+  INDEX_BATCH_SIZE: {{ .Values.app.indexBatchSize | quote }}
+  LLM_TIMEOUT_SECONDS: {{ .Values.app.llmTimeoutSeconds | quote }}
+  LLM_MAX_RETRIES: {{ .Values.app.llmMaxRetries | quote }}
+  LOCAL_STORAGE_PATH: {{ .Values.app.localStoragePath | quote }}
+  MAX_DOCUMENT_SIZE_MB: {{ .Values.app.maxDocumentSizeMb | quote }}
+  ENABLE_MALWARE_SCAN: {{ .Values.app.enableMalwareScan | quote }}

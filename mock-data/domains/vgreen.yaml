@@ -1,0 +1,10 @@
+domain: VGreen
+description: Dữ liệu xe điện VGreen, trạm sạc, pin, năng lượng và dịch vụ di động xanh
+business_objective: Phát triển hệ sinh thái xe điện, quản lý trạm sạc và tối ưu năng lượng
+owner: dang-quang-huy
+technical_owner: do-minh-quang
+tags:
+  - Manufacturing
+  - Gold
+  - IoT
+  - RealTime

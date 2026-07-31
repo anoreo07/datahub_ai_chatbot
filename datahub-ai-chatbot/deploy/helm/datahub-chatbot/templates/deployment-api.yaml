@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "datahub-chatbot.fullname" . }}-api
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    {{- include "datahub-chatbot.labels" . | nindent 4 }}
+    app.kubernetes.io/component: api
+spec:
+  replicas: {{ .Values.api.replicas }}
+  revisionHistoryLimit: {{ .Values.api.revisionHistoryLimit }}
+  strategy:
+    {{- toYaml .Values.api.strategy | nindent 4 }}
+  selector:
+    matchLabels:
+      {{- include "datahub-chatbot.apiSelectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "datahub-chatbot.apiSelectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: api
+      annotations:
+        prometheus.io/scrape: {{ .Values.monitoring.prometheusScrape | quote }}
+        prometheus.io/port: {{ .Values.monitoring.metricsPort | quote }}
+    spec:
+      {{- include "datahub-chatbot.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ include "datahub-chatbot.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: api
+          image: {{ include "datahub-chatbot.image" (dict "repository" .Values.api.image.repository "tag" .Values.api.image.tag "pullPolicy" .Values.api.image.pullPolicy) }}
+          imagePullPolicy: {{ .Values.api.image.pullPolicy | default .Values.image.pullPolicy }}
+          command:
+            {{- toYaml .Values.api.command | nindent 12 }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.api.service.targetPort }}
+              protocol: TCP
+          securityContext:
+            {{- toYaml .Values.containerSecurityContext | nindent 12 }}
+          env:
+            {{- include "datahub-chatbot.env" . | nindent 12 }}
+            {{- include "datahub-chatbot.secretEnv" . | nindent 12 }}
+          resources:
+            {{- toYaml .Values.api.resources | nindent 12 }}
+          livenessProbe:
+            {{- toYaml .Values.api.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.api.readinessProbe | nindent 12 }}
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: data
+              mountPath: {{ .Values.app.localStoragePath }}
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        - name: data
+          emptyDir: {}
+      nodeSelector:
+        {{- toYaml .Values.api.nodeSelector | nindent 8 }}
+      tolerations:
+        {{- toYaml .Values.api.tolerations | nindent 8 }}
+      affinity:
+        {{- toYaml .Values.api.affinity | nindent 8 }}

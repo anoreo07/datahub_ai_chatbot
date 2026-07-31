@@ -1,0 +1,73 @@
+---
+global:
+  environment: staging
+
+api:
+  replicas: 1
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 3
+  resources:
+    requests:
+      cpu: 250m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  podDisruptionBudget:
+    enabled: false
+
+worker:
+  replicas: 1
+  sync:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 250m
+        memory: 256Mi
+  indexing:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 250m
+        memory: 256Mi
+  document:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 250m
+        memory: 256Mi
+  podDisruptionBudget:
+    enabled: false
+
+app:
+  env: staging
+  logLevel: DEBUG
+  useMockDatahub: true
+  enableDevEndpoints: true
+  authMode: mock
+  authRequired: false
+  embeddingProvider: mock
+  llmProvider: fireworks
+
+keda:
+  enabled: false
+
+ingress:
+  enabled: true
+  hosts:
+    - host: chatbot-staging.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+
+syncCronjob:
+  enabled: true
+  schedule: "0 3 * * *"

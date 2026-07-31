@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "datahub-chatbot.fullname" . }}-worker
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    {{- include "datahub-chatbot.labels" . | nindent 4 }}
+    app.kubernetes.io/component: worker
+spec:
+  replicas: {{ .Values.worker.replicas }}
+  revisionHistoryLimit: {{ .Values.worker.revisionHistoryLimit }}
+  strategy:
+    {{- toYaml .Values.worker.strategy | nindent 4 }}
+  selector:
+    matchLabels:
+      {{- include "datahub-chatbot.workerSelectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "datahub-chatbot.workerSelectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: worker
+    spec:
+      {{- include "datahub-chatbot.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ include "datahub-chatbot.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: sync-worker
+          image: {{ include "datahub-chatbot.image" (dict "repository" .Values.worker.image.repository "tag" .Values.worker.image.tag "pullPolicy" .Values.worker.image.pullPolicy) }}
+          imagePullPolicy: {{ .Values.worker.image.pullPolicy | default .Values.image.pullPolicy }}
+          command:
+            {{- toYaml .Values.worker.sync.command | nindent 12 }}
+          securityContext:
+            {{- toYaml .Values.containerSecurityContext | nindent 12 }}
+          env:
+            {{- include "datahub-chatbot.env" . | nindent 12 }}
+            {{- include "datahub-chatbot.secretEnv" . | nindent 12 }}
+          resources:
+            {{- toYaml .Values.worker.sync.resources | nindent 12 }}
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+        - name: indexing-worker
+          image: {{ include "datahub-chatbot.image" (dict "repository" .Values.worker.image.repository "tag" .Values.worker.image.tag "pullPolicy" .Values.worker.image.pullPolicy) }}
+          imagePullPolicy: {{ .Values.worker.image.pullPolicy | default .Values.image.pullPolicy }}
+          command:
+            {{- toYaml .Values.worker.indexing.command | nindent 12 }}
+          securityContext:
+            {{- toYaml .Values.containerSecurityContext | nindent 12 }}
+          env:
+            {{- include "datahub-chatbot.env" . | nindent 12 }}
+            {{- include "datahub-chatbot.secretEnv" . | nindent 12 }}
+          resources:
+            {{- toYaml .Values.worker.indexing.resources | nindent 12 }}
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+        - name: document-worker
+          image: {{ include "datahub-chatbot.image" (dict "repository" .Values.worker.image.repository "tag" .Values.worker.image.tag "pullPolicy" .Values.worker.image.pullPolicy) }}
+          imagePullPolicy: {{ .Values.worker.image.pullPolicy | default .Values.image.pullPolicy }}
+          command:
+            {{- toYaml .Values.worker.document.command | nindent 12 }}
+          securityContext:
+            {{- toYaml .Values.containerSecurityContext | nindent 12 }}
+          env:
+            {{- include "datahub-chatbot.env" . | nindent 12 }}
+            {{- include "datahub-chatbot.secretEnv" . | nindent 12 }}
+          resources:
+            {{- toYaml .Values.worker.document.resources | nindent 12 }}
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: data
+              mountPath: {{ .Values.app.localStoragePath }}
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        - name: data
+          emptyDir: {}
+      nodeSelector:
+        {{- toYaml .Values.worker.nodeSelector | nindent 8 }}
+      tolerations:
+        {{- toYaml .Values.worker.tolerations | nindent 8 }}
+      affinity:
+        {{- toYaml .Values.worker.affinity | nindent 8 }}

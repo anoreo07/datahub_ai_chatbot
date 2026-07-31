@@ -1,0 +1,312 @@
+---
+# Global settings
+global:
+  imageRegistry: ""
+  imagePullSecrets: []
+  environment: production
+
+# Image configuration
+image:
+  repository: registry.example.com/datahub-ai-chatbot
+  tag: "0.1.0"
+  pullPolicy: IfNotPresent
+
+# Name overrides
+nameOverride: ""
+fullnameOverride: ""
+
+# Service account
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+# Pod security context
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000
+  seccompProfile:
+    type: RuntimeDefault
+
+# Container security context
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 1000
+
+# API service configuration
+api:
+  enabled: true
+  replicas: 2
+  revisionHistoryLimit: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  image:
+    repository: ""
+    tag: ""
+    pullPolicy: ""
+  command:
+    - uvicorn
+    - app.main:app
+    - --host
+    - "0.0.0.0"
+    - --port
+    - "8000"
+    - --workers
+    - "4"
+  service:
+    port: 80
+    targetPort: 8000
+    type: ClusterIP
+  ingress:
+    enabled: true
+    className: nginx
+    annotations:
+      nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+      nginx.ingress.kubernetes.io/proxy-read-timeout: "120"
+      nginx.ingress.kubernetes.io/proxy-send-timeout: "120"
+    hosts:
+      - host: chatbot.example.com
+        paths:
+          - path: /
+            pathType: Prefix
+    tls: []
+  resources:
+    requests:
+      cpu: 500m
+      memory: 512Mi
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 80
+  livenessProbe:
+    httpGet:
+      path: /health
+      port: 8000
+    initialDelaySeconds: 10
+    periodSeconds: 15
+    timeoutSeconds: 5
+    failureThreshold: 3
+  readinessProbe:
+    httpGet:
+      path: /ready
+      port: 8000
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 3
+    failureThreshold: 2
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  podDisruptionBudget:
+    enabled: true
+    minAvailable: 1
+
+# Worker configuration
+worker:
+  enabled: true
+  replicas: 1
+  revisionHistoryLimit: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  image:
+    repository: ""
+    tag: ""
+    pullPolicy: ""
+  sync:
+    command:
+      - python
+      - -m
+      - workers.sync_worker
+    resources:
+      requests:
+        cpu: 250m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+  indexing:
+    command:
+      - python
+      - -m
+      - workers.indexing_worker
+    resources:
+      requests:
+        cpu: 250m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+  document:
+    command:
+      - python
+      - -m
+      - workers.document_worker
+    resources:
+      requests:
+        cpu: 250m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+  livenessProbe:
+    httpGet:
+      path: /health
+      port: 8000
+    initialDelaySeconds: 15
+    periodSeconds: 20
+  readinessProbe:
+    httpGet:
+      path: /ready
+      port: 8000
+    initialDelaySeconds: 10
+    periodSeconds: 15
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  podDisruptionBudget:
+    enabled: true
+    minAvailable: 1
+
+# Sync CronJob
+syncCronjob:
+  enabled: true
+  schedule: "0 2 * * *"
+  command:
+    - python
+    - -m
+    - scripts.full_sync
+  resources:
+    requests:
+      cpu: 500m
+      memory: 512Mi
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+  restartPolicy: OnFailure
+  backoffLimit: 3
+
+# KEDA scaled object for workers
+keda:
+  enabled: false
+  pollingInterval: 30
+  cooldownPeriod: 300
+  minReplicaCount: 1
+  maxReplicaCount: 10
+  triggers:
+    - type: redis
+      metadata:
+        address: redis:6379
+        listName: indexing:queue
+        listLength: "10"
+
+# External service connections
+postgresql:
+  enabled: false
+  host: postgres
+  port: 5432
+  database: chatbot
+  username: postgres
+  password: ""
+  existingSecret: ""
+
+redis:
+  enabled: false
+  host: redis
+  port: 6379
+  existingSecret: ""
+
+opensearch:
+  enabled: false
+  host: opensearch
+  port: 9200
+  username: ""
+  existingSecret: ""
+
+datahub:
+  gmsUrl: http://datahub-gms:8080
+  frontendUrl: http://datahub-frontend:9002
+  token: ""
+  existingSecret: ""
+  pageSize: 100
+  requestTimeoutSeconds: 30
+  maxRetries: 3
+  syncDryRun: false
+
+# Application config
+app:
+  env: production
+  logLevel: INFO
+  host: "0.0.0.0"
+  port: 8000
+  authMode: header
+  authRequired: true
+  useMockDatahub: false
+  embeddingProvider: openai
+  embeddingModel: text-embedding-ada-002
+  llmProvider: openai
+  llmModel: gpt-4o
+  enableDevEndpoints: false
+  cacheEnabled: true
+  cacheDefaultTtlSeconds: 300
+  rateLimitMaxRequests: 60
+  rateLimitWindowSeconds: 60
+  maxContextChunks: 8
+  maxContextCharacters: 24000
+  searchCacheTtlSeconds: 300
+  indexMaxRetries: 3
+  indexBatchSize: 20
+  llmTimeoutSeconds: 60
+  llmMaxRetries: 2
+  jwtSecretKey: ""
+  localStoragePath: /data/documents
+  maxDocumentSizeMb: 20
+  enableMalwareScan: false
+
+# Ingress
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "120"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "120"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  hosts:
+    - host: chatbot.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+# Network policy
+networkPolicy:
+  enabled: true
+  ingressNamespace: ingress-nginx
+  datahubNamespace: datahub
+  databaseNamespace: database
+  cacheNamespace: cache
+  searchNamespace: search
+
+# Monitoring
+monitoring:
+  enabled: false
+  prometheusScrape: true
+  metricsPort: 8000

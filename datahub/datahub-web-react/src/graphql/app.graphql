@@ -1,0 +1,220 @@
+query appConfig {
+    appConfig {
+        appVersion
+        policiesConfig {
+            enabled
+            platformPrivileges {
+                type
+                displayName
+                description
+            }
+            resourcePrivileges {
+                resourceType
+                resourceTypeDisplayName
+                entityType
+                privileges {
+                    type
+                    displayName
+                    description
+                }
+            }
+        }
+        analyticsConfig {
+            enabled
+        }
+        authConfig {
+            tokenAuthEnabled
+        }
+        identityManagementConfig {
+            enabled
+        }
+        lineageConfig {
+            supportsImpactAnalysis
+        }
+        managedIngestionConfig {
+            enabled
+        }
+        visualConfig {
+            logoUrl
+            faviconUrl
+            showFullTitleInLineage
+            queriesTab {
+                queriesTabResultSize
+            }
+            entityProfiles {
+                domain {
+                    defaultTab
+                }
+            }
+            searchResult {
+                enableNameHighlight
+            }
+            theme {
+                themeId
+            }
+            application {
+                showSidebarSectionWhenEmpty
+                showApplicationInNavigation
+            }
+        }
+        telemetryConfig {
+            enableThirdPartyLogging
+        }
+        testsConfig {
+            enabled
+        }
+        viewsConfig {
+            enabled
+        }
+        searchBarConfig {
+            apiVariant
+        }
+        searchCardConfig {
+            showDescription
+        }
+        searchFlagsConfig {
+            defaultSkipHighlighting
+        }
+        homePageConfig {
+            firstInPersonalSidebar
+        }
+        featureFlags {
+            readOnlyModeEnabled
+            showSearchFiltersV2
+            showBrowseV2
+            showAcrylInfo
+            erModelRelationshipFeatureEnabled
+            showAccessManagement
+            nestedDomainsEnabled
+            platformBrowseV2
+            businessAttributeEntityEnabled
+            contextDocumentsEnabled
+            dataContractsEnabled
+            editableDatasetNameEnabled
+            themeV2Enabled
+            themeV2Default
+            themeV2Toggleable
+            lineageGraphV2
+            showSeparateSiblings
+            showManageStructuredProperties
+            schemaFieldCLLEnabled
+            hideDbtSourceInLineage
+            schemaFieldLineageIgnoreStatus
+            showNavBarRedesign
+            showAutoCompleteResults
+            entityVersioningEnabled
+            showHasSiblingsFilter
+            showSearchBarAutocompleteRedesign
+            showManageTags
+            showIntroducePage
+            showIngestionPageRedesign
+            showLineageExpandMore
+            showLineageFilterNodes
+            showStatsTabRedesign
+            showHomePageRedesign
+            showDefaultExternalLinks
+            showProductUpdates
+            lineageGraphV3
+            logicalModelsEnabled
+            showHomepageUserRole
+            assetSummaryPageV1
+            datasetSummaryPageV1
+            metricsEnabled
+            ingestionOnboardingRedesignV1
+            documentationFileUploadV1
+            contextDocumentsEnabled
+            hideLineageInSearchCards
+            dataProductLineageEnabled
+            glossaryBasedPoliciesEnabled
+            multipleDataProductsPerAsset
+            showTestsInHealthIcon
+            i18nEnabled
+            browserTracingEnabled
+            browserWebVitalsEnabled
+        }
+        chromeExtensionConfig {
+            enabled
+            lineageEnabled
+        }
+    }
+}
+
+query getEntityCounts($input: EntityCountInput) {
+    getEntityCounts(input: $input) {
+        counts {
+            entityType
+            count
+        }
+    }
+}
+
+query getGlobalViewsSettings {
+    globalViewsSettings {
+        defaultView
+    }
+}
+
+query getDocPropagationSettings {
+    docPropagationSettings {
+        docColumnPropagation
+    }
+}
+
+query getHomePageSettings {
+    globalHomePageSettings {
+        defaultTemplate {
+            ...PageTemplate
+        }
+    }
+}
+
+query getPresignedUploadUrl($input: GetPresignedUploadUrlInput!) {
+    getPresignedUploadUrl(input: $input) {
+        url
+        fileId
+    }
+}
+
+mutation createDataHubFile($input: CreateDataHubFileInput!) {
+    createDataHubFile(input: $input) {
+        file {
+            urn
+        }
+    }
+}
+
+mutation updateGlobalViewsSettings($input: UpdateGlobalViewsSettingsInput!) {
+    updateGlobalViewsSettings(input: $input)
+}
+
+mutation updateDocPropagationSettings($input: UpdateDocPropagationSettingsInput!) {
+    updateDocPropagationSettings(input: $input)
+}
+
+mutation updateApplicationsSettings($input: UpdateApplicationsSettingsInput!) {
+    updateApplicationsSettings(input: $input)
+}
+
+query getLatestProductUpdate {
+    latestProductUpdate {
+        enabled
+        id
+        title
+        header
+        requiredVersion
+        description
+        image
+        primaryCtaText
+        primaryCtaLink
+        secondaryCtaText
+        secondaryCtaLink
+        ctaText
+        ctaLink
+        features {
+            title
+            description
+            icon
+            availability
+        }
+    }
+}

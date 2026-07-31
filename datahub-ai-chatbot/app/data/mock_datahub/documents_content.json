@@ -1,0 +1,18 @@
+[
+  {
+    "urn": "urn:li:document:inventory_policy",
+    "sections": [
+      {"heading": "Mục đích", "content": "Chính sách này quy định việc theo dõi và quản lý tồn kho nhằm đảm bảo không thiếu hàng và không tồn vượt mức."},
+      {"heading": "Phạm vi", "content": "Áp dụng cho tất cả nhà máy và kho trực thuộc."},
+      {"heading": "Ngưỡng tồn kho", "content": "Mỗi vật tư có ngưỡng tồn kho tối thiểu và tối đa được thiết lập bởi bộ phận cung ứng."},
+      {"heading": "Safety Stock", "content": "Safety Stock được tính bằng 20% mức tiêu thụ trung bình hàng tháng."}
+    ]
+  },
+  {
+    "urn": "urn:li:document:monthly_revenue_methodology",
+    "sections": [
+      {"heading": "Overview", "content": "Doanh thu hàng tháng được tổng hợp từ bảng sales.orders."},
+      {"heading": "Calculation", "content": "Total Net Revenue = SUM(net_revenue) group by month. Chỉ bao gồm đơn hàng đã xác nhận."}
+    ]
+  }
+]
