@@ -21,16 +21,9 @@ class MockLLM(BaseLLM):
         *,
         context: list[str] | None = None,
         history: list[tuple[str, str]] | None = None,
+        system_prompt: str | None = None,
     ) -> str:
         context_str = "\n".join(context) if context else ""
-
-        history_context = ""
-        if history:
-            history_lines = []
-            for q, a in reversed(history[-3:]):
-                history_lines.append(f"Previous Q: {q}")
-                history_lines.append(f"Previous A: {a}")
-            history_context = "\n".join(history_lines)
 
         intent = self._detect_intent(prompt)
         evidence = self._parse_evidence(context_str)
@@ -65,7 +58,6 @@ class MockLLM(BaseLLM):
 
     @staticmethod
     def _resolve_from_history(query: str, history: list[tuple[str, str]]) -> str:
-        query_lower = query.lower().strip()
         for q_prev, a_prev in reversed(history):
             if "không tìm thấy" in a_prev.lower():
                 continue
@@ -88,64 +80,108 @@ class MockLLM(BaseLLM):
     @staticmethod
     def _detect_intent(prompt: str) -> str:
         prompt_lower = prompt.lower()
-        if "owner" in prompt_lower or "sở hữu" in prompt_lower:
+        if "domain" in prompt_lower or "lĩnh vực" in prompt_lower \
+                or "linh vuc" in prompt_lower or "miền" in prompt_lower:
+            return "DOMAIN_LOOKUP"
+        if ("owner" in prompt_lower or "sở hữu" in prompt_lower or "so huu" in prompt_lower
+                or "của ai" in prompt_lower or "cua ai" in prompt_lower
+                or "thuộc về ai" in prompt_lower or "thuộc ai" in prompt_lower):
             return "OWNER_LOOKUP"
         if "schema" in prompt_lower or "column" in prompt_lower or "cột" in prompt_lower or "field" in prompt_lower:
             return "SCHEMA_LOOKUP"
         if "definition" in prompt_lower or "nghĩa" in prompt_lower or "glossary" in prompt_lower:
             return "GLOSSARY_DEFINITION"
-        if "upstream" in prompt_lower or "lineage" in prompt_lower or "lấy dữ liệu" in prompt_lower:
+        if ("upstream" in prompt_lower or "lineage" in prompt_lower
+                or "lấy dữ liệu" in prompt_lower or "lấy từ đâu" in prompt_lower
+                or "nguồn" in prompt_lower or "nguon" in prompt_lower):
             return "UPSTREAM_LINEAGE"
         if "downstream" in prompt_lower or "ảnh hưởng" in prompt_lower:
             return "DOWNSTREAM_LINEAGE"
-        if "domain" in prompt_lower:
-            return "DOMAIN_LOOKUP"
         return "GENERAL"
 
     @staticmethod
-    def _parse_evidence(context_str: str) -> list[dict]:
+    def _parse_evidence(context_str: str) -> list[dict[str, Any]]:
         if not context_str.strip():
             return []
-        lines = context_str.split("\n")
         evidence = []
-        current: dict[str, Any] = {}
-        for line in lines:
-            line = line.strip()
-            if line.startswith("<entity") or line.startswith("<chunk"):
-                if current:
-                    evidence.append(current)
-                current = {"raw": line}
-            elif "urn:" in line:
-                urns = re.findall(r"urn:li:[^\s<>\"]+", line)
-                if urns:
-                    current["urn"] = urns[0]
-            elif "name:" in line.lower() and ":" in line:
-                parts = line.split(":", 1)
-                if len(parts) == 2:
-                    key = parts[0].strip().lower()
-                    val = parts[1].strip()
-                    current[key] = val
-        if current:
-            evidence.append(current)
+        for m in re.finditer(r"<entity[^>]*>(.*?)</entity>", context_str, re.S):
+            block = m.group(1)
+            entry: dict[str, Any] = {}
+            name = re.search(r"<name>(.*?)</name>", block, re.S)
+            if name:
+                entry["name"] = name.group(1).strip()
+            content = re.search(r"<content>(.*?)</content>", block, re.S)
+            if content:
+                entry["content"] = content.group(1).strip()
+            urn = re.search(r"urn:li:[^\s<>\"]+", block)
+            if urn:
+                entry["urn"] = urn.group(0)
+            if entry:
+                evidence.append(entry)
         if not evidence:
-            for line in lines[:20]:
-                evidence.append({"raw": line})
+            for line in context_str.splitlines()[:20]:
+                if line.strip():
+                    evidence.append({"raw": line.strip()})
         return evidence
 
     @staticmethod
-    def _build_answer(evidence: list[dict], intent: str) -> str:
+    def _extract_content_fields(content: str) -> dict[str, str]:
+        """Parse 'Key: value | Key: value' blocks produced by the context builder."""
+        fields: dict[str, str] = {}
+        if not content:
+            return fields
+        pattern = re.compile(
+            r"\b(Name|Description|Domain|Platform|Owners|Glossary terms|Upstream|Downstream)\s*:\s*([^|]*)",
+            re.I,
+        )
+        for m in pattern.finditer(content):
+            key = m.group(1).strip().lower()
+            value = m.group(2).strip()
+            if key not in fields or value:
+                fields[key] = value
+        return fields
+
+    @staticmethod
+    def _build_answer(evidence: list[dict[str, Any]], intent: str) -> str:
         parts = []
         for item in evidence[:3]:
-            name = item.get("name", item.get("entity_name", item.get("raw", "")))[:80]
-            if intent == "OWNER_LOOKUP" and item.get("urn"):
-                parts.append(f"Entity {name} (URN: {item['urn'][:60]}) có thông tin trong hệ thống.")
+            content = item.get("content", "")
+            fields = MockLLM._extract_content_fields(content)
+            name = fields.get("name") or item.get("name") or item.get("raw", "")
+            if intent == "OWNER_LOOKUP":
+                owners = fields.get("owners")
+                if owners:
+                    parts.append(f"{name} được sở hữu bởi {owners}.")
+                else:
+                    parts.append(f"{name} hiện chưa có thông tin owner trong hệ thống.")
+            elif intent == "DOMAIN_LOOKUP":
+                domain = fields.get("domain")
+                if domain:
+                    parts.append(f"{name} thuộc về domain {domain}.")
+                else:
+                    parts.append(f"{name} không có thông tin domain được ghi nhận.")
             elif intent == "SCHEMA_LOOKUP":
-                parts.append(f"Thông tin schema cho {name} có trong metadata mẫu.")
+                if "Schema fields" in content:
+                    parts.append(f"Thông tin schema của {name} đã có trong metadata mẫu.")
+                else:
+                    parts.append(f"Chưa có thông tin schema cho {name}.")
+            elif intent in ("UPSTREAM_LINEAGE", "DOWNSTREAM_LINEAGE"):
+                if "Upstream" in content or "Downstream" in content:
+                    parts.append(f"Thông tin lineage của {name} đã có trong metadata.")
+                else:
+                    parts.append(f"{name} hiện chưa có thông tin lineage được ghi nhận.")
             elif intent == "GLOSSARY_DEFINITION":
-                if name:
+                desc = fields.get("description")
+                if desc:
+                    parts.append(f"{name}: {desc}")
+                else:
                     parts.append(f"Glossary term {name} được định nghĩa trong hệ thống.")
             else:
-                parts.append(f"{name}: thông tin có trong dữ liệu mẫu.")
+                desc = fields.get("description")
+                if desc:
+                    parts.append(f"{name}: {desc}")
+                else:
+                    parts.append(f"{name}: thông tin có trong dữ liệu mẫu.")
         if not parts:
             return "Không tìm thấy thông tin này trong metadata mẫu hiện có."
         return " ".join(parts)

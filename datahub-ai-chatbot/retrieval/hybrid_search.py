@@ -59,21 +59,33 @@ class HybridSearch:
         return results[:10]
 
     async def search(self, query: str, top_k: int = 10, **filters: Any) -> list[SearchResult]:
-        resolution = await self._entity_resolver.resolve(query)
+        trace_id = filters.pop("trace_id", None)
+        resolution = await self._entity_resolver.resolve(query, trace_id=trace_id)
         if resolution.exact_match and resolution.resolved:
+            log.info("hybrid_path", trace_id=trace_id,
+                     query=query, path="exact_match",
+                     resolved=resolution.resolved.name, count=1)
             return [await self._entity_to_result(resolution.resolved.urn)]
 
         if resolution.candidates:
             urns = [c.urn for c in resolution.candidates[:5]]
-            return await self._urns_to_results(urns)
+            results = await self._urns_to_results(urns)
+            log.info("hybrid_path", trace_id=trace_id, query=query,
+                     path="candidates", count=len(results))
+            return results
 
         vector = await self._embedder.embed_query(query)
         os_results = await self._vector_store.hybrid_search(query, vector, size=top_k, **filters)
         results = await self._os_results_to_search_results(os_results)
+        log.info("hybrid_path", trace_id=trace_id, query=query,
+                 path="vector", count=len(results))
         if results:
             return results
         if settings.USE_FAKE_OPENSEARCH or settings.USE_MOCK_DATAHUB:
-            return await self._search_mock_fallback(query)
+            results = await self._search_mock_fallback(query)
+            log.info("hybrid_path", trace_id=trace_id, query=query,
+                     path="mock_fallback", count=len(results))
+            return results
         return results
 
     async def keyword_search(self, query: str, top_k: int = 10, **filters: Any) -> list[SearchResult]:

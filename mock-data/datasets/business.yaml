@@ -29,7 +29,7 @@ datasets:
         description: Loại hình đại lý
         data_type: varchar
         nullable: true
-        business_definition: Phân loại đại lý theo quy mô và cấp độ: 3S, 2S, 1S, Showroom
+        business_definition: "Phân loại đại lý theo quy mô và cấp độ: 3S, 2S, 1S, Showroom"
         example: 3S
       - name: region_id
         description: Mã khu vực địa lý
@@ -65,7 +65,7 @@ datasets:
         description: Trạng thái hoạt động
         data_type: varchar
         nullable: true
-        business_definition: Trạng thái hiện tại của đại lý: Hoạt động, Tạm ngưng, Chấm dứt hợp đồng
+        business_definition: "Trạng thái hiện tại của đại lý: Hoạt động, Tạm ngưng, Chấm dứt hợp đồng"
         example: Hoạt động
       - name: open_date
         description: Ngày khai trương
@@ -113,7 +113,7 @@ datasets:
         description: Loại khách hàng
         data_type: varchar
         nullable: true
-        business_definition: Phân loại khách hàng: Cá nhân hoặc Doanh nghiệp
+        business_definition: "Phân loại khách hàng: Cá nhân hoặc Doanh nghiệp"
         example: Cá nhân
       - name: phone
         description: Số điện thoại
@@ -143,7 +143,7 @@ datasets:
         description: Giới tính
         data_type: varchar
         nullable: true
-        business_definition: Giới tính của khách hàng: Nam, Nữ, Khác
+        business_definition: "Giới tính của khách hàng: Nam, Nữ, Khác"
         example: Nữ
       - name: province
         description: Tỉnh/Thành phố nơi cư trú
@@ -161,7 +161,7 @@ datasets:
         description: Phân khúc khách hàng
         data_type: varchar
         nullable: true
-        business_definition: Phân khúc theo hành vi và giá trị: Vàng, Bạc, Đồng, Tiềm năng
+        business_definition: "Phân khúc theo hành vi và giá trị: Vàng, Bạc, Đồng, Tiềm năng"
         example: Vàng
       - name: registration_date
         description: Ngày đăng ký
@@ -203,7 +203,7 @@ datasets:
         description: Nhóm kênh
         data_type: varchar
         nullable: true
-        business_definition: Nhóm phân loại kênh: Online, Offline, Đối tác
+        business_definition: "Nhóm phân loại kênh: Online, Offline, Đối tác"
         example: Online
       - name: channel_type
         description: Loại kênh
@@ -215,7 +215,7 @@ datasets:
         description: Kích hoạt
         data_type: varchar
         nullable: true
-        business_definition: Trạng thái kênh đang được sử dụng hay không: Y/N
+        business_definition: "Trạng thái kênh đang được sử dụng hay không: Y/N"
         example: Y
       - name: commission_rate
         description: Tỷ lệ hoa hồng
@@ -305,13 +305,13 @@ datasets:
         description: Trạng thái đơn hàng
         data_type: varchar
         nullable: true
-        business_definition: Trạng thái xử lý đơn hàng: Chờ xác nhận, Đã xác nhận, Đang giao, Hoàn thành, Đã hủy
+        business_definition: "Trạng thái xử lý đơn hàng: Chờ xác nhận, Đã xác nhận, Đang giao, Hoàn thành, Đã hủy"
         example: Đã xác nhận
       - name: payment_method
         description: Phương thức thanh toán
         data_type: varchar
         nullable: true
-        business_definition: Hình thức thanh toán khách hàng lựa chọn: Tiền mặt, Chuyển khoản, Trả góp
+        business_definition: "Hình thức thanh toán khách hàng lựa chọn: Tiền mặt, Chuyển khoản, Trả góp"
         example: Trả góp
       - name: expected_delivery_date
         description: Ngày giao dự kiến
@@ -383,13 +383,13 @@ datasets:
         description: Trạng thái giao hàng
         data_type: varchar
         nullable: true
-        business_definition: Trạng thái: Đã lên lịch, Đang giao, Đã bàn giao, Trả lại
+        business_definition: "Trạng thái: Đã lên lịch, Đang giao, Đã bàn giao, Trả lại"
         example: Đã bàn giao
       - name: delivery_type
         description: Hình thức bàn giao
         data_type: varchar
         nullable: true
-        business_definition: Hình thức: Tại đại lý, Tại nhà, Tại công ty
+        business_definition: "Hình thức: Tại đại lý, Tại nhà, Tại công ty"
         example: Tại đại lý
       - name: delivery_notes
         description: Ghi chú bàn giao
@@ -468,7 +468,7 @@ datasets:
         description: Trạng thái chỉ tiêu
         data_type: varchar
         nullable: true
-        business_definition: Trạng thái: Đang thực hiện, Hoàn thành, Không hoàn thành
+        business_definition: "Trạng thái: Đang thực hiện, Hoàn thành, Không hoàn thành"
         example: Không hoàn thành
     owners:
       - sales_planning
@@ -541,7 +541,7 @@ datasets:
         description: Xếp hạng tổng thể
         data_type: varchar
         nullable: true
-        business_definition: Xếp hạng tổng thể hiệu suất: A, B, C, D
+        business_definition: "Xếp hạng tổng thể hiệu suất: A, B, C, D"
         example: B
     owners:
       - dealer_management
@@ -577,13 +577,13 @@ datasets:
         description: Phân khúc xe
         data_type: varchar
         nullable: true
-        business_definition: Phân khúc theo kích thước và mục đích: SUV, Sedan, Hatchback, MPV
+        business_definition: "Phân khúc theo kích thước và mục đích: SUV, Sedan, Hatchback, MPV"
         example: SUV
       - name: engine_type
         description: Loại động cơ
         data_type: varchar
         nullable: true
-        business_definition: Loại động cơ: Điện, Xăng, Diesel, Hybrid
+        business_definition: "Loại động cơ: Điện, Xăng, Diesel, Hybrid"
         example: Điện
       - name: battery_capacity
         description: Dung lượng pin (kWh)
@@ -619,7 +619,7 @@ datasets:
         description: Trạng thái model
         data_type: varchar
         nullable: true
-        business_definition: Trạng thái sản xuất và bán hàng: Đang bán, Ngừng sản xuất, Sắp ra mắt
+        business_definition: "Trạng thái sản xuất và bán hàng: Đang bán, Ngừng sản xuất, Sắp ra mắt"
         example: Đang bán
     owners:
       - product_management
@@ -733,7 +733,7 @@ datasets:
         description: Loại ưu đãi
         data_type: varchar
         nullable: true
-        business_definition: Loại ưu đãi: Hỗ trợ bán hàng, Hoa hồng, Khuyến mãi KH, Hỗ trợ tài chính
+        business_definition: "Loại ưu đãi: Hỗ trợ bán hàng, Hoa hồng, Khuyến mãi KH, Hỗ trợ tài chính"
         example: Hoa hồng
       - name: claim_amount
         description: Số tiền yêu cầu
@@ -751,7 +751,7 @@ datasets:
         description: Trạng thái
         data_type: varchar
         nullable: true
-        business_definition: Trạng thái xử lý: Đã gửi, Đang xét duyệt, Đã duyệt, Từ chối, Đã chi trả
+        business_definition: "Trạng thái xử lý: Đã gửi, Đang xét duyệt, Đã duyệt, Từ chối, Đã chi trả"
         example: Đã duyệt
       - name: approved_by
         description: Người duyệt
@@ -806,7 +806,7 @@ datasets:
         description: Kênh phản hồi
         data_type: varchar
         nullable: true
-        business_definition: Kênh khách hàng sử dụng: Điện thoại, Email, Website, Ứng dụng, Tại đại lý
+        business_definition: "Kênh khách hàng sử dụng: Điện thoại, Email, Website, Ứng dụng, Tại đại lý"
         example: Ứng dụng VinFast
       - name: nps_score
         description: Điểm NPS
@@ -824,7 +824,7 @@ datasets:
         description: Phân loại phản hồi
         data_type: varchar
         nullable: true
-        business_definition: Phân loại: Sản phẩm, Dịch vụ, Giao hàng, Giá cả, Khác
+        business_definition: "Phân loại: Sản phẩm, Dịch vụ, Giao hàng, Giá cả, Khác"
         example: Sản phẩm
       - name: feedback_content
         description: Nội dung phản hồi
@@ -836,13 +836,13 @@ datasets:
         description: Cảm xúc
         data_type: varchar
         nullable: true
-        business_definition: Phân tích cảm xúc tự động: Tích cực, Trung tính, Tiêu cực
+        business_definition: "Phân tích cảm xúc tự động: Tích cực, Trung tính, Tiêu cực"
         example: Tích cực
       - name: resolved_flag
         description: Đã xử lý
         data_type: varchar
         nullable: true
-        business_definition: Cờ đánh dấu phản hồi đã được xử lý: Y/N
+        business_definition: "Cờ đánh dấu phản hồi đã được xử lý: Y/N"
         example: Y
     owners:
       - crm_team
@@ -872,7 +872,7 @@ datasets:
         description: Loại khuyến mãi
         data_type: varchar
         nullable: true
-        business_definition: Loại: Giảm giá, Tặng phụ kiện, Hỗ trợ lãi suất, Ưu đãi pin
+        business_definition: "Loại: Giảm giá, Tặng phụ kiện, Hỗ trợ lãi suất, Ưu đãi pin"
         example: Giảm giá
       - name: discount_value
         description: Giá trị ưu đãi
@@ -902,7 +902,7 @@ datasets:
         description: Trạng thái
         data_type: varchar
         nullable: true
-        business_definition: Trạng thái chương trình: Lên kế hoạch, Đang chạy, Kết thúc, Hủy
+        business_definition: "Trạng thái chương trình: Lên kế hoạch, Đang chạy, Kết thúc, Hủy"
         example: Đang chạy
       - name: budget
         description: Ngân sách
@@ -944,7 +944,7 @@ datasets:
         description: Nguồn lead
         data_type: varchar
         nullable: true
-        business_definition: Nguồn phát sinh khách hàng tiềm năng: Website, Facebook, Event, Giới thiệu, Đại lý
+        business_definition: "Nguồn phát sinh khách hàng tiềm năng: Website, Facebook, Event, Giới thiệu, Đại lý"
         example: Website
       - name: campaign_name
         description: Chiến dịch marketing
@@ -980,7 +980,7 @@ datasets:
         description: Trạng thái lead
         data_type: varchar
         nullable: true
-        business_definition: Trạng thái xử lý: Mới, Đang liên hệ, Hẹn lái thử, Đã đặt cọc, Chuyển đổi, Mất
+        business_definition: "Trạng thái xử lý: Mới, Đang liên hệ, Hẹn lái thử, Đã đặt cọc, Chuyển đổi, Mất"
         example: Đang liên hệ
       - name: assigned_to
         description: Nhân viên phụ trách
@@ -1064,13 +1064,13 @@ datasets:
         description: Trạng thái
         data_type: varchar
         nullable: true
-        business_definition: Trạng thái: Đã lên lịch, Đã lái thử, Vắng mặt, Hủy
+        business_definition: "Trạng thái: Đã lên lịch, Đã lái thử, Vắng mặt, Hủy"
         example: Đã lái thử
       - name: result
         description: Kết quả
         data_type: varchar
         nullable: true
-        business_definition: Kết quả sau lái thử của khách hàng: Rất quan tâm, Cân nhắc, Chưa phù hợp
+        business_definition: "Kết quả sau lái thử của khách hàng: Rất quan tâm, Cân nhắc, Chưa phù hợp"
         example: Rất quan tâm
       - name: follow_up_action
         description: Hành động tiếp theo

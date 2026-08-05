@@ -71,6 +71,30 @@ class RedisClient:
         except Exception:
             pass
 
+    async def lpush(self, key: str, value: str) -> None:
+        if not self._client:
+            return
+        try:
+            await self._client.lpush(key, value)
+        except Exception:
+            pass
+
+    async def lrange(self, key: str, start: int, stop: int) -> list[str]:
+        if not self._client:
+            return []
+        try:
+            return await self._client.lrange(key, start, stop)
+        except Exception:
+            return []
+
+    async def ltrim(self, key: str, start: int, stop: int) -> None:
+        if not self._client:
+            return
+        try:
+            await self._client.ltrim(key, start, stop)
+        except Exception:
+            pass
+
     async def enqueue(self, queue_name: str, value: str) -> None:
         if not self._client:
             return

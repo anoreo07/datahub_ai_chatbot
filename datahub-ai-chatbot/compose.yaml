@@ -68,6 +68,8 @@ services:
       DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres:5432/chatbot
       REDIS_URL: redis://redis:6379/0
       OPENSEARCH_URL: http://opensearch:9200
+      DATAHUB_GMS_URL: http://datahub-datahub-gms-quickstart-1:8080
+      OLLAMA_BASE_URL: http://ollama:11434/v1
     depends_on:
       postgres:
         condition: service_healthy
@@ -91,6 +93,8 @@ services:
       DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres:5432/chatbot
       REDIS_URL: redis://redis:6379/0
       OPENSEARCH_URL: http://opensearch:9200
+      DATAHUB_GMS_URL: http://datahub-datahub-gms-quickstart-1:8080
+      OLLAMA_BASE_URL: http://ollama:11434/v1
     depends_on:
       postgres:
         condition: service_healthy
@@ -112,6 +116,8 @@ services:
       DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres:5432/chatbot
       REDIS_URL: redis://redis:6379/0
       OPENSEARCH_URL: http://opensearch:9200
+      DATAHUB_GMS_URL: http://datahub-datahub-gms-quickstart-1:8080
+      OLLAMA_BASE_URL: http://ollama:11434/v1
     depends_on:
       postgres:
         condition: service_healthy

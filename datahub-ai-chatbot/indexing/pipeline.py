@@ -36,6 +36,9 @@ class IndexingPipeline:
                 full_chunks.append(sub_item)
 
         texts = [c.content for c in full_chunks]
+        if not texts:
+            await self._chunk_repo.replace_for_entity(urn, [])
+            return
         embeddings = await self._embedder.embed(texts)
 
         pg_chunks: list[EntityChunk] = []

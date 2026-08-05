@@ -53,3 +53,25 @@ async def delete_conversation(
     memory._conversations.pop(f"{uid}::{conversation_id}", None)
 
     return {"status": "deleted", "conversation_id": conversation_id}
+
+
+@router.delete("")
+async def clear_conversations(
+    current_user: UserContext = Depends(get_current_user),
+    session: AsyncSession = Depends(get_session),
+) -> dict:
+    """Delete all of the current user's chat history."""
+    uid = current_user.user_id
+    stmt = sa_delete(ConversationHistory).where(ConversationHistory.user_id == uid)
+    await session.execute(stmt)
+    await session.commit()
+
+    memory = get_conversation_memory()
+    prefix = f"{uid}::"
+    memory._conversations = {
+        key: conv
+        for key, conv in memory._conversations.items()
+        if not key.startswith(prefix)
+    }
+
+    return {"status": "deleted", "user_id": uid}

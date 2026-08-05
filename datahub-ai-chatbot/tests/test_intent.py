@@ -32,6 +32,9 @@ def test_lineage() -> None:
     assert classify_intent("upstream of sales.orders") == QueryIntent.LINEAGE
     assert classify_intent("what are the downstream dependencies") == QueryIntent.LINEAGE
     assert classify_intent("nguồn dữ liệu của dataset") == QueryIntent.LINEAGE
+    assert classify_intent("thông tin về lineage của dataset dim_inventory_category") == QueryIntent.LINEAGE
+    assert classify_intent("thông tin về linage của dataset dim_inventory_category") == QueryIntent.LINEAGE
+    assert classify_intent("lineage của dim_inventory_category") == QueryIntent.LINEAGE
 
 
 def test_schema_lookup() -> None:
@@ -65,10 +68,61 @@ def test_domain_query_vietnamese() -> None:
     assert classify_intent("domain vgreen có những entity nào?") == QueryIntent.DOMAIN_QUERY
 
 
+def test_domain_query_linh_vuc_synonym() -> None:
+    assert classify_intent("Lĩnh vực tài chính gồm những dataset nào") == QueryIntent.DOMAIN_QUERY
+    assert classify_intent("lĩnh vực Logistics có những asset nào?") == QueryIntent.DOMAIN_QUERY
+    assert classify_intent("những asset thuộc lĩnh vực Sản xuất") == QueryIntent.DOMAIN_QUERY
+    assert classify_intent("linh vuc tai chinh gom nhung dataset nao") == QueryIntent.DOMAIN_QUERY
+
+
+def test_count_entities_vietnamese() -> None:
+    assert classify_intent("Có bao nhiêu datasets?") == QueryIntent.COUNT_ENTITIES
+    assert classify_intent("Lĩnh vực tài chính có bao nhiêu datasets?") == QueryIntent.COUNT_ENTITIES
+    assert classify_intent("domain Finance có bao nhiêu datasets") == QueryIntent.COUNT_ENTITIES
+    assert classify_intent("có bao nhiêu glossary terms?") == QueryIntent.COUNT_ENTITIES
+    assert classify_intent("tổng cộng có bao nhiêu dashboard?") == QueryIntent.COUNT_ENTITIES
+
+
+def test_count_entities_english() -> None:
+    assert classify_intent("How many datasets are in domain Finance?") == QueryIntent.COUNT_ENTITIES
+    assert classify_intent("count datasets in domain Finance") == QueryIntent.COUNT_ENTITIES
+    assert classify_intent("how many dashboards exist?") == QueryIntent.COUNT_ENTITIES
+
+
+def test_count_does_not_steal_other_intents() -> None:
+    assert classify_intent("Dataset sales.orders có bao nhiêu field?") != QueryIntent.COUNT_ENTITIES
+    assert classify_intent("Revenue là gì") == QueryIntent.TERM_DEFINITION
+    assert classify_intent("Dataset nào gắn term Customer?") == QueryIntent.TERM_TO_DATASETS
+    assert classify_intent("Ai sở hữu dataset sales.orders?") == QueryIntent.OWNER_LOOKUP
+
+
 def test_domain_query_english() -> None:
     assert classify_intent("What assets are in domain VGreen?") == QueryIntent.DOMAIN_QUERY
     assert classify_intent("datasets belonging to domain Sales") == QueryIntent.DOMAIN_QUERY
     assert classify_intent("domain: Sales") == QueryIntent.DOMAIN_QUERY
+
+
+def test_domain_listing_intent() -> None:
+    assert classify_intent("có các domain nào?") == QueryIntent.DOMAIN_QUERY
+    assert classify_intent("Có những domain nào?") == QueryIntent.DOMAIN_QUERY
+    assert classify_intent("liệt kê các domain") == QueryIntent.DOMAIN_QUERY
+    assert classify_intent("liệt kê domain") == QueryIntent.DOMAIN_QUERY
+    assert classify_intent("danh sách các domain") == QueryIntent.DOMAIN_QUERY
+    assert classify_intent("danh sách domain") == QueryIntent.DOMAIN_QUERY
+    assert classify_intent("domain nào trong hệ thống?") == QueryIntent.DOMAIN_QUERY
+    assert classify_intent("các domain trong hệ thống") == QueryIntent.DOMAIN_QUERY
+    assert classify_intent("liệt kê các lĩnh vực") == QueryIntent.DOMAIN_QUERY
+    assert classify_intent("danh sách lĩnh vực") == QueryIntent.DOMAIN_QUERY
+    assert classify_intent("liệt kê miền") == QueryIntent.DOMAIN_QUERY
+    assert classify_intent("co cac domain nao?") == QueryIntent.DOMAIN_QUERY
+    assert classify_intent("liet ke linh vuc") == QueryIntent.DOMAIN_QUERY
+
+
+def test_domain_listing_does_not_steal_entity_domain() -> None:
+    assert classify_intent("fact_inventory thuộc domain nào?") == QueryIntent.ENTITY_DOMAIN
+    assert classify_intent("sales.orders thuộc lĩnh vực nào?") == QueryIntent.ENTITY_DOMAIN
+    assert classify_intent("lĩnh vực tài chính gồm những dataset nào") == QueryIntent.DOMAIN_QUERY
+    assert classify_intent("có bao nhiêu datasets?") == QueryIntent.COUNT_ENTITIES
 
 
 def test_platform_query() -> None:
@@ -106,3 +160,19 @@ def test_general_fallback() -> None:
     assert classify_intent("Bạn có thể giúp gì?") == QueryIntent.GENERAL
     assert classify_intent("hello") == QueryIntent.GREETING
     assert classify_intent("nội dung của datahub") == QueryIntent.GENERAL
+
+
+def test_entity_domain_membership() -> None:
+    assert classify_intent("dataset sales.orders thuộc về domain nào?") == QueryIntent.ENTITY_DOMAIN
+    assert classify_intent("sales.orders thuộc domain nào") == QueryIntent.ENTITY_DOMAIN
+    assert classify_intent("domain của dataset sales.orders là gì?") == QueryIntent.ENTITY_DOMAIN
+    assert classify_intent("sales.orders thuộc lĩnh vực nào?") == QueryIntent.ENTITY_DOMAIN
+    assert classify_intent("which domain does sales.orders belong to") == QueryIntent.ENTITY_DOMAIN
+    assert classify_intent("domain of finance.monthly_revenue") == QueryIntent.ENTITY_DOMAIN
+
+
+def test_owner_lookup_alternate_phrasing() -> None:
+    assert classify_intent("dataset sales.orders thuộc về ai?") == QueryIntent.OWNER_LOOKUP
+    assert classify_intent("sales.orders thuộc về ai") == QueryIntent.OWNER_LOOKUP
+    assert classify_intent("chủ sở hữu của dataset sales.orders") == QueryIntent.OWNER_LOOKUP
+    assert classify_intent("belongs to whom sales.orders") == QueryIntent.OWNER_LOOKUP

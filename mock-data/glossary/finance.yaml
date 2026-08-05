@@ -129,7 +129,7 @@ glossary_terms:
   - name: Unit Economics
     definition: Kinh tế đơn vị sản phẩm, phân tích doanh thu và chi phí trên mỗi đơn vị sản phẩm
     business_meaning: Đánh giá lợi nhuận trên từng xe bán ra
-    example: Unit Economics VF8: giá bán 800 triệu, COGS 600 triệu, gross margin 25%
+    example: "Unit Economics VF8: giá bán 800 triệu, COGS 600 triệu, gross margin 25%"
     related_terms:
       - COGS
       - Gross Margin

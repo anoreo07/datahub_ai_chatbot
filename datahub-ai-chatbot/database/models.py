@@ -2,6 +2,7 @@ import datetime
 import enum
 
 from sqlalchemy import JSON, Boolean, DateTime, ForeignKey, Integer, String, Text, func
+from sqlalchemy.dialects import postgresql
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
@@ -100,10 +101,10 @@ class EntityAclDB(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     entity_urn: Mapped[str] = mapped_column(String(512), unique=True, nullable=False, index=True)
     is_public: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
-    allowed_user_ids: Mapped[list] = mapped_column(JSON, nullable=False, default=list)
-    allowed_groups: Mapped[list] = mapped_column(JSON, nullable=False, default=list)
-    denied_user_ids: Mapped[list] = mapped_column(JSON, nullable=False, default=list)
-    denied_groups: Mapped[list] = mapped_column(JSON, nullable=False, default=list)
+    allowed_user_ids: Mapped[list] = mapped_column(postgresql.ARRAY(String), nullable=False, default=list)
+    allowed_groups: Mapped[list] = mapped_column(postgresql.ARRAY(String), nullable=False, default=list)
+    denied_user_ids: Mapped[list] = mapped_column(postgresql.ARRAY(String), nullable=False, default=list)
+    denied_groups: Mapped[list] = mapped_column(postgresql.ARRAY(String), nullable=False, default=list)
     classification: Mapped[str] = mapped_column(String(64), nullable=False, default="internal")
     tenant_id: Mapped[str | None] = mapped_column(String(128), nullable=True)
     created_at: Mapped[datetime.datetime] = mapped_column(

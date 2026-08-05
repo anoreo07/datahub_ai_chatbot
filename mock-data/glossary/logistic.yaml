@@ -37,7 +37,7 @@ glossary_terms:
 
   - name: Min-Max Stock
     definition: Ngưỡng tồn kho tối thiểu và tối đa cho mỗi vật tư
-    business_meaning: Phương pháp quản lý tồn kho theo ngưỡng: đặt hàng khi chạm Min
+    business_meaning: "Phương pháp quản lý tồn kho theo ngưỡng: đặt hàng khi chạm Min"
     example: Vật tư có Min=200, Max=1.000, khi SOH chạm 200 thì đặt thêm
     related_terms:
       - Safety Stock
@@ -118,7 +118,7 @@ glossary_terms:
 
   - name: Inventory Turnover
     definition: Vòng quay tồn kho trong một kỳ
-    business_meaning: Chỉ số hiệu quả quản lý tồn kho: số lần tồn kho được luân chuyển trong kỳ
+    business_meaning: "Chỉ số hiệu quả quản lý tồn kho: số lần tồn kho được luân chuyển trong kỳ"
     example: Inventory Turnover 12 lần/năm cho thấy hàng luân chuyển tốt
     related_terms:
       - DIO
@@ -144,7 +144,7 @@ glossary_terms:
     domain: LOGISTIC
 
   - name: ABC Classification
-    definition: Phân loại vật tư theo giá trị: A (cao), B (trung bình), C (thấp)
+    definition: "Phân loại vật tư theo giá trị: A (cao), B (trung bình), C (thấp)"
     business_meaning: Phương pháp quản lý tồn kho ưu tiên theo giá trị
     example: Pin (A) được quản lý chặt, kiểm đếm hàng ngày; ốc vít (C) kiểm đếm hàng tháng
     related_terms:

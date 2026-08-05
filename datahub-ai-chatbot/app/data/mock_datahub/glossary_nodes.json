@@ -12,6 +12,18 @@
       "urn:li:glossaryTerm:goods_in_transit",
       "urn:li:glossaryTerm:coverage_date",
       "urn:li:glossaryTerm:safety_stock"
+    ],
+    "owners": [
+      {
+        "name": "Nguyễn Văn An",
+        "email": "nguyenvan.an@company.example",
+        "type": "BUSINESS_OWNER"
+      },
+      {
+        "name": "Trần Minh Khoa",
+        "email": "tranminh.khoa@company.example",
+        "type": "DATA_TECHNICAL_OWNER"
+      }
     ]
   }
 ]

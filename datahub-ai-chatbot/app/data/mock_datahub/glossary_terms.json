@@ -8,7 +8,11 @@
     "domain_urn": "urn:li:domain:logistic",
     "domain": "Logistic",
     "owners": [
-      {"name": "Nguyễn Văn An", "email": "nguyenvan.an@company.example", "type": "BUSINESS_OWNER"}
+      {
+        "name": "Nguyễn Văn An",
+        "email": "nguyenvan.an@company.example",
+        "type": "BUSINESS_OWNER"
+      }
     ],
     "datahub_url": "http://mock-datahub.local/glossary/ton-kho-min-max"
   },
@@ -20,7 +24,18 @@
     "definition": "Stock On Hand là số lượng hàng hóa hiện đang có trong kho tại một thời điểm xác định.",
     "domain_urn": "urn:li:domain:logistic",
     "domain": "Logistic",
-    "owners": [],
+    "owners": [
+      {
+        "name": "Nguyễn Văn An",
+        "email": "nguyenvan.an@company.example",
+        "type": "BUSINESS_OWNER"
+      },
+      {
+        "name": "Trần Minh Khoa",
+        "email": "tranminh.khoa@company.example",
+        "type": "DATA_TECHNICAL_OWNER"
+      }
+    ],
     "datahub_url": "http://mock-datahub.local/glossary/stock-on-hand"
   },
   {
@@ -31,7 +46,18 @@
     "definition": "Goods In Transit là hàng hóa đã rời khỏi kho xuất nhưng chưa đến kho nhận.",
     "domain_urn": "urn:li:domain:logistic",
     "domain": "Logistic",
-    "owners": [],
+    "owners": [
+      {
+        "name": "Nguyễn Văn An",
+        "email": "nguyenvan.an@company.example",
+        "type": "BUSINESS_OWNER"
+      },
+      {
+        "name": "Trần Minh Khoa",
+        "email": "tranminh.khoa@company.example",
+        "type": "DATA_TECHNICAL_OWNER"
+      }
+    ],
     "datahub_url": "http://mock-datahub.local/glossary/goods-in-transit"
   },
   {
@@ -42,7 +68,18 @@
     "definition": "Coverage Date là khoảng thời gian (số ngày) mà lượng tồn kho hiện tại có thể đáp ứng nhu cầu sử dụng dự kiến, dựa trên mức tiêu thụ trung bình.",
     "domain_urn": "urn:li:domain:logistic",
     "domain": "Logistic",
-    "owners": [],
+    "owners": [
+      {
+        "name": "Nguyễn Văn An",
+        "email": "nguyenvan.an@company.example",
+        "type": "BUSINESS_OWNER"
+      },
+      {
+        "name": "Trần Minh Khoa",
+        "email": "tranminh.khoa@company.example",
+        "type": "DATA_TECHNICAL_OWNER"
+      }
+    ],
     "datahub_url": "http://mock-datahub.local/glossary/coverage-date"
   },
   {
@@ -53,7 +90,18 @@
     "definition": "Safety Stock là lượng hàng tồn kho dự phòng được duy trì để giảm thiểu rủi ro hết hàng do biến động nhu cầu hoặc chậm trễ cung ứng.",
     "domain_urn": "urn:li:domain:logistic",
     "domain": "Logistic",
-    "owners": [],
+    "owners": [
+      {
+        "name": "Nguyễn Văn An",
+        "email": "nguyenvan.an@company.example",
+        "type": "BUSINESS_OWNER"
+      },
+      {
+        "name": "Trần Minh Khoa",
+        "email": "tranminh.khoa@company.example",
+        "type": "DATA_TECHNICAL_OWNER"
+      }
+    ],
     "datahub_url": "http://mock-datahub.local/glossary/safety-stock"
   },
   {
@@ -64,7 +112,13 @@
     "definition": "Đơn hàng (Order) là giao dịch mua hàng được xác nhận giữa khách hàng và công ty.",
     "domain_urn": "urn:li:domain:kinh_doanh",
     "domain": "Kinh doanh",
-    "owners": [],
+    "owners": [
+      {
+        "name": "Nguyễn Văn An",
+        "email": "nguyenvan.an@company.example",
+        "type": "BUSINESS_OWNER"
+      }
+    ],
     "datahub_url": "http://mock-datahub.local/glossary/don-hang"
   },
   {
@@ -75,7 +129,13 @@
     "definition": "Khách hàng (Customer) là cá nhân hoặc tổ chức mua sản phẩm hoặc dịch vụ.",
     "domain_urn": "urn:li:domain:kinh_doanh",
     "domain": "Kinh doanh",
-    "owners": [],
+    "owners": [
+      {
+        "name": "Nguyễn Văn An",
+        "email": "nguyenvan.an@company.example",
+        "type": "BUSINESS_OWNER"
+      }
+    ],
     "datahub_url": "http://mock-datahub.local/glossary/khach-hang"
   },
   {
@@ -86,7 +146,13 @@
     "definition": "Doanh thu (Revenue) là tổng giá trị thu được từ hoạt động bán hàng và cung cấp dịch vụ.",
     "domain_urn": "urn:li:domain:finance",
     "domain": "Finance",
-    "owners": [],
+    "owners": [
+      {
+        "name": "Finance Analytics",
+        "email": "finance.analytics@company.example",
+        "type": "DATA_TECHNICAL_OWNER"
+      }
+    ],
     "datahub_url": "http://mock-datahub.local/glossary/doanh-thu"
   },
   {
@@ -109,7 +175,18 @@
     "definition": "Inventory Turnover là chỉ số đo lường số lần hàng tồn kho được bán và thay thế trong một kỳ.",
     "domain_urn": "urn:li:domain:logistic",
     "domain": "Logistic",
-    "owners": [],
+    "owners": [
+      {
+        "name": "Nguyễn Văn An",
+        "email": "nguyenvan.an@company.example",
+        "type": "BUSINESS_OWNER"
+      },
+      {
+        "name": "Trần Minh Khoa",
+        "email": "tranminh.khoa@company.example",
+        "type": "DATA_TECHNICAL_OWNER"
+      }
+    ],
     "datahub_url": "http://mock-datahub.local/glossary/inventory-turnover"
   }
 ]

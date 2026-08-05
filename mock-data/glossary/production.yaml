@@ -138,7 +138,7 @@ glossary_terms:
   - name: Routing
     definition: Trình tự các bước gia công và nguyên công trong sản xuất
     business_meaning: Định nghĩa quy trình sản xuất chi tiết cho từng linh kiện
-    example: Routing của thân xe gồm 5 bước: dập - hàn - sơn - lắp ráp - kiểm tra
+    example: "Routing của thân xe gồm 5 bước: dập - hàn - sơn - lắp ráp - kiểm tra"
     related_terms:
       - BOM
       - Production Order

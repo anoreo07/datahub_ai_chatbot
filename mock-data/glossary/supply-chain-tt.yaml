@@ -22,7 +22,7 @@ glossary_terms:
   - name: Vendor Scorecard
     definition: Bảng điểm đánh giá định kỳ hiệu quả hoạt động của nhà cung cấp theo các tiêu chí KPI
     business_meaning: Công cụ quản lý và so sánh năng lực nhà cung cấp, làm cơ sở phân loại và phát triển nhà cung cấp
-    example: Scorecard tháng 6: Supplier B đạt điểm A (90%) ở chất lượng, B (80%) ở giao hàng
+    example: "Scorecard tháng 6: Supplier B đạt điểm A (90%) ở chất lượng, B (80%) ở giao hàng"
     related_terms:
       - Supplier Evaluation
       - KPI
@@ -172,7 +172,7 @@ glossary_terms:
   - name: NCR (Non-Conformance Report)
     definition: Báo cáo ghi nhận sự không phù hợp của hàng hóa hoặc quy trình so với yêu cầu kỹ thuật
     business_meaning: Công cụ truy xuất và xử lý lỗi chất lượng, yêu cầu nhà cung cấp thực hiện khắc phục
-    example: NCR-2024-033: Phát hiện độ dày tôn không đạt spec, yêu cầu nhà cung cấp tái sản xuất lô hàng
+    example: "NCR-2024-033: Phát hiện độ dày tôn không đạt spec, yêu cầu nhà cung cấp tái sản xuất lô hàng"
     related_terms:
       - Corrective Action
       - Supplier Audit

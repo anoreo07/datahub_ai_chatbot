@@ -29,7 +29,7 @@ datasets:
         description: Phân loại nhà cung cấp
         data_type: varchar
         nullable: true
-        business_definition: Loại: Linh kiện, Nguyên vật liệu, Dịch vụ, Logistics, Thiết bị
+        business_definition: "Loại: Linh kiện, Nguyên vật liệu, Dịch vụ, Logistics, Thiết bị"
         example: Linh kiện
       - name: tax_code
         description: Mã số thuế
@@ -71,7 +71,7 @@ datasets:
         description: Xếp hạng
         data_type: varchar
         nullable: true
-        business_definition: Xếp hạng tổng thể: A, B, C, D
+        business_definition: "Xếp hạng tổng thể: A, B, C, D"
         example: A
       - name: material_groups_supplied
         description: Nhóm vật tư cung cấp
@@ -192,7 +192,7 @@ datasets:
         description: Kỳ đánh giá
         data_type: varchar
         nullable: false
-        business_definition: Kỳ đánh giá: Q1-2024, Q2-2024, Năm 2024
+        business_definition: "Kỳ đánh giá: Q1-2024, Q2-2024, Năm 2024"
         example: Q2-2024
       - name: quality_score
         description: Điểm chất lượng
@@ -270,7 +270,7 @@ datasets:
         description: Bộ phận
         data_type: varchar
         nullable: true
-        business_definition: Bộ phận: Sản xuất, Kỹ thuật, Bảo trì, Chất lượng
+        business_definition: "Bộ phận: Sản xuất, Kỹ thuật, Bảo trì, Chất lượng"
         example: Sản xuất
       - name: material_group_id
         description: Mã nhóm vật tư
@@ -408,7 +408,7 @@ datasets:
         description: Được chọn
         data_type: varchar
         nullable: true
-        business_definition: Cờ xác định báo giá được chọn: Y/N
+        business_definition: "Cờ xác định báo giá được chọn: Y/N"
         example: N
     owners:
       - procurement
@@ -439,7 +439,7 @@ datasets:
         description: Kỳ bảng điểm
         data_type: varchar
         nullable: false
-        business_definition: Kỳ đánh giá: Q1-2024, Q2-2024, Năm 2024
+        business_definition: "Kỳ đánh giá: Q1-2024, Q2-2024, Năm 2024"
         example: Q2-2024
       - name: on_time_delivery_pct
         description: Giao đúng hạn %
@@ -523,13 +523,13 @@ datasets:
         description: Điều kiện lưu kho
         data_type: varchar
         nullable: true
-        business_definition: Yêu cầu lưu trữ: Khô ráo, Nhiệt độ thường, Môi trường lạnh
+        business_definition: "Yêu cầu lưu trữ: Khô ráo, Nhiệt độ thường, Môi trường lạnh"
         example: Khô ráo, thoáng mát
       - name: hazardous_flag
         description: Hàng nguy hiểm
         data_type: varchar
         nullable: true
-        business_definition: Cờ đánh dấu hàng nguy hiểm/cháy nổ: Y/N
+        business_definition: "Cờ đánh dấu hàng nguy hiểm/cháy nổ: Y/N"
         example: N
       - name: unit_default
         description: Đơn vị mặc định
@@ -817,7 +817,7 @@ datasets:
         description: Tiêu chuẩn ngành
         data_type: varchar
         nullable: true
-        business_definition: Tiêu chuẩn áp dụng: ISO, IATF, SAE, ASTM
+        business_definition: "Tiêu chuẩn áp dụng: ISO, IATF, SAE, ASTM"
         example: ISO
       - name: description
         description: Mô tả
@@ -829,7 +829,7 @@ datasets:
         description: Bắt buộc bởi VinFast
         data_type: varchar
         nullable: true
-        business_definition: Chứng chỉ bắt buộc phải có: Y/N
+        business_definition: "Chứng chỉ bắt buộc phải có: Y/N"
         example: Y
     owners:
       - procurement
@@ -973,7 +973,7 @@ datasets:
         description: Xử lý
         data_type: varchar
         nullable: true
-        business_definition: Hướng xử lý: Trả hàng, Sửa lại, Chấp nhận có điều kiện, Loại bỏ
+        business_definition: "Hướng xử lý: Trả hàng, Sửa lại, Chấp nhận có điều kiện, Loại bỏ"
         example: Trả hàng
       - name: corrective_action
         description: Hành động khắc phục
@@ -1021,7 +1021,7 @@ datasets:
         description: Nhóm hạng mục
         data_type: varchar
         nullable: true
-        business_definition: Nhóm: Nguyên liệu chính, Linh kiện, Dịch vụ sản xuất, Gián tiếp
+        business_definition: "Nhóm: Nguyên liệu chính, Linh kiện, Dịch vụ sản xuất, Gián tiếp"
         example: Nguyên liệu chính
       - name: procurement_manager
         description: Quản lý thu mua
@@ -1081,7 +1081,7 @@ datasets:
         description: Kỳ đánh giá
         data_type: varchar
         nullable: false
-        business_definition: Kỳ đánh giá: Q1-2024, Q2-2024, Năm 2024
+        business_definition: "Kỳ đánh giá: Q1-2024, Q2-2024, Năm 2024"
         example: Q2-2024
       - name: contract_value_released
         description: Giá trị giải ngân
@@ -1099,13 +1099,13 @@ datasets:
         description: Hiệu suất giao hàng
         data_type: varchar
         nullable: true
-        business_definition: Đánh giá: Vượt mức, Đạt, Dưới mức, Kém
+        business_definition: "Đánh giá: Vượt mức, Đạt, Dưới mức, Kém"
         example: Đạt
       - name: quality_performance
         description: Hiệu suất chất lượng
         data_type: varchar
         nullable: true
-        business_definition: Đánh giá chất lượng: Tốt, Đạt, Cần cải thiện, Kém
+        business_definition: "Đánh giá chất lượng: Tốt, Đạt, Cần cải thiện, Kém"
         example: Đạt
       - name: compliance_score
         description: Điểm tuân thủ

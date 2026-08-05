@@ -29,7 +29,7 @@ datasets:
         description: Loại trung tâm
         data_type: varchar
         nullable: true
-        business_definition: Phân loại: Trạm dịch vụ, Trung tâm bảo dưỡng, Xưởng sửa chữa chuyên sâu
+        business_definition: "Phân loại: Trạm dịch vụ, Trung tâm bảo dưỡng, Xưởng sửa chữa chuyên sâu"
         example: Trạm dịch vụ
       - name: dealer_id
         description: Mã đại lý
@@ -77,7 +77,7 @@ datasets:
         description: Trạng thái
         data_type: varchar
         nullable: true
-        business_definition: Trạng thái hoạt động: Hoạt động, Bảo trì, Đóng cửa
+        business_definition: "Trạng thái hoạt động: Hoạt động, Bảo trì, Đóng cửa"
         example: Hoạt động
     owners:
       - after_sales_ops
@@ -113,7 +113,7 @@ datasets:
         description: Loại bảo hành
         data_type: varchar
         nullable: true
-        business_definition: Phân loại: Xe mới, Phụ tùng, Pin, Sơn, Chống gỉ
+        business_definition: "Phân loại: Xe mới, Phụ tùng, Pin, Sơn, Chống gỉ"
         example: Xe mới
       - name: duration_months
         description: Thời hạn (tháng)
@@ -149,7 +149,7 @@ datasets:
         description: Trạng thái
         data_type: varchar
         nullable: true
-        business_definition: Trạng thái: Hiện hành, Hết hạn, Sắp áp dụng
+        business_definition: "Trạng thái: Hiện hành, Hết hạn, Sắp áp dụng"
         example: Hiện hành
     owners:
       - after_sales_ops
@@ -203,13 +203,13 @@ datasets:
         description: Loại dịch vụ
         data_type: varchar
         nullable: true
-        business_definition: Loại: Bảo dưỡng định kỳ, Sửa chữa, Kiểm tra, Thu hồi
+        business_definition: "Loại: Bảo dưỡng định kỳ, Sửa chữa, Kiểm tra, Thu hồi"
         example: Bảo dưỡng định kỳ
       - name: appointment_status
         description: Trạng thái
         data_type: varchar
         nullable: true
-        business_definition: Trạng thái: Đã đặt, Đã xác nhận, Đã đến, Hoàn thành, Vắng mặt, Hủy
+        business_definition: "Trạng thái: Đã đặt, Đã xác nhận, Đã đến, Hoàn thành, Vắng mặt, Hủy"
         example: Đã xác nhận
       - name: odometer_km
         description: Số km hiện tại
@@ -383,7 +383,7 @@ datasets:
         description: Loại lỗi
         data_type: varchar
         nullable: true
-        business_definition: Phân loại lỗi: Động cơ, Pin, Điện tử, Nội thất, Ngoại thất, Hệ thống phanh
+        business_definition: "Phân loại lỗi: Động cơ, Pin, Điện tử, Nội thất, Ngoại thất, Hệ thống phanh"
         example: Điện tử
       - name: defect_description
         description: Mô tả lỗi
@@ -509,7 +509,7 @@ datasets:
         description: Bảo hành chi trả
         data_type: varchar
         nullable: true
-        business_definition: Cờ xác định bảo dưỡng được bảo hành chi trả: Y/N
+        business_definition: "Cờ xác định bảo dưỡng được bảo hành chi trả: Y/N"
         example: Y
     owners:
       - after_sales_ops
@@ -539,7 +539,7 @@ datasets:
         description: Nhóm phụ tùng
         data_type: varchar
         nullable: true
-        business_definition: Phân nhóm: Hệ thống phanh, Động cơ, Điện tử, Nội thất, Ngoại thất
+        business_definition: "Phân nhóm: Hệ thống phanh, Động cơ, Điện tử, Nội thất, Ngoại thất"
         example: Hệ thống phanh
       - name: applicable_models
         description: Model áp dụng
@@ -557,7 +557,7 @@ datasets:
         description: Đơn vị tính
         data_type: varchar
         nullable: true
-        business_definition: Đơn vị: Cái, Bộ, Lít, Mét
+        business_definition: "Đơn vị: Cái, Bộ, Lít, Mét"
         example: Bộ
       - name: manufacturer
         description: Nhà sản xuất
@@ -695,7 +695,7 @@ datasets:
         description: Kênh khiếu nại
         data_type: varchar
         nullable: true
-        business_definition: Kênh: Hotline, Email, App, Facebook, Trực tiếp
+        business_definition: "Kênh: Hotline, Email, App, Facebook, Trực tiếp"
         example: Hotline
       - name: complaint_category
         description: Phân loại
@@ -713,7 +713,7 @@ datasets:
         description: Mức độ
         data_type: varchar
         nullable: true
-        business_definition: Mức độ nghiêm trọng: Thấp, Trung bình, Cao, Khẩn cấp
+        business_definition: "Mức độ nghiêm trọng: Thấp, Trung bình, Cao, Khẩn cấp"
         example: Trung bình
       - name: resolution_status
         description: Trạng thái xử lý
@@ -839,13 +839,13 @@ datasets:
         description: Cấp chứng chỉ
         data_type: varchar
         nullable: true
-        business_definition: Cấp độ chuyên môn: Sơ cấp, Trung cấp, Cao cấp, Chuyên gia
+        business_definition: "Cấp độ chuyên môn: Sơ cấp, Trung cấp, Cao cấp, Chuyên gia"
         example: Cao cấp
       - name: specialization
         description: Chuyên môn
         data_type: varchar
         nullable: true
-        business_definition: Chuyên môn chính: Điện, Động cơ, Pin cao áp, Thân vỏ, Điều hòa
+        business_definition: "Chuyên môn chính: Điện, Động cơ, Pin cao áp, Thân vỏ, Điều hòa"
         example: Pin cao áp
       - name: years_of_experience
         description: Số năm kinh nghiệm
@@ -965,7 +965,7 @@ datasets:
         description: Nhóm sửa chữa
         data_type: varchar
         nullable: true
-        business_definition: Nhóm: Động cơ, Phanh, Treo, Điện, Nội thất, Điều hòa, Chung
+        business_definition: "Nhóm: Động cơ, Phanh, Treo, Điện, Nội thất, Điều hòa, Chung"
         example: Phanh
       - name: standard_labor_time
         description: Thời gian chuẩn (giờ)
@@ -989,7 +989,7 @@ datasets:
         description: Đủ điều kiện bảo hành
         data_type: varchar
         nullable: true
-        business_definition: Hạng mục có được bảo hành chi trả không: Y/N
+        business_definition: "Hạng mục có được bảo hành chi trả không: Y/N"
         example: N
     owners:
       - technical_training

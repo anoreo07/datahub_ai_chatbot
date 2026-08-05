@@ -82,7 +82,7 @@ glossary_terms:
   - name: Sales Mix
     definition: Cơ cấu doanh số theo dòng sản phẩm, phiên bản hoặc màu sắc
     business_meaning: Cơ sở lập kế hoạch sản xuất và tối ưu lợi nhuận theo từng phân khúc
-    example: Sales Mix hiện tại: sedan 40%, SUV 35%, hatchback 25% tổng doanh số
+    example: "Sales Mix hiện tại: sedan 40%, SUV 35%, hatchback 25% tổng doanh số"
     related_terms:
       - Product Mix
       - Option Take Rate

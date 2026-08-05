@@ -39,9 +39,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .msg.error{align-self:flex-start;background:#fdecea;color:var(--error);border-bottom-left-radius:4px}
 .msg .meta{font-size:11px;color:var(--text-secondary);margin-top:4px}
 .msg.user .meta{color:rgba(255,255,255,.7)}
-.typing{align-self:flex-start;background:var(--bot-msg);border-bottom-left-radius:4px;padding:10px 18px;font-size:14px}
-.typing::after{content:'...';animation:dots 1.2s steps(4) infinite}
-@keyframes dots{0%{content:''}25%{content:'.'}50%{content:'..'}75%{content:'...'}}
+.typing{align-self:flex-start;background:var(--bot-msg);border-bottom-left-radius:4px;padding:10px 18px;font-size:14px;max-width:70%}
+.typing .typing-label{font-size:12px;color:var(--text-secondary);margin-bottom:4px}
+.typing .typing-dots{color:var(--primary);letter-spacing:2px;animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.3}50%{opacity:1}}
 .msg.bot .answer-text{line-height:1.6}
 .msg.bot .cit{color:var(--primary);text-decoration:none;font-weight:600}
 .msg.bot .cit:hover{text-decoration:underline}
@@ -54,6 +55,22 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .ent-item{font-size:11px;background:var(--bg);border-radius:4px;padding:2px 8px}
 .ent-item a{color:var(--text-secondary);text-decoration:none}
 .ent-item a:hover{color:var(--primary)}
+.suggestion{margin-top:8px;padding:10px 12px;background:var(--bg);border:1px solid var(--warning);border-radius:8px;font-size:13px}
+.suggestion .sugg-hint{color:var(--text);margin-bottom:8px}
+.suggestion .sugg-term{font-weight:700;color:var(--primary)}
+.suggestion .btn{margin-right:6px}
+.suggestion.done{opacity:.55;border-color:var(--border)}
+.lineage{margin-top:10px;border:1px solid var(--border);border-radius:8px;background:var(--bg);padding:6px;overflow-x:auto}
+.lineage svg{display:block;margin:0 auto}
+.lineage .lg-legend{font-size:11px;color:var(--text-secondary);text-align:center;margin-top:4px}
+.lineage .lg-node{cursor:pointer}
+.lineage .lg-node .lg-rect{fill:var(--card);stroke:var(--primary);stroke-width:1.2}
+.lineage .lg-node.main .lg-rect{fill:#fff;stroke:var(--primary);stroke-width:2}
+.lineage .lg-node text{font:11px -apple-system,'Segoe UI',Roboto,sans-serif;fill:var(--text);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.lineage .lg-link{fill:none;stroke:var(--text-secondary);stroke-width:1.2}
+.lineage .lg-link.up{stroke:var(--success)}
+.lineage .lg-link.down{stroke:var(--warning)}
+.lineage .lg-label{font-size:10px;fill:var(--text-secondary);text-anchor:middle}
 #input-area{display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--border);background:var(--card)}
 #input{flex:1;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:14px;outline:none;background:var(--bg);color:var(--text)}
 #input:focus{border-color:var(--primary)}
@@ -126,6 +143,31 @@ tr:hover td{background:var(--bg)}
 .spinner{width:18px;height:18px;border:2px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin .6s linear infinite;display:inline-block}
 @keyframes spin{to{transform:rotate(360deg)}}
 .json-view{background:var(--bg);padding:12px;border-radius:6px;font-size:12px;font-family:monospace;overflow-x:auto;white-space:pre-wrap;max-height:400px;overflow-y:auto}
+/* Action menu */
+#input-area{position:relative}
+.action-wrap{position:relative}
+.action-toggle{width:38px;height:38px;padding:0;font-size:20px;line-height:1;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.action-menu{position:absolute;bottom:calc(100% + 8px);left:0;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 4px 20px var(--shadow);min-width:250px;z-index:60;overflow:hidden;padding:6px}
+.action-menu.hidden{display:none}
+.action-menu .am-head{font-size:11px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.5px;padding:8px 10px 6px}
+.action-item{display:flex;align-items:center;gap:10px;width:100%;padding:9px 10px;cursor:pointer;font-size:13px;color:var(--text);border:0;background:none;border-radius:6px;text-align:left}
+.action-item:hover{background:var(--bg)}
+.action-item svg{width:16px;height:16px;flex-shrink:0;color:var(--primary)}
+.action-item .ai-desc{font-size:11px;color:var(--text-secondary);margin-top:1px}
+.action-panel{font-size:13px}
+.action-panel .ap-title{margin-bottom:4px}
+.action-panel .ap-hint{font-size:12px;color:var(--text-secondary);margin-bottom:12px}
+.action-panel .col-chip{display:inline-block;background:var(--primary);color:#fff;border-radius:4px;padding:1px 7px;font-size:11px;margin:2px}
+.action-panel .col-chip.missing{background:var(--error)}
+.action-panel .col-chip.additional{background:var(--warning)}
+.action-panel .badge-low{background:var(--success);color:#fff}
+.action-panel .badge-medium{background:var(--warning);color:#fff}
+.action-panel .badge-high{background:var(--error);color:#fff}
+.ratio{display:flex;margin:8px 0}
+.ratio-fill{height:10px;border-radius:5px}
+.ratio-empty{flex:1;background:var(--border);height:10px;border-radius:5px}
+.sql-block{background:var(--bg);padding:12px;border-radius:6px;font-family:monospace;font-size:12px;overflow-x:auto;white-space:pre;line-height:1.5}
+.stars{color:var(--warning);letter-spacing:2px}
 </style>
 </head>
 <body>
@@ -210,6 +252,40 @@ tr:hover td{background:var(--bg)}
     </div>
   </div>
   <div id="input-area">
+    <div class="action-wrap">
+      <button class="btn btn-ghost action-toggle" id="action-toggle" title="Action menu" onclick="toggleActionMenu(event)">+</button>
+      <div class="action-menu hidden" id="action-menu">
+        <div class="am-head">Actions</div>
+        <button class="action-item" onclick="openAction('upload')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>
+          <span><b>Upload Document</b><div class="ai-desc">So sánh schema file tải lên với DataHub</div></span>
+        </button>
+        <button class="action-item" onclick="openAction('search')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <span><b>Search Dataset</b><div class="ai-desc">Tìm dataset theo tên, cột, owner, tag…</div></span>
+        </button>
+        <button class="action-item" onclick="openAction('sql')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16M4 12h16M4 19h16"/><path d="M8 5v14M12 15l-3 4M16 15l-3 4"/></svg>
+          <span><b>SQL Generator</b><div class="ai-desc">Sinh SQL chỉ từ schema DataHub</div></span>
+        </button>
+        <button class="action-item" onclick="openAction('impact')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 17h.01"/></svg>
+          <span><b>Impact Analysis</b><div class="ai-desc">Đánh giá ảnh hưởng hạ nguồn</div></span>
+        </button>
+        <button class="action-item" onclick="openAction('lineage')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="12" r="2"/><circle cx="19" cy="12" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="12" cy="19" r="2"/><path d="M7 12h3M14 5h3M14 19h3M12 7v4M12 13v4"/></svg>
+          <span><b>Data Lineage</b><div class="ai-desc">Xem lineage dạng đồ thị tương tác</div></span>
+        </button>
+        <button class="action-item" onclick="openAction('quality')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.5-6.3 4.5L8 14 2 9.4h7.6z"/></svg>
+          <span><b>Data Quality Check</b><div class="ai-desc">Đánh giá độ hoàn thiện metadata</div></span>
+        </button>
+        <button class="action-item" onclick="openAction('report')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg>
+          <span><b>Metadata Report</b><div class="ai-desc">Báo cáo AI metadata chuyên nghiệp</div></span>
+        </button>
+      </div>
+    </div>
     <input id="chat-input" type="text" placeholder="Hỏi về metadata..." autofocus>
     <button class="btn btn-primary" id="chat-send" onclick="sendChat()">Send</button>
   </div>
@@ -300,6 +376,21 @@ tr:hover td{background:var(--bg)}
     <h3>System Health</h3>
     <div id="health-status"></div>
     <button class="btn btn-ghost btn-sm" onclick="checkHealth()" style="margin-top:8px">Refresh</button>
+    <span id="health-last-check" style="font-size:12px;color:var(--text-secondary);margin-left:8px"></span>
+  </div>
+  <div class="card">
+    <h3>Healthcheck Logs (5 phút 1 lần)</h3>
+    <div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px">
+      Healthcheck tự động chạy mỗi 5 phút. Lịch sử các lần kiểm tra được liệt kê bên dưới.
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Thời gian</th><th>Trạng thái</th><th>Thời gian chạy</th><th>postgres</th><th>redis</th><th>opensearch</th><th>llm</th></tr>
+        </thead>
+        <tbody id="health-logs"></tbody>
+      </table>
+    </div>
   </div>
   <div class="card">
     <h3>Quick Stats</h3>
@@ -424,39 +515,59 @@ function switchPage(page) {
 
 // Chat
 let conversationId = localStorage.getItem('conversationId') || null;
+let lastQuestion = '';
+const STREAM_STATUS_LABELS = {
+  classify: 'Đang phân tích câu hỏi…',
+  retrieve: 'Đang tìm kiếm metadata…',
+  rerank: 'Đang sắp xếp kết quả…',
+  generate: 'Đang sinh câu trả lời…'
+};
 async function sendChat() {
   const input = document.getElementById('chat-input');
   const query = input.value.trim();
   if (!query) return;
+  lastQuestion = query;
   input.value = '';
+  const body = {question: query};
+  if (conversationId) body.conversation_id = conversationId;
+  await streamChat(body);
+}
+function parseSse(block) {
+  let event = 'message', data = null;
+  block.split('\n').forEach(line => {
+    if (line.startsWith('event:')) event = line.slice(6).trim();
+    else if (line.startsWith('data:')) data = line.slice(5).trim();
+  });
+  if (data === null) return null;
+  try { return {event, data: JSON.parse(data)}; }
+  catch (e) { return {event, data: null}; }
+}
+async function streamChat(body, userLabel) {
+  const input = document.getElementById('chat-input');
   const msgs = document.getElementById('messages');
   const userDiv = document.createElement('div');
   userDiv.className = 'msg user';
-  userDiv.innerHTML = '<div>' + escapeHtml(query) + '</div><div class="meta">' + now() + '</div>';
+  userDiv.innerHTML = '<div>' + escapeHtml(userLabel || body.question) + '</div><div class="meta">' + now() + '</div>';
   msgs.appendChild(userDiv);
   const typing = document.createElement('div');
   typing.className = 'typing'; typing.id = 'typing-ind';
+  typing.innerHTML = '<div class="typing-label">Đang phân tích câu hỏi…</div><div class="typing-dots">● ● ●</div>';
   msgs.appendChild(typing);
   msgs.scrollTop = msgs.scrollHeight;
-  document.getElementById('chat-send').disabled = true;
-  try {
-    const body = {question: query};
-    if (conversationId) body.conversation_id = conversationId;
-    const res = await fetch(API_BASE + '/api/v1/chat', {
-      method:'POST', headers: authHeaders(),
-      body: JSON.stringify(body)
-    });
-    document.getElementById('typing-ind')?.remove();
-    if (!res.ok) {
-      if (res.status === 401) { logout(); return; }
-      throw new Error((await res.json()).detail || res.statusText);
-    }
-    const data = await res.json();
-    if (data.conversation_id) { conversationId = data.conversation_id; localStorage.setItem('conversationId', conversationId); }
-    const botDiv = document.createElement('div');
-    botDiv.className = 'msg bot';
+  const sendBtn = document.getElementById('chat-send');
+  if (sendBtn) sendBtn.disabled = true;
 
-    let answerHtml = renderMarkdown(data.answer);
+  const botDiv = document.createElement('div');
+  botDiv.className = 'msg bot';
+  const answerDiv = document.createElement('div');
+  answerDiv.className = 'answer-text';
+  botDiv.appendChild(answerDiv);
+  let fullText = '';
+  let started = false;
+
+  const finalize = (data) => {
+    if (data.conversation_id) { conversationId = data.conversation_id; localStorage.setItem('conversationId', conversationId); }
+    let answerHtml = renderMarkdown(fullText || data.answer);
     const citMap = {};
     (data.citations || []).forEach(c => { citMap[c.id] = c; });
     answerHtml = answerHtml.replace(/\[(E\d+)\]/g, (m, cid) => {
@@ -488,9 +599,64 @@ async function sendChat() {
       entitiesHtml += '</div>';
     }
 
-    botDiv.innerHTML = '<div class="answer-text">' + answerHtml + '</div>' + citationsHtml + entitiesHtml + '<div class="meta">' + now() + (data.confidence ? ' · ' + data.confidence : '') + (data.ambiguous ? ' · ambiguous' : '') + '</div>';
-    msgs.appendChild(botDiv);
+    botDiv.innerHTML = '<div class="answer-text">' + answerHtml + '</div>' + citationsHtml + entitiesHtml + (data.lineage ? lineageSvg(data.lineage) : '') + (data.suggestion ? suggestionHtml(data.suggestion) : '') + '<div class="meta">' + now() + (data.confidence ? ' · ' + data.confidence : '') + (data.ambiguous ? ' · ambiguous' : '') + '</div>';
     msgs.scrollTop = msgs.scrollHeight;
+  };
+
+  try {
+    const res = await fetch(API_BASE + '/api/v1/chat/stream', {
+      method: 'POST', headers: authHeaders(),
+      body: JSON.stringify(body)
+    });
+    if (!res.ok) {
+      if (res.status === 401) { logout(); return; }
+      throw new Error((await res.json()).detail || res.statusText);
+    }
+    if (!res.body) {
+      const data = await res.json();
+      finalize(data);
+      return;
+    }
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buf = '';
+    while (true) {
+      const {done, value} = await reader.read();
+      if (done) break;
+      buf += decoder.decode(value, {stream: true});
+      let idx;
+      while ((idx = buf.indexOf('\n\n')) !== -1) {
+        const block = buf.slice(0, idx);
+        buf = buf.slice(idx + 2);
+        const ev = parseSse(block);
+        if (!ev) continue;
+        if (ev.event === 'status' && ev.data && STREAM_STATUS_LABELS[ev.data.step]) {
+          const lbl = typing.querySelector('.typing-label');
+          if (lbl) lbl.textContent = STREAM_STATUS_LABELS[ev.data.step];
+        } else if (ev.event === 'token' && ev.data && ev.data.text) {
+          if (!started) {
+            started = true;
+            typing.remove();
+            msgs.appendChild(botDiv);
+            msgs.scrollTop = msgs.scrollHeight;
+          }
+          fullText += ev.data.text;
+          answerDiv.innerHTML = renderMarkdown(fullText);
+          msgs.scrollTop = msgs.scrollHeight;
+        } else if (ev.event === 'done' && ev.data) {
+          if (typing.parentNode) typing.remove();
+          if (!botDiv.parentNode) msgs.appendChild(botDiv);
+          finalize(ev.data);
+        } else if (ev.event === 'error' && ev.data) {
+          throw new Error(ev.data.detail || 'Streaming error');
+        }
+      }
+    }
+    if (!started && typing.parentNode) {
+      typing.remove();
+      msgs.appendChild(botDiv);
+      finalize({answer: fullText, conversation_id: body.conversation_id});
+    }
   } catch(e) {
     document.getElementById('typing-ind')?.remove();
     const errDiv = document.createElement('div');
@@ -498,11 +664,125 @@ async function sendChat() {
     errDiv.innerHTML = '<div>Error: ' + escapeHtml(e.message) + '</div>';
     msgs.appendChild(errDiv);
   } finally {
-    document.getElementById('chat-send').disabled = false;
+    if (sendBtn) sendBtn.disabled = false;
     input.focus();
   }
 }
 document.getElementById('chat-input')?.addEventListener('keydown', e => { if (e.key === 'Enter') sendChat(); });
+
+function suggestionHtml(s) {
+  return '<div class="suggestion" id="sugg-box">' +
+    '<div class="sugg-hint">Ý bạn là <span class="sugg-term">' + escapeHtml(s.suggested) + '</span>?</div>' +
+    '<button class="btn btn-primary btn-sm" onclick="applySuggestion(\'' + escapeAttr(s.suggested).replace(/'/g, "\\'") + '\', this)">Đồng ý với gợi ý</button>' +
+    '<button class="btn btn-ghost btn-sm" onclick="dismissSuggestion(this)">Để sau</button>' +
+    '</div>';
+}
+
+// Render a lineage graph: the selected dataset is always centered, upstream
+// datasets on the LEFT, downstream datasets on the RIGHT. Every arrow is an
+// orthogonal edge that connects to the selected dataset's own edge (never
+// between neighbours). Layout is computed from the data, not hardcoded.
+function lineageSvg(lg) {
+  if (!lg) return '';
+  const byUrn = (list) => {
+    const seen = new Set(), out = [];
+    (list || []).forEach(n => {
+      const key = n && n.urn;
+      if (key && !seen.has(key) && (lg.entity_urn ? key !== lg.entity_urn : true)) {
+        seen.add(key);
+        out.push(n);
+      }
+    });
+    return out;
+  };
+  const up = byUrn(lg.upstreams);
+  const down = byUrn(lg.downstreams);
+  if (!up.length && !down.length) return '';
+
+  const nodeW = 150, nodeH = 34, rowH = 46, padY = 26, elbow = 70;
+  const nRows = Math.max(up.length, down.length);
+  const leftX = nodeW / 2;                            // upstream column centre
+  const mainX = nodeW + elbow + nodeW / 2;            // selected dataset centre (fixed)
+  const rightX = nodeW + elbow + nodeW + elbow + nodeW / 2; // downstream column centre
+  const width = rightX + nodeW / 2 + 16;
+  const gridH = Math.max(1, nRows) * rowH;
+  const mainY = padY + gridH / 2;                     // selected dataset vertically centred
+  const height = padY * 2 + gridH;
+
+  const truncate = s => s.length > 22 ? s.slice(0, 20) + '…' : s;
+  const node = (x, y, label, main, url) => {
+    const cls = main ? 'lg-node main' : 'lg-node';
+    const display = escapeHtml(truncate(label || '?'));
+    const body = '<g class="' + cls + '">' +
+      '<rect x="' + (x - nodeW / 2) + '" y="' + (y - nodeH / 2) + '" width="' + nodeW + '" height="' + nodeH + '" rx="6" class="lg-rect"/>' +
+      '<text x="' + x + '" y="' + y + '" text-anchor="middle" dominant-baseline="central">' + display + '</text>' +
+      '</g>';
+    return (url ? '<a href="' + escapeAttr(url) + '" target="_blank" style="text-decoration:none;display:inline-block">' : '') +
+      body +
+      (url ? '</a>' : '');
+  };
+
+  let s = '<div class="lineage"><svg xmlns="http://www.w3.org/2000/svg" width="' + width + '" height="' + height + '" viewBox="0 0 ' + width + ' ' + height + '">';
+  s += '<defs>' +
+    '<marker id="lgArrowUp" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L9,4.5 L0,9 z" fill="#2e7d32"/></marker>' +
+    '<marker id="lgArrowDown" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L9,4.5 L0,9 z" fill="#e65100"/></marker>' +
+    '</defs>';
+
+  // Upstream edge: upstream node -> elbow -> into the selected dataset's LEFT edge.
+  up.forEach((n, i) => {
+    const y = padY + i * rowH + nodeH / 2;
+    const midX = leftX + nodeW / 2 + elbow / 2;
+    s += '<polyline class="lg-link up" marker-end="url(#lgArrowUp)" points="' +
+      (leftX + nodeW / 2) + ',' + y + ' ' +
+      midX + ',' + y + ' ' +
+      midX + ',' + mainY + ' ' +
+      (mainX - nodeW / 2) + ',' + mainY + '"/>';
+  });
+  // Downstream edge: selected dataset's RIGHT edge -> elbow -> downstream node.
+  down.forEach((n, i) => {
+    const y = padY + i * rowH + nodeH / 2;
+    const midX = mainX + nodeW / 2 + elbow / 2;
+    s += '<polyline class="lg-link down" marker-end="url(#lgArrowDown)" points="' +
+      (mainX + nodeW / 2) + ',' + mainY + ' ' +
+      midX + ',' + mainY + ' ' +
+      midX + ',' + y + ' ' +
+      (rightX - nodeW / 2) + ',' + y + '"/>';
+  });
+
+  up.forEach((n, i) => {
+    const y = padY + i * rowH + nodeH / 2;
+    s += node(leftX, y, n.name || n.urn, false, n.url);
+  });
+  s += node(mainX, mainY, lg.entity_name || '', true, lg.entity_url);
+  down.forEach((n, i) => {
+    const y = padY + i * rowH + nodeH / 2;
+    s += node(rightX, y, n.name || n.urn, false, n.url);
+  });
+
+  s += '</svg><div class="lg-legend">← upstream &nbsp;·&nbsp; <b>' + escapeHtml(lg.entity_name || '') + '</b> &nbsp;·&nbsp; downstream →</div></div>';
+  return s;
+}
+function applySuggestion(suggested, btn) {
+  const box = document.getElementById('sugg-box');
+  if (box) box.classList.add('done');
+  if (btn) btn.disabled = true;
+  sendChatWithSuggestion(suggested);
+}
+function dismissSuggestion(btn) {
+  const box = document.getElementById('sugg-box');
+  if (box) box.classList.add('done');
+  if (btn) btn.disabled = true;
+}
+async function sendChatWithSuggestion(suggested) {
+  const query = document.getElementById('chat-input').value.trim() || lastQuestion || '';
+  const input = document.getElementById('chat-input');
+  if (!lastQuestion && !query) return;
+  // Re-ask with the corrected name so the chatbot answers with the fixed term.
+  const body = {question: lastQuestion || query, suggested_name: suggested};
+  if (conversationId) body.conversation_id = conversationId;
+  input.value = '';
+  await streamChat(body, (lastQuestion || query) + ' <span class="sugg-term">(' + escapeHtml(suggested) + ')</span>');
+}
 
 // Search
 async function doSearch() {
@@ -705,6 +985,9 @@ async function importDoc() {
 }
 
 // Status
+const HEALTH_AUTO_REFRESH_MS = 60000;
+let healthTimer = null;
+
 async function checkHealth() {
   const el = document.getElementById('health-status');
   el.innerHTML = '<span class="spinner"></span>';
@@ -719,24 +1002,73 @@ async function checkHealth() {
     }
     html += '</table><p style="margin-top:8px;font-weight:600;color:' + (data.status === 'ok' ? 'var(--success)' : 'var(--error)') + '">Overall: ' + data.status + '</p>';
     el.innerHTML = html;
+    document.getElementById('health-last-check').textContent = 'Cập nhật lúc: ' + now();
+    await loadHealthLogs();
   } catch(e) {
     el.innerHTML = '<p style="color:var(--error)">Cannot connect to server</p>';
   }
 }
 
+async function loadHealthLogs() {
+  const tbody = document.getElementById('health-logs');
+  if (!tbody) return;
+  try {
+    const r = await fetch(API_BASE + '/ready/logs?limit=50');
+    if (!r.ok) throw new Error('failed');
+    const data = await r.json();
+    const logs = data.logs || [];
+    if (!logs.length) {
+      tbody.innerHTML = '<tr><td colspan="8" style="color:var(--text-secondary)">Chưa có healthcheck nào.</td></tr>';
+      return;
+    }
+    let html = '';
+    logs.forEach(l => {
+      const t = new Date(l.timestamp);
+      const timeStr = t.toLocaleString([], {hour:'2-digit',minute:'2-digit',second:'2-digit',day:'2-digit',month:'2-digit'});
+      const svcs = l.services || {};
+      const dot = l.status === 'ok' ? 'ok' : 'error';
+      const badge = (v) => '<span class="status-dot ' + (v === 'ok' ? 'ok' : 'error') + '"></span>' + (v || '-');
+      html += '<tr>' +
+        '<td>' + escapeHtml(timeStr) + '</td>' +
+        '<td><span class="status-dot ' + dot + '"></span>' + escapeHtml(l.status) + '</td>' +
+        '<td>' + (l.duration_ms != null ? l.duration_ms + ' ms' : '-') + '</td>' +
+        '<td>' + badge(svcs.postgres) + '</td>' +
+        '<td>' + badge(svcs.redis) + '</td>' +
+        '<td>' + badge(svcs.opensearch) + '</td>' +
+        '<td>' + badge(svcs.llm) + '</td>' +
+        '</tr>';
+    });
+    tbody.innerHTML = html;
+  } catch(e) {
+    tbody.innerHTML = '<tr><td colspan="8" style="color:var(--text-secondary)">Không tải được healthcheck logs.</td></tr>';
+  }
+}
+
+function startHealthAutoRefresh() {
+  if (healthTimer) clearInterval(healthTimer);
+  healthTimer = setInterval(() => {
+    const page = document.querySelector('#sidebar nav a.active');
+    if (page && page.dataset.page === 'status') loadHealthLogs();
+  }, HEALTH_AUTO_REFRESH_MS);
+}
+startHealthAutoRefresh();
+
 async function loadStats() {
   const el = document.getElementById('quick-stats');
   try {
-    const r = await fetch(API_BASE + '/api/v1/search?q=*&limit=0', {headers: authHeaders()});
-    const total = (await r.json()).total || 0;
-    const types = ['dataset','dashboard','glossary_term','document'];
+    const r = await fetch(API_BASE + '/api/v1/search/stats', {headers: authHeaders()});
+    const data = await r.json();
+    const types = [
+      {key:'dataset', label:'Datasets'},
+      {key:'dashboard', label:'Dashboards'},
+      {key:'glossary_term', label:'Glossary Terms'},
+      {key:'document', label:'Documents'}
+    ];
     let html = '';
     for (const t of types) {
-      const res = await fetch(API_BASE + '/api/v1/search?q=*&entity_type=' + t + '&limit=0', {headers: authHeaders()});
-      const count = (await res.json()).total || 0;
-      html += '<div class="stat-card"><div class="value">' + count + '</div><div class="label">' + t + '</div></div>';
+      html += '<div class="stat-card"><div class="value">' + (data[t.key] || 0) + '</div><div class="label">' + t.label + '</div></div>';
     }
-    html += '<div class="stat-card"><div class="value">' + total + '</div><div class="label">Total Entities</div></div>';
+    html += '<div class="stat-card"><div class="value">' + (data.total || 0) + '</div><div class="label">Total Entities</div></div>';
     el.innerHTML = html;
   } catch(e) { el.innerHTML = '<p style="color:var(--text-secondary)">Could not load stats</p>'; }
 }
@@ -768,6 +1100,434 @@ function renderMarkdown(text) {
   html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
   html = html.replace(/^# (.+)$/gm, '<h1>$1</h1>');
   return html;
+}
+
+// ===================== Action Menu Plus =====================
+function toggleActionMenu(e) {
+  if (e) e.stopPropagation();
+  document.getElementById('action-menu').classList.toggle('hidden');
+}
+document.addEventListener('click', (e) => {
+  const m = document.getElementById('action-menu');
+  if (m && !m.classList.contains('hidden') && !m.contains(e.target) && e.target.id !== 'action-toggle') {
+    m.classList.add('hidden');
+  }
+});
+function closeActionMenu() {
+  document.getElementById('action-menu').classList.add('hidden');
+}
+function actionError(panel, msg) {
+  panel.innerHTML = '<p style="color:var(--error)">Error: ' + escapeHtml(msg || 'Lỗi') + '</p>';
+}
+function actionEndpoint() {
+  return '/api/v1/actions';
+}
+async function postAction(path, body, panel) {
+  const r = await fetch(API_BASE + actionEndpoint() + path, {
+    method: 'POST', headers: authHeaders(), body: JSON.stringify(body)
+  });
+  if (r.status === 401) { logout(); return null; }
+  if (!r.ok) {
+    let detail = r.statusText;
+    try { detail = (await r.json()).detail || detail; } catch(e) {}
+    throw new Error(detail);
+  }
+  return r.json();
+}
+
+function openAction(name) {
+  closeActionMenu();
+  const handlers = {upload: actionUpload, search: actionSearch, sql: actionSql,
+    impact: actionImpact, lineage: actionLineage, quality: actionQuality, report: actionReport};
+  if (handlers[name]) handlers[name]();
+}
+
+// ---------- Shared dataset query panel ----------
+function datasetQueryHtml(title, hint, id, placeholder, extraFields='') {
+  return '<div class="action-panel">' +
+    '<h3 class="ap-title">' + escapeHtml(title) + '</h3>' +
+    '<div class="ap-hint">' + escapeHtml(hint) + '</div>' +
+    '<div class="form-group"><label>Dataset / câu hỏi</label>' +
+    '<input id="' + id + '" placeholder="' + escapeAttr(placeholder) + '" onkeydown="if(event.key===\'Enter\')document.getElementById(\'run-' + id + '\').click()"></div>' +
+    extraFields +
+    '</div>';
+}
+
+// ---------- 1. Upload Document (schema compare) ----------
+function actionUpload() {
+  closeActionMenu();
+  const html = '<div class="action-panel">' +
+    '<h3 class="ap-title">Upload Document (so sánh schema)</h3>' +
+    '<div class="ap-hint">Hỗ trợ: PDF, CSV, Excel, SQL, dbt, YAML, Avro, JSON Schema. Trích xuất cột rồi đối chiếu với dataset trong DataHub.</div>' +
+    '<div class="form-group"><label>Tài liệu</label><input type="file" id="up-file" accept=".pdf,.csv,.xls,.xlsx,.sql,.yml,.yaml,.avsc,.json,.md"></div>' +
+    '<div class="form-group"><label>Cột đã trích xuất (có thể chỉnh sửa, mỗi dòng 1 cột)</label>' +
+    '<textarea id="up-columns" rows="6" placeholder="Đợi parse file…"></textarea></div>' +
+    '<div class="form-group"><label>Dataset gợi ý (tùy chọn)</label>' +
+    '<input id="up-preferred" placeholder="vd: sales_order"></div>' +
+    '<div class="modal-actions"><button class="btn btn-ghost" onclick="parseUpload()">Parse file</button>' +
+    '<button class="btn btn-primary" id="run-upload" onclick="runUpload()">So sánh với DataHub</button></div>' +
+    '<div id="up-result" style="margin-top:12px"></div></div>';
+  showModal(html);
+  document.getElementById('up-file').addEventListener('change', parseUpload);
+}
+
+function parseUpload() {
+  const fileInput = document.getElementById('up-file');
+  const out = document.getElementById('up-columns');
+  if (!fileInput || !fileInput.files.length) { toast('Chọn file trước', 'error'); return; }
+  const file = fileInput.files[0];
+  const reader = new FileReader();
+  reader.onerror = () => toast('Không đọc được file', 'error');
+  reader.onload = () => {
+    const cols = extractColumns(file.name, reader.result);
+    out.value = cols.join('\n');
+    if (!cols.length) toast('Không trích xuất được cột — nhập tay hoặc chọn file khác', 'error');
+    else toast('Trích xuất ' + cols.length + ' cột', 'success');
+  };
+  reader.readAsText(file);
+}
+
+function extractColumns(filename, content) {
+  if (!content || typeof content !== 'string') return [];
+  const name = (filename || '').toLowerCase();
+  const text = String(content);
+  if (name.endsWith('.csv') || name.endsWith('.tsv')) {
+    const sep = name.endsWith('.tsv') ? '\t' : ',';
+    const first = text.split(/\r?\n/).find(l => l.trim());
+    return (first || '').split(sep).map(c => c.trim().replace(/^"|"$/g, '')).filter(Boolean);
+  }
+  if (name.endsWith('.json') || name.endsWith('.avsc')) {
+    try {
+      const obj = JSON.parse(text);
+      const props = (obj && obj.properties) || (Array.isArray(obj && obj.fields) ? obj.fields : null);
+      if (obj && obj.properties) return Object.keys(obj.properties);
+      if (Array.isArray(obj && obj.fields)) return obj.fields.map(f => f && f.name).filter(Boolean);
+    } catch(e) {}
+  }
+  if (name.endsWith('.yaml') || name.endsWith('.yml') || name.endsWith('_schema.yml') || name.includes('dbt')) {
+    const cols = [];
+    text.split(/\r?\n/).forEach(l => {
+      const m = l.match(/^\s*-\s+name:\s*([A-Za-z0-9_]+)/);
+      const m2 = l.match(/^\s*-\s+([A-Za-z0-9_]+)\s*:/);
+      if (m) cols.push(m[1]); else if (m2) cols.push(m2[1]);
+    });
+    return cols;
+  }
+  if (name.endsWith('.sql')) {
+    const cols = [];
+    text.split(/\r?\n/).forEach(l => {
+      const m = l.match(/^[\s`]*([A-Za-z0-9_]+)[\s`]+(INT|BIGINT|VARCHAR|STRING|DECIMAL|NUMERIC|FLOAT|DOUBLE|DATE|TIMESTAMP|DATETIME|BOOLEAN|ARRAY|STRUCT|BYTES|TEXT|CHAR|TIME)/i);
+      if (m) cols.push(m[1]);
+    });
+    return cols;
+  }
+  // PDF / plain text / unknown: take comma separated tokens from first few lines
+  const tokens = [];
+  text.split(/\r?\n/).slice(0, 40).forEach(l => {
+    l.split(/[,;\t|]/).forEach(c => { const t = c.trim(); if (/^[A-Za-z_][A-Za-z0-9_]*$/.test(t) && tokens.length < 300 && !tokens.includes(t)) tokens.push(t); });
+  });
+  return tokens;
+}
+
+async function runUpload() {
+  const cols = (document.getElementById('up-columns').value || '').split('\n').map(c => c.trim()).filter(Boolean);
+  const preferred = (document.getElementById('up-preferred').value || '').trim();
+  if (!cols.length) { toast('Cần ít nhất 1 cột', 'error'); return; }
+  const btn = document.getElementById('run-upload');
+  const result = document.getElementById('up-result');
+  btn.disabled = true; result.innerHTML = '<span class="spinner"></span>';
+  try {
+    const data = await postAction('/schema-compare', {
+      columns: cols.map(c => ({name: c})),
+      preferred_query: preferred
+    }, result);
+    if (!data) return;
+    if (!data.candidates.length) {
+      result.innerHTML = '<p style="color:var(--text-secondary)">Không có dataset nào khớp đủ. Hãy thử dataset gợi ý khác.</p>';
+      return;
+    }
+    let html = '<p style="font-size:12px;color:var(--text-secondary);margin-bottom:8px">' + data.total + ' dataset candidate</p>';
+    (data.candidates || []).forEach(c => {
+      html += '<div class="result-item"><div class="name" onclick="viewActionEntity(\'' + escapeAttr(c.urn) + '\',\'upload\')">' + escapeHtml(c.name) + '</div>';
+      html += '<div class="meta">' + escapeHtml(c.platform || '') + (c.domain ? ' · ' + escapeHtml(c.domain) : '') + ' · similarity ' + (c.similarity * 100).toFixed(1) + '%</div>';
+      if (c.description) html += '<div class="snippet">' + escapeHtml(c.description) + '</div>';
+      const count = (arr, cls) => (arr && arr.length) ? '<br><span style="font-size:11px;color:var(--text-secondary)">' + arr.map(x => '<span class="col-chip ' + cls + '">' + escapeHtml(x) + '</span>').join('') + '</span>' : '';
+      html += '<div style="font-size:11px;margin-top:4px"><b>Khớp:</b>' + count(c.matched_columns, '') +
+        count(c.missing_columns, 'missing') + count(c.additional_columns, 'additional') + '</div>';
+      html += '</div>';
+    });
+    result.innerHTML = html;
+  } catch(e) { actionError(result, e.message); }
+  finally { btn.disabled = false; }
+}
+
+// ---------- 2. Search Dataset ----------
+function actionSearch() {
+  closeActionMenu();
+  const html = '<div class="action-panel">' +
+    '<h3 class="ap-title">Search Dataset</h3>' +
+    '<div class="ap-hint">Tìm theo tên, mô tả, cột, owner, tag… Kết quả là danh sách xếp hạng.</div>' +
+    '<div class="form-group"><label>Query</label><input id="s-q" placeholder="vd: sales, customer, revenue…" onkeydown="if(event.key===\'Enter\')runSearchDataset()"></div>' +
+    '<div class="form-row"><div class="form-group" style="flex:1"><label>Owner</label><input id="s-owner" placeholder="tên owner"></div>' +
+    '<div class="form-group" style="flex:1"><label>Tag</label><input id="s-tag" placeholder="tag"></div></div>' +
+    '<div class="form-group"><label>Cột (column name)</label><input id="s-col" placeholder="vd: customer_id"></div>' +
+    '<button class="btn btn-primary" onclick="runSearchDataset()">Tìm kiếm</button>' +
+    '<div id="s-result" style="margin-top:12px"></div></div>';
+  showModal(html);
+  document.getElementById('s-q').focus();
+}
+async function runSearchDataset() {
+  const q = (document.getElementById('s-q').value || '').trim();
+  const owner = (document.getElementById('s-owner').value || '').trim();
+  const tag = (document.getElementById('s-tag').value || '').trim();
+  const col = (document.getElementById('s-col').value || '').trim();
+  const result = document.getElementById('s-result');
+  if (!q && !owner && !tag && !col) { result.innerHTML = '<p style="color:var(--text-secondary)">Nhập ít nhất 1 điều kiện.</p>'; return; }
+  result.innerHTML = '<span class="spinner"></span>';
+  try {
+    const params = new URLSearchParams({q: q || '*', entity_type: 'dataset', limit: 20});
+    if (owner) params.set('owner', owner);
+    if (tag) params.set('tag', tag);
+    if (col) params.set('column', col);
+    const r = await fetch(API_BASE + '/api/v1/search?' + params, {headers: authHeaders()});
+    if (!r.ok) throw new Error((await r.json()).detail || r.statusText);
+    const data = await r.json();
+    if (!data.results.length) { result.innerHTML = '<p style="color:var(--text-secondary)">Không tìm thấy dataset.</p>'; return; }
+    let html = '<p style="font-size:12px;color:var(--text-secondary);margin-bottom:8px">' + data.results.length + ' dataset</p>';
+    (data.results || []).forEach(r2 => {
+      const sim = Math.round((r2.score || 0) * 100);
+      html += '<div class="result-item"><div class="name" onclick="viewActionEntity(\'' + escapeAttr(r2.urn) + '\',\'search\')">' + escapeHtml(r2.name) + '</div>';
+      html += '<div class="meta">' + escapeHtml(r2.entity_type) + ' · similarity <b>' + sim + '%</b>' + (r2.datahub_url ? ' · <a href="' + escapeAttr(r2.datahub_url) + '" target="_blank">Open</a>' : '') + '</div>';
+      if (r2.snippet) html += '<div class="snippet">' + escapeHtml(r2.snippet) + '</div>';
+      html += '<div style="margin-top:6px">' +
+        '<button class="btn btn-ghost btn-sm" onclick="loadLineageFor(\'' + escapeAttr(r2.urn) + '\',\'' + escapeAttr(r2.name) + '\',\'' + escapeAttr(r2.datahub_url || '') + '\')">Lineage</button> ' +
+        '<button class="btn btn-ghost btn-sm" onclick="loadSqlFor(\'' + escapeAttr(r2.urn) + '\',\'' + escapeAttr(r2.name) + '\')">SQL</button> ' +
+        '<button class="btn btn-ghost btn-sm" onclick="loadQualityFor(\'' + escapeAttr(r2.urn) + '\',\'' + escapeAttr(r2.name) + '\')">Quality</button> ' +
+        '<button class="btn btn-ghost btn-sm" onclick="loadReportFor(\'' + escapeAttr(r2.urn) + '\',\'' + escapeAttr(r2.name) + '\')">Report</button></div>';
+      html += '</div>';
+    });
+    result.innerHTML = html;
+  } catch(e) { actionError(result, e.message); }
+}
+
+// ---------- 3. SQL Generator ----------
+function actionSql() {
+  closeActionMenu();
+  showModal(datasetQueryHtml('SQL Generator',
+    'Sinh SQL chỉ từ schema DataHub — không bịa tên bảng/cột. Nếu cột không có trong metadata sẽ báo rõ.',
+    'sql-q', 'vd: sales_order (hoặc URL dataset)', '') +
+    '<div class="modal-actions"><button class="btn btn-primary" id="run-sql-q" onclick="runSql()">Generate SQL</button></div>' +
+    '<div id="sql-result" style="margin-top:12px"></div>');
+  document.getElementById('sql-q').focus();
+}
+async function runSql() {
+  const q = (document.getElementById('sql-q').value || '').trim();
+  if (!q) { toast('Nhập dataset', 'error'); return; }
+  const result = document.getElementById('sql-result');
+  result.innerHTML = '<span class="spinner"></span>';
+  try {
+    const data = await postAction('/sql', {dataset: q, columns: []}, result);
+    if (!data) return;
+    if (!data.valid) {
+      result.innerHTML = '<p style="color:var(--error)">' + escapeHtml((data.explanation || []).join(' ')) + '</p>';
+      return;
+    }
+    if (data.unavailable_columns && data.unavailable_columns.length) {
+      result.innerHTML = '<p style="color:var(--warning)">Cột không tồn tại: ' + data.unavailable_columns.map(escapeHtml).join(', ') + '</p>';
+      return;
+    }
+    let html = '<div class="sql-block">' + escapeHtml(data.sql) + '</div>';
+    if (data.explanation && data.explanation.length) {
+      html += '<p style="font-size:12px;margin-top:8px"><b>Giải thích</b></p><ul style="font-size:12px">' + data.explanation.map(e => '<li>' + escapeHtml(e) + '</li>').join('') + '</ul>';
+    }
+    result.innerHTML = html;
+  } catch(e) { actionError(result, e.message); }
+}
+
+// ---------- 4. Impact Analysis ----------
+function actionImpact() {
+  closeActionMenu();
+  showModal(datasetQueryHtml('Impact Analysis',
+    'Phân tích ảnh hưởng hạ nguồn trước khi thay đổi/loại bỏ dataset. Chỉ dùng phụ thuộc trả về từ DataHub.',
+    'im-q', 'vd: sales_order', '') +
+    '<div class="modal-actions"><button class="btn btn-primary" id="run-im-q" onclick="runImpact()">Analyze</button></div>' +
+    '<div id="im-result" style="margin-top:12px"></div>');
+  document.getElementById('im-q').focus();
+}
+async function runImpact() {
+  const q = (document.getElementById('im-q').value || '').trim();
+  if (!q) { toast('Nhập dataset', 'error'); return; }
+  const result = document.getElementById('im-result');
+  result.innerHTML = '<span class="spinner"></span>';
+  try {
+    const data = await postAction('/impact', {dataset: q, columns: []}, result);
+    if (!data) return;
+    const riskMap = {low: 'Thấp', medium: 'Trung bình', high: 'Cao'};
+    let html = '<div style="margin-bottom:8px"><b>Risk level:</b> <span class="badge badge-' + escapeHtml(data.risk_level) + '">' + escapeHtml(riskMap[data.risk_level] || data.risk_level) + '</span></div>';
+    const section = (title, items) => {
+      if (!items || !items.length) return '';
+      return '<p style="font-size:12px;margin-top:6px"><b>' + escapeHtml(title) + '</b> (' + items.length + ')</p><ul style="font-size:12px">' + items.map(i => '<li>' + escapeHtml(i.name) + (i.url ? ' <a href="' + escapeAttr(i.url) + '" target="_blank">mở</a>' : '') + '</li>').join('') + '</ul>';
+    };
+    html += section('Datasets bị ảnh hưởng', data.affected_datasets);
+    html += section('Dashboards bị ảnh hưởng', data.affected_dashboards);
+    html += section('Pipelines bị ảnh hưởng', data.affected_pipelines);
+    html += section('Jobs bị ảnh hưởng', data.affected_jobs);
+    html += '<p style="font-size:12px;margin-top:8px"><b>Business impact</b></p><ul style="font-size:12px">' + (data.business_impact || []).map(e => '<li>' + escapeHtml(e) + '</li>').join('') + '</ul>';
+    result.innerHTML = html;
+  } catch(e) { actionError(result, e.message); }
+}
+
+// ---------- 5. Data Lineage (interactive graph) ----------
+function actionLineage() {
+  closeActionMenu();
+  showModal('<div class="action-panel">' +
+    '<h3 class="ap-title">Data Lineage</h3>' +
+    '<div class="ap-hint">Nhập dataset để hiển thị lineage dạng đồ thị tương tác.</div>' +
+    '<div class="form-group"><label>Dataset</label><input id="lg-q" placeholder="vd: sales_order" onkeydown="if(event.key===\'Enter\')runLineage()"></div>' +
+    '<button class="btn btn-primary" onclick="runLineage()">Xem Lineage</button>' +
+    '<div id="lg-result" style="margin-top:12px"></div></div>');
+  document.getElementById('lg-q').focus();
+}
+async function runLineage() {
+  const q = (document.getElementById('lg-q').value || '').trim();
+  if (!q) { toast('Nhập dataset', 'error'); return; }
+  const result = document.getElementById('lg-result');
+  result.innerHTML = '<span class="spinner"></span>';
+  try {
+    const data = await postAction('/lineage', {dataset: q, columns: []}, result);
+    if (!data) return;
+    if (!data.upstreams || !data.upstreams.length) {
+      if (!data.downstreams || !data.downstreams.length) {
+        result.innerHTML = '<p style="color:var(--text-secondary)">Dataset này chưa có lineage trong DataHub.</p>';
+        return;
+      }
+    }
+    result.innerHTML = lineageSvg(data);
+  } catch(e) { actionError(result, e.message); }
+}
+function loadLineageFor(urn, name, url) {
+  closeActionMenu();
+  showModal('<div class="action-panel"><h3 class="ap-title">Data Lineage</h3><div id="lg-for-result" style="margin-top:4px"><span class="spinner"></span></div></div>');
+  postAction('/lineage', {dataset: urn, columns: []}).then(data => {
+    const el = document.getElementById('lg-for-result');
+    if (!data || (!data.upstreams || !data.upstreams.length) && (!data.downstreams || !data.downstreams.length)) {
+      el.innerHTML = '<p style="color:var(--text-secondary)">' + escapeHtml(name) + ' chưa có lineage.</p>';
+    } else {
+      el.innerHTML = lineageSvg(data);
+    }
+  }).catch(e => { const el = document.getElementById('lg-for-result'); if (el) actionError(el, e.message); });
+}
+
+// ---------- 6. Data Quality Check ----------
+function actionQuality() {
+  closeActionMenu();
+  showModal(datasetQueryHtml('Data Quality Check',
+    'Đánh giá độ hoàn thiện metadata & governance bằng dữ liệu từ DataHub.',
+    'q-q', 'vd: sales_order', '') +
+    '<div class="modal-actions"><button class="btn btn-primary" id="run-q-q" onclick="runQuality()">Kiểm tra</button></div>' +
+    '<div id="quality-result" style="margin-top:12px"></div>');
+  document.getElementById('q-q').focus();
+}
+function qualityBarsHtml(data) {
+  const maps = {Excellent:'var(--success)', Good:'var(--success)', 'Needs Improvement':'var(--warning)', Missing:'var(--error)'};
+  let html = '<p style="margin:8px 0"><b>Tổng điểm:</b> <span style="color:var(--primary);font-weight:700">' + data.overall_score + '/100</span></p>';
+  (data.dimensions || []).forEach(d => {
+    html += '<div style="font-size:12px;margin:6px 0">' +
+      '<div style="display:flex;justify-content:space-between"><span>' + escapeHtml(d.label) + '</span><span style="color:' + (maps[d.status] || 'var(--text)') + '"><b>' + escapeHtml(d.status) + '</b> · ' + d.score + '</span></div>' +
+      '<div class="ratio"><div class="ratio-fill" style="width:' + (d.score) + '%;background:' + (maps[d.status] || 'var(--primary)') + '"></div><div class="ratio-empty" style="flex:1"></div></div>' +
+      (d.detail ? '<div style="font-size:11px;color:var(--text-secondary)">' + escapeHtml(d.detail) + '</div>' : '') +
+      '</div>';
+  });
+  if (data.highlights && data.highlights.length) html += '<p style="font-size:12px;margin-top:8px"><b>Vấn đề cần lưu ý</b></p><ul style="font-size:12px">' + data.highlights.map(h => '<li>' + escapeHtml(h) + '</li>').join('') + '</ul>';
+  return html;
+}
+async function runQuality() {
+  const q = (document.getElementById('q-q').value || '').trim();
+  if (!q) { toast('Nhập dataset', 'error'); return; }
+  const result = document.getElementById('quality-result');
+  result.innerHTML = '<span class="spinner"></span>';
+  try {
+    const data = await postAction('/quality', {dataset: q, columns: []}, result);
+    if (!data) return;
+    let html = qualityBarsHtml(data);
+    if (data.recommendations && data.recommendations.length) html += '<p style="font-size:12px;margin-top:8px"><b>Khuyến nghị</b></p><ul style="font-size:12px">' + data.recommendations.map(r => '<li>' + escapeHtml(r) + '</li>').join('') + '</ul>';
+    result.innerHTML = html;
+  } catch(e) { actionError(result, e.message); }
+}
+function loadQualityFor(urn, name) {
+  closeActionMenu();
+  showModal('<div class="action-panel"><h3 class="ap-title">Data Quality: ' + escapeHtml(name) + '</h3><div id="q-for-result" style="margin-top:4px"><span class="spinner"></span></div></div>');
+  postAction('/quality', {dataset: urn, columns: []}).then(d => {
+    const el = document.getElementById('q-for-result');
+    if (el) el.innerHTML = qualityBarsHtml(d) + ((d.recommendations && d.recommendations.length) ? '<p style="font-size:12px;margin-top:8px"><b>Khuyến nghị</b></p><ul style="font-size:12px">' + d.recommendations.map(r => '<li>' + escapeHtml(r) + '</li>').join('') + '</ul>' : '');
+  }).catch(e => { const el = document.getElementById('q-for-result'); if (el) actionError(el, e.message); });
+}
+
+// ---------- 7. Metadata Report ----------
+function actionReport() {
+  closeActionMenu();
+  showModal(datasetQueryHtml('AI Metadata Report',
+    'Báo cáo metadata chuyên nghiệp kèm AI Metadata Assessment.',
+    'rep-q', 'vd: sales_order', '') +
+    '<div class="modal-actions"><button class="btn btn-primary" id="run-rep-q" onclick="runReport()">Tạo báo cáo</button></div>' +
+    '<div id="report-result" style="margin-top:12px"></div>');
+  document.getElementById('rep-q').focus();
+}
+async function runReport() {
+  const q = (document.getElementById('rep-q').value || '').trim();
+  if (!q) { toast('Nhập dataset', 'error'); return; }
+  const result = document.getElementById('report-result');
+  result.innerHTML = '<span class="spinner"></span>';
+  try {
+    const data = await postAction('/report', {dataset: q, columns: []}, result);
+    if (!data) return;
+    const stars = '★★★★★'.slice(5 - Math.max(1, data.overall_score / 20));
+    let html = '<div class="action-panel">' +
+      '<h3 class="ap-title">' + escapeHtml(data.dataset) + '</h3>' +
+      '<div style="font-size:13px;margin-bottom:10px">Metadata Maturity: <span class="stars">' + escapeHtml(stars) + '</span> <b>' + escapeHtml(data.overall_rating) + '</b> (' + data.overall_score + '/100)</div>';
+    (data.sections || []).forEach(s => {
+      html += '<p style="font-size:12px;margin-top:8px"><b>' + escapeHtml(s.title) + '</b></p>';
+      html += '<div style="font-size:12px;line-height:1.6;color:var(--text)">' + (s.lines || []).map(l => '<div>' + escapeHtml(l) + '</div>').join('') + '</div>';
+    });
+    if (data.assessment && data.assessment.length) {
+      html += '<p style="font-size:12px;margin-top:10px"><b>AI Metadata Assessment</b></p>';
+      (data.assessment || []).forEach(a => {
+        const st = '★★★★★'.slice(5 - Math.max(1, a.score / 20));
+        html += '<div style="font-size:12px;display:flex;justify-content:space-between;border-bottom:1px solid var(--border);padding:3px 0"><span>' + escapeHtml(a.dimension) + '</span><span class="stars">' + escapeHtml(st) + '</span> <span>' + escapeHtml(a.rating) + '</span></div>';
+      });
+    }
+    html += '<p style="font-size:12px;margin-top:10px"><b>Khuyến nghị</b></p><ul style="font-size:12px">' + (data.recommendations || []).map(r => '<li>' + escapeHtml(r) + '</li>').join('') + '</ul>';
+    html += '</div>';
+    result.innerHTML = html;
+  } catch(e) { actionError(result, e.message); }
+}
+function loadReportFor(urn, name) {
+  closeActionMenu();
+  showModal('<div class="action-panel"><h3 class="ap-title">Metadata Report</h3><div id="rep-for-result" style="margin-top:4px"><span class="spinner"></span></div></div>');
+  postAction('/report', {dataset: urn, columns: []}).then(d => {
+    const el = document.getElementById('rep-for-result');
+    if (!el) return;
+    const st = '★★★★★'.slice(5 - Math.max(1, d.overall_score / 20));
+    let html = '<h3 class="ap-title">' + escapeHtml(d.dataset) + '</h3>' +
+      '<div style="font-size:13px;margin-bottom:10px">Metadata Maturity: <span class="stars">' + escapeHtml(st) + '</span> <b>' + escapeHtml(d.overall_rating) + '</b> (' + d.overall_score + '/100)</div>';
+    (d.sections || []).forEach(s => { html += '<p style="font-size:12px;margin-top:6px"><b>' + escapeHtml(s.title) + '</b></p><div style="font-size:12px">' + (s.lines || []).map(l => '<div>' + escapeHtml(l) + '</div>').join('') + '</div>'; });
+    html += '<p style="font-size:12px;margin-top:8px"><b>Khuyến nghị</b></p><ul style="font-size:12px">' + (d.recommendations || []).map(r => '<li>' + escapeHtml(r) + '</li>').join('') + '</ul>';
+    el.innerHTML = html;
+  }).catch(e => { const el = document.getElementById('rep-for-result'); if (el) actionError(el, e.message); });
+}
+function loadSqlFor(urn, name) {
+  closeActionMenu();
+  showModal('<div class="action-panel"><h3 class="ap-title">SQL Generator: ' + escapeHtml(name) + '</h3><div id="sql-for-result" style="margin-top:4px"><span class="spinner"></span></div></div>');
+  postAction('/sql', {dataset: urn, columns: []}).then(d => {
+    const el = document.getElementById('sql-for-result');
+    if (!el) return;
+    if (!d.valid) { el.innerHTML = '<p style="color:var(--error)">' + escapeHtml((d.explanation || []).join(' ')) + '</p>'; return; }
+    el.innerHTML = '<div class="sql-block">' + escapeHtml(d.sql) + '</div>' + ((d.explanation || []).length ? '<p style="font-size:12px;margin-top:8px"><b>Giải thích</b></p><ul style="font-size:12px">' + d.explanation.map(e => '<li>' + escapeHtml(e) + '</li>').join('') + '</ul>' : '');
+  }).catch(e => { const el = document.getElementById('sql-for-result'); if (el) actionError(el, e.message); });
+}
+function viewActionEntity(urn, from) {
+  closeActionMenu();
+  viewEntity(urn);
 }
 
 // Init

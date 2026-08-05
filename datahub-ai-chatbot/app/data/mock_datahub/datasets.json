@@ -11,25 +11,86 @@
     "domain_urn": "urn:li:domain:logistic",
     "domain": "Logistic",
     "owners": [
-      {"name": "Nguyễn Văn An", "email": "nguyenvan.an@company.example", "type": "BUSINESS_OWNER"},
-      {"name": "Trần Minh Khoa", "email": "tranminh.khoa@company.example", "type": "DATA_TECHNICAL_OWNER"}
+      {
+        "name": "Nguyễn Văn An",
+        "email": "nguyenvan.an@company.example",
+        "type": "BUSINESS_OWNER"
+      },
+      {
+        "name": "Trần Minh Khoa",
+        "email": "tranminh.khoa@company.example",
+        "type": "DATA_TECHNICAL_OWNER"
+      }
     ],
     "glossary_terms": [
       "urn:li:glossaryTerm:ton_kho_min_max",
       "urn:li:glossaryTerm:stock_on_hand"
     ],
-    "tags": ["certified", "pii_none"],
+    "tags": [
+      "certified",
+      "pii_none"
+    ],
     "schema_fields": [
-      {"name": "inventory_date", "type": "date", "description": "Ngày ghi nhận tồn kho", "nullable": false},
-      {"name": "plant_code", "type": "varchar(10)", "description": "Mã nhà máy", "nullable": false},
-      {"name": "material_code", "type": "varchar(20)", "description": "Mã vật tư", "nullable": false},
-      {"name": "supplier_code", "type": "varchar(10)", "description": "Mã nhà cung cấp", "nullable": true},
-      {"name": "stock_on_hand", "type": "decimal(18,2)", "description": "Số lượng tồn kho hiện có", "nullable": false},
-      {"name": "minimum_stock", "type": "decimal(18,2)", "description": "Ngưỡng tồn kho tối thiểu", "nullable": false},
-      {"name": "maximum_stock", "type": "decimal(18,2)", "description": "Ngưỡng tồn kho tối đa", "nullable": false},
-      {"name": "safety_stock", "type": "decimal(18,2)", "description": "Mức tồn kho dự phòng", "nullable": false},
-      {"name": "coverage_days", "type": "int", "description": "Số ngày tồn kho hiện tại đáp ứng được nhu cầu", "nullable": true},
-      {"name": "goods_in_transit", "type": "decimal(18,2)", "description": "Số lượng hàng đang vận chuyển", "nullable": true}
+      {
+        "name": "inventory_date",
+        "type": "date",
+        "description": "Ngày ghi nhận tồn kho",
+        "nullable": false
+      },
+      {
+        "name": "plant_code",
+        "type": "varchar(10)",
+        "description": "Mã nhà máy",
+        "nullable": false
+      },
+      {
+        "name": "material_code",
+        "type": "varchar(20)",
+        "description": "Mã vật tư",
+        "nullable": false
+      },
+      {
+        "name": "supplier_code",
+        "type": "varchar(10)",
+        "description": "Mã nhà cung cấp",
+        "nullable": true
+      },
+      {
+        "name": "stock_on_hand",
+        "type": "decimal(18,2)",
+        "description": "Số lượng tồn kho hiện có",
+        "nullable": false
+      },
+      {
+        "name": "minimum_stock",
+        "type": "decimal(18,2)",
+        "description": "Ngưỡng tồn kho tối thiểu",
+        "nullable": false
+      },
+      {
+        "name": "maximum_stock",
+        "type": "decimal(18,2)",
+        "description": "Ngưỡng tồn kho tối đa",
+        "nullable": false
+      },
+      {
+        "name": "safety_stock",
+        "type": "decimal(18,2)",
+        "description": "Mức tồn kho dự phòng",
+        "nullable": false
+      },
+      {
+        "name": "coverage_days",
+        "type": "int",
+        "description": "Số ngày tồn kho hiện tại đáp ứng được nhu cầu",
+        "nullable": true
+      },
+      {
+        "name": "goods_in_transit",
+        "type": "decimal(18,2)",
+        "description": "Số lượng hàng đang vận chuyển",
+        "nullable": true
+      }
     ],
     "upstreams": [
       "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.dim_material,PROD)",
@@ -40,7 +101,9 @@
       "urn:li:dashboard:(powerbi,logistic.ton_kho_min_max)",
       "urn:li:dashboard:(powerbi,logistic.inventory_executive_summary)"
     ],
-    "linked_documents": ["Inventory Management Policy"],
+    "linked_documents": [
+      "Inventory Management Policy"
+    ],
     "certified": true,
     "datahub_url": "http://mock-datahub.local/dataset/logistic.fact_inventory"
   },
@@ -56,16 +119,45 @@
     "domain_urn": "urn:li:domain:logistic",
     "domain": "Logistic",
     "owners": [
-      {"name": "Lê Thu Hà", "email": "lethu.ha@company.example", "type": "SYSTEM_OWNER"}
+      {
+        "name": "Lê Thu Hà",
+        "email": "lethu.ha@company.example",
+        "type": "SYSTEM_OWNER"
+      }
     ],
     "glossary_terms": [],
     "tags": [],
     "schema_fields": [
-      {"name": "material_code", "type": "varchar(20)", "description": "Mã vật tư", "nullable": false},
-      {"name": "material_name", "type": "varchar(200)", "description": "Tên vật tư", "nullable": false},
-      {"name": "material_group", "type": "varchar(50)", "description": "Nhóm vật tư", "nullable": true},
-      {"name": "base_unit", "type": "varchar(10)", "description": "Đơn vị cơ bản (cái, kg, m)", "nullable": false},
-      {"name": "weight_kg", "type": "decimal(10,2)", "description": "Khối lượng (kg)", "nullable": true}
+      {
+        "name": "material_code",
+        "type": "varchar(20)",
+        "description": "Mã vật tư",
+        "nullable": false
+      },
+      {
+        "name": "material_name",
+        "type": "varchar(200)",
+        "description": "Tên vật tư",
+        "nullable": false
+      },
+      {
+        "name": "material_group",
+        "type": "varchar(50)",
+        "description": "Nhóm vật tư",
+        "nullable": true
+      },
+      {
+        "name": "base_unit",
+        "type": "varchar(10)",
+        "description": "Đơn vị cơ bản (cái, kg, m)",
+        "nullable": false
+      },
+      {
+        "name": "weight_kg",
+        "type": "decimal(10,2)",
+        "description": "Khối lượng (kg)",
+        "nullable": true
+      }
     ],
     "upstreams": [],
     "downstreams": [
@@ -87,15 +179,39 @@
     "domain_urn": "urn:li:domain:logistic",
     "domain": "Logistic",
     "owners": [
-      {"name": "Lê Thu Hà", "email": "lethu.ha@company.example", "type": "SYSTEM_OWNER"}
+      {
+        "name": "Lê Thu Hà",
+        "email": "lethu.ha@company.example",
+        "type": "SYSTEM_OWNER"
+      }
     ],
     "glossary_terms": [],
     "tags": [],
     "schema_fields": [
-      {"name": "plant_code", "type": "varchar(10)", "description": "Mã nhà máy", "nullable": false},
-      {"name": "plant_name", "type": "varchar(200)", "description": "Tên nhà máy", "nullable": false},
-      {"name": "location", "type": "varchar(200)", "description": "Địa điểm", "nullable": true},
-      {"name": "is_active", "type": "boolean", "description": "Trạng thái hoạt động", "nullable": false}
+      {
+        "name": "plant_code",
+        "type": "varchar(10)",
+        "description": "Mã nhà máy",
+        "nullable": false
+      },
+      {
+        "name": "plant_name",
+        "type": "varchar(200)",
+        "description": "Tên nhà máy",
+        "nullable": false
+      },
+      {
+        "name": "location",
+        "type": "varchar(200)",
+        "description": "Địa điểm",
+        "nullable": true
+      },
+      {
+        "name": "is_active",
+        "type": "boolean",
+        "description": "Trạng thái hoạt động",
+        "nullable": false
+      }
     ],
     "upstreams": [],
     "downstreams": [
@@ -117,15 +233,39 @@
     "domain_urn": "urn:li:domain:cung_ung",
     "domain": "Cung ứng",
     "owners": [
-      {"name": "Nguyễn Văn An", "email": "nguyenvan.an@company.example", "type": "BUSINESS_OWNER"}
+      {
+        "name": "Nguyễn Văn An",
+        "email": "nguyenvan.an@company.example",
+        "type": "BUSINESS_OWNER"
+      }
     ],
     "glossary_terms": [],
     "tags": [],
     "schema_fields": [
-      {"name": "supplier_code", "type": "varchar(10)", "description": "Mã nhà cung cấp", "nullable": false},
-      {"name": "supplier_name", "type": "varchar(200)", "description": "Tên nhà cung cấp", "nullable": false},
-      {"name": "category", "type": "varchar(50)", "description": "Phân loại (raw material, packaging, service)", "nullable": true},
-      {"name": "rating", "type": "int", "description": "Điểm đánh giá 1-5", "nullable": true}
+      {
+        "name": "supplier_code",
+        "type": "varchar(10)",
+        "description": "Mã nhà cung cấp",
+        "nullable": false
+      },
+      {
+        "name": "supplier_name",
+        "type": "varchar(200)",
+        "description": "Tên nhà cung cấp",
+        "nullable": false
+      },
+      {
+        "name": "category",
+        "type": "varchar(50)",
+        "description": "Phân loại (raw material, packaging, service)",
+        "nullable": true
+      },
+      {
+        "name": "rating",
+        "type": "int",
+        "description": "Điểm đánh giá 1-5",
+        "nullable": true
+      }
     ],
     "upstreams": [],
     "downstreams": [
@@ -147,19 +287,53 @@
     "domain_urn": "urn:li:domain:logistic",
     "domain": "Logistic",
     "owners": [
-      {"name": "Trần Minh Khoa", "email": "tranminh.khoa@company.example", "type": "DATA_TECHNICAL_OWNER"}
+      {
+        "name": "Trần Minh Khoa",
+        "email": "tranminh.khoa@company.example",
+        "type": "DATA_TECHNICAL_OWNER"
+      }
     ],
     "glossary_terms": [
       "urn:li:glossaryTerm:goods_in_transit"
     ],
     "tags": [],
     "schema_fields": [
-      {"name": "shipment_id", "type": "varchar(20)", "description": "Mã lô hàng", "nullable": false},
-      {"name": "material_code", "type": "varchar(20)", "description": "Mã vật tư", "nullable": false},
-      {"name": "from_plant", "type": "varchar(10)", "description": "Nhà máy gửi", "nullable": false},
-      {"name": "to_plant", "type": "varchar(10)", "description": "Nhà máy nhận", "nullable": false},
-      {"name": "quantity", "type": "decimal(18,2)", "description": "Số lượng", "nullable": false},
-      {"name": "planned_delivery_date", "type": "date", "description": "Ngày dự kiến nhận", "nullable": true}
+      {
+        "name": "shipment_id",
+        "type": "varchar(20)",
+        "description": "Mã lô hàng",
+        "nullable": false
+      },
+      {
+        "name": "material_code",
+        "type": "varchar(20)",
+        "description": "Mã vật tư",
+        "nullable": false
+      },
+      {
+        "name": "from_plant",
+        "type": "varchar(10)",
+        "description": "Nhà máy gửi",
+        "nullable": false
+      },
+      {
+        "name": "to_plant",
+        "type": "varchar(10)",
+        "description": "Nhà máy nhận",
+        "nullable": false
+      },
+      {
+        "name": "quantity",
+        "type": "decimal(18,2)",
+        "description": "Số lượng",
+        "nullable": false
+      },
+      {
+        "name": "planned_delivery_date",
+        "type": "date",
+        "description": "Ngày dự kiến nhận",
+        "nullable": true
+      }
     ],
     "upstreams": [
       "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.dim_material,PROD)",
@@ -184,20 +358,52 @@
     "domain_urn": "urn:li:domain:kinh_doanh",
     "domain": "Kinh doanh",
     "owners": [
-      {"name": "Nguyễn Văn An", "email": "nguyenvan.an@company.example", "type": "BUSINESS_OWNER"}
+      {
+        "name": "Nguyễn Văn An",
+        "email": "nguyenvan.an@company.example",
+        "type": "BUSINESS_OWNER"
+      }
     ],
     "glossary_terms": [
       "urn:li:glossaryTerm:don_hang",
       "urn:li:glossaryTerm:khach_hang",
       "urn:li:glossaryTerm:doanh_thu"
     ],
-    "tags": ["certified", "pii_yes"],
+    "tags": [
+      "certified",
+      "pii_yes"
+    ],
     "schema_fields": [
-      {"name": "order_id", "type": "varchar(20)", "description": "Mã đơn hàng duy nhất", "nullable": false},
-      {"name": "customer_id", "type": "varchar(20)", "description": "Mã khách hàng", "nullable": false},
-      {"name": "gross_revenue", "type": "decimal(18,2)", "description": "Doanh thu gộp", "nullable": false},
-      {"name": "net_revenue", "type": "decimal(18,2)", "description": "Doanh thu thuần", "nullable": false},
-      {"name": "created_at", "type": "timestamp", "description": "Thời gian tạo đơn", "nullable": false}
+      {
+        "name": "order_id",
+        "type": "varchar(20)",
+        "description": "Mã đơn hàng duy nhất",
+        "nullable": false
+      },
+      {
+        "name": "customer_id",
+        "type": "varchar(20)",
+        "description": "Mã khách hàng",
+        "nullable": false
+      },
+      {
+        "name": "gross_revenue",
+        "type": "decimal(18,2)",
+        "description": "Doanh thu gộp",
+        "nullable": false
+      },
+      {
+        "name": "net_revenue",
+        "type": "decimal(18,2)",
+        "description": "Doanh thu thuần",
+        "nullable": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp",
+        "description": "Thời gian tạo đơn",
+        "nullable": false
+      }
     ],
     "upstreams": [],
     "downstreams": [
@@ -219,17 +425,41 @@
     "domain_urn": "urn:li:domain:finance",
     "domain": "Finance",
     "owners": [
-      {"name": "Finance Analytics", "email": "finance.analytics@company.example", "type": "DATA_TECHNICAL_OWNER"}
+      {
+        "name": "Finance Analytics",
+        "email": "finance.analytics@company.example",
+        "type": "DATA_TECHNICAL_OWNER"
+      }
     ],
     "glossary_terms": [
       "urn:li:glossaryTerm:doanh_thu"
     ],
     "tags": [],
     "schema_fields": [
-      {"name": "month", "type": "date", "description": "Tháng báo cáo", "nullable": false},
-      {"name": "total_gross_revenue", "type": "decimal(18,2)", "description": "Tổng doanh thu gộp", "nullable": false},
-      {"name": "total_net_revenue", "type": "decimal(18,2)", "description": "Tổng doanh thu thuần", "nullable": false},
-      {"name": "order_count", "type": "integer", "description": "Số lượng đơn hàng", "nullable": false}
+      {
+        "name": "month",
+        "type": "date",
+        "description": "Tháng báo cáo",
+        "nullable": false
+      },
+      {
+        "name": "total_gross_revenue",
+        "type": "decimal(18,2)",
+        "description": "Tổng doanh thu gộp",
+        "nullable": false
+      },
+      {
+        "name": "total_net_revenue",
+        "type": "decimal(18,2)",
+        "description": "Tổng doanh thu thuần",
+        "nullable": false
+      },
+      {
+        "name": "order_count",
+        "type": "integer",
+        "description": "Số lượng đơn hàng",
+        "nullable": false
+      }
     ],
     "upstreams": [
       "urn:li:dataset:(urn:li:dataPlatform:snowflake,sales.orders,PROD)",
@@ -238,7 +468,9 @@
     "downstreams": [
       "urn:li:dashboard:finance.monthly_summary"
     ],
-    "linked_documents": ["Monthly Revenue Methodology"],
+    "linked_documents": [
+      "Monthly Revenue Methodology"
+    ],
     "certified": true,
     "datahub_url": "http://mock-datahub.local/dataset/finance.monthly_revenue"
   },
@@ -253,15 +485,46 @@
     "environment": "PROD",
     "domain_urn": "urn:li:domain:finance",
     "domain": "Finance",
-    "owners": [],
+    "owners": [
+      {
+        "name": "Finance Analytics",
+        "email": "finance.analytics@company.example",
+        "type": "DATA_TECHNICAL_OWNER"
+      }
+    ],
     "glossary_terms": [],
     "tags": [],
     "schema_fields": [
-      {"name": "payment_id", "type": "varchar(20)", "description": "Mã thanh toán", "nullable": false},
-      {"name": "order_id", "type": "varchar(20)", "description": "Mã đơn hàng", "nullable": false},
-      {"name": "amount", "type": "decimal(18,2)", "description": "Số tiền", "nullable": false},
-      {"name": "refund_amount", "type": "decimal(18,2)", "description": "Số tiền hoàn lại", "nullable": true},
-      {"name": "payment_date", "type": "timestamp", "description": "Ngày thanh toán", "nullable": false}
+      {
+        "name": "payment_id",
+        "type": "varchar(20)",
+        "description": "Mã thanh toán",
+        "nullable": false
+      },
+      {
+        "name": "order_id",
+        "type": "varchar(20)",
+        "description": "Mã đơn hàng",
+        "nullable": false
+      },
+      {
+        "name": "amount",
+        "type": "decimal(18,2)",
+        "description": "Số tiền",
+        "nullable": false
+      },
+      {
+        "name": "refund_amount",
+        "type": "decimal(18,2)",
+        "description": "Số tiền hoàn lại",
+        "nullable": true
+      },
+      {
+        "name": "payment_date",
+        "type": "timestamp",
+        "description": "Ngày thanh toán",
+        "nullable": false
+      }
     ],
     "upstreams": [],
     "downstreams": [

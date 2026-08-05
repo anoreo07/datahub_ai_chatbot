@@ -210,14 +210,14 @@ query getDataset($urn: String!) {
 """
 
 GET_DATASET_LINEAGE_QUERY = """
-query getDatasetLineage($urn: String!, $direction: String!, $depth: Int!, $count: Int) {
+query getDatasetLineage($urn: String!, $direction: LineageDirection!, $start: Int, $count: Int) {
   dataset(urn: $urn) {
     urn
-    lineage(input: { direction: $direction, depth: $depth, count: $count }) {
+    lineage(input: { direction: $direction, start: $start, count: $count }) {
       total
       relationships {
         type
-        entity { urn type name }
+        entity { urn type }
       }
     }
   }

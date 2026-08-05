@@ -3,7 +3,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
+    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
     APP_NAME: str = "DataHub AI Chatbot"
     APP_ENV: str = "development"
@@ -57,10 +57,17 @@ class Settings(BaseSettings):
     FIREWORKS_API_KEY: str = ""
     FIREWORKS_MODEL_ID: str = "accounts/fireworks/models/deepseek-v4-flash"
 
+    NVIDIA_API_KEY: str = ""
+    NVIDIA_BASE_URL: str = "https://integrate.api.nvidia.com/v1"
+    NVIDIA_MODEL_ID: str = "meta/llama-3.3-70b-instruct"
+
     SEARCH_CACHE_TTL_SECONDS: int = 300
     INDEX_MAX_RETRIES: int = 3
     INDEX_BATCH_SIZE: int = 20
     INDEX_POLL_INTERVAL_SECONDS: int = 2
+    HEALTHCHECK_INTERVAL_SECONDS: int = 300
+    HEALTHCHECK_LOG_TTL_SECONDS: int = 86400
+    HEALTHCHECK_MAX_LOGS: int = 200
 
     LLM_TIMEOUT_SECONDS: int = 60
     LLM_MAX_RETRIES: int = 2
@@ -74,6 +81,13 @@ class Settings(BaseSettings):
     ENTITY_RESOLVER_HIGH_THRESHOLD: float = 0.9
     ENTITY_RESOLVER_SUBSTRING_THRESHOLD: float = 0.7
     ENTITY_RESOLVER_AMBIGUITY_MARGIN: float = 0.2
+    # Minimum score required to trust an entity resolution without asking the
+    # user to confirm. Below this, TERM_DEFINITION returns no results so the
+    # suggestion flow (Ý bạn là X?) kicks in instead of generating off a
+    # low-confidence fuzzy/substring match (e.g. "ABV Matching" -> "3-Way Matching").
+    ENTITY_RESOLVER_TRUST_THRESHOLD: float = 0.85
+    ENTITY_RESOLVER_FUZZY_MIN_THRESHOLD: float = 0.6
+    ENTITY_RESOLVER_FUZZY_MAX_CANDIDATES: int = 8
 
     RATE_LIMIT_MAX_REQUESTS: int = 60
     RATE_LIMIT_WINDOW_SECONDS: int = 60
@@ -89,8 +103,15 @@ class Settings(BaseSettings):
             raise ValueError("JWT_SECRET_KEY must be set when AUTH_MODE=jwt")
         if not self.USE_MOCK_DATAHUB and not self.DATAHUB_GMS_URL:
             raise ValueError("DATAHUB_GMS_URL must be set when USE_MOCK_DATAHUB=false")
-        if not self.USE_MOCK_LLM and not self.FIREWORKS_API_KEY and self.LLM_PROVIDER in ("fireworks",):
-            raise ValueError("FIREWORKS_API_KEY must be set when USE_MOCK_LLM=false and LLM_PROVIDER=fireworks")
+        if (
+            not self.USE_MOCK_LLM
+            and not self.FIREWORKS_API_KEY
+            and self.LLM_PROVIDER in ("fireworks",)
+        ):
+            raise ValueError(
+                "FIREWORKS_API_KEY must be set when USE_MOCK_LLM=false "
+                "and LLM_PROVIDER=fireworks"
+            )
         return self
 
     @property

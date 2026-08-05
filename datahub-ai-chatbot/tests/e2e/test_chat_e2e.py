@@ -135,3 +135,48 @@ async def test_no_hallucination_for_nonexistent(db_session) -> None:
     assert response.intent == "ENTITY_EXISTS"
     answer_lower = response.answer.lower()
     assert "không" in answer_lower or "không tìm thấy" in answer_lower
+
+
+@pytest.mark.asyncio
+async def test_owner_lookup_alternate_phrasing(db_session) -> None:
+    from app.services.chat_service import ChatService
+    from ingestion.sync import SyncOrchestrator
+
+    orchestrator = SyncOrchestrator(db_session)
+    await orchestrator.run_full_sync()
+
+    service = ChatService(db_session)
+
+    response = await service.answer("dataset sales.orders thuộc về ai?")
+    assert response.intent == "OWNER_LOOKUP"
+    assert "Sales Analytics" in response.answer
+
+
+@pytest.mark.asyncio
+async def test_owner_lookup_typo_resolution(db_session) -> None:
+    from app.services.chat_service import ChatService
+    from ingestion.sync import SyncOrchestrator
+
+    orchestrator = SyncOrchestrator(db_session)
+    await orchestrator.run_full_sync()
+
+    service = ChatService(db_session)
+
+    response = await service.answer("Ai sở hữu duathet sales.orders?")
+    assert response.intent == "OWNER_LOOKUP"
+    assert "Sales Analytics" in response.answer
+
+
+@pytest.mark.asyncio
+async def test_entity_domain_membership(db_session) -> None:
+    from app.services.chat_service import ChatService
+    from ingestion.sync import SyncOrchestrator
+
+    orchestrator = SyncOrchestrator(db_session)
+    await orchestrator.run_full_sync()
+
+    service = ChatService(db_session)
+
+    response = await service.answer("dataset sales.orders thuộc về domain nào?")
+    assert response.intent == "ENTITY_DOMAIN"
+    assert "Sales" in response.answer

@@ -418,13 +418,21 @@ class GraphQLDataHubSource(DataHubSource):
         try:
             data = await self._client.execute(
                 GET_DATASET_LINEAGE_QUERY,
-                {"urn": urn, "direction": direction.upper(), "depth": depth, "count": 100},
+                {"urn": urn, "direction": direction.upper(), "start": 0, "count": 100},
             )
         except DataHubConnectionError:
             log.exception("graphql_get_lineage_failed", urn=urn)
-            return {}
+            return {"relationships": []}
 
-        return data.get("lineage") or data.get("dataset", {}).get("lineage") or {}
+        lineage = (data.get("dataset") or {}).get("lineage") or {}
+        relationships = []
+        for rel in lineage.get("relationships", []) or []:
+            entity = rel.get("entity") or {}
+            relationships.append({
+                "type": rel.get("type"),
+                "entity": {"urn": entity.get("urn"), "type": entity.get("type")},
+            })
+        return {"total": lineage.get("total"), "relationships": relationships}
 
     async def list_entity_type(self, entity_type: str) -> Sequence[CanonicalEntity]:
         if entity_type == "dataset":

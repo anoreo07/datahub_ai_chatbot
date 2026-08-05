@@ -12,11 +12,11 @@ log = structlog.get_logger()
 
 _DOMAIN_ACL_RULES = [
     {
-        "domains": ["Finance"],
+        "domains": ["Finance", "TÀI CHÍNH"],
         "allowed_groups": ["finance-team", "admin-group"],
     },
     {
-        "domains": ["Logistics", "Supply Chain"],
+        "domains": ["Logistics", "LOGISTIC", "Supply Chain", "CUNG ỨNG (NĐH)", "CUNG ỨNG (TT)"],
         "allowed_groups": ["logistics-team", "admin-group"],
     },
     {

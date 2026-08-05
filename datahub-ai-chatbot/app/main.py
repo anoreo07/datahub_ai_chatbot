@@ -1,11 +1,13 @@
 from contextlib import asynccontextmanager
 from pathlib import Path
 
+import asyncio
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 
 from app.api.auth import router as auth_router
+from app.api.actions import router as actions_router
 from app.api.chat import router as chat_router
 from app.api.conversations import router as conversations_router
 from app.api.documents import router as documents_router
@@ -49,7 +51,19 @@ async def lifespan(app: FastAPI):
             pipeline = IndexingPipeline(session)
             processed = await pipeline.process_pending_jobs(max_jobs=100)
             log.info("initial_indexing_complete", processed=processed)
+
+    from app.services.health_service import healthcheck_loop
+    health_task = asyncio.create_task(healthcheck_loop())
+    log.info("periodic_healthcheck_started",
+             interval_seconds=settings.HEALTHCHECK_INTERVAL_SECONDS)
+
     yield
+
+    health_task.cancel()
+    try:
+        await health_task
+    except asyncio.CancelledError:
+        pass
 
 
 app = FastAPI(
@@ -63,6 +77,7 @@ if settings.RATE_LIMIT_ENABLED:
     app.add_middleware(RateLimitMiddleware)
 
 app.include_router(auth_router, prefix="/api/v1/auth", tags=["auth"])
+app.include_router(actions_router, prefix="/api/v1/actions", tags=["actions"])
 app.include_router(health_router, tags=["health"])
 app.include_router(chat_router, prefix="/api/v1/chat", tags=["chat"])
 app.include_router(conversations_router, prefix="/api/v1/conversations", tags=["conversations"])

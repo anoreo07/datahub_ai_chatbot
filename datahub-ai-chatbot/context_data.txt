@@ -1,0 +1,2147 @@
+==============================================================================
+DATAHUB AI CHATBOT - SYSTEM CONTEXT (GROUND TRUTH)
+Dung cho agent sinh cau hoi test. Toan bo thong tin la data that trong he thong.
+==============================================================================
+
+Tong quan: 135 datasets | 167 glossary terms
+
+=== DOMAINS (field domain cua datasets) ===
+  - unknown: 30 datasets
+  - CUNG ỨNG (NĐH): 15 datasets
+  - CUNG ỨNG (TT): 15 datasets
+  - HẬU MÃI: 15 datasets
+  - KINH DOANH: 15 datasets
+  - LOGISTIC: 15 datasets
+  - SẢN XUẤT: 15 datasets
+  - TÀI CHÍNH: 15 datasets
+
+=== PLATFORMS ===
+  - redshift: 135 datasets
+
+==============================================================================
+DANH SACH DATASETS
+==============================================================================
+
+[1] DATASET: dim_assembly_line
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_assembly_line,PROD)
+  - platform: redshift
+  - domain: SẢN XUẤT
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_assembly_line,PROD)
+  - description: Danh mục dây chuyền lắp ráp trong nhà máy
+  - schema_fields (10): assembly_line_id, plant_id, line_name, line_type, cycle_time_seconds, line_speed, length_meters, line_status, supervisor_id, created_at
+  - upstream (nguon) (2): dim_worker, dim_plant
+  - downstream (tieu thu) (8): fact_production_routing, fact_production_order, fact_oee_metrics, dim_station, fact_material_consumption, fact_wip_tracking, fact_downtime, fact_production_output
+
+[2] DATASET: dim_battery_pack
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_battery_pack,PROD)
+  - platform: redshift
+  - domain: unknown
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_battery_pack,PROD)
+  - description: Danh mục bộ pin xe điện VinFast
+  - schema_fields (14): battery_id, battery_serial, model_code, battery_type, nominal_capacity_kwh, usable_capacity_kwh, nominal_voltage_v, max_power_kw, weight_kg, cell_count, cooling_type, manufacture_date, warranty_years, battery_status
+
+[3] DATASET: dim_bms_config
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_bms_config,PROD)
+  - platform: redshift
+  - domain: unknown
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_bms_config,PROD)
+  - description: Cấu hình hệ thống quản lý pin (BMS)
+  - schema_fields (15): bms_config_id, model_code, firmware_version, charge_voltage_max_v, discharge_voltage_min_v, charge_current_max_a, discharge_current_max_a, cell_voltage_min_v, cell_voltage_max_v, temp_max_c, temp_min_c, balance_threshold_v, soc_calibration_interval_days, release_date, config_status
+
+[4] DATASET: dim_certification
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_certification,PROD)
+  - platform: redshift
+  - domain: CUNG ỨNG (TT)
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_certification,PROD)
+  - description: Danh mục chứng chỉ của nhà cung cấp
+  - schema_fields (6): certification_id, certification_name, certification_body, industry_standard, description, required_by_vinfast
+
+[5] DATASET: dim_charging_connector
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_charging_connector,PROD)
+  - platform: redshift
+  - domain: unknown
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_charging_connector,PROD)
+  - description: Danh mục đầu cắm sạc tại trạm VGreen
+  - schema_fields (12): connector_id, station_id, connector_type, max_power_kw, voltage_min_v, voltage_max_v, current_max_a, cable_length_m, connector_status, serial_number, manufacturer, last_calibration_date
+
+[6] DATASET: dim_charging_station
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_charging_station,PROD)
+  - platform: redshift
+  - domain: unknown
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_charging_station,PROD)
+  - description: Danh mục trạm sạc điện VinFast trên toàn quốc
+  - schema_fields (13): station_id, station_name, address, latitude, longitude, station_type, total_connectors, power_kw, status, opening_hours, parking_fee, install_date, last_maintenance_date
+
+[7] DATASET: dim_component
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_component,PROD)
+  - platform: redshift
+  - domain: unknown
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_component,PROD)
+  - description: Danh mục linh kiện sử dụng trong thiết kế xe
+  - schema_fields (13): component_code, component_name, component_category, subcategory, material, unit, weight_kg, dimension_mm, procurement_type, country_of_origin, component_status, replacement_for, created_date
+
+[8] DATASET: dim_contract
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_contract,PROD)
+  - platform: redshift
+  - domain: CUNG ỨNG (TT)
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_contract,PROD)
+  - description: Thông tin hợp đồng cung cấp vật tư với nhà cung cấp
+  - schema_fields (12): contract_id, vendor_id, contract_name, contract_type, total_value, currency, start_date, end_date, payment_terms, contract_status, procurement_category_id, created_by
+
+[9] DATASET: dim_cost_center
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_cost_center,PROD)
+  - platform: redshift
+  - domain: TÀI CHÍNH
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_cost_center,PROD)
+  - description: Danh mục trung tâm chi phí theo cấu trúc quản lý tài chính
+  - schema_fields (10): cost_center_id, cost_center_name, plant_id, department, cost_center_type, cost_center_manager, budget_owner, is_active, effective_date, created_at
+  - upstream (nguon) (1): dim_plant
+  - downstream (tieu thu) (6): fact_fixed_asset, fact_budget, fact_general_ledger, fact_actual_cost, fact_budget_variance, fact_goods_issue
+
+[10] DATASET: dim_country
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_country,PROD)
+  - platform: redshift
+  - domain: CUNG ỨNG (NĐH)
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_country,PROD)
+  - description: Danh mục quốc gia phục vụ nhập khẩu
+  - schema_fields (12): country_code, country_name, region, sub_region, continent, currency_code, free_trade_agreement, preferential_duty, lead_time_days, risk_rating, major_port, status
+
+[11] DATASET: dim_customer
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_customer,PROD)
+  - platform: redshift
+  - domain: KINH DOANH
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_customer,PROD)
+  - description: Thông tin khách hàng cá nhân và doanh nghiệp
+  - schema_fields (13): customer_id, full_name, customer_type, phone, email, identity_number, date_of_birth, gender, province, occupation, customer_segment, registration_date, dealer_id
+
+[12] DATASET: dim_dealer
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_dealer,PROD)
+  - platform: redshift
+  - domain: KINH DOANH
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_dealer,PROD)
+  - description: Thông tin chi tiết các đại lý ủy quyền của VinFast trên toàn quốc
+  - schema_fields (13): dealer_id, dealer_code, dealer_name, dealer_type, region_id, province, district, address, phone, dealer_status, open_date, tax_code, sales_manager
+
+[13] DATASET: dim_domestic_vendor
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_domestic_vendor,PROD)
+  - platform: redshift
+  - domain: CUNG ỨNG (TT)
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_domestic_vendor,PROD)
+  - description: Thông tin các nhà cung cấp vật tư, linh kiện trong nước
+  - schema_fields (12): vendor_id, vendor_code, vendor_name, vendor_category, tax_code, province, contact_person, phone, vendor_status, approval_date, rating, material_groups_supplied
+
+[14] DATASET: dim_drawing
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_drawing,PROD)
+  - platform: redshift
+  - domain: unknown
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_drawing,PROD)
+  - description: Danh mục bản vẽ kỹ thuật
+  - schema_fields (14): drawing_id, drawing_title, project_id, component_code, drawing_type, format, cad_system, sheet_size, scale, current_revision, file_path, created_by, created_date, drawing_status
+
+[15] DATASET: dim_engineering_change
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_engineering_change,PROD)
+  - platform: redshift
+  - domain: unknown
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_engineering_change,PROD)
+  - description: Danh mục thay đổi kỹ thuật trên sản phẩm
+  - schema_fields (15): change_id, project_id, change_type, component_code, change_reason, description, change_owner, priority, submitted_date, approval_date, implementation_date, change_status, cost_impact, phase_in_method, affected_models
+
+[16] DATASET: dim_ev_model
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_ev_model,PROD)
+  - platform: redshift
+  - domain: unknown
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_ev_model,PROD)
+  - description: Danh mục model xe điện VinFast
+  - schema_fields (13): model_code, model_name, segment, battery_code, range_nedc_km, range_wltp_km, motor_power_kw, motor_torque_nm, drive_type, seats, launch_date, msrp_vnd, model_status
+
+[17] DATASET: dim_ev_owner
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_ev_owner,PROD)
+  - platform: redshift
+  - domain: unknown
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_ev_owner,PROD)
+  - description: Danh mục chủ sở hữu xe điện VinFast
+  - schema_fields (11): owner_id, owner_name, phone_number, email, province_city, vehicle_vin, purchase_date, battery_subscription, battery_subscription_fee, owner_status, registration_date
+
+[18] DATASET: dim_fiscal_calendar
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_fiscal_calendar,PROD)
+  - platform: redshift
+  - domain: TÀI CHÍNH
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_fiscal_calendar,PROD)
+  - description: Lịch tài chính quy ước theo năm tài chính của doanh nghiệp
+  - schema_fields (13): fiscal_date_id, calendar_date, fiscal_year, fiscal_quarter, fiscal_period, fiscal_week, is_weekend, is_holiday, holiday_name, is_month_end, is_quarter_end, is_year_end, created_at
+
+[19] DATASET: dim_foreign_vendor
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_foreign_vendor,PROD)
+  - platform: redshift
+  - domain: CUNG ỨNG (NĐH)
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_foreign_vendor,PROD)
+  - description: Danh mục nhà cung cấp nước ngoài của VinFast
+  - schema_fields (14): vendor_id, vendor_name, vendor_country, vendor_tier, vendor_category, vendor_status, contract_start_date, contract_end_date, payment_terms, vendor_rating, contact_email, duns_number, certification, created_at
+
+[20] DATASET: dim_gl_account
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_gl_account,PROD)
+  - platform: redshift
+  - domain: TÀI CHÍNH
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_gl_account,PROD)
+  - description: Danh mục tài khoản kế toán theo hệ thống tài khoản quốc gia
+  - schema_fields (8): gl_account_id, account_name, account_type, account_group, is_control_account, currency, is_active, created_at
+  - downstream (tieu thu) (4): fact_general_ledger, fact_budget, fact_actual_cost, fact_budget_variance
+
+[21] DATASET: dim_hs_code
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_hs_code,PROD)
+  - platform: redshift
+  - domain: CUNG ỨNG (NĐH)
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_hs_code,PROD)
+  - description: Danh mục mã HS dùng trong nhập khẩu linh kiện ô tô
+  - schema_fields (13): hs_code, hs_description, hs_section, chapter, heading, product_group, duty_rate_standard, restricted_import, coo_required, risk_level, valid_from, valid_to, last_update
+
+[22] DATASET: dim_import_duty
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_import_duty,PROD)
+  - platform: redshift
+  - domain: CUNG ỨNG (NĐH)
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_import_duty,PROD)
+  - description: Danh mục thuế nhập khẩu linh kiện ô tô
+  - schema_fields (14): duty_id, hs_code, duty_rate, vat_rate, special_tax, duty_start_date, duty_end_date, country_of_origin, preferential_tariff, preferential_rate, commodity_description, unit_of_measure, legal_basis, last_updated
+
+[23] DATASET: dim_incoterm
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_incoterm,PROD)
+  - platform: redshift
+  - domain: CUNG ỨNG (NĐH)
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_incoterm,PROD)
+  - description: Danh mục điều kiện Incoterms sử dụng trong hợp đồng nhập khẩu
+  - schema_fields (10): incoterm_code, incoterm_name, incoterm_edition, category, transport_mode, risk_transfer_point, cost_responsibility, suitable_for, used_by_vendor_count, notes
+
+[24] DATASET: dim_inventory_category
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_inventory_category,PROD)
+  - platform: redshift
+  - domain: LOGISTIC
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_inventory_category,PROD)
+  - description: Phân loại tồn kho ABC theo giá trị sử dụng
+  - schema_fields (10): material_code, abc_classification, annual_usage_value, usage_percentage, cumulative_percentage, classification_date, review_cycle, storage_priority, cycle_count_frequency, created_at
+  - upstream (nguon) (1): dim_material
+
+[25] DATASET: dim_material
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material,PROD)
+  - platform: redshift
+  - domain: LOGISTIC
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material,PROD)
+  - description: Danh mục vật tư nguyên vật liệu phục vụ sản xuất xe
+  - schema_fields (13): material_code, material_name, material_type, material_group, base_unit, weight_per_unit_kg, standard_price, lead_time_days, safety_stock, reorder_point, sourcing_type, material_status, created_at
+  - downstream (tieu thu) (13): fact_standard_cost, fact_inventory_movement, fact_lead_time, dim_inventory_category, fact_reorder_alert, fact_inventory_forecast, fact_inventory, fact_physical_inventory, fact_goods_receipt, fact_stock_transfer, fact_material_consumption, fact_goods_issue, fact_purchase_order
+
+[26] DATASET: dim_material_group
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material_group,PROD)
+  - platform: redshift
+  - domain: CUNG ỨNG (TT)
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material_group,PROD)
+  - description: Danh mục nhóm vật tư sử dụng trong sản xuất
+  - schema_fields (6): material_group_id, material_group_name, procurement_category_id, storage_condition, hazardous_flag, unit_default
+
+[27] DATASET: dim_plant
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_plant,PROD)
+  - platform: redshift
+  - domain: SẢN XUẤT
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_plant,PROD)
+  - description: Danh mục nhà máy sản xuất của VinFast
+  - schema_fields (10): plant_id, plant_name, plant_location, plant_area_sqm, production_capacity_per_year, plant_status, operating_since, plant_manager, shift_model, created_at
+  - downstream (tieu thu) (7): dim_shift, dim_worker, fact_fixed_asset, dim_warehouse, dim_cost_center, fact_production_order, dim_assembly_line
+
+[28] DATASET: dim_platform
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_platform,PROD)
+  - platform: redshift
+  - domain: unknown
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_platform,PROD)
+  - description: Danh mục nền tảng khung gầm xe điện
+  - schema_fields (12): platform_id, platform_name, vehicle_type, segment, wheelbase_mm, battery_format, motor_placement, max_power_kw, max_battery_kwh, platform_status, launch_date, derived_models
+
+[29] DATASET: dim_port
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_port,PROD)
+  - platform: redshift
+  - domain: CUNG ỨNG (NĐH)
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_port,PROD)
+  - description: Danh mục cảng biển và sân bay quốc tế
+  - schema_fields (12): port_id, port_name, port_type, country_code, city, region, operating_hours, max_draught_m, capacity_teu, has_cfs, distance_to_plant_km, status
+
+[30] DATASET: dim_procurement_category
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_procurement_category,PROD)
+  - platform: redshift
+  - domain: CUNG ỨNG (TT)
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_procurement_category,PROD)
+  - description: Danh mục hạng mục mua sắm của bộ phận thu mua
+  - schema_fields (7): procurement_category_id, category_name, category_group, procurement_manager, annual_spend, supplier_count, strategic_importance
+
+[31] DATASET: dim_product
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_product,PROD)
+  - platform: redshift
+  - domain: SẢN XUẤT
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_product,PROD)
+  - description: Danh mục sản phẩm xe ô tô, bao gồm tất cả phiên bản và tùy chọn
+  - schema_fields (15): product_id, model_name, variant, body_type, fuel_type, battery_capacity_kwh, engine_power_hp, seating_capacity, exterior_color, interior_material, standard_warranty_months, base_price, product_status, launch_date, created_at
+  - downstream (tieu thu) (5): fact_revenue, fact_standard_cost, fact_production_routing, fact_production_order, fact_production_output
+
+[32] DATASET: dim_product_model
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_product_model,PROD)
+  - platform: redshift
+  - domain: KINH DOANH
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_product_model,PROD)
+  - description: Danh mục các model xe VinFast và thông số kỹ thuật
+  - schema_fields (11): model_id, model_name, model_year, vehicle_category, engine_type, battery_capacity, range_km, seating_capacity, base_price, warranty_period, status
+
+[33] DATASET: dim_profit_center
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_profit_center,PROD)
+  - platform: redshift
+  - domain: TÀI CHÍNH
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_profit_center,PROD)
+  - description: Danh mục trung tâm lợi nhuận theo dòng sản phẩm
+  - schema_fields (6): profit_center_id, profit_center_name, product_line, profit_center_manager, is_active, created_at
+  - downstream (tieu thu) (4): fact_revenue, fact_general_ledger, fact_budget, fact_budget_variance
+
+[34] DATASET: dim_project
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_project,PROD)
+  - platform: redshift
+  - domain: unknown
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_project,PROD)
+  - description: Danh mục dự án phát triển xe của VinFast
+  - schema_fields (13): project_id, project_name, project_type, product_line, program_manager, start_date, planned_end_date, actual_end_date, budget, budget_consumed, project_status, gate_review_level, risk_level
+
+[35] DATASET: dim_promotion
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_promotion,PROD)
+  - platform: redshift
+  - domain: KINH DOANH
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_promotion,PROD)
+  - description: Danh mục chương trình khuyến mãi và ưu đãi
+  - schema_fields (10): promotion_id, promotion_name, promotion_type, discount_value, start_date, end_date, applicable_models, status, budget, created_by
+
+[36] DATASET: dim_region
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_region,PROD)
+  - platform: redshift
+  - domain: KINH DOANH
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_region,PROD)
+  - description: Danh mục khu vực địa lý và vùng miền quản lý
+  - schema_fields (5): region_id, region_name, region_manager, provinces_included, total_dealers
+
+[37] DATASET: dim_repair_code
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_repair_code,PROD)
+  - platform: redshift
+  - domain: HẬU MÃI
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_repair_code,PROD)
+  - description: Danh mục mã sửa chữa tiêu chuẩn và quy trình tương ứng
+  - schema_fields (8): repair_code_id, repair_code, repair_name, repair_category, standard_labor_time, skill_level_required, special_tools, warranty_eligibility
+
+[38] DATASET: dim_sales_channel
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_sales_channel,PROD)
+  - platform: redshift
+  - domain: KINH DOANH
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_sales_channel,PROD)
+  - description: Danh mục kênh bán hàng của VinFast
+  - schema_fields (7): channel_id, channel_name, channel_group, channel_type, is_active, commission_rate, effective_date
+
+[39] DATASET: dim_service_center
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_service_center,PROD)
+  - platform: redshift
+  - domain: HẬU MÃI
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_service_center,PROD)
+  - description: Thông tin các trung tâm dịch vụ ủy quyền và trạm bảo dưỡng VinFast
+  - schema_fields (12): service_center_id, center_code, center_name, center_type, dealer_id, region_id, province, address, phone, working_hours, capacity_per_day, status
+
+[40] DATASET: dim_shift
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_shift,PROD)
+  - platform: redshift
+  - domain: SẢN XUẤT
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_shift,PROD)
+  - description: Danh mục ca làm việc trong nhà máy
+  - schema_fields (12): shift_id, shift_code, shift_name, plant_id, shift_date, start_time, end_time, break_start, break_duration_minutes, overtime_minutes, shift_status, created_at
+  - upstream (nguon) (1): dim_plant
+  - downstream (tieu thu) (4): fact_oee_metrics, fact_material_consumption, fact_downtime, fact_production_output
+
+[41] DATASET: dim_spare_part
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_spare_part,PROD)
+  - platform: redshift
+  - domain: HẬU MÃI
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_spare_part,PROD)
+  - description: Danh mục phụ tùng, linh kiện thay thế VinFast
+  - schema_fields (10): part_id, part_name, part_category, applicable_models, unit_price, unit, manufacturer, warranty_months, min_stock_level, status
+
+[42] DATASET: dim_specification
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_specification,PROD)
+  - platform: redshift
+  - domain: unknown
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_specification,PROD)
+  - description: Danh mục thông số kỹ thuật của xe và linh kiện
+  - schema_fields (13): spec_id, spec_code, spec_name, component_code, model_line, unit, nominal_value, tolerance_min, tolerance_max, spec_category, test_method, spec_status, customer_facing
+
+[43] DATASET: dim_station
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_station,PROD)
+  - platform: redshift
+  - domain: SẢN XUẤT
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_station,PROD)
+  - description: Danh mục trạm làm việc trên dây chuyền lắp ráp
+  - schema_fields (10): station_id, assembly_line_id, station_code, station_name, station_type, sequence_number, standard_cycle_time, min_workers_required, station_status, created_at
+  - upstream (nguon) (1): dim_assembly_line
+  - downstream (tieu thu) (6): fact_production_routing, fact_quality_inspection, fact_wip_tracking, fact_downtime, fact_defect_tracking, fact_production_output
+
+[44] DATASET: dim_supplier
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_supplier,PROD)
+  - platform: redshift
+  - domain: LOGISTIC
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_supplier,PROD)
+  - description: Danh mục nhà cung cấp vật tư và linh kiện
+  - schema_fields (11): supplier_id, supplier_name, supplier_category, supply_type, country, payment_terms, lead_time_days, quality_rating, supplier_status, contract_expiry, created_at
+  - downstream (tieu thu) (6): fact_ap_payable, fact_lead_time, fact_goods_receipt, fact_reorder_alert, dim_vendor_invoice, fact_purchase_order
+
+[45] DATASET: dim_technician
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_technician,PROD)
+  - platform: redshift
+  - domain: HẬU MÃI
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_technician,PROD)
+  - description: Danh mục kỹ thuật viên và thông tin chuyên môn
+  - schema_fields (8): technician_id, full_name, service_center_id, certification_level, specialization, years_of_experience, certifications, employment_status
+
+[46] DATASET: dim_uom
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_uom,PROD)
+  - platform: redshift
+  - domain: LOGISTIC
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_uom,PROD)
+  - description: Danh mục đơn vị tính sử dụng trong quản lý vật tư
+  - schema_fields (8): uom_code, uom_name, uom_category, base_uom, conversion_factor, decimal_places, is_active, created_at
+
+[47] DATASET: dim_vendor_invoice
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_vendor_invoice,PROD)
+  - platform: redshift
+  - domain: TÀI CHÍNH
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_vendor_invoice,PROD)
+  - description: Hóa đơn mua hàng từ nhà cung cấp và dịch vụ
+  - schema_fields (14): invoice_id, supplier_id, invoice_type, invoice_number, invoice_date, receipt_date, total_amount, tax_amount, net_amount, currency, payment_due_date, invoice_status, verified_by, created_at
+  - upstream (nguon) (1): dim_supplier
+
+[48] DATASET: dim_warehouse
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_warehouse,PROD)
+  - platform: redshift
+  - domain: LOGISTIC
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_warehouse,PROD)
+  - description: Danh mục kho hàng trong hệ thống logistics
+  - schema_fields (10): warehouse_id, warehouse_name, plant_id, warehouse_type, location, total_capacity_sqm, storage_type, warehouse_manager, is_active, created_at
+  - upstream (nguon) (1): dim_plant
+  - downstream (tieu thu) (8): fact_inventory_movement, fact_goods_receipt, fact_reorder_alert, fact_inventory_forecast, fact_inventory, fact_stock_transfer, fact_physical_inventory, fact_goods_issue
+
+[49] DATASET: dim_warranty_policy
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_warranty_policy,PROD)
+  - platform: redshift
+  - domain: HẬU MÃI
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_warranty_policy,PROD)
+  - description: Danh mục chính sách bảo hành xe và phụ tùng
+  - schema_fields (10): warranty_policy_id, policy_name, applicable_model_id, warranty_type, duration_months, distance_limit_km, coverage_description, exclusion_items, effective_date, policy_status
+
+[50] DATASET: dim_worker
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,dim_worker,PROD)
+  - platform: redshift
+  - domain: SẢN XUẤT
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dim_worker,PROD)
+  - description: Danh mục công nhân sản xuất
+  - schema_fields (11): worker_id, full_name, plant_id, department, job_title, skill_level, certification, hire_date, worker_status, assigned_shift, created_at
+  - upstream (nguon) (1): dim_plant
+  - downstream (tieu thu) (2): fact_quality_inspection, dim_assembly_line
+
+[51] DATASET: fact_actual_cost
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_actual_cost,PROD)
+  - platform: redshift
+  - domain: TÀI CHÍNH
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_actual_cost,PROD)
+  - description: Chi phí sản xuất thực tế phát sinh theo từng đối tượng
+  - schema_fields (11): actual_cost_id, cost_center_id, gl_account_id, order_id, cost_element, actual_amount, quantity, unit_cost, posting_date, reference_document, created_at
+  - upstream (nguon) (3): dim_cost_center, fact_production_order, dim_gl_account
+
+[52] DATASET: fact_ap_payable
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_ap_payable,PROD)
+  - platform: redshift
+  - domain: TÀI CHÍNH
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_ap_payable,PROD)
+  - description: Công nợ phải trả nhà cung cấp vật tư và dịch vụ
+  - schema_fields (13): payable_id, supplier_id, supplier_name, invoice_number, invoice_date, due_date, invoice_amount, paid_amount, outstanding_amount, payment_terms, ap_status, purchase_order_ref, created_at
+  - upstream (nguon) (1): dim_supplier
+
+[53] DATASET: fact_ar_receivable
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_ar_receivable,PROD)
+  - platform: redshift
+  - domain: TÀI CHÍNH
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_ar_receivable,PROD)
+  - description: Công nợ phải thu từ khách hàng và đại lý
+  - schema_fields (14): receivable_id, customer_id, customer_name, invoice_number, invoice_date, due_date, invoice_amount, paid_amount, outstanding_amount, overdue_days, aging_bucket, ar_status, collection_notes, created_at
+
+[54] DATASET: fact_battery_health
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_battery_health,PROD)
+  - platform: redshift
+  - domain: unknown
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_battery_health,PROD)
+  - description: Tình trạng sức khỏe pin xe điện
+  - schema_fields (14): health_id, battery_id, vehicle_vin, record_date, soh_percent, total_cycles, total_energy_in_kwh, total_energy_out_kwh, avg_temperature_c, max_temperature_c, internal_resistance_mohm, cell_voltage_deviation_v, health_grade, recommendation
+
+[55] DATASET: fact_battery_swap
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_battery_swap,PROD)
+  - platform: redshift
+  - domain: unknown
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_battery_swap,PROD)
+  - description: Giao dịch đổi pin cho xe điện VinFast
+  - schema_fields (13): swap_id, vehicle_vin, old_battery_id, new_battery_id, swap_station_id, swap_time, old_battery_soc, new_battery_soc, old_battery_soh, swap_duration_seconds, swap_fee_vnd, customer_id, swap_status
+
+[56] DATASET: fact_bom_engineering
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_bom_engineering,PROD)
+  - platform: redshift
+  - domain: unknown
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_bom_engineering,PROD)
+  - description: BOM kỹ thuật (Engineering BOM)
+  - schema_fields (15): ebom_id, parent_assembly_code, component_code, component_name, level, quantity_per_parent, unit_of_measure, part_type, drawing_number, engineering_material, weight_kg, effectivity_start, effectivity_end, bom_version, created_at
+
+[57] DATASET: fact_budget
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_budget,PROD)
+  - platform: redshift
+  - domain: TÀI CHÍNH
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_budget,PROD)
+  - description: Ngân sách chi phí và doanh thu theo từng trung tâm
+  - schema_fields (12): budget_id, cost_center_id, profit_center_id, gl_account_id, fiscal_year, fiscal_period, budget_type, budget_amount, approved_by, approval_date, notes, created_at
+  - upstream (nguon) (3): dim_cost_center, dim_gl_account, dim_profit_center
+
+[58] DATASET: fact_budget_variance
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_budget_variance,PROD)
+  - platform: redshift
+  - domain: TÀI CHÍNH
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_budget_variance,PROD)
+  - description: Chênh lệch giữa ngân sách và chi phí doanh thu thực tế
+  - schema_fields (13): variance_id, cost_center_id, profit_center_id, gl_account_id, fiscal_year, fiscal_period, budget_amount, actual_amount, variance_amount, variance_pct, variance_type, variance_reason, created_at
+  - upstream (nguon) (3): dim_cost_center, dim_gl_account, dim_profit_center
+
+[59] DATASET: fact_cash_flow
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_cash_flow,PROD)
+  - platform: redshift
+  - domain: TÀI CHÍNH
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_cash_flow,PROD)
+  - description: Dòng tiền thu chi của doanh nghiệp theo từng ngày
+  - schema_fields (12): cash_flow_id, transaction_date, cash_flow_type, transaction_type, amount, currency, bank_account, counterparty, description, reference_document, cash_flow_category, created_at
+
+[60] DATASET: fact_change_request
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_change_request,PROD)
+  - platform: redshift
+  - domain: unknown
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_change_request,PROD)
+  - description: Yêu cầu thay đổi sản phẩm/quy trình
+  - schema_fields (15): cr_id, project_id, cr_title, cr_type, priority, source, description, justification, requested_by, request_date, review_date, decision, decision_by, linked_eco, cr_status
+
+[61] DATASET: fact_charging_session
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_charging_session,PROD)
+  - platform: redshift
+  - domain: unknown
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_charging_session,PROD)
+  - description: Chi tiết phiên sạc tại trạm sạc VGreen
+  - schema_fields (15): session_id, station_id, connector_id, vehicle_vin, battery_id, start_time, end_time, duration_minutes, energy_delivered_kwh, start_soc, end_soc, avg_power_kw, cost_vnd, payment_method, session_status
+
+[62] DATASET: fact_charging_station_maintenance
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_charging_station_maintenance,PROD)
+  - platform: redshift
+  - domain: unknown
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_charging_station_maintenance,PROD)
+  - description: Lịch sử bảo trì trạm sạc VGreen
+  - schema_fields (14): maintenance_id, station_id, connector_id, maintenance_type, scheduled_date, actual_date, technician_name, issue_description, action_taken, parts_replaced, downtime_hours, cost_vnd, completion_status, next_maintenance_due
+
+[63] DATASET: fact_contract_performance
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_contract_performance,PROD)
+  - platform: redshift
+  - domain: CUNG ỨNG (TT)
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_contract_performance,PROD)
+  - description: Đánh giá hiệu suất thực hiện hợp đồng
+  - schema_fields (10): contract_performance_id, contract_id, vendor_id, period, contract_value_released, fulfillment_rate, delivery_performance, quality_performance, compliance_score, overall_performance
+
+[64] DATASET: fact_customer_complaint
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_customer_complaint,PROD)
+  - platform: redshift
+  - domain: HẬU MÃI
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_customer_complaint,PROD)
+  - description: Khiếu nại của khách hàng về sản phẩm và dịch vụ
+  - schema_fields (12): complaint_id, customer_id, service_center_id, sales_order_id, complaint_date, complaint_channel, complaint_category, complaint_description, severity, resolution_status, resolved_date, compensation_amount
+
+[65] DATASET: fact_customer_feedback
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_customer_feedback,PROD)
+  - platform: redshift
+  - domain: KINH DOANH
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_customer_feedback,PROD)
+  - description: Phản hồi và khảo sát ý kiến khách hàng sau mua xe
+  - schema_fields (11): feedback_id, customer_id, sales_order_id, feedback_date, feedback_channel, nps_score, satisfaction_rating, feedback_category, feedback_content, sentiment, resolved_flag
+
+[66] DATASET: fact_customer_satisfaction
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_customer_satisfaction,PROD)
+  - platform: redshift
+  - domain: HẬU MÃI
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_customer_satisfaction,PROD)
+  - description: Đánh giá mức độ hài lòng của khách hàng sau dịch vụ
+  - schema_fields (11): satisfaction_id, service_order_id, customer_id, survey_date, overall_rating, service_quality_rating, timeliness_rating, staff_attitude_rating, price_fairness_rating, recommend_score, feedback_notes
+
+[67] DATASET: fact_customs_declaration
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_customs_declaration,PROD)
+  - platform: redshift
+  - domain: CUNG ỨNG (NĐH)
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_customs_declaration,PROD)
+  - description: Tờ khai hải quan cho lô hàng nhập khẩu linh kiện
+  - schema_fields (15): declaration_id, import_order_id, hs_code, customs_branch, declaration_date, clearance_date, container_number, gross_weight_kg, cargo_description, invoice_value, customs_value, duty_amount, vat_amount, declaration_type, broker_id
+
+[68] DATASET: fact_dealer_performance
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_dealer_performance,PROD)
+  - platform: redshift
+  - domain: KINH DOANH
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_dealer_performance,PROD)
+  - description: Đánh giá hiệu suất hoạt động của đại lý
+  - schema_fields (10): performance_id, dealer_id, review_period, total_sales_quantity, target_achievement_rate, customer_satisfaction_score, inventory_turnover_days, test_drive_conversion_rate, after_sales_revenue, overall_rating
+
+[69] DATASET: fact_defect_tracking
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_defect_tracking,PROD)
+  - platform: redshift
+  - domain: SẢN XUẤT
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_defect_tracking,PROD)
+  - description: Theo dõi lỗi phát sinh trong quá trình sản xuất và lắp ráp
+  - schema_fields (15): defect_id, order_id, vin_number, station_id, defect_code, defect_description, defect_severity, defect_category, detected_at, reported_by, root_cause, corrective_action, defect_status, resolved_at, created_at
+  - upstream (nguon) (2): fact_production_order, dim_station
+
+[70] DATASET: fact_design_release
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_design_release,PROD)
+  - platform: redshift
+  - domain: unknown
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_design_release,PROD)
+  - description: Phát hành thiết kế bản vẽ và tài liệu kỹ thuật
+  - schema_fields (12): release_id, drawing_number, project_id, revision, document_type, release_date, designed_by, checked_by, approved_by, release_status, plm_system, effective_date
+
+[71] DATASET: fact_downtime
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_downtime,PROD)
+  - platform: redshift
+  - domain: SẢN XUẤT
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_downtime,PROD)
+  - description: Ghi nhận thời gian dừng máy và nguyên nhân ngừng sản xuất
+  - schema_fields (13): downtime_id, assembly_line_id, station_id, shift_id, downtime_start, downtime_end, duration_minutes, downtime_category, downtime_reason, equipment_id, reported_by, resolution_action, created_at
+  - upstream (nguon) (3): dim_shift, dim_station, dim_assembly_line
+
+[72] DATASET: fact_dvp
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_dvp,PROD)
+  - platform: redshift
+  - domain: unknown
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_dvp,PROD)
+  - description: Kế hoạch xác nhận thiết kế (DVP)
+  - schema_fields (14): dvp_id, project_id, component_code, test_item, test_method, sample_qty, planned_start_date, planned_end_date, actual_start_date, actual_end_date, test_status, result, dvp_engineer, dvp_version
+
+[73] DATASET: fact_energy_consumption
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_energy_consumption,PROD)
+  - platform: redshift
+  - domain: unknown
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_energy_consumption,PROD)
+  - description: Tiêu thụ năng lượng của xe điện
+  - schema_fields (13): consumption_id, vehicle_vin, record_date, distance_km, energy_consumed_kwh, avg_consumption_wh_per_km, driving_style, ac_energy_kwh, regen_energy_kwh, terrain_type, ambient_temp_c, tire_pressure_psi, energy_cost_vnd
+
+[74] DATASET: fact_ev_fleet
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_ev_fleet,PROD)
+  - platform: redshift
+  - domain: unknown
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_ev_fleet,PROD)
+  - description: Dữ liệu đội xe điện (dành cho quản lý vận hành)
+  - schema_fields (13): fleet_id, vehicle_vin, fleet_owner, vehicle_plate, registration_date, total_distance_km, total_energy_kwh, total_charging_sessions, last_service_date, next_service_date, fleet_status, driver_name, utilization_rate
+
+[75] DATASET: fact_fixed_asset
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_fixed_asset,PROD)
+  - platform: redshift
+  - domain: TÀI CHÍNH
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_fixed_asset,PROD)
+  - description: Tài sản cố định nhà xưởng, máy móc thiết bị sản xuất
+  - schema_fields (15): asset_id, asset_name, asset_category, plant_id, cost_center_id, acquisition_date, acquisition_cost, accumulated_depreciation, net_book_value, depreciation_method, useful_life_months, monthly_depreciation, asset_status, last_depreciation_date, created_at
+  - upstream (nguon) (2): dim_cost_center, dim_plant
+
+[76] DATASET: fact_fmea
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_fmea,PROD)
+  - platform: redshift
+  - domain: unknown
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_fmea,PROD)
+  - description: Phân tích chế độ lỗi và ảnh hưởng (FMEA)
+  - schema_fields (15): fmea_id, fmea_type, component_code, function_description, failure_mode, failure_effect, failure_cause, severity, occurrence, detection, rpn, recommended_action, action_owner, rpn_after_action, review_date
+
+[77] DATASET: fact_foreign_audit
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_foreign_audit,PROD)
+  - platform: redshift
+  - domain: CUNG ỨNG (NĐH)
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_foreign_audit,PROD)
+  - description: Kết quả kiểm toán nhà cung cấp nước ngoài
+  - schema_fields (15): audit_id, vendor_id, audit_date, audit_type, auditor_team, quality_score, delivery_score, compliance_score, overall_score, findings_count, critical_findings, action_plan_required, action_plan_deadline, next_audit_date, audit_result
+
+[78] DATASET: fact_foreign_contract
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_foreign_contract,PROD)
+  - platform: redshift
+  - domain: CUNG ỨNG (NĐH)
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_foreign_contract,PROD)
+  - description: Hợp đồng mua bán hàng hóa với nhà cung cấp nước ngoài
+  - schema_fields (15): contract_id, vendor_id, contract_type, contract_value, currency, start_date, end_date, renewal_clause, delivery_terms, payment_terms, warranty_period, legal_governing, dispute_resolution, contract_status, sign_date
+
+[79] DATASET: fact_general_ledger
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_general_ledger,PROD)
+  - platform: redshift
+  - domain: TÀI CHÍNH
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_general_ledger,PROD)
+  - description: Sổ cái ghi nhận tất cả bút toán kế toán của doanh nghiệp
+  - schema_fields (15): journal_entry_id, gl_account_id, cost_center_id, profit_center_id, posting_date, document_type, document_number, debit_amount, credit_amount, currency, exchange_rate, posting_text, fiscal_year, fiscal_period, created_at
+  - upstream (nguon) (3): dim_cost_center, dim_gl_account, dim_profit_center
+
+[80] DATASET: fact_goods_issue
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_goods_issue,PROD)
+  - platform: redshift
+  - domain: LOGISTIC
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_goods_issue,PROD)
+  - description: Phiếu xuất kho cho sản xuất hoặc các mục đích khác
+  - schema_fields (12): goods_issue_id, order_id, material_code, warehouse_id, issue_date, quantity_issued, unit_of_measure, issue_type, cost_center_id, batch_number, issued_by, created_at
+  - upstream (nguon) (4): dim_warehouse, dim_material, dim_cost_center, fact_production_order
+
+[81] DATASET: fact_goods_receipt
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_goods_receipt,PROD)
+  - platform: redshift
+  - domain: LOGISTIC
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_goods_receipt,PROD)
+  - description: Phiếu nhập kho ghi nhận hàng hóa từ nhà cung cấp
+  - schema_fields (13): goods_receipt_id, po_number, supplier_id, material_code, warehouse_id, receipt_date, quantity_received, unit_of_measure, batch_number, inspection_status, receipt_note, received_by, created_at
+  - upstream (nguon) (4): dim_warehouse, dim_material, dim_supplier, fact_purchase_order
+
+[82] DATASET: fact_homologation
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_homologation,PROD)
+  - platform: redshift
+  - domain: unknown
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_homologation,PROD)
+  - description: Chứng nhận kiểu (Homologation) cho xe điện
+  - schema_fields (14): homologation_id, model_code, certifying_body, certificate_number, regulation_type, test_standard, application_date, certificate_date, expiry_date, scope, test_laboratory, approval_status, remarks, created_at
+
+[83] DATASET: fact_import_cost
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_import_cost,PROD)
+  - platform: redshift
+  - domain: CUNG ỨNG (NĐH)
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_import_cost,PROD)
+  - description: Chi phí nhập khẩu linh kiện tổng hợp
+  - schema_fields (15): import_cost_id, import_order_id, invoice_value_usd, freight_cost_usd, insurance_cost_usd, duty_amount_usd, vat_amount_vnd, customs_clearance_cost, inland_transport_cost, storage_cost, inspection_cost, total_landed_cost_vnd, exchange_rate, cost_center, recorded_at
+
+[84] DATASET: fact_import_order
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_import_order,PROD)
+  - platform: redshift
+  - domain: CUNG ỨNG (NĐH)
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_import_order,PROD)
+  - description: Đơn nhập khẩu linh kiện từ nhà cung cấp nước ngoài
+  - schema_fields (15): import_order_id, vendor_id, order_date, po_number, incoterm, currency, total_amount, vnd_amount, line_items_count, delivery_date_requested, delivery_date_actual, order_status, payment_status, created_by, created_at
+
+[85] DATASET: fact_import_schedule
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_import_schedule,PROD)
+  - platform: redshift
+  - domain: CUNG ỨNG (NĐH)
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_import_schedule,PROD)
+  - description: Lịch trình nhập khẩu linh kiện theo kế hoạch sản xuất
+  - schema_fields (14): schedule_id, vendor_id, component_code, component_name, quantity_planned, unit, planned_delivery_date, production_line, buffer_days, critical_item, schedule_status, delay_reason, created_by, created_at
+
+[86] DATASET: fact_incentive_claim
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_incentive_claim,PROD)
+  - platform: redshift
+  - domain: KINH DOANH
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_incentive_claim,PROD)
+  - description: Yêu cầu và chi trả ưu đãi, hỗ trợ cho đại lý và khách hàng
+  - schema_fields (10): claim_id, sales_order_id, dealer_id, claim_date, incentive_type, claim_amount, approved_amount, claim_status, approved_by, payment_date
+
+[87] DATASET: fact_inventory
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_inventory,PROD)
+  - platform: redshift
+  - domain: LOGISTIC
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_inventory,PROD)
+  - description: Tồn kho hiện tại của từng vật tư tại từng kho
+  - schema_fields (13): inventory_id, material_code, warehouse_id, batch_number, quantity_on_hand, quantity_reserved, quantity_available, quantity_in_transit, unit_cost, total_value, last_movement_date, inventory_status, created_at
+  - upstream (nguon) (2): dim_warehouse, dim_material
+
+[88] DATASET: fact_inventory_forecast
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_inventory_forecast,PROD)
+  - platform: redshift
+  - domain: LOGISTIC
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_inventory_forecast,PROD)
+  - description: Dự báo tồn kho dựa trên tiêu thụ lịch sử và kế hoạch sản xuất
+  - schema_fields (13): forecast_id, material_code, warehouse_id, forecast_month, forecast_quantity, forecast_method, confidence_level_pct, projected_beginning_inventory, projected_ending_inventory, planned_receipts, recommended_order, forecast_date, created_at
+  - upstream (nguon) (2): dim_warehouse, dim_material
+
+[89] DATASET: fact_inventory_movement
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_inventory_movement,PROD)
+  - platform: redshift
+  - domain: LOGISTIC
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_inventory_movement,PROD)
+  - description: Nhật ký di chuyển tồn kho chi tiết từng giao dịch
+  - schema_fields (11): movement_id, material_code, warehouse_id, movement_type, quantity, unit_of_measure, movement_date, reference_document, batch_number, created_by, created_at
+  - upstream (nguon) (2): dim_warehouse, dim_material
+
+[90] DATASET: fact_lead_management
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_lead_management,PROD)
+  - platform: redshift
+  - domain: KINH DOANH
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_lead_management,PROD)
+  - description: Quản lý khách hàng tiềm năng từ các chiến dịch marketing
+  - schema_fields (13): lead_id, customer_id, lead_source, campaign_name, full_name, phone, email, interested_model, lead_status, assigned_to, assigned_date, conversion_date, dealer_id
+
+[91] DATASET: fact_lead_time
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_lead_time,PROD)
+  - platform: redshift
+  - domain: LOGISTIC
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_lead_time,PROD)
+  - description: Theo dõi thời gian đặt hàng và giao hàng từ nhà cung cấp
+  - schema_fields (13): lead_time_id, po_number, supplier_id, material_code, order_date, supplier_ack_date, promised_delivery_date, actual_delivery_date, order_to_ack_hours, actual_lead_time_days, variance_days, on_time_delivery, created_at
+  - upstream (nguon) (3): dim_material, dim_supplier, fact_purchase_order
+
+[92] DATASET: fact_letter_of_credit
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_letter_of_credit,PROD)
+  - platform: redshift
+  - domain: CUNG ỨNG (NĐH)
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_letter_of_credit,PROD)
+  - description: Thư tín dụng dùng trong thanh toán nhập khẩu
+  - schema_fields (15): lc_id, import_order_id, lc_number, issuing_bank, beneficiary_bank, beneficiary_name, lc_type, lc_amount, currency, issue_date, expiry_date, shipping_date_latest, tenor_days, lc_status, created_at
+
+[93] DATASET: fact_local_content
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_local_content,PROD)
+  - platform: redshift
+  - domain: CUNG ỨNG (TT)
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_local_content,PROD)
+  - description: Tỷ lệ nội địa hóa và giá trị linh kiện trong nước
+  - schema_fields (10): local_content_id, model_id, report_period, total_part_count, domestic_part_count, local_part_pct, domestic_value, total_material_value, local_value_pct, localization_target
+
+[94] DATASET: fact_maintenance_record
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_maintenance_record,PROD)
+  - platform: redshift
+  - domain: HẬU MÃI
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_maintenance_record,PROD)
+  - description: Lịch sử bảo dưỡng định kỳ của từng xe
+  - schema_fields (13): maintenance_id, vin_number, customer_id, service_center_id, service_order_id, maintenance_type, odometer_km, maintenance_date, next_maintenance_km, next_maintenance_date, performed_items, total_cost, warranty_covered
+
+[95] DATASET: fact_market_share
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_market_share,PROD)
+  - platform: redshift
+  - domain: KINH DOANH
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_market_share,PROD)
+  - description: Dữ liệu thị phần của VinFast theo khu vực và thời gian
+  - schema_fields (10): market_share_id, region_id, year, month, vehicle_category, vinfast_units_sold, industry_total_units, market_share_pct, rank, data_source
+
+[96] DATASET: fact_material_consumption
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_material_consumption,PROD)
+  - platform: redshift
+  - domain: SẢN XUẤT
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_material_consumption,PROD)
+  - description: Tiêu hao vật tư trong quá trình sản xuất xe
+  - schema_fields (12): consumption_id, order_id, material_code, assembly_line_id, unit_of_measure, planned_quantity, actual_quantity, variance_quantity, consumption_date, shift_id, batch_number, created_at
+  - upstream (nguon) (4): dim_shift, dim_material, fact_production_order, dim_assembly_line
+
+[97] DATASET: fact_non_conformance
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_non_conformance,PROD)
+  - platform: redshift
+  - domain: CUNG ỨNG (TT)
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_non_conformance,PROD)
+  - description: Biên bản không phù hợp khi nhập hàng hoặc trong sản xuất
+  - schema_fields (12): ncr_id, vendor_id, part_id, receipt_id, ncr_date, ncr_type, severity, defect_description, disposition, corrective_action, closed_date, status
+
+[98] DATASET: fact_oee_metrics
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_oee_metrics,PROD)
+  - platform: redshift
+  - domain: SẢN XUẤT
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_oee_metrics,PROD)
+  - description: Chỉ số OEE tổng hợp hiệu quả thiết bị tổng thể
+  - schema_fields (14): oee_id, assembly_line_id, shift_id, oee_date, availability_pct, performance_pct, quality_pct, oee_pct, planned_production_time_min, actual_runtime_min, ideal_cycle_time_seconds, total_parts_produced, good_parts_produced, created_at
+  - upstream (nguon) (2): dim_shift, dim_assembly_line
+
+[99] DATASET: fact_part_inventory
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_part_inventory,PROD)
+  - platform: redshift
+  - domain: HẬU MÃI
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_part_inventory,PROD)
+  - description: Tồn kho phụ tùng tại các trung tâm dịch vụ
+  - schema_fields (9): inventory_id, service_center_id, part_id, quantity_on_hand, quantity_reserved, quantity_available, last_restock_date, last_issue_date, location_bin
+
+[100] DATASET: fact_physical_inventory
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_physical_inventory,PROD)
+  - platform: redshift
+  - domain: LOGISTIC
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_physical_inventory,PROD)
+  - description: Kết quả kiểm kê thực tế đối chiếu với tồn kho hệ thống
+  - schema_fields (13): physical_inventory_id, material_code, warehouse_id, inventory_date, system_quantity, counted_quantity, variance_quantity, variance_reason, adjusted_quantity, counted_by, approved_by, pi_status, created_at
+  - upstream (nguon) (2): dim_warehouse, dim_material
+
+[101] DATASET: fact_production_order
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_order,PROD)
+  - platform: redshift
+  - domain: SẢN XUẤT
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_order,PROD)
+  - description: Lệnh sản xuất xe, bao gồm thông tin chi tiết từng lô xe được sản xuất
+  - schema_fields (14): order_id, product_id, plant_id, assembly_line_id, order_quantity, order_date, planned_start_date, planned_end_date, actual_start_date, actual_end_date, order_status, priority, customer_order_ref, created_at
+  - upstream (nguon) (3): dim_plant, dim_product, dim_assembly_line
+  - downstream (tieu thu) (7): fact_quality_inspection, fact_actual_cost, fact_material_consumption, fact_wip_tracking, fact_defect_tracking, fact_goods_issue, fact_production_output
+
+[102] DATASET: fact_production_output
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_output,PROD)
+  - platform: redshift
+  - domain: SẢN XUẤT
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_output,PROD)
+  - description: Sản lượng sản xuất thực tế theo từng ca và dây chuyền
+  - schema_fields (12): output_id, order_id, shift_id, assembly_line_id, station_id, output_date, product_id, vin_number, good_quantity, reject_quantity, rework_quantity, recorded_at
+  - upstream (nguon) (5): dim_shift, fact_production_order, dim_station, dim_assembly_line, dim_product
+
+[103] DATASET: fact_production_routing
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_routing,PROD)
+  - platform: redshift
+  - domain: SẢN XUẤT
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_routing,PROD)
+  - description: Quy trình sản xuất và trình tự các công đoạn chế tạo xe
+  - schema_fields (15): routing_id, product_id, operation_sequence, operation_code, operation_description, assembly_line_id, station_id, standard_setup_time_min, standard_run_time_min, required_skill_level, routing_version, effective_from, effective_to, is_active, created_at
+  - upstream (nguon) (3): dim_station, dim_product, dim_assembly_line
+
+[104] DATASET: fact_prototype
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_prototype,PROD)
+  - platform: redshift
+  - domain: unknown
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_prototype,PROD)
+  - description: Quản lý nguyên mẫu xe trong quá trình phát triển
+  - schema_fields (14): prototype_id, project_id, prototype_phase, build_number, vin_number, build_date, body_style, color, battery_type, motor_type, purpose, current_location, prototype_status, created_at
+
+[105] DATASET: fact_purchase_order
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_purchase_order,PROD)
+  - platform: redshift
+  - domain: LOGISTIC
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_purchase_order,PROD)
+  - description: Đơn mua hàng đặt mua vật tư từ nhà cung cấp
+  - schema_fields (15): po_number, supplier_id, material_code, material_description, quantity_ordered, quantity_received, quantity_invoiced, unit_price, total_amount, order_date, promised_delivery_date, actual_delivery_date, po_status, buyer_name, created_at
+  - upstream (nguon) (2): dim_material, dim_supplier
+  - downstream (tieu thu) (2): fact_lead_time, fact_goods_receipt
+
+[106] DATASET: fact_purchase_requisition
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_purchase_requisition,PROD)
+  - platform: redshift
+  - domain: CUNG ỨNG (TT)
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_purchase_requisition,PROD)
+  - description: Yêu cầu mua hàng nội bộ từ các bộ phận sản xuất
+  - schema_fields (13): requisition_id, request_date, requested_by, department, material_group_id, part_id, part_description, quantity, unit, required_date, estimated_budget, status, approved_by
+
+[107] DATASET: fact_quality_inbound
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_quality_inbound,PROD)
+  - platform: redshift
+  - domain: CUNG ỨNG (NĐH)
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_quality_inbound,PROD)
+  - description: Kết quả kiểm tra chất lượng hàng nhập khẩu đầu vào
+  - schema_fields (15): inspection_id, import_order_id, component_code, component_name, inspection_date, inspector, sample_size, lot_size, defect_count, defect_rate, critical_defects, major_defects, inspection_result, disposition, created_at
+
+[108] DATASET: fact_quality_inspection
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_quality_inspection,PROD)
+  - platform: redshift
+  - domain: SẢN XUẤT
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_quality_inspection,PROD)
+  - description: Kết quả kiểm tra chất lượng tại các trạm kiểm định
+  - schema_fields (14): inspection_id, order_id, vin_number, inspection_type, inspection_station, inspector_id, inspection_result, score, defect_count, inspection_date, inspection_at, next_inspection_due, notes, created_at
+  - upstream (nguon) (3): dim_worker, fact_production_order, dim_station
+
+[109] DATASET: fact_range_tracking
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_range_tracking,PROD)
+  - platform: redshift
+  - domain: unknown
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_range_tracking,PROD)
+  - description: Theo dõi phạm vi hoạt động thực tế của xe điện
+  - schema_fields (13): range_id, vehicle_vin, record_date, estimated_range_km, actual_range_km, rated_range_km, range_deviation_percent, battery_soc, avg_speed_kmh, outside_temp_c, ac_usage_percent, driving_condition, range_anomaly_flag
+
+[110] DATASET: fact_recall
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_recall,PROD)
+  - platform: redshift
+  - domain: HẬU MÃI
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_recall,PROD)
+  - description: Thông tin triệu hồi xe do lỗi kỹ thuật hoặc an toàn
+  - schema_fields (12): recall_id, recall_campaign_name, model_id, production_period, vin_range_start, vin_range_end, total_affected, total_completed, defect_description, repair_action, announced_date, recall_status
+
+[111] DATASET: fact_reorder_alert
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_reorder_alert,PROD)
+  - platform: redshift
+  - domain: LOGISTIC
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_reorder_alert,PROD)
+  - description: Cảnh báo tái đặt hàng khi tồn kho dưới điểm tái đặt hàng
+  - schema_fields (13): alert_id, material_code, warehouse_id, alert_date, current_stock, reorder_point, safety_stock_level, suggested_order_qty, supplier_id, alert_priority, alert_status, acknowledged_by, created_at
+  - upstream (nguon) (3): dim_warehouse, dim_material, dim_supplier
+
+[112] DATASET: fact_revenue
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_revenue,PROD)
+  - platform: redshift
+  - domain: TÀI CHÍNH
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_revenue,PROD)
+  - description: Doanh thu bán xe và dịch vụ theo từng kỳ
+  - schema_fields (14): revenue_id, product_id, profit_center_id, revenue_date, revenue_type, quantity_sold, unit_price, gross_revenue, discount_amount, net_revenue, vat_amount, customer_id, invoice_number, created_at
+  - upstream (nguon) (2): dim_product, dim_profit_center
+
+[113] DATASET: fact_rfq
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_rfq,PROD)
+  - platform: redshift
+  - domain: CUNG ỨNG (TT)
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_rfq,PROD)
+  - description: Yêu cầu báo giá gửi đến các nhà cung cấp
+  - schema_fields (12): rfq_id, requisition_id, rfq_date, vendor_id, part_id, quantity, quoted_unit_price, quoted_total, lead_time_days, valid_until, rfq_status, selected_flag
+
+[114] DATASET: fact_sales_delivery
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_sales_delivery,PROD)
+  - platform: redshift
+  - domain: KINH DOANH
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_sales_delivery,PROD)
+  - description: Thông tin bàn giao xe cho khách hàng
+  - schema_fields (10): delivery_id, sales_order_id, delivery_date, customer_id, dealer_id, vin_number, license_plate, delivery_status, delivery_type, delivery_notes
+
+[115] DATASET: fact_sales_order
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_sales_order,PROD)
+  - platform: redshift
+  - domain: KINH DOANH
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_sales_order,PROD)
+  - description: Thông tin chi tiết đơn đặt hàng xe và phụ kiện
+  - schema_fields (14): sales_order_id, order_date, customer_id, dealer_id, channel_id, model_id, quantity, unit_price, discount_amount, total_amount, order_status, payment_method, expected_delivery_date, promotion_id
+
+[116] DATASET: fact_sales_target
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_sales_target,PROD)
+  - platform: redshift
+  - domain: KINH DOANH
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_sales_target,PROD)
+  - description: Chỉ tiêu bán hàng theo đại lý và thời gian
+  - schema_fields (10): target_id, dealer_id, target_year, target_month, model_id, target_quantity, target_value, actual_quantity, completion_rate, target_status
+
+[117] DATASET: fact_service_appointment
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_service_appointment,PROD)
+  - platform: redshift
+  - domain: HẬU MÃI
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_service_appointment,PROD)
+  - description: Lịch hẹn dịch vụ bảo dưỡng và sửa chữa của khách hàng
+  - schema_fields (11): appointment_id, customer_id, service_center_id, vin_number, appointment_date, appointment_time, service_type, appointment_status, odometer_km, notes, created_date
+
+[118] DATASET: fact_service_campaign
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_service_campaign,PROD)
+  - platform: redshift
+  - domain: HẬU MÃI
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_service_campaign,PROD)
+  - description: Chiến dịch dịch vụ đặc biệt và triệu hồi chủ động
+  - schema_fields (10): campaign_id, campaign_name, campaign_type, applicable_models, start_date, end_date, target_vehicles, completed_vehicles, completion_rate, campaign_status
+
+[119] DATASET: fact_service_order
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_service_order,PROD)
+  - platform: redshift
+  - domain: HẬU MÃI
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_service_order,PROD)
+  - description: Phiếu sửa chữa và chi tiết dịch vụ thực hiện cho xe
+  - schema_fields (15): service_order_id, appointment_id, customer_id, service_center_id, vin_number, received_date, completion_date, service_type, odometer_in, labor_hours, total_labor_cost, total_part_cost, total_amount, payment_status, technician_id
+
+[120] DATASET: fact_shipping_manifest
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_shipping_manifest,PROD)
+  - platform: redshift
+  - domain: CUNG ỨNG (NĐH)
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_shipping_manifest,PROD)
+  - description: Vận đơn hàng hóa nhập khẩu
+  - schema_fields (15): manifest_id, bill_of_lading_type, carrier_id, vessel_name, voyage_number, port_of_loading, port_of_discharge, container_count, etd, eta, actual_arrival, cargo_weight_kg, cargo_volume_cbm, freight_cost, created_at
+
+[121] DATASET: fact_soc_log
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_soc_log,PROD)
+  - platform: redshift
+  - domain: unknown
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_soc_log,PROD)
+  - description: Log trạng thái sạc pin (SOC) theo thời gian thực
+  - schema_fields (13): soc_log_id, vehicle_vin, battery_id, log_time, soc_percent, voltage_v, current_a, power_kw, temperature_c, charging_state, estimated_range_km, event_type, source
+
+[122] DATASET: fact_standard_cost
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_standard_cost,PROD)
+  - platform: redshift
+  - domain: TÀI CHÍNH
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_standard_cost,PROD)
+  - description: Chi phí tiêu chuẩn được xây dựng cho từng sản phẩm
+  - schema_fields (12): standard_cost_id, product_id, version, cost_component, material_code, standard_quantity, standard_unit_cost, standard_total_cost, valid_from, valid_to, is_active, created_at
+  - upstream (nguon) (2): dim_material, dim_product
+
+[123] DATASET: fact_stock_transfer
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_stock_transfer,PROD)
+  - platform: redshift
+  - domain: LOGISTIC
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_stock_transfer,PROD)
+  - description: Chuyển kho giữa các vị trí trong cùng nhà máy hoặc khác nhà máy
+  - schema_fields (13): transfer_id, material_code, from_warehouse_id, to_warehouse_id, transfer_date, quantity_transferred, unit_of_measure, transfer_type, initiated_by, approved_by, transfer_status, notes, created_at
+  - upstream (nguon) (2): dim_warehouse, dim_material
+
+[124] DATASET: fact_telemetry
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_telemetry,PROD)
+  - platform: redshift
+  - domain: unknown
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_telemetry,PROD)
+  - description: Dữ liệu từ xa (telemetry) của xe điện
+  - schema_fields (15): telemetry_id, vehicle_vin, record_time, latitude, longitude, speed_kmh, odometer_km, battery_soc, battery_temp_c, motor_temp_c, inside_temp_c, tire_pressure_fl_psi, tire_pressure_fr_psi, dtc_code, driving_mode
+
+[125] DATASET: fact_test_cycle
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_test_cycle,PROD)
+  - platform: redshift
+  - domain: unknown
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_test_cycle,PROD)
+  - description: Chu kỳ thử nghiệm xe điện và linh kiện
+  - schema_fields (15): test_cycle_id, prototype_id, test_cycle_name, cycle_type, test_standard, total_cycles_planned, total_cycles_completed, start_date, end_date, pass_criteria, current_result, final_result, test_engineer, test_equipment, remarks
+
+[126] DATASET: fact_test_drive
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_test_drive,PROD)
+  - platform: redshift
+  - domain: KINH DOANH
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_test_drive,PROD)
+  - description: Thông tin lịch hẹn và kết quả lái thử xe
+  - schema_fields (11): test_drive_id, lead_id, customer_id, dealer_id, model_id, scheduled_date, actual_date, test_drive_status, result, follow_up_action, sales_officer
+
+[127] DATASET: fact_test_result
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_test_result,PROD)
+  - platform: redshift
+  - domain: unknown
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_test_result,PROD)
+  - description: Kết quả thử nghiệm xe và linh kiện
+  - schema_fields (15): test_result_id, prototype_id, component_code, test_case_code, test_name, test_date, test_location, test_duration_hours, measured_value, unit, specification_min, specification_max, test_result, failure_mode, test_engineer
+
+[128] DATASET: fact_vehicle_history
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_vehicle_history,PROD)
+  - platform: redshift
+  - domain: HẬU MÃI
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_vehicle_history,PROD)
+  - description: Lịch sử toàn diện của từng xe từ khi xuất xưởng
+  - schema_fields (9): history_id, vin_number, event_date, event_type, odometer_km, service_center_id, reference_id, description, created_by
+
+[129] DATASET: fact_vendor_audit
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_vendor_audit,PROD)
+  - platform: redshift
+  - domain: CUNG ỨNG (TT)
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_vendor_audit,PROD)
+  - description: Lịch sử kiểm toán và đánh giá nhà cung cấp
+  - schema_fields (12): audit_id, vendor_id, audit_date, audit_type, audit_scope, auditor_name, total_score, result, major_non_conformities, minor_non_conformities, next_audit_date, findings_summary
+
+[130] DATASET: fact_vendor_evaluation
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_vendor_evaluation,PROD)
+  - platform: redshift
+  - domain: CUNG ỨNG (TT)
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_vendor_evaluation,PROD)
+  - description: Đánh giá tổng quan nhà cung cấp theo từng kỳ
+  - schema_fields (10): evaluation_id, vendor_id, evaluation_period, quality_score, delivery_score, price_score, service_score, overall_score, rating, evaluator
+
+[131] DATASET: fact_vendor_payment
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_vendor_payment,PROD)
+  - platform: redshift
+  - domain: CUNG ỨNG (TT)
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_vendor_payment,PROD)
+  - description: Lịch sử thanh toán cho nhà cung cấp
+  - schema_fields (11): payment_id, vendor_id, contract_id, invoice_number, payment_date, due_date, payment_amount, payment_method, payment_status, days_early_or_late, discount_taken
+
+[132] DATASET: fact_vendor_quality
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_vendor_quality,PROD)
+  - platform: redshift
+  - domain: CUNG ỨNG (TT)
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_vendor_quality,PROD)
+  - description: Dữ liệu chất lượng hàng hóa từ nhà cung cấp
+  - schema_fields (13): quality_id, vendor_id, part_id, inspection_date, receipt_id, lot_number, quantity_received, quantity_inspected, defect_quantity, defect_rate, inspection_result, defect_details, inspector
+
+[133] DATASET: fact_vendor_scorecard
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_vendor_scorecard,PROD)
+  - platform: redshift
+  - domain: CUNG ỨNG (TT)
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_vendor_scorecard,PROD)
+  - description: Bảng điểm tổng hợp hiệu suất nhà cung cấp theo thời gian
+  - schema_fields (11): scorecard_id, vendor_id, scorecard_period, on_time_delivery_pct, defect_rate_ppm, reject_rate_pct, cost_competitiveness, delivery_accuracy_pct, response_time_hours, overall_score, tier_ranking
+
+[134] DATASET: fact_warranty_claim
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_warranty_claim,PROD)
+  - platform: redshift
+  - domain: HẬU MÃI
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_warranty_claim,PROD)
+  - description: Yêu cầu bảo hành từ đại lý và trung tâm dịch vụ
+  - schema_fields (13): warranty_claim_id, service_order_id, customer_id, service_center_id, claim_date, warranty_policy_id, defect_category, defect_description, repair_action, claim_amount, approved_amount, claim_status, rejection_reason
+
+[135] DATASET: fact_wip_tracking
+  - urn: urn:li:dataset:(urn:li:dataPlatform:redshift,fact_wip_tracking,PROD)
+  - platform: redshift
+  - domain: SẢN XUẤT
+  - environment: PROD
+  - datahub_url: http://localhost:9002/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,fact_wip_tracking,PROD)
+  - description: Theo dõi sản phẩm dở dang trên dây chuyền sản xuất
+  - schema_fields (12): wip_id, order_id, vin_number, assembly_line_id, station_id, wip_status, quantity, entered_at, exited_at, dwell_time_minutes, hold_reason, created_at
+  - upstream (nguon) (3): fact_production_order, dim_station, dim_assembly_line
+
+==============================================================================
+DANH SACH GLOSSARY TERMS
+==============================================================================
+
+[1] GLOSSARY TERM: 3-Way Matching
+  - urn: urn:li:glossaryTerm:3-way%20matching
+  - domain: unknown
+  - description: Quy trình đối chiếu ba chứng từ PO, GRN và Invoice trước khi thanh toán cho nhà cung cấp
+
+[2] GLOSSARY TERM: ABC Classification
+  - urn: urn:li:glossaryTerm:abc%20classification
+  - domain: unknown
+  - description: Phân loại vật tư theo giá trị: A (cao), B (trung bình), C (thấp)
+
+[3] GLOSSARY TERM: AccountBalance
+  - urn: urn:li:glossaryTerm:AccountBalance
+  - domain: unknown
+  - description: amount of money available or owed
+
+[4] GLOSSARY TERM: Actual Cost
+  - urn: urn:li:glossaryTerm:actual%20cost
+  - domain: unknown
+  - description: Chi phí thực tế phát sinh trong quá trình sản xuất
+
+[5] GLOSSARY TERM: Aging Inventory
+  - urn: urn:li:glossaryTerm:aging%20inventory
+  - domain: unknown
+  - description: Hàng tồn kho lâu ngày, vượt quá thời gian quy định
+
+[6] GLOSSARY TERM: Andon
+  - urn: urn:li:glossaryTerm:andon
+  - domain: unknown
+  - description: Hệ thống cảnh báo trực quan khi có vấn đề trên dây chuyền sản xuất
+
+[7] GLOSSARY TERM: Approved Supplier List
+  - urn: urn:li:glossaryTerm:approved%20supplier%20list
+  - domain: unknown
+  - description: Danh sách nhà cung cấp đã được phê duyệt đủ điều kiện cung ứng hàng hóa cho doanh nghiệp
+
+[8] GLOSSARY TERM: BMS (Battery Management System)
+  - urn: urn:li:glossaryTerm:bms%20%28battery%20management%20system%29
+  - domain: unknown
+  - description: Hệ thống quản lý pin – bộ điều khiển điện tử giám sát nhiệt độ, điện áp, dòng điện và SOC của pin.
+
+[9] GLOSSARY TERM: BOM (Bill of Materials)
+  - urn: urn:li:glossaryTerm:bom%20%28bill%20of%20materials%29
+  - domain: unknown
+  - description: Danh sách đầy đủ các linh kiện, vật tư cần thiết để sản xuất một sản phẩm
+
+[10] GLOSSARY TERM: Balance Sheet
+  - urn: urn:li:glossaryTerm:balance%20sheet
+  - domain: unknown
+  - description: Bảng cân đối kế toán phản ánh tài sản, nợ phải trả và vốn chủ sở hữu
+
+[11] GLOSSARY TERM: Benchmarking
+  - urn: urn:li:glossaryTerm:benchmarking
+  - domain: unknown
+  - description: Phân tích đối chuẩn – so sánh thông số kỹ thuật và hiệu năng của xe đối thủ để xác định mục tiêu thiết kế.
+
+[12] GLOSSARY TERM: Bill of Lading (B/L)
+  - urn: urn:li:glossaryTerm:bill%20of%20lading%20%28b/l%29
+  - domain: unknown
+  - description: Vận đơn đường biển – chứng từ vận tải biển, bằng chứng sở hữu hàng hóa và hợp đồng vận chuyển.
+
+[13] GLOSSARY TERM: Bonded Warehouse
+  - urn: urn:li:glossaryTerm:bonded%20warehouse
+  - domain: unknown
+  - description: Kho ngoại quan – kho hàng hóa nhập khẩu chưa nộp thuế, được lưu trữ dưới sự giám sát của hải quan.
+
+[14] GLOSSARY TERM: Budget Variance
+  - urn: urn:li:glossaryTerm:budget%20variance
+  - domain: unknown
+  - description: Chênh lệch giữa ngân sách kế hoạch và thực tế
+
+[15] GLOSSARY TERM: CAD Model (Computer-Aided Design)
+  - urn: urn:li:glossaryTerm:cad%20model%20%28computer-aided%20design%29
+  - domain: unknown
+  - description: Mô hình thiết kế ba chiều được tạo bằng phần mềm CAD để mô phỏng hình học và cấu trúc của chi tiết hoặc hệ thống.
+
+[16] GLOSSARY TERM: CAE (Computer-Aided Engineering)
+  - urn: urn:li:glossaryTerm:cae%20%28computer-aided%20engineering%29
+  - domain: unknown
+  - description: Kỹ thuật mô phỏng bằng máy tính – sử dụng phần mềm mô phỏng để phân tích hành vi kết cấu, nhiệt, va chạm và khí động.
+
+[17] GLOSSARY TERM: CAPEX (Capital Expenditure)
+  - urn: urn:li:glossaryTerm:capex%20%28capital%20expenditure%29
+  - domain: unknown
+  - description: Chi phí đầu tư tài sản cố định như máy móc, thiết bị, nhà xưởng
+
+[18] GLOSSARY TERM: CCS (Combined Charging System)
+  - urn: urn:li:glossaryTerm:ccs%20%28combined%20charging%20system%29
+  - domain: unknown
+  - description: Hệ thống sạc kết hợp – chuẩn cổng sạc cho phép sạc AC và DC qua cùng một đầu nối phổ biến toàn cầu.
+
+[19] GLOSSARY TERM: CIF/FOB
+  - urn: urn:li:glossaryTerm:cif/fob
+  - domain: unknown
+  - description: CIF (Cost, Insurance, Freight) – người bán chịu chi phí, bảo hiểm và cước đến cảng đích; FOB (Free On Board) – người bán giao hàng lên tàu tại cảng xuất.
+
+[20] GLOSSARY TERM: COGS (Cost of Goods Sold)
+  - urn: urn:li:glossaryTerm:cogs%20%28cost%20of%20goods%20sold%29
+  - domain: unknown
+  - description: Giá vốn hàng bán, bao gồm chi phí nguyên vật liệu, nhân công và sản xuất
+
+[21] GLOSSARY TERM: Calibration
+  - urn: urn:li:glossaryTerm:calibration
+  - domain: unknown
+  - description: Hiệu chỉnh – quá trình tối ưu thông số bộ điều khiển điện tử (ECU) để đạt hiệu suất, khí thải và cảm giác lái mong muốn.
+
+[22] GLOSSARY TERM: Capacity Utilization
+  - urn: urn:li:glossaryTerm:capacity%20utilization
+  - domain: unknown
+  - description: Tỷ lệ sử dụng công suất sản xuất thực tế so với công suất thiết kế
+
+[23] GLOSSARY TERM: Cash Conversion Cycle
+  - urn: urn:li:glossaryTerm:cash%20conversion%20cycle
+  - domain: unknown
+  - description: Chu kỳ chuyển đổi tiền mặt = DSO + DIO - DPO
+
+[24] GLOSSARY TERM: Certificate of Origin (CO)
+  - urn: urn:li:glossaryTerm:certificate%20of%20origin%20%28co%29
+  - domain: unknown
+  - description: Giấy chứng nhận xuất xứ – chứng từ xác nhận hàng hóa có xuất xứ từ một quốc gia hoặc khu vực nhất định.
+
+[25] GLOSSARY TERM: Changeover Time
+  - urn: urn:li:glossaryTerm:changeover%20time
+  - domain: unknown
+  - description: Thời gian chuyển đổi giữa hai model sản phẩm khác nhau trên cùng dây chuyền
+
+[26] GLOSSARY TERM: Commercial Invoice
+  - urn: urn:li:glossaryTerm:commercial%20invoice
+  - domain: unknown
+  - description: Hóa đơn thương mại – chứng từ do nhà xuất khẩu phát hành, ghi nhận giá trị giao dịch và điều kiện thanh toán.
+
+[27] GLOSSARY TERM: Competitive Benchmarking
+  - urn: urn:li:glossaryTerm:competitive%20benchmarking
+  - domain: unknown
+  - description: So sánh định kỳ sản phẩm, giá cả, khuyến mãi và dịch vụ so với đối thủ cạnh tranh
+
+[28] GLOSSARY TERM: Contract Management
+  - urn: urn:li:glossaryTerm:contract%20management
+  - domain: unknown
+  - description: Quy trình quản lý vòng đời hợp đồng từ đàm phán, ký kết, thực hiện đến thanh lý
+
+[29] GLOSSARY TERM: Conversion Rate
+  - urn: urn:li:glossaryTerm:conversion%20rate
+  - domain: unknown
+  - description: Tỷ lệ khách hàng tiềm năng trở thành khách hàng mua xe thực tế
+
+[30] GLOSSARY TERM: Coverage Date
+  - urn: urn:li:glossaryTerm:coverage%20date
+  - domain: unknown
+  - description: Số ngày tồn kho dự kiến có thể đáp ứng sản xuất dựa trên mức tiêu thụ
+
+[31] GLOSSARY TERM: Cross-docking
+  - urn: urn:li:glossaryTerm:cross-docking
+  - domain: unknown
+  - description: Kỹ thuật chuyển hàng trực tiếp từ xe nhập sang xe xuất không qua lưu kho
+
+[32] GLOSSARY TERM: Customer Acquisition Cost
+  - urn: urn:li:glossaryTerm:customer%20acquisition%20cost
+  - domain: unknown
+  - description: Tổng chi phí marketing và bán hàng để có được một khách hàng mới
+
+[33] GLOSSARY TERM: Customer Lifetime Value
+  - urn: urn:li:glossaryTerm:customer%20lifetime%20value
+  - domain: unknown
+  - description: Tổng giá trị doanh thu dự kiến từ một khách hàng trong suốt thời gian gắn bó với thương hiệu
+
+[34] GLOSSARY TERM: Customer Satisfaction Index
+  - urn: urn:li:glossaryTerm:customer%20satisfaction%20index
+  - domain: unknown
+  - description: Chỉ số đo lường mức độ hài lòng của khách hàng sau dịch vụ bảo hành, bảo dưỡng
+
+[35] GLOSSARY TERM: CustomerAccount
+  - urn: urn:li:glossaryTerm:CustomerAccount
+  - domain: unknown
+  - description: account that represents an identified, named collection of balances and cumulative totals used to summarize customer transaction-related activity over a designated period of time
+
+[36] GLOSSARY TERM: Customs Clearance
+  - urn: urn:li:glossaryTerm:customs%20clearance
+  - domain: unknown
+  - description: Thủ tục thông quan – quá trình khai báo hải quan và hoàn tất các yêu cầu pháp lý để nhập khẩu hàng hóa vào lãnh thổ quốc gia.
+
+[37] GLOSSARY TERM: Cycle Count
+  - urn: urn:li:glossaryTerm:cycle%20count
+  - domain: unknown
+  - description: Kiểm đếm tồn kho theo chu kỳ, không phải kiểm kê toàn bộ
+
+[38] GLOSSARY TERM: Cycle Time
+  - urn: urn:li:glossaryTerm:cycle%20time
+  - domain: unknown
+  - description: Thời gian hoàn thành một chu kỳ sản xuất cho một đơn vị sản phẩm
+
+[39] GLOSSARY TERM: DC Fast Charger
+  - urn: urn:li:glossaryTerm:dc%20fast%20charger
+  - domain: unknown
+  - description: Bộ sạc nhanh DC – thiết bị sạc dòng điện một chiều công suất cao, nạp pin trực tiếp không qua bộ sạc trên xe.
+
+[40] GLOSSARY TERM: DFM/DFA (Design for Manufacturing/Assembly)
+  - urn: urn:li:glossaryTerm:dfm/dfa%20%28design%20for%20manufacturing/assembly%29
+  - domain: unknown
+  - description: Thiết kế cho sản xuất/lắp ráp – nguyên tắc thiết kế nhằm tối ưu khả năng chế tạo và lắp ráp sản phẩm.
+
+[41] GLOSSARY TERM: DIO (Days Inventory Outstanding)
+  - urn: urn:li:glossaryTerm:dio%20%28days%20inventory%20outstanding%29
+  - domain: unknown
+  - description: Số ngày tồn kho bình quân
+
+[42] GLOSSARY TERM: DPO (Days Payable Outstanding)
+  - urn: urn:li:glossaryTerm:dpo%20%28days%20payable%20outstanding%29
+  - domain: unknown
+  - description: Số ngày trả tiền bình quân cho nhà cung cấp
+
+[43] GLOSSARY TERM: DSO (Days Sales Outstanding)
+  - urn: urn:li:glossaryTerm:dso%20%28days%20sales%20outstanding%29
+  - domain: unknown
+  - description: Số ngày thu tiền bình quân từ khách hàng
+
+[44] GLOSSARY TERM: DVP&R (Design Verification Plan & Report)
+  - urn: urn:li:glossaryTerm:dvp%26r%20%28design%20verification%20plan%20%26%20report%29
+  - domain: unknown
+  - description: Kế hoạch và báo cáo xác nhận thiết kế – tài liệu quản lý tất cả các bài kiểm tra xác nhận thiết kế.
+
+[45] GLOSSARY TERM: Dealer Margin
+  - urn: urn:li:glossaryTerm:dealer%20margin
+  - domain: unknown
+  - description: Khoản chênh lệch giữa giá bán đại lý và giá xuất kho từ nhà sản xuất
+
+[46] GLOSSARY TERM: Dealer Network
+  - urn: urn:li:glossaryTerm:dealer%20network
+  - domain: unknown
+  - description: Hệ thống đại lý phân phối sản phẩm của hãng trên các địa bàn
+
+[47] GLOSSARY TERM: Defect Rate
+  - urn: urn:li:glossaryTerm:defect%20rate
+  - domain: unknown
+  - description: Tỷ lệ sản phẩm lỗi so với tổng sản phẩm sản xuất
+
+[48] GLOSSARY TERM: Depreciation
+  - urn: urn:li:glossaryTerm:depreciation
+  - domain: unknown
+  - description: Khấu hao tài sản cố định trong kỳ
+
+[49] GLOSSARY TERM: Design Freeze
+  - urn: urn:li:glossaryTerm:design%20freeze
+  - domain: unknown
+  - description: Đóng băng thiết kế – mốc thời gian trong dự án phát triển khi mọi thay đổi thiết kế chính thức dừng lại.
+
+[50] GLOSSARY TERM: Drop Shipment
+  - urn: urn:li:glossaryTerm:drop%20shipment
+  - domain: unknown
+  - description: Giao hàng thẳng từ nhà cung cấp đến khách hàng không qua kho trung gian
+
+[51] GLOSSARY TERM: Dual Sourcing
+  - urn: urn:li:glossaryTerm:dual%20sourcing
+  - domain: unknown
+  - description: Chiến lược tìm nguồn cung kép – mua cùng một linh kiện từ hai nhà cung cấp khác nhau để giảm rủi ro gián đoạn.
+
+[52] GLOSSARY TERM: EBITDA
+  - urn: urn:li:glossaryTerm:ebitda
+  - domain: unknown
+  - description: Lợi nhuận trước lãi vay, thuế, khấu hao và chi phí trả dần
+
+[53] GLOSSARY TERM: EOQ (Economic Order Quantity)
+  - urn: urn:li:glossaryTerm:eoq%20%28economic%20order%20quantity%29
+  - domain: unknown
+  - description: Số lượng đặt hàng kinh tế tối ưu
+
+[54] GLOSSARY TERM: Extended Warranty
+  - urn: urn:li:glossaryTerm:extended%20warranty
+  - domain: unknown
+  - description: Gói bảo hành mở rộng sau thời gian bảo hành tiêu chuẩn, do khách hàng mua thêm
+
+[55] GLOSSARY TERM: FEFO (First Expiry First Out)
+  - urn: urn:li:glossaryTerm:fefo%20%28first%20expiry%20first%20out%29
+  - domain: unknown
+  - description: Phương pháp quản lý tồn kho theo hạn sử dụng, xuất trước hạn trước
+
+[56] GLOSSARY TERM: FIFO (First In First Out)
+  - urn: urn:li:glossaryTerm:fifo%20%28first%20in%20first%20out%29
+  - domain: unknown
+  - description: Phương pháp quản lý tồn kho theo nguyên tắc nhập trước xuất trước
+
+[57] GLOSSARY TERM: FMEA (Failure Mode and Effects Analysis)
+  - urn: urn:li:glossaryTerm:fmea%20%28failure%20mode%20and%20effects%20analysis%29
+  - domain: unknown
+  - description: Phân tích kiểu lỗi và ảnh hưởng – phương pháp hệ thống xác định và đánh giá rủi ro hư hỏng tiềm ẩn trong thiết kế.
+
+[58] GLOSSARY TERM: Fast Charging
+  - urn: urn:li:glossaryTerm:fast%20charging
+  - domain: unknown
+  - description: Sạc nhanh – công nghệ sạc với công suất lớn (thường từ 50 kW đến 350 kW) để nạp năng lượng trong thời gian ngắn.
+
+[59] GLOSSARY TERM: First Pass Yield (FPY)
+  - urn: urn:li:glossaryTerm:first%20pass%20yield%20%28fpy%29
+  - domain: unknown
+  - description: Tỷ lệ sản phẩm đạt chất lượng ngay từ lần đầu mà không cần làm lại
+
+[60] GLOSSARY TERM: First Visit Fix Rate
+  - urn: urn:li:glossaryTerm:first%20visit%20fix%20rate
+  - domain: unknown
+  - description: Tỷ lệ khách hàng được sửa chữa thành công ngay lần đầu đến xưởng dịch vụ
+
+[61] GLOSSARY TERM: Fleet Availability Rate
+  - urn: urn:li:glossaryTerm:fleet%20availability%20rate
+  - domain: unknown
+  - description: Tỷ lệ thời gian xe hoạt động được so với tổng thời gian theo kế hoạch (dành cho xe thương mại)
+
+[62] GLOSSARY TERM: Fleet Sales
+  - urn: urn:li:glossaryTerm:fleet%20sales
+  - domain: unknown
+  - description: Doanh số bán xe cho khách hàng tổ chức, doanh nghiệp hoặc cơ quan nhà nước với số lượng lớn
+
+[63] GLOSSARY TERM: Force Majeure
+  - urn: urn:li:glossaryTerm:force%20majeure
+  - domain: unknown
+  - description: Điều khoản bất khả kháng – điều khoản hợp đồng miễn trách nhiệm cho bên không thực hiện nghĩa vụ do sự kiện bất khả kháng.
+
+[64] GLOSSARY TERM: Freight Forwarder
+  - urn: urn:li:glossaryTerm:freight%20forwarder
+  - domain: unknown
+  - description: Công ty giao nhận vận tải – trung gian tổ chức vận chuyển hàng hóa từ người gửi đến người nhận trên toàn cầu.
+
+[65] GLOSSARY TERM: GRN (Goods Received Note)
+  - urn: urn:li:glossaryTerm:grn%20%28goods%20received%20note%29
+  - domain: unknown
+  - description: Biên bản nhận hàng ghi nhận số lượng và tình trạng hàng hóa khi nhập kho
+
+[66] GLOSSARY TERM: Geographic Penetration
+  - urn: urn:li:glossaryTerm:geographic%20penetration
+  - domain: unknown
+  - description: Mức độ thâm nhập thị trường theo địa lý, đo bằng số xe bán trên đầu dân hoặc hộ gia đình
+
+[67] GLOSSARY TERM: Goods In Transit (GIT)
+  - urn: urn:li:glossaryTerm:goods%20in%20transit%20%28git%29
+  - domain: unknown
+  - description: Hàng đang trên đường vận chuyển, chưa nhập kho
+
+[68] GLOSSARY TERM: Goodwill Policy
+  - urn: urn:li:glossaryTerm:goodwill%20policy
+  - domain: unknown
+  - description: Chính sách hỗ trợ chi phí sửa chữa ngoài bảo hành dựa trên thiện chí và lịch sử khách hàng
+
+[69] GLOSSARY TERM: Gross Margin
+  - urn: urn:li:glossaryTerm:gross%20margin
+  - domain: unknown
+  - description: Tỷ suất lợi nhuận gộp = (Doanh thu - COGS) / Doanh thu
+
+[70] GLOSSARY TERM: HIL Testing (Hardware-in-the-Loop)
+  - urn: urn:li:glossaryTerm:hil%20testing%20%28hardware-in-the-loop%29
+  - domain: unknown
+  - description: Kiểm thử phần cứng trong vòng lặp – kỹ thuật kiểm tra bộ điều khiển điện tử bằng cách kết nối với mô phỏng thời gian thực.
+
+[71] GLOSSARY TERM: HS Code
+  - urn: urn:li:glossaryTerm:hs%20code
+  - domain: unknown
+  - description: Mã số hài hòa mô tả và mã hóa hàng hóa – hệ thống mã hóa quốc tế dùng để phân loại hàng hóa xuất nhập khẩu.
+
+[72] GLOSSARY TERM: Homologation
+  - urn: urn:li:glossaryTerm:homologation
+  - domain: unknown
+  - description: Chứng nhận kiểu loại – thủ tục pháp lý chứng nhận xe đáp ứng các quy định kỹ thuật và an toàn của quốc gia sở tại.
+
+[73] GLOSSARY TERM: IP Rating (Ingress Protection)
+  - urn: urn:li:glossaryTerm:ip%20rating%20%28ingress%20protection%29
+  - domain: unknown
+  - description: Chỉ số bảo vệ chống bụi và nước – tiêu chuẩn IEC đánh giá khả năng chống xâm nhập của thiết bị điện.
+
+[74] GLOSSARY TERM: IRR (Internal Rate of Return)
+  - urn: urn:li:glossaryTerm:irr%20%28internal%20rate%20of%20return%29
+  - domain: unknown
+  - description: Tỷ suất hoàn vốn nội bộ của dự án đầu tư
+
+[75] GLOSSARY TERM: Import Duty
+  - urn: urn:li:glossaryTerm:import%20duty
+  - domain: unknown
+  - description: Thuế nhập khẩu – thuế đánh vào hàng hóa nhập khẩu dựa trên trị giá hải quan và mã HS.
+
+[76] GLOSSARY TERM: Incentive Program
+  - urn: urn:li:glossaryTerm:incentive%20program
+  - domain: unknown
+  - description: Chương trình khuyến khích tài chính cho đại lý hoặc khách hàng nhằm thúc đẩy doanh số
+
+[77] GLOSSARY TERM: Incoterms
+  - urn: urn:li:glossaryTerm:incoterms
+  - domain: unknown
+  - description: Bộ quy tắc thương mại quốc tế do ICC ban hành, quy định trách nhiệm của người mua và người bán trong giao nhận hàng hóa.
+
+[78] GLOSSARY TERM: Inventory Turnover
+  - urn: urn:li:glossaryTerm:inventory%20turnover
+  - domain: unknown
+  - description: Vòng quay tồn kho trong một kỳ
+
+[79] GLOSSARY TERM: JIT (Just-In-Time)
+  - urn: urn:li:glossaryTerm:jit%20%28just-in-time%29
+  - domain: unknown
+  - description: Phương pháp cung ứng vật tư đúng số lượng cần thiết, đúng thời điểm sử dụng trên dây chuyền
+
+[80] GLOSSARY TERM: Just-in-Time (JIT)
+  - urn: urn:li:glossaryTerm:just-in-time%20%28jit%29
+  - domain: unknown
+  - description: Phương thức sản xuất và cung ứng kịp thời – linh kiện được giao đến dây chuyền lắp ráp đúng lúc cần sử dụng.
+
+[81] GLOSSARY TERM: Kanban
+  - urn: urn:li:glossaryTerm:kanban
+  - domain: unknown
+  - description: Hệ thống kéo sản xuất dựa trên thẻ tín hiệu
+
+[82] GLOSSARY TERM: LFP Battery
+  - urn: urn:li:glossaryTerm:lfp%20battery
+  - domain: unknown
+  - description: Pin LFP (Lithium Iron Phosphate) – pin lithium-ion dùng cathode sắt-phosphate, không chứa coban.
+
+[83] GLOSSARY TERM: Lead Time
+  - urn: urn:li:glossaryTerm:lead%20time
+  - domain: unknown
+  - description: Thời gian từ khi đặt hàng đến khi nhận được hàng từ nhà cung cấp
+
+[84] GLOSSARY TERM: Letter of Credit (L/C)
+  - urn: urn:li:glossaryTerm:letter%20of%20credit%20%28l/c%29
+  - domain: unknown
+  - description: Thư tín dụng – cam kết thanh toán của ngân hàng phát hành cho người thụ hưởng khi đáp ứng đủ điều kiện trong thư.
+
+[85] GLOSSARY TERM: Lithium-ion
+  - urn: urn:li:glossaryTerm:lithium-ion
+  - domain: unknown
+  - description: Pin lithium-ion – công nghệ pin sạc dùng ion lithium di chuyển giữa cực âm và dương để lưu trữ và giải phóng năng lượng.
+
+[86] GLOSSARY TERM: Local Content
+  - urn: urn:li:glossaryTerm:local%20content
+  - domain: unknown
+  - description: Tỷ lệ giá trị linh kiện, nguyên vật liệu được sản xuất trong nước trên tổng giá trị sản phẩm
+
+[87] GLOSSARY TERM: MOQ (Minimum Order Quantity)
+  - urn: urn:li:glossaryTerm:moq%20%28minimum%20order%20quantity%29
+  - domain: unknown
+  - description: Số lượng đặt hàng tối thiểu mà nhà cung cấp yêu cầu cho một đơn hàng
+
+[88] GLOSSARY TERM: MSRP (Manufacturer's Suggested Retail Price)
+  - urn: urn:li:glossaryTerm:msrp%20%28manufacturer%27s%20suggested%20retail%20price%29
+  - domain: unknown
+  - description: Giá bán lẻ đề xuất của nhà sản xuất cho đại lý và người tiêu dùng cuối
+
+[89] GLOSSARY TERM: MTBF (Mean Time Between Failures)
+  - urn: urn:li:glossaryTerm:mtbf%20%28mean%20time%20between%20failures%29
+  - domain: unknown
+  - description: Thời gian trung bình giữa hai lần hỏng hóc của linh kiện hoặc hệ thống
+
+[90] GLOSSARY TERM: MTTR (Mean Time To Repair)
+  - urn: urn:li:glossaryTerm:mttr%20%28mean%20time%20to%20repair%29
+  - domain: unknown
+  - description: Thời gian trung bình để hoàn thành một ca sửa chữa kể từ khi khởi tạo phiếu đến bàn giao xe
+
+[91] GLOSSARY TERM: Make or Buy Decision
+  - urn: urn:li:glossaryTerm:make%20or%20buy%20decision
+  - domain: unknown
+  - description: Quyết định chiến lược tự sản xuất linh kiện hay mua từ nhà cung cấp bên ngoài
+
+[92] GLOSSARY TERM: Market Share
+  - urn: urn:li:glossaryTerm:market%20share
+  - domain: unknown
+  - description: Thị phần là tỷ lệ doanh số của hãng so với tổng doanh số toàn thị trường
+
+[93] GLOSSARY TERM: Min-Max Stock
+  - urn: urn:li:glossaryTerm:min-max%20stock
+  - domain: unknown
+  - description: Ngưỡng tồn kho tối thiểu và tối đa cho mỗi vật tư
+
+[94] GLOSSARY TERM: Model Lifecycle
+  - urn: urn:li:glossaryTerm:model%20lifecycle
+  - domain: unknown
+  - description: Vòng đời sản phẩm từ khi giới thiệu đến ngừng sản xuất, bao gồm launch, growth, maturity, decline
+
+[95] GLOSSARY TERM: Months of Inventory
+  - urn: urn:li:glossaryTerm:months%20of%20inventory
+  - domain: unknown
+  - description: Số tháng tồn kho dựa trên doanh số bán hiện tại, đo lường áp lực tồn kho
+
+[96] GLOSSARY TERM: NCR (Non-Conformance Report)
+  - urn: urn:li:glossaryTerm:ncr%20%28non-conformance%20report%29
+  - domain: unknown
+  - description: Báo cáo ghi nhận sự không phù hợp của hàng hóa hoặc quy trình so với yêu cầu kỹ thuật
+
+[97] GLOSSARY TERM: NMC Battery
+  - urn: urn:li:glossaryTerm:nmc%20battery
+  - domain: unknown
+  - description: Pin NMC (Nickel Manganese Cobalt) – loại pin lithium-ion dùng cathode hỗn hợp niken-mangan-coban.
+
+[98] GLOSSARY TERM: NVH (Noise, Vibration, Harshness)
+  - urn: urn:li:glossaryTerm:nvh%20%28noise%2C%20vibration%2C%20harshness%29
+  - domain: unknown
+  - description: Tiếng ồn, rung động và độ êm dịu – tập hợp các chỉ tiêu cảm nhận về âm thanh và rung động của xe.
+
+[99] GLOSSARY TERM: OEE (Overall Equipment Effectiveness)
+  - urn: urn:li:glossaryTerm:oee%20%28overall%20equipment%20effectiveness%29
+  - domain: unknown
+  - description: Chỉ số đo lường hiệu suất tổng thể của thiết bị sản xuất, tính bằng tích số của Availability, Performance và Quality
+
+[100] GLOSSARY TERM: OPEX (Operating Expenses)
+  - urn: urn:li:glossaryTerm:opex%20%28operating%20expenses%29
+  - domain: unknown
+  - description: Chi phí hoạt động, bao gồm chi phí bán hàng, quản lý doanh nghiệp
+
+[101] GLOSSARY TERM: Ocean Freight
+  - urn: urn:li:glossaryTerm:ocean%20freight
+  - domain: unknown
+  - description: Cước vận tải biển – chi phí vận chuyển hàng hóa bằng đường biển từ cảng xuất đến cảng nhập.
+
+[102] GLOSSARY TERM: One Pedal Driving
+  - urn: urn:li:glossaryTerm:one%20pedal%20driving
+  - domain: unknown
+  - description: Lái một bàn đạp – chế độ lái xe điện chỉ dùng bàn đạp ga, nhả ga sẽ kích hoạt phanh tái tạo đến khi xe dừng hẳn.
+
+[103] GLOSSARY TERM: Option Take Rate
+  - urn: urn:li:glossaryTerm:option%20take%20rate
+  - domain: unknown
+  - description: Tỷ lệ khách hàng chọn mua các tùy chọn trang bị thêm khi mua xe
+
+[104] GLOSSARY TERM: Overturn Rate
+  - urn: urn:li:glossaryTerm:overturn%20rate
+  - domain: unknown
+  - description: Tốc độ quay vòng của một vị trí sửa chữa trong xưởng dịch vụ trong ngày
+
+[105] GLOSSARY TERM: P&L (Profit & Loss)
+  - urn: urn:li:glossaryTerm:p%26l%20%28profit%20%26%20loss%29
+  - domain: unknown
+  - description: Báo cáo kết quả hoạt động kinh doanh trong một kỳ
+
+[106] GLOSSARY TERM: PO (Purchase Order)
+  - urn: urn:li:glossaryTerm:po%20%28purchase%20order%29
+  - domain: unknown
+  - description: Đơn đặt hàng chính thức từ doanh nghiệp đến nhà cung cấp, xác nhận số lượng, giá cả và thời gian giao
+
+[107] GLOSSARY TERM: Packing List
+  - urn: urn:li:glossaryTerm:packing%20list
+  - domain: unknown
+  - description: Phiếu đóng gói – chứng từ liệt kê chi tiết từng kiện hàng, trọng lượng, kích thước và nội dung bên trong.
+
+[108] GLOSSARY TERM: Part Return Rate
+  - urn: urn:li:glossaryTerm:part%20return%20rate
+  - domain: unknown
+  - description: Tỷ lệ phụ tùng bị trả lại do lỗi hoặc không tương thích so với tổng phụ tùng bán ra
+
+[109] GLOSSARY TERM: Parts Availability Rate
+  - urn: urn:li:glossaryTerm:parts%20availability%20rate
+  - domain: unknown
+  - description: Tỷ lệ phụ tùng có sẵn trong kho đáp ứng ngay yêu cầu của xưởng dịch vụ
+
+[110] GLOSSARY TERM: Platform Architecture
+  - urn: urn:li:glossaryTerm:platform%20architecture
+  - domain: unknown
+  - description: Kiến trúc nền tảng – khung cơ sở kỹ thuật được dùng chung cho nhiều mẫu xe, gồm khung gầm, hệ thống treo và powertrain.
+
+[111] GLOSSARY TERM: Preferential Tariff
+  - urn: urn:li:glossaryTerm:preferential%20tariff
+  - domain: unknown
+  - description: Thuế suất ưu đãi – mức thuế nhập khẩu thấp hơn hoặc bằng 0% áp dụng cho hàng hóa từ nước có FTA với Việt Nam.
+
+[112] GLOSSARY TERM: Preferred Supplier
+  - urn: urn:li:glossaryTerm:preferred%20supplier
+  - domain: unknown
+  - description: Nhà cung cấp ưu tiên được đánh giá cao và được ưu tiên trong việc trao đơn hàng mới
+
+[113] GLOSSARY TERM: Preventive Maintenance
+  - urn: urn:li:glossaryTerm:preventive%20maintenance
+  - domain: unknown
+  - description: Bảo dưỡng định kỳ theo lịch trình nhà sản xuất nhằm duy trì hiệu suất và phòng ngừa hư hỏng
+
+[114] GLOSSARY TERM: Production Order
+  - urn: urn:li:glossaryTerm:production%20order
+  - domain: unknown
+  - description: Lệnh sản xuất cho một lô sản phẩm cụ thể
+
+[115] GLOSSARY TERM: Prototype
+  - urn: urn:li:glossaryTerm:prototype
+  - domain: unknown
+  - description: Nguyên mẫu – phiên bản thử nghiệm của xe hoặc bộ phận được chế tạo để kiểm tra thiết kế trước khi sản xuất hàng loạt.
+
+[116] GLOSSARY TERM: Quality Gate
+  - urn: urn:li:glossaryTerm:quality%20gate
+  - domain: unknown
+  - description: Điểm kiểm tra chất lượng bắt buộc trong quy trình sản xuất
+
+[117] GLOSSARY TERM: RFQ (Request for Quotation)
+  - urn: urn:li:glossaryTerm:rfq%20%28request%20for%20quotation%29
+  - domain: unknown
+  - description: Yêu cầu báo giá gửi đến nhà cung cấp cho một lô hàng hoặc linh kiện cụ thể
+
+[118] GLOSSARY TERM: RSM (Regional Service Manager)
+  - urn: urn:li:glossaryTerm:rsm%20%28regional%20service%20manager%29
+  - domain: unknown
+  - description: Quản lý dịch vụ khu vực chịu trách nhiệm hỗ trợ kỹ thuật và vận hành cho hệ thống đại lý
+
+[119] GLOSSARY TERM: Range (Tầm xa)
+  - urn: urn:li:glossaryTerm:range%20%28t%E1%BA%A7m%20xa%29
+  - domain: unknown
+  - description: Tầm xa – quãng đường tối đa xe điện có thể di chuyển với một lần sạc đầy, đo theo chuẩn WLTP hoặc NEDC.
+
+[120] GLOSSARY TERM: Regenerative Braking
+  - urn: urn:li:glossaryTerm:regenerative%20braking
+  - domain: unknown
+  - description: Phanh tái tạo – hệ thống thu hồi động năng khi giảm tốc hoặc phanh, chuyển thành điện năng nạp lại pin.
+
+[121] GLOSSARY TERM: Reorder Point (ROP)
+  - urn: urn:li:glossaryTerm:reorder%20point%20%28rop%29
+  - domain: unknown
+  - description: Điểm đặt hàng lại khi tồn kho giảm đến một mức nhất định
+
+[122] GLOSSARY TERM: Residual Value
+  - urn: urn:li:glossaryTerm:residual%20value
+  - domain: unknown
+  - description: Giá trị còn lại của xe sau một thời gian sử dụng, ảnh hưởng đến quyết định mua của khách
+
+[123] GLOSSARY TERM: Rework Rate
+  - urn: urn:li:glossaryTerm:rework%20rate
+  - domain: unknown
+  - description: Tỷ lệ sản phẩm phải làm lại do không đạt chất lượng lần đầu
+
+[124] GLOSSARY TERM: Routing
+  - urn: urn:li:glossaryTerm:routing
+  - domain: unknown
+  - description: Trình tự các bước gia công và nguyên công trong sản xuất
+
+[125] GLOSSARY TERM: SMED (Single Minute Exchange of Die)
+  - urn: urn:li:glossaryTerm:smed%20%28single%20minute%20exchange%20of%20die%29
+  - domain: unknown
+  - description: Phương pháp giảm thời gian chuyển đổi khuôn mẫu xuống dưới 10 phút
+
+[126] GLOSSARY TERM: SOC (State of Charge)
+  - urn: urn:li:glossaryTerm:soc%20%28state%20of%20charge%29
+  - domain: unknown
+  - description: Trạng thái sạc – tỷ lệ phần trăm năng lượng còn lại trong pin so với dung lượng tối đa của pin.
+
+[127] GLOSSARY TERM: SOH (Stock On Hand)
+  - urn: urn:li:glossaryTerm:soh%20%28stock%20on%20hand%29
+  - domain: unknown
+  - description: Lượng tồn kho hiện tại trong kho
+
+[128] GLOSSARY TERM: SOR (Statement of Requirements)
+  - urn: urn:li:glossaryTerm:sor%20%28statement%20of%20requirements%29
+  - domain: unknown
+  - description: Bảng yêu cầu kỹ thuật – tài liệu liệt kê toàn bộ yêu cầu kỹ thuật và tính năng của xe mới.
+
+[129] GLOSSARY TERM: Safety Stock
+  - urn: urn:li:glossaryTerm:safety%20stock
+  - domain: unknown
+  - description: Lượng tồn kho dự phòng để đảm bảo sản xuất không bị gián đoạn khi nguồn cung bất ổn
+
+[130] GLOSSARY TERM: Sales Mix
+  - urn: urn:li:glossaryTerm:sales%20mix
+  - domain: unknown
+  - description: Cơ cấu doanh số theo dòng sản phẩm, phiên bản hoặc màu sắc
+
+[131] GLOSSARY TERM: Sales Target
+  - urn: urn:li:glossaryTerm:sales%20target
+  - domain: unknown
+  - description: Chỉ tiêu doanh số được giao theo tháng, quý hoặc năm cho từng khu vực và đại lý
+
+[132] GLOSSARY TERM: SavingAccount
+  - urn: urn:li:glossaryTerm:SavingAccount
+  - domain: unknown
+  - description: a product provided to consumers and businesses by a bank or similar depository institution such as a checking account, savings account, certificate of deposit, debit or pre-paid card, or credit card
+
+[133] GLOSSARY TERM: Service Absorption Rate
+  - urn: urn:li:glossaryTerm:service%20absorption%20rate
+  - domain: unknown
+  - description: Tỷ lệ chi phí hoạt động của đại lý được bù đắp bởi doanh thu dịch vụ và phụ tùng
+
+[134] GLOSSARY TERM: Service Campaign
+  - urn: urn:li:glossaryTerm:service%20campaign
+  - domain: unknown
+  - description: Chương trình triệu hồi hoặc kiểm tra miễn phí theo chiến dịch của nhà sản xuất
+
+[135] GLOSSARY TERM: Service Retention Rate
+  - urn: urn:li:glossaryTerm:service%20retention%20rate
+  - domain: unknown
+  - description: Tỷ lệ khách hàng quay lại đại lý chính hãng để bảo dưỡng sau khi hết bảo hành
+
+[136] GLOSSARY TERM: Shelf Life
+  - urn: urn:li:glossaryTerm:shelf%20life
+  - domain: unknown
+  - description: Thời hạn sử dụng của vật tư từ khi sản xuất
+
+[137] GLOSSARY TERM: SoH (State of Health)
+  - urn: urn:li:glossaryTerm:soh%20%28state%20of%20health%29
+  - domain: unknown
+  - description: Trạng thái sức khỏe pin – tỷ lệ phần trăm dung lượng thực tế so với dung lượng ban đầu của pin.
+
+[138] GLOSSARY TERM: Standard Cost
+  - urn: urn:li:glossaryTerm:standard%20cost
+  - domain: unknown
+  - description: Chi phí tiêu chuẩn được xây dựng dựa trên định mức nguyên vật liệu, nhân công
+
+[139] GLOSSARY TERM: Supplier Audit
+  - urn: urn:li:glossaryTerm:supplier%20audit
+  - domain: unknown
+  - description: Hoạt động kiểm tra thực địa nhà máy của nhà cung cấp về quy trình, chất lượng và điều kiện làm việc
+
+[140] GLOSSARY TERM: Supplier Development
+  - urn: urn:li:glossaryTerm:supplier%20development
+  - domain: unknown
+  - description: Chương trình hỗ trợ nhà cung cấp cải thiện năng lực sản xuất, chất lượng và quản lý
+
+[141] GLOSSARY TERM: Supplier Evaluation
+  - urn: urn:li:glossaryTerm:supplier%20evaluation
+  - domain: unknown
+  - description: Quy trình đánh giá năng lực nhà cung cấp dựa trên chất lượng, giao hàng, giá cả và dịch vụ
+
+[142] GLOSSARY TERM: Supplier Tier Management
+  - urn: urn:li:glossaryTerm:supplier%20tier%20management
+  - domain: unknown
+  - description: Quản lý phân cấp nhà cung cấp từ Tier 1 (giao trực tiếp) đến Tier 2, Tier 3 dọc chuỗi cung ứng
+
+[143] GLOSSARY TERM: Supply Chain Risk
+  - urn: urn:li:glossaryTerm:supply%20chain%20risk
+  - domain: unknown
+  - description: Rủi ro chuỗi cung ứng – các yếu tố gây gián đoạn dòng chảy nguyên vật liệu từ nhà cung cấp đến nhà máy.
+
+[144] GLOSSARY TERM: Takt Time
+  - urn: urn:li:glossaryTerm:takt%20time
+  - domain: unknown
+  - description: Nhịp sản xuất yêu cầu để đáp ứng nhu cầu khách hàng
+
+[145] GLOSSARY TERM: Technical Service Bulletin
+  - urn: urn:li:glossaryTerm:technical%20service%20bulletin
+  - domain: unknown
+  - description: Thông báo kỹ thuật từ nhà sản xuất hướng dẫn xử lý các vấn đề đã biết trên xe
+
+[146] GLOSSARY TERM: Thermal Management
+  - urn: urn:li:glossaryTerm:thermal%20management
+  - domain: unknown
+  - description: Quản lý nhiệt – hệ thống duy trì nhiệt độ pin trong khoảng làm việc tối ưu khi vận hành và sạc.
+
+[147] GLOSSARY TERM: Throughput
+  - urn: urn:li:glossaryTerm:throughput
+  - domain: unknown
+  - description: Sản lượng đầu ra của dây chuyền sản xuất trong một đơn vị thời gian
+
+[148] GLOSSARY TERM: Traceability
+  - urn: urn:li:glossaryTerm:traceability
+  - domain: unknown
+  - description: Khả năng truy xuất nguồn gốc sản phẩm qua từng công đoạn sản xuất
+
+[149] GLOSSARY TERM: Trade Spend
+  - urn: urn:li:glossaryTerm:trade%20spend
+  - domain: unknown
+  - description: Ngân sách chi tiêu cho các hoạt động xúc tiến thương mại tại đại lý và kênh phân phối
+
+[150] GLOSSARY TERM: Transfer Price
+  - urn: urn:li:glossaryTerm:transfer%20price
+  - domain: unknown
+  - description: Giá chuyển giao giữa các pháp nhân trong cùng tập đoàn
+
+[151] GLOSSARY TERM: Unit Economics
+  - urn: urn:li:glossaryTerm:unit%20economics
+  - domain: unknown
+  - description: Kinh tế đơn vị sản phẩm, phân tích doanh thu và chi phí trên mỗi đơn vị sản phẩm
+
+[152] GLOSSARY TERM: V2G (Vehicle-to-Grid)
+  - urn: urn:li:glossaryTerm:v2g%20%28vehicle-to-grid%29
+  - domain: unknown
+  - description: Xe nối lưới – công nghệ cho phép xe điện xả điện từ pin vào lưới điện quốc gia khi không sử dụng.
+
+[153] GLOSSARY TERM: VPCR (Verification Prototype Confirmation Review)
+  - urn: urn:li:glossaryTerm:vpcr%20%28verification%20prototype%20confirmation%20review%29
+  - domain: unknown
+  - description: Đánh giá xác nhận nguyên mẫu – cuộc họp kiểm tra kết quả thử nghiệm prototype trước khi chấp thuận sản xuất.
+
+[154] GLOSSARY TERM: Variance Analysis
+  - urn: urn:li:glossaryTerm:variance%20analysis
+  - domain: unknown
+  - description: Phân tích chênh lệch giữa chi phí thực tế và chi phí tiêu chuẩn
+
+[155] GLOSSARY TERM: Vehicle Off-road Rate
+  - urn: urn:li:glossaryTerm:vehicle%20off-road%20rate
+  - domain: unknown
+  - description: Tỷ lệ xe nằm xưởng chờ phụ tùng hoặc sửa chữa kéo dài so với tổng số xe vào xưởng
+
+[156] GLOSSARY TERM: Vendor Managed Inventory
+  - urn: urn:li:glossaryTerm:vendor%20managed%20inventory
+  - domain: unknown
+  - description: Mô hình nhà cung cấp chịu trách nhiệm quản lý và tái bổ sung tồn kho tại kho của doanh nghiệp
+
+[157] GLOSSARY TERM: Vendor Scorecard
+  - urn: urn:li:glossaryTerm:vendor%20scorecard
+  - domain: unknown
+  - description: Bảng điểm đánh giá định kỳ hiệu quả hoạt động của nhà cung cấp theo các tiêu chí KPI
+
+[158] GLOSSARY TERM: Virtual Validation
+  - urn: urn:li:glossaryTerm:virtual%20validation
+  - domain: unknown
+  - description: Xác nhận ảo – quá trình kiểm tra và phê duyệt thiết kế thông qua mô phỏng số thay vì thử nghiệm vật lý.
+
+[159] GLOSSARY TERM: WACC (Weighted Average Cost of Capital)
+  - urn: urn:li:glossaryTerm:wacc%20%28weighted%20average%20cost%20of%20capital%29
+  - domain: unknown
+  - description: Chi phí vốn bình quân gia quyền
+
+[160] GLOSSARY TERM: WIP (Work In Process)
+  - urn: urn:li:glossaryTerm:wip%20%28work%20in%20process%29
+  - domain: unknown
+  - description: Hàng tồn dở dang đang trong quá trình sản xuất
+
+[161] GLOSSARY TERM: WLTP (Worldwide Harmonized Light Vehicles Test Procedure)
+  - urn: urn:li:glossaryTerm:wltp%20%28worldwide%20harmonized%20light%20vehicles%20test%20procedure%29
+  - domain: unknown
+  - description: Quy trình thử nghiệm xe hạng nhẹ hài hòa toàn cầu – chuẩn đo tầm xa và mức tiêu thụ năng lượng quốc tế.
+
+[162] GLOSSARY TERM: WMS (Warehouse Management System)
+  - urn: urn:li:glossaryTerm:wms%20%28warehouse%20management%20system%29
+  - domain: unknown
+  - description: Hệ thống quản lý kho hàng
+
+[163] GLOSSARY TERM: Warranty Claim
+  - urn: urn:li:glossaryTerm:warranty%20claim
+  - domain: unknown
+  - description: Yêu cầu bồi hoàn chi phí sửa chữa bảo hành từ đại lý gửi đến nhà sản xuất
+
+[164] GLOSSARY TERM: Warranty Reserve
+  - urn: urn:li:glossaryTerm:warranty%20reserve
+  - domain: unknown
+  - description: Quỹ dự phòng bảo hành trích lập trên mỗi xe bán ra để chi trả cho các yêu cầu bảo hành tương lai
+
+[165] GLOSSARY TERM: Wholesale Volume
+  - urn: urn:li:glossaryTerm:wholesale%20volume
+  - domain: unknown
+  - description: Số lượng xe bán sỉ từ nhà máy đến đại lý (không phải bán lẻ đến người tiêu dùng)
+
+[166] GLOSSARY TERM: Working Capital
+  - urn: urn:li:glossaryTerm:working%20capital
+  - domain: unknown
+  - description: Vốn lưu động = Tài sản ngắn hạn - Nợ ngắn hạn
+
+[167] GLOSSARY TERM: kWh (Kilowatt-giờ)
+  - urn: urn:li:glossaryTerm:kwh%20%28kilowatt-gi%E1%BB%9D%29
+  - domain: unknown
+  - description: Kilowatt-giờ – đơn vị đo năng lượng, dùng để chỉ dung lượng pin và lượng điện tiêu thụ.
+
+==============================================================================
+HUONG DAN SINH CAU HOI TEST (an example)
+==============================================================================
+
+Cac kieu cau hoi nen sinh (tra loi phai nam trong context tren):
+1. Dinh nghia glossary term (dung ten chinh xac, vi du: "3-Way Matching la gi?")
+2. Dinh nghia voi ten sai chinh ta (de test suggestion, vi du: "ABV Matching la gi?")
+3. Lineage: hoi upstream/downstream cua mot dataset (vi du: "lineage cua dim_warehouse")
+4. Owner cua dataset (neu co owner trong payload)
+5. Schema/field cua dataset
+6. Lien ket term voi dataset (vi du: "dataset nao gan term X?")
+7. Domain: "dataset nao trong domain X?", "co bao nhieu dataset trong domain X?"
+8. Listing: "liet ke datasets", "liet ke glossary terms", "co bao nhieu datasets?"
+9. Cau hoi voi ten domain sai chinh ta (test suggestion domain, vi du: "domain tai chinss")
+10. Kiem tra ton tai: "dataset X co ton tai khong?"
+
+Luu y:
+- Chi sinh cau hoi ma cau tra loi co the tra cuu duoc tu context o tren.
+- Su dung ten chinh xac cua dataset/term/domain nhu trong danh sach.
+- Co the khop thu cong so luong (count) voi context.
