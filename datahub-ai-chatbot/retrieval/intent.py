@@ -3,12 +3,27 @@ from enum import StrEnum
 
 
 class QueryIntent(StrEnum):
+    # --- user-specified Metadata Intelligence taxonomy -----------------------
+    DATASET_LOOKUP = "DATASET_LOOKUP"
+    FIELD_LOOKUP = "FIELD_LOOKUP"
+    SCHEMA_LOOKUP = "SCHEMA_LOOKUP"
     TERM_DEFINITION = "TERM_DEFINITION"
-    FIND_ENTITY = "FIND_ENTITY"
     OWNER_LOOKUP = "OWNER_LOOKUP"
+    DOMAIN_LOOKUP = "DOMAIN_LOOKUP"
+    LINEAGE_UPSTREAM = "LINEAGE_UPSTREAM"
+    LINEAGE_DOWNSTREAM = "LINEAGE_DOWNSTREAM"
+    IMPACT_ANALYSIS = "IMPACT_ANALYSIS"
+    RECURSIVE_IMPACT = "RECURSIVE_IMPACT"
+    COMPOSITE_QUERY = "COMPOSITE_QUERY"
+    GRAPH_QUERY = "GRAPH_QUERY"
+    RELATED_DATASETS = "RELATED_DATASETS"
+    SEMANTIC_SEARCH = "SEMANTIC_SEARCH"
+    MULTI_ENTITY_QUERY = "MULTI_ENTITY_QUERY"
+    # --- legacy intents kept for compatibility with existing routing ---------
+    FIND_ENTITY = "FIND_ENTITY"
     TERM_TO_DATASETS = "TERM_TO_DATASETS"
     LINEAGE = "LINEAGE"
-    SCHEMA_LOOKUP = "SCHEMA_LOOKUP"
+    IMPACT = "IMPACT"
     ENTITY_DOMAIN = "ENTITY_DOMAIN"
     COUNT_ENTITIES = "COUNT_ENTITIES"
     DOMAIN_QUERY = "DOMAIN_QUERY"
@@ -22,6 +37,26 @@ class QueryIntent(StrEnum):
     GENERAL = "GENERAL"
     DATAHUB_URL = "DATAHUB_URL"
     ENTITY_EXISTS = "ENTITY_EXISTS"
+    LISTING = "LISTING"
+    SQL_GENERATION = "SQL_GENERATION"
+
+
+# Mapping from the new taxonomy onto the legacy intents so existing routing
+# (chat_service._structured_retrieval etc.) keeps working unchanged.
+LEGACY_FOR: dict["QueryIntent", "QueryIntent"] = {
+    QueryIntent.DATASET_LOOKUP: QueryIntent.FIND_ENTITY,
+    QueryIntent.FIELD_LOOKUP: QueryIntent.SCHEMA_LOOKUP,
+    QueryIntent.DOMAIN_LOOKUP: QueryIntent.ENTITY_DOMAIN,
+    QueryIntent.LINEAGE_UPSTREAM: QueryIntent.LINEAGE,
+    QueryIntent.LINEAGE_DOWNSTREAM: QueryIntent.LINEAGE,
+    QueryIntent.IMPACT_ANALYSIS: QueryIntent.IMPACT,
+    QueryIntent.RECURSIVE_IMPACT: QueryIntent.IMPACT,
+    QueryIntent.COMPOSITE_QUERY: QueryIntent.GENERAL,
+    QueryIntent.GRAPH_QUERY: QueryIntent.GENERAL,
+    QueryIntent.RELATED_DATASETS: QueryIntent.FIND_ENTITY,
+    QueryIntent.SEMANTIC_SEARCH: QueryIntent.GENERAL,
+    QueryIntent.MULTI_ENTITY_QUERY: QueryIntent.GENERAL,
+}
 
 
 _GREETINGS = {
@@ -53,6 +88,46 @@ def _norm_vn(s: str) -> str:
 
 
 _RULE_STRINGS: list[tuple[str, QueryIntent]] = [
+    # Composite / multi-step questions — checked high so they win over subsets.
+    (r"(?:đồng thời|dong thoi|cũng như|cung nhu|sau đó|sau do)\b", QueryIntent.COMPOSITE_QUERY),
+    (r"(?:và (?:ai|cái gì|what|của|do)? (?:ai|what|cái gì|nào|sau))|(?:and then|and what|and who|and its)",
+     QueryIntent.COMPOSITE_QUERY),
+    (r"(?:nhiều|nhieu|một số|mot so|several)\s+(?:dataset|bảng|table|entity)(?:s|es)?\b", QueryIntent.MULTI_ENTITY_QUERY),
+    # Graph / traversal questions (shortest/longest path, cycle, reachability).
+    (r"(?:đường ngắn nhất|duong ngan nhat|shortest path|longest path|chuỗi dài nhất|duong di dai nhat|"
+     r"mối quan hệ|moi quan he|relationship|chu kỳ|chu ky|cycle|phụ thuộc lẫn nhau|circular|loop\b)",
+     QueryIntent.GRAPH_QUERY),
+    # Related datasets / semantic search (business concept, "dataset nào liên quan").
+    (r"(?:dataset nào liên quan|datasets related|related datasets|liên quan nhất|lien quan nhat|"
+     r"tương tự|tuong tu|most relevant)\b", QueryIntent.RELATED_DATASETS),
+    (r"(?:tìm.*theo.*ý|find.*similar|semantic|ngữ nghĩa|nghia tuong tu|concept)", QueryIntent.SEMANTIC_SEARCH),
+    # Recursive impact: every descendant / deep traversal — must win before the
+    # plain IMPACT_ANALYSIS rules (which also match the bare word "impact").
+    (r"(?:recursive|recursiv|tất cả tiêu thụ|xuyên sâu|into depth|deeper|"
+     r"tất cả|all|toàn bộ|toan bo|mọi)\s+.*(?:downstream|hậu duệ|con cháu|tiêu thụ|impact)",
+     QueryIntent.RECURSIVE_IMPACT),
+    # Impact analysis: removal/change affects who. Must win before LINEAGE.
+    (r"(?:nếu (?:thay đổi|thay doi|xóa|tắt|có|bỏ|change|delete|drop|remov)|remove|and\s+then?)",
+     QueryIntent.IMPACT_ANALYSIS),
+    (r"(?:ai bị ảnh hưởng|ảnh huong nghiêm|sẽ bị|bi tac dong hang loat|impact|blast radius|dây chuyền ảnh hưởng|"
+     r"chiếu xuống|ảnh hưởng lan truyền|affected|who (?:is|are) affected|what breaks|bị ảnh hưởng|bi anh huong)",
+     QueryIntent.IMPACT_ANALYSIS),
+    # "Xóa dim_X thì những bảng nào bị ảnh hưởng?" — verb-first removal without
+    # "nếu" prefix, and entity names that look like data assets.
+    (r"(?:xóa|xoa|xoá|delete|drop|remove|thay đổi|thay doi)\b[^\n]{0,80}?(?:ảnh hưởng|anh huong|impact|affected)",
+     QueryIntent.IMPACT_ANALYSIS),
+    # Implicit impact: removing/changing an asset while asking about the outcome,
+    # WITHOUT the literal word "ảnh hưởng". "Xóa dataset X thì sao?", "delete dataset
+    # X what happens", "thay đổi X ra sao" all imply impact analysis (blast radius).
+    (r"(?:xóa|xoá|xoa|delete|drop|remove|disable|thay đổi|thay doi|ảnh hưởng|anh huong|impact)\b"
+     r"[^\n]{0,90}?(?:thì sao|thi sao|thế nào|the nao|ra gì|ra gi|sẽ ra sao|se ra sao|ra sẽ|ra se|"
+     r"what happens|what would happen|whats? next|consequence|xảy ra gì|xay ra gi)",
+     QueryIntent.IMPACT_ANALYSIS),
+    # Reverse order: "ảnh hưởng của việc xóa dataset X?" — the impact word comes
+    # BEFORE the removal verb, which the verb-first rules above cannot catch.
+    (r"(?:ảnh hưởng|anh huong|impact|affected|effect)\b[^\n]{0,90}?(?:của việc xóa|cua viec xoa|"
+     r"của việc delete|cua viec delete|of (?:deleting|dropping|removing)|khi (?:xóa|xoa|delete))",
+     QueryIntent.IMPACT_ANALYSIS),
     # Relationship / membership queries FIRST so they win over generic TERM_DEFINITION ("là gì").
     (r"(?:thuộc|thuoc|nằm|nam|được chia|belong|belongs|belonging|in)\s+(?:về|ve|trong|to|in)?\s*(?:domain|lĩnh vực|linh vuc|miền|mien)\s+(?:nào|nao|what|which)", QueryIntent.ENTITY_DOMAIN),
     (r"(?:which|what)\s+(?:domain|lĩnh vực|linh vuc|miền|mien)\b", QueryIntent.ENTITY_DOMAIN),
@@ -63,15 +138,19 @@ _RULE_STRINGS: list[tuple[str, QueryIntent]] = [
     # Schema / field queries must win over the generic "là gì" definition rule:
     # "trường uom_name là gì?" asks about a column, not a glossary term.
     (r"(field|column|cột|trường|schema|columns?|fields?|thuộc tính|cấu trúc bảng|co nhung field|co nhung truong|co nhung cot)", QueryIntent.SCHEMA_LOOKUP),
+    # Dataset content lookup — "dataset X lưu trữ thông tin gì", "X chứa dữ liệu gì".
+    (r"(dataset|bảng|bang)\s+[\w\.\- ]{1,60}\s+(lưu trữ|luu tru|chứa|chua|chứa dữ liệu|lưu thông tin|chứa những dữ liệu)\s", QueryIntent.DATASET_LOOKUP),
+    (r"(lưu trữ thông tin gì|luu tru thong tin gi|chứa những dữ liệu gì|chua nhung du lieu gi|stores? what|contains what data)", QueryIntent.DATASET_LOOKUP),
     # Generic definition lookups — kept after the schema rules above.
-    (r"(nghĩa là gì|nghia la gi|định nghĩa|dinh nghia|definition|là gì|la gi|meaning|meaning of|define)", QueryIntent.TERM_DEFINITION),
+    (r"(nghĩa là gì|nghia la gi|định nghĩa|dinh nghia|definition|la gi|meaning|meaning of|define|"
+     r"ý nghĩa là gì|y nghia la gi|ý nghĩa gì|y nghia gi|có ý nghĩa gì|co y nghia gi|có nghĩa là gì|co nghia la gi)", QueryIntent.TERM_DEFINITION),
     (r"(lấy dữ liệu từ đâu|lấy từ đâu|upstream|downstream|lineage|linage|nguồn|source.*data|phụ thuộc|luồng dữ liệu|dòng dữ liệu|data flow|flow of data|nguôn)", QueryIntent.LINEAGE),
     # Count queries — "có bao nhiêu datasets?", "lĩnh vực tài chính có bao nhiêu datasets"
     (r"(có bao nhiêu|co bao nhieu|bao nhiêu|bao nhieu|how many|số lượng|so luong|count|tổng cộng|tong cong)\s+(dataset|dashboard|glossary(?:\s+term)?|asset|entity)s?", QueryIntent.COUNT_ENTITIES),
     (r"(dataset|dashboard|glossary(?:\s+term)?|asset|entity)s?\s+(có bao nhiêu|co bao nhieu|bao nhiêu|how many|số lượng|so luong|count)", QueryIntent.COUNT_ENTITIES),
     # Domain queries — "domain vgreen bao gồm những asset nào", "những asset thuộc domain X", "lĩnh vực tài chính gồm những dataset nào"
     (r"(domain|miền|lĩnh vực)\s+[\w\.\- ]{1,60}?\s+(bao gồm|gồm|có (những|các|asset|entity|dataset)|chứa|include|includes?|has|have|contain)", QueryIntent.DOMAIN_QUERY),
-    (r"(assets?|entities?|datasets?|dashboards?)\s+(?:(that\s+are|are|which\s+are|which)\s+)?(trong|thuộc|in|belonging to|belong to)\s+(the\s+)?(domain|miền|lĩnh vực)\s+[\w\.\- ]{1,60}", QueryIntent.DOMAIN_QUERY),
+    (r"(assets?|entities?|datasets?|dashboards?|bảng|bang)\s+(?:(that\s+are|are|which\s+are|which|nào|nao)\s+)?(trong|thuộc|thuoc|in|belonging to|belong to)\s+(the\s+)?(domain|miền|lĩnh vực)\s+[\w\.\- ]{1,60}", QueryIntent.DOMAIN_QUERY),
     (r"(domain|miền|lĩnh vực)\s*[:=]\s*[\w\.\- ]{1,60}", QueryIntent.DOMAIN_QUERY),
     # Listing all domains — "có các domain nào?", "liệt kê domain", "danh sách domain",
     # "domain trong hệ thống", "có bao nhiêu domain" -> answered deterministically from DB.
@@ -104,9 +183,30 @@ _RULE_STRINGS: list[tuple[str, QueryIntent]] = [
     (r"certified\s+(dataset|asset|entity)s?", QueryIntent.CERTIFIED_LIST),
     (r"danh sách\s+(đã\s+)?certified", QueryIntent.CERTIFIED_LIST),
     (r"(dataset nào|dataset.*gắn|entity.*associated|find dataset|entity nào)", QueryIntent.TERM_TO_DATASETS),
+    (r"(term nào liên quan|terms? (?:related to|liên quan đến|about)\s|terms?.*(?:doanh thu|tồn kho|liên quan|chứa|liệt kê))", QueryIntent.TERM_TO_DATASETS),
+    (r"terms?\s+(?:nào|nao|which|what)\s+(?:liên quan|lien quan|related|theo)\s", QueryIntent.TERM_TO_DATASETS),
+    # Document QA — bare "tài liệu X mô tả điều gì" (not necessarily "theo tài liệu").
+    (r"(tài liệu|tai lieu|documents?|reports?)\s+[\w\.\- ]{1,80}?\s+"
+     r"(mô tả|mo ta|nói về|noi ve|nội dung|noi dung|describe|explain|giải thích|"
+     r"nói gì|noi gi|bao gồm gì|about)", QueryIntent.DOCUMENT_QA),
     (r"(theo tài liệu|document|report nói gì|theo document)", QueryIntent.DOCUMENT_QA),
     (r"(link|url|đường dẫn|datahub.*link)", QueryIntent.DATAHUB_URL),
     (r"(có tồn tại|tồn tại không|exist|có\s+không|co khong|có\s+\S+(?:\s+\S+)?\s+không)", QueryIntent.ENTITY_EXISTS),
+    # SQL / query generation: "viết SQL", "truy vấn ... field", "sinh câu query",
+    # "tạo câu lệnh truy vấn", "select ... from". Explicit SQL requests must
+    # route to the SQL generator, never to generic entity search.
+    (r"\b(sql|query)\b|viết\s+sql|viet\s+sql|tạo\s+sql|tao\s+sql|sinh\s+sql|"
+     r"truy vấn|truy van|câu lệnh truy vấn|cau lenh truy van|lệnh để truy cập|"
+     r"viết câu lệnh|viet cau lenh|trả về một câu sql|tra ve mot cau sql|"
+     r"ghi\s+sql|ghi lenh truy van|select\s+|from\s+", QueryIntent.SQL_GENERATION),
+    # Natural-language record queries that name a filter column and a value
+    # ("lấy các bản ghi có warehouse_id = 123", "cho tôi bản ghi customer_id 5").
+    # These select rows from a dataset, so they belong to the SQL generator even
+    # without the literal words "sql"/"truy vấn".
+    (r"(?:các\s+)?bản\s+ghi|ban\s+ghi|bản tin|ban tin|bản ghi|records?\b",
+     QueryIntent.SQL_GENERATION),
+    (r"(?:lấy|lay|cho tôi|cho toi|get|fetch|gắ|dieu).{0,25}\b(?:có|cot|co)\s+"
+     r"\w+[_]\w+(\s*[=<>]?\s*['\"]?[a-z0-9_]+['\"]?)?", QueryIntent.SQL_GENERATION),
 ]
 
 _RULES: list[tuple[re.Pattern[str], QueryIntent]] = [
@@ -135,3 +235,14 @@ def classify_intent(query: str) -> QueryIntent:
             return intent
 
     return QueryIntent.GENERAL
+
+
+def normalize_intent(intent: "QueryIntent") -> "QueryIntent":
+    """Map the new Metadata Intelligence taxonomy onto the legacy vocabulary.
+
+    Existing routing (``chat_service``) was built around the legacy intents
+    (``FIND_ENTITY``, ``LINEAGE``, ``IMPACT``, ...). New intents subclass those
+    concepts; this returns the legacy intent a route can act on, or the intent
+    unchanged when it already belongs to the legacy set.
+    """
+    return LEGACY_FOR.get(intent, intent)

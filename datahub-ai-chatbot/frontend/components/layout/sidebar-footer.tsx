@@ -3,9 +3,10 @@
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import { useApp } from "@/lib/app-store";
+import { getRoleAvatar } from "@/lib/avatar";
 
 interface SidebarFooterProps {
   collapsed: boolean;
@@ -13,6 +14,7 @@ interface SidebarFooterProps {
 
 export function SidebarFooter({ collapsed }: SidebarFooterProps) {
   const { user } = useApp();
+  const avatar = getRoleAvatar(user);
   const displayName = user?.display_name || user?.username || "Anonymous";
   const initials = displayName
     .split(/\s+/)
@@ -32,6 +34,7 @@ export function SidebarFooter({ collapsed }: SidebarFooterProps) {
         aria-label="Hồ sơ người dùng"
       >
         <Avatar className="h-8 w-8 shrink-0">
+          {avatar && <AvatarImage src={avatar} alt={displayName} />}
           <AvatarFallback>{initials}</AvatarFallback>
         </Avatar>
         {!collapsed && (

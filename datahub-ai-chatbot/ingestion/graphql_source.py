@@ -11,7 +11,6 @@ from ingestion.graphql.queries import (
     GET_DATASET_QUERY,
     GET_DOCUMENT_QUERY,
     GET_GLOSSARY_TERM_QUERY,
-    LIST_GLOSSARY_TERMS_QUERY,
     SCROLL_ACROSS_ENTITIES_QUERY,
 )
 from ingestion.mappers.dashboard import DashboardMapper
@@ -123,6 +122,8 @@ class GraphQLDataHubSource(DataHubSource):
         (":dataset:", "dataset"),
         (":dataset(", "dataset"),
         (":glossaryTerm:", "glossary_term"),
+        (":glossaryNode:", "glossary_node"),
+        (":document:", "document"),
         (":dashboard:", "dashboard"),
         (":dashboard(", "dashboard"),
         (":chart:", "chart"),
@@ -138,12 +139,36 @@ class GraphQLDataHubSource(DataHubSource):
         (":mlModel(", "mlModel"),
     ]
 
+    _GQL_TYPE_TO_INTERNAL: dict[str, str] = {
+        "DATASET": "dataset",
+        "GLOSSARY_TERM": "glossary_term",
+        "GLOSSARY_NODE": "glossary_node",
+        "DOCUMENT": "document",
+        "DASHBOARD": "dashboard",
+        "CHART": "chart",
+        "DATA_FLOW": "dataFlow",
+        "DATA_JOB": "dataJob",
+        "CONTAINER": "container",
+        "TAG": "tag",
+        "MLMODEL": "mlModel",
+        "ML_FEATURE_TABLE": "mlFeatureTable",
+    }
+
     @staticmethod
     def _urn_to_type(urn: str) -> str:
         for pattern, etype in GraphQLDataHubSource._URN_TYPE_ROUTING:
             if pattern in urn:
                 return etype
         return "dataset"
+
+    @classmethod
+    def _hit_to_type(cls, entity: dict, urn: str) -> str:
+        hit_type = entity.get("type")
+        if hit_type:
+            internal = cls._GQL_TYPE_TO_INTERNAL.get(str(hit_type).upper())
+            if internal:
+                return internal
+        return cls._urn_to_type(urn)
 
     async def get_entity(self, urn: str) -> CanonicalEntity | None:
         etype = self._urn_to_type(urn)
@@ -308,7 +333,7 @@ class GraphQLDataHubSource(DataHubSource):
         name = self._get_entity_name(entity)
         result = CanonicalEntity(
             urn=urn,
-            entity_type=self._urn_to_type(urn),
+            entity_type=self._hit_to_type(entity, urn),
             name=name,
             display_name=entity.get("displayName") or name,
             description=self._get_entity_description(entity),

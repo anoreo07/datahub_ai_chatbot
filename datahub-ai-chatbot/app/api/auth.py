@@ -45,6 +45,7 @@ class LoginRequest(BaseModel):
 
 class LoginResponse(BaseModel):
     token: str
+    username: str
     user_id: str
     display_name: str
     roles: list[str]
@@ -76,6 +77,7 @@ async def login(req: LoginRequest) -> LoginResponse:
 
     return LoginResponse(
         token=token,
+        username=req.username,
         user_id=user.user_id,
         display_name=user.display_name,
         roles=user.roles,

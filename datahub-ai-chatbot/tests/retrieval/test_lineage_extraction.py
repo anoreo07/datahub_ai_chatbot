@@ -13,8 +13,12 @@ def _extract(query: str) -> str:
 
 
 def test_lineage_extracts_entity_name() -> None:
-    assert _extract("thông tin về lineage của dataset dim_inventory_category") == "dim inventory category"
-    assert _extract("thông tin về linage của dataset dim_inventory_category") == "dim inventory category"
+    assert _extract(
+        "thông tin về lineage của dataset dim_inventory_category"
+    ) == "dim inventory category"
+    assert _extract(
+        "thông tin về linage của dataset dim_inventory_category"
+    ) == "dim inventory category"
     assert _extract("lineage của dim_inventory_category") == "dim inventory category"
     assert _extract("upstream của dim_inventory_category") == "dim inventory category"
     assert _extract("dim_inventory_category lấy dữ liệu từ đâu?") == "dim inventory category"

@@ -58,6 +58,38 @@ export interface ChatResponse {
   conversation_id?: string;
   lineage?: LineageData;
   suggestion?: Suggestion;
+  quality_report?: QualityReport;
+}
+
+export interface ImageItem {
+  image_id: string;
+  conversation_id?: string | null;
+  original_filename: string;
+  mime_type: string;
+  size: number;
+  storage_path: string;
+  thumbnail_url?: string | null;
+  upload_time?: string | null;
+  updated_time?: string | null;
+  status: string;
+  image_type?: string | null;
+  dataset_detected?: string | null;
+  is_deleted?: boolean;
+}
+
+export interface ImageListResponse {
+  items: ImageItem[];
+  total: number;
+  offset: number;
+  limit: number;
+}
+
+export interface ImageStats {
+  total: number;
+  total_size: number;
+  analyzed: number;
+  failed: number;
+  pending: number;
 }
 
 export interface SearchItem {
@@ -143,21 +175,44 @@ export interface ImpactResponse {
   valid: boolean;
 }
 
-export interface QualityDimension {
-  key: string;
-  label: string;
-  score: number;
-  status: string;
+export type QualityStatusValue =
+  | "passed"
+  | "warning"
+  | "failed"
+  | "not_evaluated";
+
+export interface QualityFinding {
+  name: string;
+  status: QualityStatusValue;
   detail: string;
+  value?: string;
 }
 
-export interface QualityResponse {
-  dataset?: string;
-  urn?: string;
-  dimensions: QualityDimension[];
+export interface QualitySection {
+  key: string;
+  title: string;
+  score: number;
+  status: QualityStatusValue;
+  findings: QualityFinding[];
+}
+
+export interface QualityRecommendation {
+  priority: string;
+  text: string;
+}
+
+export interface QualityReport {
+  dataset: string;
+  urn: string;
+  url?: string;
+  generated_at: string;
+  generated_by: string;
   overall_score: number;
-  highlights: string[];
-  recommendations: string[];
+  rating: "Excellent" | "Good" | "Fair" | "Poor";
+  profiling_available: boolean;
+  sections: QualitySection[];
+  recommendations: QualityRecommendation[];
+  not_evaluated_checks: string[];
   valid: boolean;
 }
 

@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 
 import { ThemeSwitcher } from "@/components/theme/theme-switcher";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { useApp } from "@/lib/app-store";
+import { getRoleAvatar } from "@/lib/avatar";
 
 const ADMIN_ROUTES = ["/glossary", "/entities", "/admin", "/status", "/search", "/profile"];
 
@@ -23,6 +24,7 @@ export function Topbar({ title }: { title?: string }) {
   const { user, logout, setMobileSidebarOpen } = useApp();
   const router = useRouter();
   const pathname = usePathname();
+  const avatar = getRoleAvatar(user);
   const displayName = user?.display_name || user?.username || "Anonymous";
   const initials = displayName
     .split(/\s+/)
@@ -74,6 +76,7 @@ export function Topbar({ title }: { title?: string }) {
             aria-label="Menu người dùng"
           >
             <Avatar className="h-8 w-8">
+              {avatar && <AvatarImage src={avatar} alt={displayName} />}
               <AvatarFallback>{initials}</AvatarFallback>
             </Avatar>
           </button>

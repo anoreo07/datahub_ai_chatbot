@@ -13,6 +13,8 @@ export interface ChatPayload {
   conversation_id?: string;
   suggested_name?: string;
   model?: string;
+  selected_action?: string;
+  images?: string[];
 }
 
 function parseBlock(block: string): StreamEvent | null {

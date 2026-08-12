@@ -10,6 +10,7 @@ import type {
   CitationItem,
   EntityItem,
   LineageData,
+  QualityReport,
   Suggestion,
 } from "@/lib/types";
 
@@ -19,10 +20,13 @@ export interface ChatMessage {
   id: string;
   role: MessageRole;
   content: string;
+  displayContent?: string;
+  images?: string[];
   timestamp: number;
   citations?: CitationItem[];
   entities?: EntityItem[];
   lineage?: LineageData;
+  quality_report?: QualityReport;
   suggestion?: Suggestion;
   confidence?: string;
   ambiguous?: boolean;
@@ -33,6 +37,8 @@ export interface ChatMessage {
 
 const STEPS: Record<string, string> = {
   classify: "Đang phân tích câu hỏi…",
+  thinking: "Đang tư duy & lập kế hoạch…",
+  thinking_done: "Đang sinh câu trả lời…",
   retrieve: "Đang tìm kiếm metadata…",
   rerank: "Đang sắp xếp kết quả…",
   generate: "Đang sinh câu trả lời…",
@@ -99,80 +105,95 @@ export function useChat() {
     };
   }, [activeConversationId]);
 
-  const send = useCallback(async (question: string, suggestedName?: string, model?: string) => {
-    const q = question.trim();
-    if (!q || streamingRef.current) return;
-    lastQuestionRef.current = q;
+  const send = useCallback(
+    async (
+      question: string,
+      suggestedName?: string,
+      model?: string,
+      displayContent?: string,
+      selectedAction?: string,
+      images?: string[]
+    ) => {
+      const q = question.trim();
+      if (!q || streamingRef.current) return;
+      lastQuestionRef.current = q;
 
-    const userMsg: ChatMessage = {
-      id: uid(),
-      role: "user",
-      content: q,
-      timestamp: Date.now(),
-    };
-    const botId = uid();
-    const botMsg: ChatMessage = {
-      id: botId,
-      role: "assistant",
-      content: "",
-      timestamp: Date.now(),
-      streaming: true,
-    };
-    setMessages((prev) => [...prev, userMsg, botMsg]);
-    setIsStreaming(true);
-    setStep("classify");
-    streamingRef.current = true;
+      const userMsg: ChatMessage = {
+        id: uid(),
+        role: "user",
+        content: q,
+        displayContent: displayContent || q,
+        images: images && images.length ? images : undefined,
+        timestamp: Date.now(),
+      };
+      const botId = uid();
+      const botMsg: ChatMessage = {
+        id: botId,
+        role: "assistant",
+        content: "",
+        timestamp: Date.now(),
+        streaming: true,
+      };
+      setMessages((prev) => [...prev, userMsg, botMsg]);
+      setIsStreaming(true);
+      setStep("classify");
+      streamingRef.current = true;
 
-    await streamChat(
-      {
-        question: q,
-        conversation_id: conversationIdRef.current || undefined,
-        suggested_name: suggestedName,
-        model,
-      },
-      {
-        onStatus: (s) => setStep(STEPS[s] || s),
-        onToken: (text) => {
-          setMessages((prev) =>
-            prev.map((m) => (m.id === botId ? { ...m, content: m.content + text } : m))
-          );
+      await streamChat(
+        {
+          question: q,
+          conversation_id: conversationIdRef.current || undefined,
+          suggested_name: suggestedName,
+          model,
+          selected_action: selectedAction,
+          images: images && images.length ? images : undefined,
         },
-        onDone: (data: ChatResponse) => {
-          conversationIdRef.current = data.conversation_id || conversationIdRef.current;
-          setMessages((prev) =>
-            prev.map((m) =>
-              m.id === botId
-                ? {
-                    ...m,
-                    streaming: false,
-                    content: m.content || data.answer,
-                    citations: data.citations,
-                    entities: data.entities,
-                    lineage: data.lineage,
-                    suggestion: data.suggestion,
-                    confidence: data.confidence,
-                    ambiguous: data.ambiguous,
-                    intent: data.intent,
-                    conversation_id: data.conversation_id,
-                  }
-                : m
-            )
-          );
-          setIsStreaming(false);
-          setStep("");
-          streamingRef.current = false;
-        },
-        onError: (message: string) => {
-          setMessages((prev) =>
-            prev.map((m) => (m.id === botId ? { ...m, streaming: false, content: `⚠️ ${message}` } : m))
-          );
-          setIsStreaming(false);
-          setStep("");
-          streamingRef.current = false;
-        },
-      }
-    );
-  }, []);
+        {
+          onStatus: (s) => setStep(STEPS[s] || s),
+          onToken: (text) => {
+            setMessages((prev) =>
+              prev.map((m) => (m.id === botId ? { ...m, content: m.content + text } : m))
+            );
+          },
+          onDone: (data: ChatResponse) => {
+            conversationIdRef.current = data.conversation_id || conversationIdRef.current;
+            setMessages((prev) =>
+              prev.map((m) =>
+                m.id === botId
+                  ? {
+                      ...m,
+                      streaming: false,
+                      content: m.content || data.answer,
+                      citations: data.citations,
+                      entities: data.entities,
+                      lineage: data.lineage,
+                      quality_report: data.quality_report,
+                      suggestion: data.suggestion,
+                      confidence: data.confidence,
+                      ambiguous: data.ambiguous,
+                      intent: data.intent,
+                      conversation_id: data.conversation_id,
+                    }
+                  : m
+              )
+            );
+            setIsStreaming(false);
+            setStep("");
+            streamingRef.current = false;
+          },
+          onError: (message: string) => {
+            setMessages((prev) =>
+              prev.map((m) => (m.id === botId ? { ...m, streaming: false, content: `⚠️ ${message}` } : m))
+            );
+            setIsStreaming(false);
+            setStep("");
+            streamingRef.current = false;
+          },
+        }
+      );
+    },
+    []
+  );
 
   const applySuggestion = useCallback(
     (suggested: string) => {
@@ -217,6 +238,7 @@ export function useChat() {
                       citations: data.citations,
                       entities: data.entities,
                       lineage: data.lineage,
+                      quality_report: data.quality_report,
                       suggestion: data.suggestion,
                       confidence: data.confidence,
                       ambiguous: data.ambiguous,

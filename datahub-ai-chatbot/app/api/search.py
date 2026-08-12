@@ -112,6 +112,12 @@ async def search(
     if platform:
         filters["platform"] = platform
 
+    # Domain RBAC: a user explicitly filtering by a domain outside their roles
+    # gets no results at all (no counts, names or metadata from unauthorized
+    # domains), rather than a misleading empty/partial dataset.
+    if domain and not await auth_service.can_access_domain(current_user, domain):
+        return SearchResponse(query=q, results=[], total=0)
+
     results = await searcher.search(q, top_k=limit, **filters)
     accessible = await auth_service.filter_accessible_urns(
         current_user, [r.urn for r in results]

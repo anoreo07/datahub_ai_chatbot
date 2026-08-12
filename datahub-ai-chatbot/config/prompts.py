@@ -61,3 +61,142 @@ Query: {query}
 
 Intent:
 """
+
+# Semantic intent classifier: extract intent, entity references, filters and
+# parameters from a user question about DataHub metadata. Replaces the pure
+# keyword/regex router with a structured JSON contract while preserving the
+# existing QueryIntent vocabulary so downstream logic keeps working.
+SEMANTIC_INTENT_PROMPT = """You are the semantic intent classifier of a DataHub metadata assistant.
+Given a user question (Vietnamese or English), extract the query's structure into JSON.
+
+Intents (exactly one primary):
+- "TERM_DEFINITION": asks what a glossary term / dataset / dashboard means ("X là gì?", "định nghĩa")
+- "FIND_ENTITY": locating/discovering an entity by name or description
+- "OWNER_LOOKUP": who owns entity X ("ai sở hữu X")
+- "TERM_TO_DATASETS": which datasets are associated with a glossary term
+- "LINEAGE": upstream/downstream of a dataset, where data comes from, what depends on it
+- "IMPACT": downstream blast radius / recursive impact ("ảnh hưởng", "bị ảnh hưởng", "impact", "who uses", "điều gì phụ thuộc")
+- "SCHEMA_LOOKUP": columns/fields of a dataset ("trường X", "cột", "schema")
+- "ENTITY_DOMAIN": domain of an entity
+- "COUNT_ENTITIES": how many entities / assets
+- "DOMAIN_QUERY": entities in a domain
+- "PLATFORM_QUERY": entities on a platform
+- "TAG_QUERY": entities with a tag
+- "ENTITIES_BY_OWNER": entities owned by X
+- "CERTIFIED_LIST": certified entities
+- "DOCUMENT_QA": question about document content
+- "DATAHUB_URL": request for the DataHub link/URL
+- "ENTITY_EXISTS": does X exist in the catalog
+- "LISTING": list all entities of a type
+- "GREETING": greeting
+- "CHITCHAT": small talk
+- "GENERAL": anything else (unrelated to metadata)
+
+Output EXACTLY one JSON object, nothing else:
+{
+  "intent": "<one of the intents above>",
+  "entity_refs": ["<likely entity name(s) as mentioned>"],
+  "entity_type": "<dataset|dashboard|glossary_term|document|null>",
+  "filter": {"dimension": "<domain|platform|tag|owner|null>", "value": "<value|null>"},
+  "direction": "<upstream|downstream|both|null>",
+  "params": {"depth": <int|null>, "top_k": <int|null>},
+  "is_composite": <true|false>,
+  "confidence": "high|medium|low"
+}
+
+Rules:
+- entity_refs: the raw names as the user typed them (do NOT guess/expand). Empty list when none.
+- "IMPACT" is the INTENT for "what downstream/consumers would be affected by changing X". Use direction=downstream.
+- is_composite=true when the question mixes multiple intents (e.g. schema + lineage, or owner + schema).
+- Do NOT infer real entity names from descriptions; only use names the user wrote.
+"""
+
+# Query planner: turn a (possibly composite) question into concrete, ordered
+# steps. Each step is later executed by the tool registry.
+QUERY_PLAN_PROMPT = """You are the query planner of a DataHub metadata assistant.
+Decompose the user question into ordered executable steps. Each step maps to one
+tool operation. Produce a JSON array of steps.
+
+Tool operations:
+- "resolve_entity": find the canonical entity for a name (params: name, entity_type)
+- "schema_lookup": return schema fields of a dataset (params: name)
+- "lineage": return upstream/downstream edges (params: name, direction: upstream|downstream|both, depth)
+- "recursive_impact": downstream blast radius (params: name, depth, max_nodes)
+- "glossary_lookup": glossary term definition (params: name)
+- "list_by_dimension": entities filtered by domain/platform/tag/owner (params: dimension, value, entity_type)
+- "list_by_type": list entities of a type (params: entity_type)
+- "count_entities": count entities (params: entity_type)
+- "term_to_datasets": datasets linked to a glossary term (params: term)
+- "document_qa": answer from document content (params: query)
+- "owner_lookup": owner of an entity (params: name)
+- "existence": does entity exist (params: name)
+
+Output EXACTLY one JSON array, nothing else:
+[
+  {
+    "op": "<operation>",
+    "params": {"<key>": <value>},
+    "purpose": "<one line: why this step>",
+    "depends_on": [<indices of steps this step needs>]
+  }
+]
+
+Rules:
+- Keep steps minimal and ordered; merge when a single step suffices.
+- For lineage questions use op "lineage" with the correct direction; for impact questions use "recursive_impact".
+- Do not invent entity names; use only what the user wrote or what prior steps resolve.
+"""
+
+# Intent resolver: merge a selected "+" menu action (a hint, never an order) with
+# the actual user message and conversation context into one routing decision.
+ACTION_RESOLUTION_PROMPT = """You are the intent resolver of a DataHub metadata assistant.
+A user picked a predefined UI action from the "+" menu and typed a message. Decide what the
+user ACTUALLY wants, treating the selected action as a HINT, not a mandatory execution path.
+
+Selected action: {action} (kind: {action_kind})
+User message: {message}
+Conversation context (recent turns):
+{history}
+
+Predefined actions and their meaning:
+- "Search Dataset": find a dataset by name, column, owner, tag, domain or platform.
+- "Generate SQL": generate SQL for a dataset.
+- "Impact Analysis": downstream / recursive impact of changing a dataset.
+- "Data Lineage": upstream/downstream lineage graph of a dataset.
+- "Data Quality Check": assess metadata completeness of a dataset.
+- "Metadata Report": produce an AI metadata report of a dataset.
+
+Decide ONE of:
+1. "agree"    -> the message matches the selected action, or only supplies the entity name
+                 the action needs (e.g. "sales_order"), or is a follow-up reference ("nó", "this")
+                 to a dataset discussed earlier. Execute the action.
+2. "override" -> the message expresses a DIFFERENT, explicit request (a capability other than
+                 the selected action, a greeting, or metadata info like owner/schema/lineage).
+                 The user's explicit wording wins - switch to the correct capability.
+3. "clarify"  -> the message is too vague to know what the user wants (no entity, no clear
+                 capability). Ask for clarification.
+
+Output EXACTLY one JSON object, nothing else:
+{{
+  "decision": "agree|override|clarify",
+  "intent": "<metadata intent or GENERAL>",
+  "entity": "<entity name or null>",
+  "confidence": "high|medium|low",
+  "reason": "<one short sentence>"
+}}
+
+Metadata intents: FIND_ENTITY, DATASET_LOOKUP, SCHEMA_LOOKUP, FIELD_LOOKUP, TERM_DEFINITION,
+OWNER_LOOKUP, ENTITY_DOMAIN, TERM_TO_DATASETS, LINEAGE, IMPACT, COUNT_ENTITIES, DOMAIN_QUERY,
+PLATFORM_QUERY, TAG_QUERY, ENTITIES_BY_OWNER, CERTIFIED_LIST, DOCUMENT_QA, DATAHUB_URL,
+ENTITY_EXISTS, LISTING, GREETING, CHITCHAT, GENERAL.
+
+Rules:
+- A bare entity name or short entity fragment (e.g. "sales_order", "fact sales") => agree.
+- Anaphora ("nó bị ảnh hưởng gì", "this dataset", "đó") => resolve the entity from the
+  conversation context; if found, agree with entity=<resolved entity>.
+- If the message clearly asks for a capability DIFFERENT from the selected action
+  (e.g. action=Impact Analysis but the message asks for the schema or SQL) => override with
+  the correct intent.
+- GREETING / CHITCHAT always override.
+- NEVER invent an entity name that is not in the message or the conversation context.
+"""

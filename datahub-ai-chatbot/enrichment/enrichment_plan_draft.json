@@ -1,0 +1,1546 @@
+{
+  "pk": [
+    {
+      "dataset": "dim_cost_center",
+      "field": "cost_center_id",
+      "evidence": "Khóa chính, mã duy nhất theo hệ thống SAP"
+    },
+    {
+      "dataset": "dim_gl_account",
+      "field": "gl_account_id",
+      "evidence": "Khóa chính, mã tài khoản theo chuẩn hệ thống tài khoản kế toán Việt Nam"
+    },
+    {
+      "dataset": "dim_profit_center",
+      "field": "profit_center_id",
+      "evidence": "Khóa chính, mã duy nhất cho mỗi trung tâm lợi nhuận"
+    },
+    {
+      "dataset": "fact_general_ledger",
+      "field": "journal_entry_id",
+      "evidence": "Khóa chính, mã duy nhất cho mỗi dòng bút toán sổ cái"
+    },
+    {
+      "dataset": "fact_actual_cost",
+      "field": "actual_cost_id",
+      "evidence": "Khóa chính, mã duy nhất cho mỗi bản ghi chi phí thực tế"
+    },
+    {
+      "dataset": "fact_standard_cost",
+      "field": "standard_cost_id",
+      "evidence": "Khóa chính, mã duy nhất cho mỗi bản ghi định mức chi phí"
+    },
+    {
+      "dataset": "fact_budget",
+      "field": "budget_id",
+      "evidence": "Khóa chính, mã duy nhất cho mỗi dòng ngân sách"
+    },
+    {
+      "dataset": "fact_budget_variance",
+      "field": "variance_id",
+      "evidence": "Khóa chính, mã duy nhất cho mỗi bản ghi chênh lệch"
+    },
+    {
+      "dataset": "fact_revenue",
+      "field": "revenue_id",
+      "evidence": "Khóa chính, mã duy nhất cho mỗi bản ghi doanh thu"
+    },
+    {
+      "dataset": "dim_fiscal_calendar",
+      "field": "fiscal_date_id",
+      "evidence": "Khóa chính, mã duy nhất theo format YYYYMMDD"
+    },
+    {
+      "dataset": "fact_ar_receivable",
+      "field": "receivable_id",
+      "evidence": "Khóa chính, mã duy nhất cho mỗi khoản phải thu"
+    },
+    {
+      "dataset": "fact_ap_payable",
+      "field": "payable_id",
+      "evidence": "Khóa chính, mã duy nhất cho mỗi khoản phải trả"
+    },
+    {
+      "dataset": "fact_fixed_asset",
+      "field": "asset_id",
+      "evidence": "Khóa chính, mã tài sản duy nhất theo hệ thống quản lý tài sản"
+    },
+    {
+      "dataset": "dim_vendor_invoice",
+      "field": "invoice_id",
+      "evidence": "Khóa chính, mã duy nhất cho mỗi hóa đơn đầu vào"
+    },
+    {
+      "dataset": "fact_cash_flow",
+      "field": "cash_flow_id",
+      "evidence": "Khóa chính, mã duy nhất cho mỗi giao dịch dòng tiền"
+    },
+    {
+      "dataset": "dim_material",
+      "field": "material_code",
+      "evidence": "Khóa chính, mã vật tư duy nhất theo hệ thống quản lý vật tư"
+    },
+    {
+      "dataset": "dim_warehouse",
+      "field": "warehouse_id",
+      "evidence": "Khóa chính, mã kho duy nhất"
+    },
+    {
+      "dataset": "dim_supplier",
+      "field": "supplier_id",
+      "evidence": "Khóa chính, mã nhà cung cấp duy nhất"
+    },
+    {
+      "dataset": "fact_inventory",
+      "field": "inventory_id",
+      "evidence": "Khóa chính, mã duy nhất cho mỗi bản ghi tồn kho"
+    },
+    {
+      "dataset": "fact_purchase_order",
+      "field": "po_number",
+      "evidence": "Khóa chính, mã đơn mua hàng duy nhất"
+    },
+    {
+      "dataset": "fact_goods_receipt",
+      "field": "goods_receipt_id",
+      "evidence": "Khóa chính, mã phiếu nhập kho duy nhất"
+    },
+    {
+      "dataset": "fact_goods_issue",
+      "field": "goods_issue_id",
+      "evidence": "Khóa chính, mã phiếu xuất kho duy nhất"
+    },
+    {
+      "dataset": "fact_inventory_movement",
+      "field": "movement_id",
+      "evidence": "Khóa chính, mã duy nhất cho mỗi giao dịch tồn kho"
+    },
+    {
+      "dataset": "fact_physical_inventory",
+      "field": "physical_inventory_id",
+      "evidence": "Khóa chính, mã duy nhất cho mỗi lần kiểm kê"
+    },
+    {
+      "dataset": "fact_lead_time",
+      "field": "lead_time_id",
+      "evidence": "Khóa chính, mã duy nhất cho mỗi bản ghi theo dõi"
+    },
+    {
+      "dataset": "dim_inventory_category",
+      "field": "material_code",
+      "evidence": "Khóa chính, khóa ngoại tham chiếu đến dim_material"
+    },
+    {
+      "dataset": "fact_stock_transfer",
+      "field": "transfer_id",
+      "evidence": "Khóa chính, mã duy nhất cho mỗi lần chuyển kho"
+    },
+    {
+      "dataset": "fact_reorder_alert",
+      "field": "alert_id",
+      "evidence": "Khóa chính, mã duy nhất cho mỗi cảnh báo"
+    },
+    {
+      "dataset": "dim_uom",
+      "field": "uom_code",
+      "evidence": "Khóa chính, mã đơn vị tính duy nhất"
+    },
+    {
+      "dataset": "fact_inventory_forecast",
+      "field": "forecast_id",
+      "evidence": "Khóa chính, mã duy nhất cho mỗi dòng dự báo"
+    },
+    {
+      "dataset": "dim_product",
+      "field": "product_id",
+      "evidence": "Khóa chính, mã sản phẩm được sinh tự động theo format VF-{dòng xe}-{phiên bản}"
+    },
+    {
+      "dataset": "dim_plant",
+      "field": "plant_id",
+      "evidence": "Khóa chính, mã nhà máy gồm 4 ký tự"
+    },
+    {
+      "dataset": "dim_assembly_line",
+      "field": "assembly_line_id",
+      "evidence": "Khóa chính, mã định danh duy nhất cho mỗi dây chuyền"
+    },
+    {
+      "dataset": "dim_station",
+      "field": "station_id",
+      "evidence": "Khóa chính, mã duy nhất cho mỗi trạm làm việc"
+    },
+    {
+      "dataset": "fact_production_order",
+      "field": "order_id",
+      "evidence": "Khóa chính, mã lệnh sản xuất duy nhất được sinh từ hệ thống ERP"
+    },
+    {
+      "dataset": "fact_production_output",
+      "field": "output_id",
+      "evidence": "Khóa chính, sinh tự động từ sequence"
+    },
+    {
+      "dataset": "fact_defect_tracking",
+      "field": "defect_id",
+      "evidence": "Khóa chính, mã duy nhất cho mỗi lỗi phát hiện"
+    },
+    {
+      "dataset": "fact_quality_inspection",
+      "field": "inspection_id",
+      "evidence": "Khóa chính, mã duy nhất cho mỗi lần kiểm tra"
+    },
+    {
+      "dataset": "fact_downtime",
+      "field": "downtime_id",
+      "evidence": "Khóa chính, mã duy nhất cho mỗi sự cố dừng máy"
+    },
+    {
+      "dataset": "fact_oee_metrics",
+      "field": "oee_id",
+      "evidence": "Khóa chính, sinh tự động"
+    },
+    {
+      "dataset": "fact_wip_tracking",
+      "field": "wip_id",
+      "evidence": "Khóa chính, mã duy nhất cho mỗi bản ghi theo dõi WIP"
+    },
+    {
+      "dataset": "dim_shift",
+      "field": "shift_id",
+      "evidence": "Khóa chính, mã ca theo format SHIFT-{ca}-{ngày}"
+    },
+    {
+      "dataset": "dim_worker",
+      "field": "worker_id",
+      "evidence": "Khóa chính, mã nhân viên duy nhất"
+    },
+    {
+      "dataset": "fact_material_consumption",
+      "field": "consumption_id",
+      "evidence": "Khóa chính, mã duy nhất cho mỗi giao dịch tiêu hao vật tư"
+    },
+    {
+      "dataset": "fact_production_routing",
+      "field": "routing_id",
+      "evidence": "Khóa chính, mã duy nhất cho mỗi bước trong quy trình"
+    }
+  ],
+  "fk": [
+    {
+      "dataset": "dim_cost_center",
+      "field": "plant_id",
+      "ref_dataset": "dim_plant",
+      "ref_field": "plant_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_plant"
+    },
+    {
+      "dataset": "fact_general_ledger",
+      "field": "gl_account_id",
+      "ref_dataset": "dim_gl_account",
+      "ref_field": "gl_account_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_gl_account"
+    },
+    {
+      "dataset": "fact_general_ledger",
+      "field": "cost_center_id",
+      "ref_dataset": "dim_cost_center",
+      "ref_field": "cost_center_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_cost_center"
+    },
+    {
+      "dataset": "fact_general_ledger",
+      "field": "profit_center_id",
+      "ref_dataset": "dim_profit_center",
+      "ref_field": "profit_center_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_profit_center"
+    },
+    {
+      "dataset": "fact_actual_cost",
+      "field": "cost_center_id",
+      "ref_dataset": "dim_cost_center",
+      "ref_field": "cost_center_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_cost_center"
+    },
+    {
+      "dataset": "fact_actual_cost",
+      "field": "gl_account_id",
+      "ref_dataset": "dim_gl_account",
+      "ref_field": "gl_account_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_gl_account"
+    },
+    {
+      "dataset": "fact_actual_cost",
+      "field": "order_id",
+      "ref_dataset": "fact_production_order",
+      "ref_field": "order_id",
+      "evidence": "Khóa ngoại tham chiếu đến fact_production_order nếu chi phí theo lệnh"
+    },
+    {
+      "dataset": "fact_standard_cost",
+      "field": "product_id",
+      "ref_dataset": "dim_product",
+      "ref_field": "product_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_product"
+    },
+    {
+      "dataset": "fact_standard_cost",
+      "field": "material_code",
+      "ref_dataset": "dim_material",
+      "ref_field": "material_code",
+      "evidence": "Khóa ngoại tham chiếu đến dim_material, áp dụng cho thành phần vật tư"
+    },
+    {
+      "dataset": "fact_budget",
+      "field": "cost_center_id",
+      "ref_dataset": "dim_cost_center",
+      "ref_field": "cost_center_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_cost_center"
+    },
+    {
+      "dataset": "fact_budget",
+      "field": "profit_center_id",
+      "ref_dataset": "dim_profit_center",
+      "ref_field": "profit_center_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_profit_center"
+    },
+    {
+      "dataset": "fact_budget",
+      "field": "gl_account_id",
+      "ref_dataset": "dim_gl_account",
+      "ref_field": "gl_account_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_gl_account"
+    },
+    {
+      "dataset": "fact_budget_variance",
+      "field": "cost_center_id",
+      "ref_dataset": "dim_cost_center",
+      "ref_field": "cost_center_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_cost_center"
+    },
+    {
+      "dataset": "fact_budget_variance",
+      "field": "profit_center_id",
+      "ref_dataset": "dim_profit_center",
+      "ref_field": "profit_center_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_profit_center"
+    },
+    {
+      "dataset": "fact_budget_variance",
+      "field": "gl_account_id",
+      "ref_dataset": "dim_gl_account",
+      "ref_field": "gl_account_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_gl_account"
+    },
+    {
+      "dataset": "fact_revenue",
+      "field": "product_id",
+      "ref_dataset": "dim_product",
+      "ref_field": "product_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_product"
+    },
+    {
+      "dataset": "fact_revenue",
+      "field": "profit_center_id",
+      "ref_dataset": "dim_profit_center",
+      "ref_field": "profit_center_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_profit_center"
+    },
+    {
+      "dataset": "fact_ap_payable",
+      "field": "supplier_id",
+      "ref_dataset": "dim_supplier",
+      "ref_field": "supplier_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_supplier"
+    },
+    {
+      "dataset": "fact_fixed_asset",
+      "field": "plant_id",
+      "ref_dataset": "dim_plant",
+      "ref_field": "plant_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_plant, nơi tài sản được sử dụng"
+    },
+    {
+      "dataset": "fact_fixed_asset",
+      "field": "cost_center_id",
+      "ref_dataset": "dim_cost_center",
+      "ref_field": "cost_center_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_cost_center, trung tâm chi phí quản lý tài sản"
+    },
+    {
+      "dataset": "dim_vendor_invoice",
+      "field": "supplier_id",
+      "ref_dataset": "dim_supplier",
+      "ref_field": "supplier_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_supplier"
+    },
+    {
+      "dataset": "dim_warehouse",
+      "field": "plant_id",
+      "ref_dataset": "dim_plant",
+      "ref_field": "plant_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_plant, nhà máy sở hữu kho"
+    },
+    {
+      "dataset": "fact_inventory",
+      "field": "material_code",
+      "ref_dataset": "dim_material",
+      "ref_field": "material_code",
+      "evidence": "Khóa ngoại tham chiếu đến dim_material"
+    },
+    {
+      "dataset": "fact_inventory",
+      "field": "warehouse_id",
+      "ref_dataset": "dim_warehouse",
+      "ref_field": "warehouse_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_warehouse"
+    },
+    {
+      "dataset": "fact_purchase_order",
+      "field": "supplier_id",
+      "ref_dataset": "dim_supplier",
+      "ref_field": "supplier_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_supplier"
+    },
+    {
+      "dataset": "fact_purchase_order",
+      "field": "material_code",
+      "ref_dataset": "dim_material",
+      "ref_field": "material_code",
+      "evidence": "Khóa ngoại tham chiếu đến dim_material"
+    },
+    {
+      "dataset": "fact_goods_receipt",
+      "field": "po_number",
+      "ref_dataset": "fact_purchase_order",
+      "ref_field": "po_number",
+      "evidence": "Khóa ngoại tham chiếu đến fact_purchase_order"
+    },
+    {
+      "dataset": "fact_goods_receipt",
+      "field": "supplier_id",
+      "ref_dataset": "dim_supplier",
+      "ref_field": "supplier_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_supplier"
+    },
+    {
+      "dataset": "fact_goods_receipt",
+      "field": "material_code",
+      "ref_dataset": "dim_material",
+      "ref_field": "material_code",
+      "evidence": "Khóa ngoại tham chiếu đến dim_material"
+    },
+    {
+      "dataset": "fact_goods_receipt",
+      "field": "warehouse_id",
+      "ref_dataset": "dim_warehouse",
+      "ref_field": "warehouse_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_warehouse"
+    },
+    {
+      "dataset": "fact_goods_issue",
+      "field": "order_id",
+      "ref_dataset": "fact_production_order",
+      "ref_field": "order_id",
+      "evidence": "Khóa ngoại tham chiếu đến fact_production_order, null nếu xuất phi sản xuất"
+    },
+    {
+      "dataset": "fact_goods_issue",
+      "field": "material_code",
+      "ref_dataset": "dim_material",
+      "ref_field": "material_code",
+      "evidence": "Khóa ngoại tham chiếu đến dim_material"
+    },
+    {
+      "dataset": "fact_goods_issue",
+      "field": "warehouse_id",
+      "ref_dataset": "dim_warehouse",
+      "ref_field": "warehouse_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_warehouse"
+    },
+    {
+      "dataset": "fact_goods_issue",
+      "field": "cost_center_id",
+      "ref_dataset": "dim_cost_center",
+      "ref_field": "cost_center_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_cost_center, trung tâm nhận vật tư"
+    },
+    {
+      "dataset": "fact_inventory_movement",
+      "field": "material_code",
+      "ref_dataset": "dim_material",
+      "ref_field": "material_code",
+      "evidence": "Khóa ngoại tham chiếu đến dim_material"
+    },
+    {
+      "dataset": "fact_inventory_movement",
+      "field": "warehouse_id",
+      "ref_dataset": "dim_warehouse",
+      "ref_field": "warehouse_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_warehouse"
+    },
+    {
+      "dataset": "fact_physical_inventory",
+      "field": "material_code",
+      "ref_dataset": "dim_material",
+      "ref_field": "material_code",
+      "evidence": "Khóa ngoại tham chiếu đến dim_material"
+    },
+    {
+      "dataset": "fact_physical_inventory",
+      "field": "warehouse_id",
+      "ref_dataset": "dim_warehouse",
+      "ref_field": "warehouse_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_warehouse"
+    },
+    {
+      "dataset": "fact_lead_time",
+      "field": "po_number",
+      "ref_dataset": "fact_purchase_order",
+      "ref_field": "po_number",
+      "evidence": "Khóa ngoại tham chiếu đến fact_purchase_order"
+    },
+    {
+      "dataset": "fact_lead_time",
+      "field": "supplier_id",
+      "ref_dataset": "dim_supplier",
+      "ref_field": "supplier_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_supplier"
+    },
+    {
+      "dataset": "fact_lead_time",
+      "field": "material_code",
+      "ref_dataset": "dim_material",
+      "ref_field": "material_code",
+      "evidence": "Khóa ngoại tham chiếu đến dim_material"
+    },
+    {
+      "dataset": "dim_inventory_category",
+      "field": "material_code",
+      "ref_dataset": "dim_material",
+      "ref_field": "material_code",
+      "evidence": "Khóa chính, khóa ngoại tham chiếu đến dim_material"
+    },
+    {
+      "dataset": "fact_stock_transfer",
+      "field": "material_code",
+      "ref_dataset": "dim_material",
+      "ref_field": "material_code",
+      "evidence": "Khóa ngoại tham chiếu đến dim_material"
+    },
+    {
+      "dataset": "fact_reorder_alert",
+      "field": "material_code",
+      "ref_dataset": "dim_material",
+      "ref_field": "material_code",
+      "evidence": "Khóa ngoại tham chiếu đến dim_material"
+    },
+    {
+      "dataset": "fact_reorder_alert",
+      "field": "warehouse_id",
+      "ref_dataset": "dim_warehouse",
+      "ref_field": "warehouse_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_warehouse"
+    },
+    {
+      "dataset": "fact_reorder_alert",
+      "field": "supplier_id",
+      "ref_dataset": "dim_supplier",
+      "ref_field": "supplier_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_supplier, nhà cung cấp đề xuất"
+    },
+    {
+      "dataset": "fact_inventory_forecast",
+      "field": "material_code",
+      "ref_dataset": "dim_material",
+      "ref_field": "material_code",
+      "evidence": "Khóa ngoại tham chiếu đến dim_material"
+    },
+    {
+      "dataset": "fact_inventory_forecast",
+      "field": "warehouse_id",
+      "ref_dataset": "dim_warehouse",
+      "ref_field": "warehouse_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_warehouse"
+    },
+    {
+      "dataset": "dim_assembly_line",
+      "field": "plant_id",
+      "ref_dataset": "dim_plant",
+      "ref_field": "plant_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_plant, xác định nhà máy sở hữu dây chuyền"
+    },
+    {
+      "dataset": "dim_station",
+      "field": "assembly_line_id",
+      "ref_dataset": "dim_assembly_line",
+      "ref_field": "assembly_line_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_assembly_line, xác định dây chuyền chứa trạm"
+    },
+    {
+      "dataset": "fact_production_order",
+      "field": "product_id",
+      "ref_dataset": "dim_product",
+      "ref_field": "product_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_product, xác định dòng xe cần sản xuất"
+    },
+    {
+      "dataset": "fact_production_order",
+      "field": "plant_id",
+      "ref_dataset": "dim_plant",
+      "ref_field": "plant_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_plant, nơi thực hiện lệnh sản xuất"
+    },
+    {
+      "dataset": "fact_production_order",
+      "field": "assembly_line_id",
+      "ref_dataset": "dim_assembly_line",
+      "ref_field": "assembly_line_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_assembly_line, dây chuyền phụ trách sản xuất"
+    },
+    {
+      "dataset": "fact_production_output",
+      "field": "order_id",
+      "ref_dataset": "fact_production_order",
+      "ref_field": "order_id",
+      "evidence": "Khóa ngoại tham chiếu đến fact_production_order"
+    },
+    {
+      "dataset": "fact_production_output",
+      "field": "shift_id",
+      "ref_dataset": "dim_shift",
+      "ref_field": "shift_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_shift"
+    },
+    {
+      "dataset": "fact_production_output",
+      "field": "assembly_line_id",
+      "ref_dataset": "dim_assembly_line",
+      "ref_field": "assembly_line_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_assembly_line"
+    },
+    {
+      "dataset": "fact_production_output",
+      "field": "station_id",
+      "ref_dataset": "dim_station",
+      "ref_field": "station_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_station"
+    },
+    {
+      "dataset": "fact_production_output",
+      "field": "product_id",
+      "ref_dataset": "dim_product",
+      "ref_field": "product_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_product"
+    },
+    {
+      "dataset": "fact_defect_tracking",
+      "field": "order_id",
+      "ref_dataset": "fact_production_order",
+      "ref_field": "order_id",
+      "evidence": "Khóa ngoại tham chiếu đến fact_production_order"
+    },
+    {
+      "dataset": "fact_defect_tracking",
+      "field": "station_id",
+      "ref_dataset": "dim_station",
+      "ref_field": "station_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_station, trạm phát hiện ra lỗi"
+    },
+    {
+      "dataset": "fact_quality_inspection",
+      "field": "order_id",
+      "ref_dataset": "fact_production_order",
+      "ref_field": "order_id",
+      "evidence": "Khóa ngoại tham chiếu đến fact_production_order"
+    },
+    {
+      "dataset": "fact_downtime",
+      "field": "assembly_line_id",
+      "ref_dataset": "dim_assembly_line",
+      "ref_field": "assembly_line_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_assembly_line, dây chuyền bị dừng"
+    },
+    {
+      "dataset": "fact_downtime",
+      "field": "station_id",
+      "ref_dataset": "dim_station",
+      "ref_field": "station_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_station, trạm gặp sự cố"
+    },
+    {
+      "dataset": "fact_downtime",
+      "field": "shift_id",
+      "ref_dataset": "dim_shift",
+      "ref_field": "shift_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_shift"
+    },
+    {
+      "dataset": "fact_oee_metrics",
+      "field": "assembly_line_id",
+      "ref_dataset": "dim_assembly_line",
+      "ref_field": "assembly_line_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_assembly_line"
+    },
+    {
+      "dataset": "fact_oee_metrics",
+      "field": "shift_id",
+      "ref_dataset": "dim_shift",
+      "ref_field": "shift_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_shift"
+    },
+    {
+      "dataset": "fact_wip_tracking",
+      "field": "order_id",
+      "ref_dataset": "fact_production_order",
+      "ref_field": "order_id",
+      "evidence": "Khóa ngoại tham chiếu đến fact_production_order"
+    },
+    {
+      "dataset": "fact_wip_tracking",
+      "field": "assembly_line_id",
+      "ref_dataset": "dim_assembly_line",
+      "ref_field": "assembly_line_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_assembly_line, dây chuyền xe đang ở"
+    },
+    {
+      "dataset": "fact_wip_tracking",
+      "field": "station_id",
+      "ref_dataset": "dim_station",
+      "ref_field": "station_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_station, trạm xe đang được xử lý"
+    },
+    {
+      "dataset": "dim_shift",
+      "field": "plant_id",
+      "ref_dataset": "dim_plant",
+      "ref_field": "plant_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_plant"
+    },
+    {
+      "dataset": "dim_worker",
+      "field": "plant_id",
+      "ref_dataset": "dim_plant",
+      "ref_field": "plant_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_plant, nơi công nhân làm việc"
+    },
+    {
+      "dataset": "fact_material_consumption",
+      "field": "order_id",
+      "ref_dataset": "fact_production_order",
+      "ref_field": "order_id",
+      "evidence": "Khóa ngoại tham chiếu đến fact_production_order"
+    },
+    {
+      "dataset": "fact_material_consumption",
+      "field": "material_code",
+      "ref_dataset": "dim_material",
+      "ref_field": "material_code",
+      "evidence": "Khóa ngoại tham chiếu đến dim_material, mã vật tư sử dụng"
+    },
+    {
+      "dataset": "fact_material_consumption",
+      "field": "assembly_line_id",
+      "ref_dataset": "dim_assembly_line",
+      "ref_field": "assembly_line_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_assembly_line, nơi tiêu hao vật tư"
+    },
+    {
+      "dataset": "fact_material_consumption",
+      "field": "shift_id",
+      "ref_dataset": "dim_shift",
+      "ref_field": "shift_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_shift"
+    },
+    {
+      "dataset": "fact_production_routing",
+      "field": "product_id",
+      "ref_dataset": "dim_product",
+      "ref_field": "product_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_product"
+    },
+    {
+      "dataset": "fact_production_routing",
+      "field": "assembly_line_id",
+      "ref_dataset": "dim_assembly_line",
+      "ref_field": "assembly_line_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_assembly_line, dây chuyền thực hiện công đoạn"
+    },
+    {
+      "dataset": "fact_production_routing",
+      "field": "station_id",
+      "ref_dataset": "dim_station",
+      "ref_field": "station_id",
+      "evidence": "Khóa ngoại tham chiếu đến dim_station, trạm thực hiện"
+    }
+  ],
+  "fk_ref_field_missing": [
+    {
+      "dataset": "fact_stock_transfer",
+      "field": "from_warehouse_id",
+      "ref_dataset": "dim_warehouse",
+      "evidence": "Khóa ngoại tham chiếu đến dim_warehouse, kho xuất"
+    },
+    {
+      "dataset": "fact_stock_transfer",
+      "field": "to_warehouse_id",
+      "ref_dataset": "dim_warehouse",
+      "evidence": "Khóa ngoại tham chiếu đến dim_warehouse, kho nhập"
+    },
+    {
+      "dataset": "dim_assembly_line",
+      "field": "supervisor_id",
+      "ref_dataset": "dim_worker",
+      "evidence": "Khóa ngoại tham chiếu đến dim_worker, người chịu trách nhiệm dây chuyền"
+    },
+    {
+      "dataset": "fact_quality_inspection",
+      "field": "inspection_station",
+      "ref_dataset": "dim_station",
+      "evidence": "Khóa ngoại tham chiếu đến dim_station, nơi thực hiện kiểm tra"
+    },
+    {
+      "dataset": "fact_quality_inspection",
+      "field": "inspector_id",
+      "ref_dataset": "dim_worker",
+      "evidence": "Khóa ngoại tham chiếu đến dim_worker, người thực hiện kiểm tra"
+    }
+  ],
+  "glossary_domain_attach": [
+    {
+      "term_urn": "urn:li:glossaryTerm:3-way%20matching",
+      "term_name": "3-way matching",
+      "domain_urn": "urn:li:domain:cungngtt"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:abc%20classification",
+      "term_name": "abc classification",
+      "domain_urn": "urn:li:domain:logistic"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:actual%20cost",
+      "term_name": "actual cost",
+      "domain_urn": "urn:li:domain:tichnh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:aging%20inventory",
+      "term_name": "aging inventory",
+      "domain_urn": "urn:li:domain:logistic"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:andon",
+      "term_name": "andon",
+      "domain_urn": "urn:li:domain:snxut"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:approved%20supplier%20list",
+      "term_name": "approved supplier list",
+      "domain_urn": "urn:li:domain:cungngtt"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:balance%20sheet",
+      "term_name": "balance sheet",
+      "domain_urn": "urn:li:domain:tichnh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:benchmarking",
+      "term_name": "benchmarking",
+      "domain_urn": "urn:li:domain:phttrinxe"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:bill%20of%20lading%20%28b/l%29",
+      "term_name": "bill of lading (b/l)",
+      "domain_urn": "urn:li:domain:cungngnh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:bom%20%28bill%20of%20materials%29",
+      "term_name": "bom (bill of materials)",
+      "domain_urn": "urn:li:domain:snxut"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:bonded%20warehouse",
+      "term_name": "bonded warehouse",
+      "domain_urn": "urn:li:domain:cungngnh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:budget%20variance",
+      "term_name": "budget variance",
+      "domain_urn": "urn:li:domain:tichnh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:cad%20model%20%28computer-aided%20design%29",
+      "term_name": "cad model (computer-aided design)",
+      "domain_urn": "urn:li:domain:phttrinxe"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:cae%20%28computer-aided%20engineering%29",
+      "term_name": "cae (computer-aided engineering)",
+      "domain_urn": "urn:li:domain:phttrinxe"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:calibration",
+      "term_name": "calibration",
+      "domain_urn": "urn:li:domain:phttrinxe"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:capacity%20utilization",
+      "term_name": "capacity utilization",
+      "domain_urn": "urn:li:domain:snxut"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:capex%20%28capital%20expenditure%29",
+      "term_name": "capex (capital expenditure)",
+      "domain_urn": "urn:li:domain:tichnh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:cash%20conversion%20cycle",
+      "term_name": "cash conversion cycle",
+      "domain_urn": "urn:li:domain:tichnh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:certificate%20of%20origin%20%28co%29",
+      "term_name": "certificate of origin (co)",
+      "domain_urn": "urn:li:domain:cungngnh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:changeover%20time",
+      "term_name": "changeover time",
+      "domain_urn": "urn:li:domain:snxut"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:cif/fob",
+      "term_name": "cif/fob",
+      "domain_urn": "urn:li:domain:cungngnh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:cogs%20%28cost%20of%20goods%20sold%29",
+      "term_name": "cogs (cost of goods sold)",
+      "domain_urn": "urn:li:domain:tichnh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:commercial%20invoice",
+      "term_name": "commercial invoice",
+      "domain_urn": "urn:li:domain:cungngnh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:competitive%20benchmarking",
+      "term_name": "competitive benchmarking",
+      "domain_urn": "urn:li:domain:kinhdoanh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:contract%20management",
+      "term_name": "contract management",
+      "domain_urn": "urn:li:domain:cungngtt"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:conversion%20rate",
+      "term_name": "conversion rate",
+      "domain_urn": "urn:li:domain:kinhdoanh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:coverage%20date",
+      "term_name": "coverage date",
+      "domain_urn": "urn:li:domain:logistic"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:cross-docking",
+      "term_name": "cross-docking",
+      "domain_urn": "urn:li:domain:logistic"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:customer%20acquisition%20cost",
+      "term_name": "customer acquisition cost",
+      "domain_urn": "urn:li:domain:kinhdoanh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:customer%20lifetime%20value",
+      "term_name": "customer lifetime value",
+      "domain_urn": "urn:li:domain:kinhdoanh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:customer%20satisfaction%20index",
+      "term_name": "customer satisfaction index",
+      "domain_urn": "urn:li:domain:humi"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:customs%20clearance",
+      "term_name": "customs clearance",
+      "domain_urn": "urn:li:domain:cungngnh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:cycle%20count",
+      "term_name": "cycle count",
+      "domain_urn": "urn:li:domain:logistic"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:cycle%20time",
+      "term_name": "cycle time",
+      "domain_urn": "urn:li:domain:snxut"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:dealer%20margin",
+      "term_name": "dealer margin",
+      "domain_urn": "urn:li:domain:kinhdoanh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:dealer%20network",
+      "term_name": "dealer network",
+      "domain_urn": "urn:li:domain:kinhdoanh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:defect%20rate",
+      "term_name": "defect rate",
+      "domain_urn": "urn:li:domain:snxut"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:depreciation",
+      "term_name": "depreciation",
+      "domain_urn": "urn:li:domain:tichnh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:design%20freeze",
+      "term_name": "design freeze",
+      "domain_urn": "urn:li:domain:phttrinxe"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:dfm/dfa%20%28design%20for%20manufacturing/assembly%29",
+      "term_name": "dfm/dfa (design for manufacturing/assembly)",
+      "domain_urn": "urn:li:domain:phttrinxe"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:dio%20%28days%20inventory%20outstanding%29",
+      "term_name": "dio (days inventory outstanding)",
+      "domain_urn": "urn:li:domain:logistic"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:dpo%20%28days%20payable%20outstanding%29",
+      "term_name": "dpo (days payable outstanding)",
+      "domain_urn": "urn:li:domain:tichnh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:drop%20shipment",
+      "term_name": "drop shipment",
+      "domain_urn": "urn:li:domain:logistic"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:dso%20%28days%20sales%20outstanding%29",
+      "term_name": "dso (days sales outstanding)",
+      "domain_urn": "urn:li:domain:tichnh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:dual%20sourcing",
+      "term_name": "dual sourcing",
+      "domain_urn": "urn:li:domain:cungngnh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:dvp%26r%20%28design%20verification%20plan%20%26%20report%29",
+      "term_name": "dvp&r (design verification plan & report)",
+      "domain_urn": "urn:li:domain:phttrinxe"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:ebitda",
+      "term_name": "ebitda",
+      "domain_urn": "urn:li:domain:tichnh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:eoq%20%28economic%20order%20quantity%29",
+      "term_name": "eoq (economic order quantity)",
+      "domain_urn": "urn:li:domain:logistic"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:extended%20warranty",
+      "term_name": "extended warranty",
+      "domain_urn": "urn:li:domain:humi"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:fefo%20%28first%20expiry%20first%20out%29",
+      "term_name": "fefo (first expiry first out)",
+      "domain_urn": "urn:li:domain:logistic"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:fifo%20%28first%20in%20first%20out%29",
+      "term_name": "fifo (first in first out)",
+      "domain_urn": "urn:li:domain:logistic"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:first%20pass%20yield%20%28fpy%29",
+      "term_name": "first pass yield (fpy)",
+      "domain_urn": "urn:li:domain:snxut"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:first%20visit%20fix%20rate",
+      "term_name": "first visit fix rate",
+      "domain_urn": "urn:li:domain:humi"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:fleet%20availability%20rate",
+      "term_name": "fleet availability rate",
+      "domain_urn": "urn:li:domain:humi"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:fleet%20sales",
+      "term_name": "fleet sales",
+      "domain_urn": "urn:li:domain:kinhdoanh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:fmea%20%28failure%20mode%20and%20effects%20analysis%29",
+      "term_name": "fmea (failure mode and effects analysis)",
+      "domain_urn": "urn:li:domain:phttrinxe"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:force%20majeure",
+      "term_name": "force majeure",
+      "domain_urn": "urn:li:domain:cungngnh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:freight%20forwarder",
+      "term_name": "freight forwarder",
+      "domain_urn": "urn:li:domain:cungngnh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:geographic%20penetration",
+      "term_name": "geographic penetration",
+      "domain_urn": "urn:li:domain:kinhdoanh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:goods%20in%20transit%20%28git%29",
+      "term_name": "goods in transit (git)",
+      "domain_urn": "urn:li:domain:logistic"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:goodwill%20policy",
+      "term_name": "goodwill policy",
+      "domain_urn": "urn:li:domain:humi"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:grn%20%28goods%20received%20note%29",
+      "term_name": "grn (goods received note)",
+      "domain_urn": "urn:li:domain:cungngtt"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:gross%20margin",
+      "term_name": "gross margin",
+      "domain_urn": "urn:li:domain:tichnh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:hil%20testing%20%28hardware-in-the-loop%29",
+      "term_name": "hil testing (hardware-in-the-loop)",
+      "domain_urn": "urn:li:domain:phttrinxe"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:homologation",
+      "term_name": "homologation",
+      "domain_urn": "urn:li:domain:phttrinxe"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:hs%20code",
+      "term_name": "hs code",
+      "domain_urn": "urn:li:domain:cungngnh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:import%20duty",
+      "term_name": "import duty",
+      "domain_urn": "urn:li:domain:cungngnh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:incentive%20program",
+      "term_name": "incentive program",
+      "domain_urn": "urn:li:domain:kinhdoanh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:incoterms",
+      "term_name": "incoterms",
+      "domain_urn": "urn:li:domain:cungngnh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:inventory%20turnover",
+      "term_name": "inventory turnover",
+      "domain_urn": "urn:li:domain:logistic"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:irr%20%28internal%20rate%20of%20return%29",
+      "term_name": "irr (internal rate of return)",
+      "domain_urn": "urn:li:domain:tichnh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:jit%20%28just-in-time%29",
+      "term_name": "jit (just-in-time)",
+      "domain_urn": "urn:li:domain:snxut"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:just-in-time%20%28jit%29",
+      "term_name": "just-in-time (jit)",
+      "domain_urn": "urn:li:domain:cungngnh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:kanban",
+      "term_name": "kanban",
+      "domain_urn": "urn:li:domain:snxut"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:lead%20time",
+      "term_name": "lead time",
+      "domain_urn": "urn:li:domain:logistic"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:letter%20of%20credit%20%28l/c%29",
+      "term_name": "letter of credit (l/c)",
+      "domain_urn": "urn:li:domain:cungngnh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:local%20content",
+      "term_name": "local content",
+      "domain_urn": "urn:li:domain:cungngtt"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:make%20or%20buy%20decision",
+      "term_name": "make or buy decision",
+      "domain_urn": "urn:li:domain:cungngtt"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:market%20share",
+      "term_name": "market share",
+      "domain_urn": "urn:li:domain:kinhdoanh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:min-max%20stock",
+      "term_name": "min-max stock",
+      "domain_urn": "urn:li:domain:logistic"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:model%20lifecycle",
+      "term_name": "model lifecycle",
+      "domain_urn": "urn:li:domain:kinhdoanh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:months%20of%20inventory",
+      "term_name": "months of inventory",
+      "domain_urn": "urn:li:domain:kinhdoanh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:moq%20%28minimum%20order%20quantity%29",
+      "term_name": "moq (minimum order quantity)",
+      "domain_urn": "urn:li:domain:logistic"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:msrp%20%28manufacturer%27s%20suggested%20retail%20price%29",
+      "term_name": "msrp (manufacturer's suggested retail price)",
+      "domain_urn": "urn:li:domain:kinhdoanh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:mtbf%20%28mean%20time%20between%20failures%29",
+      "term_name": "mtbf (mean time between failures)",
+      "domain_urn": "urn:li:domain:humi"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:mttr%20%28mean%20time%20to%20repair%29",
+      "term_name": "mttr (mean time to repair)",
+      "domain_urn": "urn:li:domain:humi"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:ncr%20%28non-conformance%20report%29",
+      "term_name": "ncr (non-conformance report)",
+      "domain_urn": "urn:li:domain:cungngtt"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:nvh%20%28noise%2C%20vibration%2C%20harshness%29",
+      "term_name": "nvh (noise, vibration, harshness)",
+      "domain_urn": "urn:li:domain:phttrinxe"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:ocean%20freight",
+      "term_name": "ocean freight",
+      "domain_urn": "urn:li:domain:cungngnh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:oee%20%28overall%20equipment%20effectiveness%29",
+      "term_name": "oee (overall equipment effectiveness)",
+      "domain_urn": "urn:li:domain:snxut"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:opex%20%28operating%20expenses%29",
+      "term_name": "opex (operating expenses)",
+      "domain_urn": "urn:li:domain:tichnh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:option%20take%20rate",
+      "term_name": "option take rate",
+      "domain_urn": "urn:li:domain:kinhdoanh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:overturn%20rate",
+      "term_name": "overturn rate",
+      "domain_urn": "urn:li:domain:humi"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:p%26l%20%28profit%20%26%20loss%29",
+      "term_name": "p&l (profit & loss)",
+      "domain_urn": "urn:li:domain:tichnh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:packing%20list",
+      "term_name": "packing list",
+      "domain_urn": "urn:li:domain:cungngnh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:part%20return%20rate",
+      "term_name": "part return rate",
+      "domain_urn": "urn:li:domain:humi"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:parts%20availability%20rate",
+      "term_name": "parts availability rate",
+      "domain_urn": "urn:li:domain:humi"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:platform%20architecture",
+      "term_name": "platform architecture",
+      "domain_urn": "urn:li:domain:phttrinxe"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:po%20%28purchase%20order%29",
+      "term_name": "po (purchase order)",
+      "domain_urn": "urn:li:domain:cungngtt"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:preferential%20tariff",
+      "term_name": "preferential tariff",
+      "domain_urn": "urn:li:domain:cungngnh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:preferred%20supplier",
+      "term_name": "preferred supplier",
+      "domain_urn": "urn:li:domain:cungngtt"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:preventive%20maintenance",
+      "term_name": "preventive maintenance",
+      "domain_urn": "urn:li:domain:humi"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:production%20order",
+      "term_name": "production order",
+      "domain_urn": "urn:li:domain:snxut"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:prototype",
+      "term_name": "prototype",
+      "domain_urn": "urn:li:domain:phttrinxe"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:quality%20gate",
+      "term_name": "quality gate",
+      "domain_urn": "urn:li:domain:snxut"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:reorder%20point%20%28rop%29",
+      "term_name": "reorder point (rop)",
+      "domain_urn": "urn:li:domain:logistic"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:residual%20value",
+      "term_name": "residual value",
+      "domain_urn": "urn:li:domain:kinhdoanh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:rework%20rate",
+      "term_name": "rework rate",
+      "domain_urn": "urn:li:domain:snxut"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:rfq%20%28request%20for%20quotation%29",
+      "term_name": "rfq (request for quotation)",
+      "domain_urn": "urn:li:domain:cungngtt"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:routing",
+      "term_name": "routing",
+      "domain_urn": "urn:li:domain:snxut"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:rsm%20%28regional%20service%20manager%29",
+      "term_name": "rsm (regional service manager)",
+      "domain_urn": "urn:li:domain:humi"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:safety%20stock",
+      "term_name": "safety stock",
+      "domain_urn": "urn:li:domain:logistic"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:sales%20mix",
+      "term_name": "sales mix",
+      "domain_urn": "urn:li:domain:kinhdoanh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:sales%20target",
+      "term_name": "sales target",
+      "domain_urn": "urn:li:domain:kinhdoanh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:service%20absorption%20rate",
+      "term_name": "service absorption rate",
+      "domain_urn": "urn:li:domain:humi"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:service%20campaign",
+      "term_name": "service campaign",
+      "domain_urn": "urn:li:domain:humi"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:service%20retention%20rate",
+      "term_name": "service retention rate",
+      "domain_urn": "urn:li:domain:humi"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:shelf%20life",
+      "term_name": "shelf life",
+      "domain_urn": "urn:li:domain:logistic"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:smed%20%28single%20minute%20exchange%20of%20die%29",
+      "term_name": "smed (single minute exchange of die)",
+      "domain_urn": "urn:li:domain:snxut"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:soh%20%28stock%20on%20hand%29",
+      "term_name": "soh (stock on hand)",
+      "domain_urn": "urn:li:domain:logistic"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:sor%20%28statement%20of%20requirements%29",
+      "term_name": "sor (statement of requirements)",
+      "domain_urn": "urn:li:domain:phttrinxe"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:standard%20cost",
+      "term_name": "standard cost",
+      "domain_urn": "urn:li:domain:tichnh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:supplier%20audit",
+      "term_name": "supplier audit",
+      "domain_urn": "urn:li:domain:cungngtt"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:supplier%20development",
+      "term_name": "supplier development",
+      "domain_urn": "urn:li:domain:cungngtt"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:supplier%20evaluation",
+      "term_name": "supplier evaluation",
+      "domain_urn": "urn:li:domain:cungngtt"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:supplier%20tier%20management",
+      "term_name": "supplier tier management",
+      "domain_urn": "urn:li:domain:cungngtt"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:supply%20chain%20risk",
+      "term_name": "supply chain risk",
+      "domain_urn": "urn:li:domain:cungngnh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:takt%20time",
+      "term_name": "takt time",
+      "domain_urn": "urn:li:domain:snxut"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:technical%20service%20bulletin",
+      "term_name": "technical service bulletin",
+      "domain_urn": "urn:li:domain:humi"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:throughput",
+      "term_name": "throughput",
+      "domain_urn": "urn:li:domain:snxut"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:traceability",
+      "term_name": "traceability",
+      "domain_urn": "urn:li:domain:snxut"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:trade%20spend",
+      "term_name": "trade spend",
+      "domain_urn": "urn:li:domain:kinhdoanh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:transfer%20price",
+      "term_name": "transfer price",
+      "domain_urn": "urn:li:domain:tichnh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:unit%20economics",
+      "term_name": "unit economics",
+      "domain_urn": "urn:li:domain:tichnh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:variance%20analysis",
+      "term_name": "variance analysis",
+      "domain_urn": "urn:li:domain:tichnh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:vehicle%20off-road%20rate",
+      "term_name": "vehicle off-road rate",
+      "domain_urn": "urn:li:domain:humi"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:vendor%20managed%20inventory",
+      "term_name": "vendor managed inventory",
+      "domain_urn": "urn:li:domain:cungngtt"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:vendor%20scorecard",
+      "term_name": "vendor scorecard",
+      "domain_urn": "urn:li:domain:cungngtt"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:virtual%20validation",
+      "term_name": "virtual validation",
+      "domain_urn": "urn:li:domain:phttrinxe"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:vpcr%20%28verification%20prototype%20confirmation%20review%29",
+      "term_name": "vpcr (verification prototype confirmation review)",
+      "domain_urn": "urn:li:domain:phttrinxe"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:wacc%20%28weighted%20average%20cost%20of%20capital%29",
+      "term_name": "wacc (weighted average cost of capital)",
+      "domain_urn": "urn:li:domain:tichnh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:warranty%20claim",
+      "term_name": "warranty claim",
+      "domain_urn": "urn:li:domain:humi"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:warranty%20reserve",
+      "term_name": "warranty reserve",
+      "domain_urn": "urn:li:domain:humi"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:wholesale%20volume",
+      "term_name": "wholesale volume",
+      "domain_urn": "urn:li:domain:kinhdoanh"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:wip%20%28work%20in%20process%29",
+      "term_name": "wip (work in process)",
+      "domain_urn": "urn:li:domain:snxut"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:wms%20%28warehouse%20management%20system%29",
+      "term_name": "wms (warehouse management system)",
+      "domain_urn": "urn:li:domain:logistic"
+    },
+    {
+      "term_urn": "urn:li:glossaryTerm:working%20capital",
+      "term_name": "working capital",
+      "domain_urn": "urn:li:domain:tichnh"
+    }
+  ]
+}

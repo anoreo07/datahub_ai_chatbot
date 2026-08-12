@@ -1,15 +1,18 @@
 import uuid
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
+from typing import Any
 
 import structlog
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.auth.domain_utils import domain_key
 from app.auth.models import (
     AuditEvent,
     EntityAcl,
     UserContext,
 )
+from app.auth.rbac import RbacService
 from database.models import Entity, EntityAclDB
 
 log = structlog.get_logger()
@@ -19,6 +22,102 @@ class AuthorizationService:
     def __init__(self, session: AsyncSession | None = None) -> None:
         self._session = session
         self._in_memory_acls: dict[str, EntityAcl] = {}
+        self._rbac = RbacService(session=session)
+
+    # ------------------------------------------------------------------
+    # Domain RBAC — data-driven permission model
+    # ------------------------------------------------------------------
+
+    @property
+    def rbac(self) -> RbacService:
+        return self._rbac
+
+    async def refresh_permissions(self) -> None:
+        """Force-refresh the RBAC snapshot (called after admin role changes)."""
+        await self._rbac.refresh()
+
+    async def can_access_domain(self, user: UserContext, domain: str | None) -> bool:
+        return await self._rbac.can_access_domain(user, domain)
+
+    async def allowed_domains(self, user: UserContext) -> set[str]:
+        return await self._rbac.allowed_domains(user)
+
+    async def access_message(self, user: UserContext, domain: str | None) -> str | None:
+        return await self._rbac.access_message(user, domain)
+
+    async def filter_domains(
+        self, user: UserContext, domains: list[str | None]
+    ) -> list[str | None]:
+        """Return only the domains the user may access (admin keeps all)."""
+        allowed = await self.allowed_domains(user)
+        if "*" in allowed:
+            return list(domains)
+        return [d for d in domains if await self.can_access_domain(user, d)]
+
+    async def accessible_domains(self, user: UserContext) -> set[str]:
+        """Set of accessible domain keys; ``{"*"}`` for admins (full access)."""
+        allowed = await self.allowed_domains(user)
+        if "*" in allowed:
+            return {"*"}
+        keys: set[str] = set()
+        for d in allowed:
+            keys.add(domain_key(d))
+        return keys
+
+    async def filter_results_by_domain(
+        self,
+        user: UserContext,
+        results: Sequence[Any],
+        domain_of: Callable[[Any], str | None],
+    ) -> list[Any]:
+        """Post-retrieval domain filter for search results.
+
+        ``domain_of`` extracts an entity's domain from a result. Entities whose
+        domain is not granted to the user are dropped. Admin keeps everything.
+        """
+        if user.is_admin:
+            return list(results)
+        allowed = await self.accessible_domains(user)
+        if "*" in allowed:
+            return list(results)
+        kept: list[Any] = []
+        for r in results:
+            domain = (domain_of(r) or "").strip()
+            if not domain or domain_key(domain) in allowed:
+                kept.append(r)
+        return kept
+
+    async def _domain_of(self, entity_urn: str) -> str | None:
+        if self._session is None:
+            return None
+        try:
+            result = await self._session.execute(
+                select(Entity).where(Entity.urn == entity_urn)
+            )
+            entity = result.scalar_one_or_none()
+            if entity is None:
+                return None
+            return (entity.domain or (entity.payload or {}).get("domain") or "").strip() or None
+        except Exception:
+            return None
+
+    async def filter_entities_by_domain(
+        self,
+        user: UserContext,
+        entities: Sequence[Entity],
+    ) -> list[Entity]:
+        """Post-retrieval domain filtering: drop entities whose domain is not
+        granted to the user. Admin and entities without a domain pass through."""
+        if user.is_admin or "*" in await self.allowed_domains(user):
+            return list(entities)
+        result: list[Entity] = []
+        for e in entities:
+            domain = (e.domain or (e.payload or {}).get("domain") or "").strip()
+            if not domain:
+                result.append(e)
+            elif await self.can_access_domain(user, domain):
+                result.append(e)
+        return result
 
     async def can_view_entity(self, user: UserContext, entity_urn: str) -> bool:
         if user.is_admin:

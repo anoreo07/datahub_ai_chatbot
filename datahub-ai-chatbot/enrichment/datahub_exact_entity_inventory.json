@@ -1,0 +1,2998 @@
+{
+  "generated_at": "2026-08-12T15:51:39.767611",
+  "datasets": [
+    {
+      "dataset": "dim_certification",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_certification,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:cungngtt",
+      "domain_name": "CUNG ỨNG (TT)",
+      "description": "Danh mục chứng chỉ của nhà cung cấp",
+      "owner": {
+        "owners": [
+          {
+            "type": "NONE",
+            "owner": {
+              "urn": "urn:li:corpuser:dang-quang-huy",
+              "username": "dang-quang-huy",
+              "properties": {
+                "displayName": "Đặng Quang Huy",
+                "email": "huydq@vinfast.vn"
+              }
+            }
+          }
+        ]
+      },
+      "schema_fields_count": 6,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "dim_service_center",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_service_center,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:humi",
+      "domain_name": "HẬU MÃI",
+      "description": "Thông tin các trung tâm dịch vụ ủy quyền và trạm bảo dưỡng VinFast",
+      "owner": {
+        "owners": [
+          {
+            "type": "NONE",
+            "owner": {
+              "urn": "urn:li:corpuser:dang-quang-huy",
+              "username": "dang-quang-huy",
+              "properties": {
+                "displayName": "Đặng Quang Huy",
+                "email": "huydq@vinfast.vn"
+              }
+            }
+          }
+        ]
+      },
+      "schema_fields_count": 12,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "dim_assembly_line",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_assembly_line,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:snxut",
+      "domain_name": "SẢN XUẤT",
+      "description": "Danh mục dây chuyền lắp ráp trong nhà máy",
+      "owner": null,
+      "schema_fields_count": 10,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 2,
+      "downstream_count": 8
+    },
+    {
+      "dataset": "dim_contract",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_contract,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:cungngtt",
+      "domain_name": "CUNG ỨNG (TT)",
+      "description": "Thông tin hợp đồng cung cấp vật tư với nhà cung cấp",
+      "owner": null,
+      "schema_fields_count": 12,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "dim_cost_center",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_cost_center,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:tichnh",
+      "domain_name": "TÀI CHÍNH",
+      "description": "Danh mục trung tâm chi phí theo cấu trúc quản lý tài chính",
+      "owner": null,
+      "schema_fields_count": 10,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 1,
+      "downstream_count": 6
+    },
+    {
+      "dataset": "dim_country",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_country,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:cungngnh",
+      "domain_name": "CUNG ỨNG (NĐH)",
+      "description": "Danh mục quốc gia phục vụ nhập khẩu",
+      "owner": null,
+      "schema_fields_count": 12,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "dim_customer",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_customer,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:kinhdoanh",
+      "domain_name": "KINH DOANH",
+      "description": "Thông tin khách hàng cá nhân và doanh nghiệp",
+      "owner": null,
+      "schema_fields_count": 13,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "dim_dealer",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_dealer,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:kinhdoanh",
+      "domain_name": "KINH DOANH",
+      "description": "Thông tin chi tiết các đại lý ủy quyền của VinFast trên toàn quốc",
+      "owner": null,
+      "schema_fields_count": 13,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "dim_domestic_vendor",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_domestic_vendor,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:cungngtt",
+      "domain_name": "CUNG ỨNG (TT)",
+      "description": "Thông tin các nhà cung cấp vật tư, linh kiện trong nước",
+      "owner": null,
+      "schema_fields_count": 12,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "dim_fiscal_calendar",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_fiscal_calendar,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:tichnh",
+      "domain_name": "TÀI CHÍNH",
+      "description": "Lịch tài chính quy ước theo năm tài chính của doanh nghiệp",
+      "owner": null,
+      "schema_fields_count": 13,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "dim_foreign_vendor",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_foreign_vendor,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:cungngnh",
+      "domain_name": "CUNG ỨNG (NĐH)",
+      "description": "Danh mục nhà cung cấp nước ngoài của VinFast",
+      "owner": null,
+      "schema_fields_count": 14,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "dim_gl_account",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_gl_account,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:tichnh",
+      "domain_name": "TÀI CHÍNH",
+      "description": "Danh mục tài khoản kế toán theo hệ thống tài khoản quốc gia",
+      "owner": null,
+      "schema_fields_count": 8,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 4
+    },
+    {
+      "dataset": "dim_hs_code",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_hs_code,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:cungngnh",
+      "domain_name": "CUNG ỨNG (NĐH)",
+      "description": "Danh mục mã HS dùng trong nhập khẩu linh kiện ô tô",
+      "owner": null,
+      "schema_fields_count": 13,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "dim_import_duty",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_import_duty,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:cungngnh",
+      "domain_name": "CUNG ỨNG (NĐH)",
+      "description": "Danh mục thuế nhập khẩu linh kiện ô tô",
+      "owner": null,
+      "schema_fields_count": 14,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "dim_incoterm",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_incoterm,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:cungngnh",
+      "domain_name": "CUNG ỨNG (NĐH)",
+      "description": "Danh mục điều kiện Incoterms sử dụng trong hợp đồng nhập khẩu",
+      "owner": null,
+      "schema_fields_count": 10,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "dim_inventory_category",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_inventory_category,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:logistic",
+      "domain_name": "LOGISTIC",
+      "description": "Phân loại tồn kho ABC theo giá trị sử dụng",
+      "owner": null,
+      "schema_fields_count": 10,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 1,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "dim_material",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:logistic",
+      "domain_name": "LOGISTIC",
+      "description": "Danh mục vật tư nguyên vật liệu phục vụ sản xuất xe",
+      "owner": null,
+      "schema_fields_count": 13,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 13
+    },
+    {
+      "dataset": "dim_material_group",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material_group,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:cungngtt",
+      "domain_name": "CUNG ỨNG (TT)",
+      "description": "Danh mục nhóm vật tư sử dụng trong sản xuất",
+      "owner": null,
+      "schema_fields_count": 6,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "dim_plant",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_plant,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:snxut",
+      "domain_name": "SẢN XUẤT",
+      "description": "Danh mục nhà máy sản xuất của VinFast",
+      "owner": null,
+      "schema_fields_count": 10,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 7
+    },
+    {
+      "dataset": "dim_port",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_port,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:cungngnh",
+      "domain_name": "CUNG ỨNG (NĐH)",
+      "description": "Danh mục cảng biển và sân bay quốc tế",
+      "owner": null,
+      "schema_fields_count": 12,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "dim_procurement_category",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_procurement_category,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:cungngtt",
+      "domain_name": "CUNG ỨNG (TT)",
+      "description": "Danh mục hạng mục mua sắm của bộ phận thu mua",
+      "owner": null,
+      "schema_fields_count": 7,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "dim_product",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_product,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:snxut",
+      "domain_name": "SẢN XUẤT",
+      "description": "Danh mục sản phẩm xe ô tô, bao gồm tất cả phiên bản và tùy chọn",
+      "owner": null,
+      "schema_fields_count": 15,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 5
+    },
+    {
+      "dataset": "dim_product_model",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_product_model,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:kinhdoanh",
+      "domain_name": "KINH DOANH",
+      "description": "Danh mục các model xe VinFast và thông số kỹ thuật",
+      "owner": null,
+      "schema_fields_count": 11,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "dim_profit_center",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_profit_center,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:tichnh",
+      "domain_name": "TÀI CHÍNH",
+      "description": "Danh mục trung tâm lợi nhuận theo dòng sản phẩm",
+      "owner": null,
+      "schema_fields_count": 6,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 4
+    },
+    {
+      "dataset": "dim_promotion",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_promotion,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:kinhdoanh",
+      "domain_name": "KINH DOANH",
+      "description": "Danh mục chương trình khuyến mãi và ưu đãi",
+      "owner": null,
+      "schema_fields_count": 10,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "dim_region",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_region,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:kinhdoanh",
+      "domain_name": "KINH DOANH",
+      "description": "Danh mục khu vực địa lý và vùng miền quản lý",
+      "owner": null,
+      "schema_fields_count": 5,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "dim_repair_code",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_repair_code,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:humi",
+      "domain_name": "HẬU MÃI",
+      "description": "Danh mục mã sửa chữa tiêu chuẩn và quy trình tương ứng",
+      "owner": null,
+      "schema_fields_count": 8,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "dim_sales_channel",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_sales_channel,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:kinhdoanh",
+      "domain_name": "KINH DOANH",
+      "description": "Danh mục kênh bán hàng của VinFast",
+      "owner": null,
+      "schema_fields_count": 7,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "dim_shift",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_shift,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:snxut",
+      "domain_name": "SẢN XUẤT",
+      "description": "Danh mục ca làm việc trong nhà máy",
+      "owner": null,
+      "schema_fields_count": 12,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 1,
+      "downstream_count": 4
+    },
+    {
+      "dataset": "dim_spare_part",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_spare_part,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:humi",
+      "domain_name": "HẬU MÃI",
+      "description": "Danh mục phụ tùng, linh kiện thay thế VinFast",
+      "owner": null,
+      "schema_fields_count": 10,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "dim_station",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_station,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:snxut",
+      "domain_name": "SẢN XUẤT",
+      "description": "Danh mục trạm làm việc trên dây chuyền lắp ráp",
+      "owner": null,
+      "schema_fields_count": 10,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 1,
+      "downstream_count": 6
+    },
+    {
+      "dataset": "dim_supplier",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_supplier,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:logistic",
+      "domain_name": "LOGISTIC",
+      "description": "Danh mục nhà cung cấp vật tư và linh kiện",
+      "owner": null,
+      "schema_fields_count": 11,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 6
+    },
+    {
+      "dataset": "dim_technician",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_technician,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:humi",
+      "domain_name": "HẬU MÃI",
+      "description": "Danh mục kỹ thuật viên và thông tin chuyên môn",
+      "owner": null,
+      "schema_fields_count": 8,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "dim_uom",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_uom,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:logistic",
+      "domain_name": "LOGISTIC",
+      "description": "Danh mục đơn vị tính sử dụng trong quản lý vật tư",
+      "owner": null,
+      "schema_fields_count": 8,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "dim_vendor_invoice",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_vendor_invoice,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:tichnh",
+      "domain_name": "TÀI CHÍNH",
+      "description": "Hóa đơn mua hàng từ nhà cung cấp và dịch vụ",
+      "owner": null,
+      "schema_fields_count": 14,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 1,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "dim_warehouse",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_warehouse,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:logistic",
+      "domain_name": "LOGISTIC",
+      "description": "Danh mục kho hàng trong hệ thống logistics",
+      "owner": null,
+      "schema_fields_count": 10,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 1,
+      "downstream_count": 8
+    },
+    {
+      "dataset": "dim_warranty_policy",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_warranty_policy,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:humi",
+      "domain_name": "HẬU MÃI",
+      "description": "Danh mục chính sách bảo hành xe và phụ tùng",
+      "owner": null,
+      "schema_fields_count": 10,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "dim_worker",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_worker,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:snxut",
+      "domain_name": "SẢN XUẤT",
+      "description": "Danh mục công nhân sản xuất",
+      "owner": null,
+      "schema_fields_count": 11,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 1,
+      "downstream_count": 2
+    },
+    {
+      "dataset": "fact_actual_cost",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_actual_cost,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:tichnh",
+      "domain_name": "TÀI CHÍNH",
+      "description": "Chi phí sản xuất thực tế phát sinh theo từng đối tượng",
+      "owner": null,
+      "schema_fields_count": 11,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 3,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_ap_payable",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_ap_payable,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:tichnh",
+      "domain_name": "TÀI CHÍNH",
+      "description": "Công nợ phải trả nhà cung cấp vật tư và dịch vụ",
+      "owner": null,
+      "schema_fields_count": 13,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 1,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_ar_receivable",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_ar_receivable,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:tichnh",
+      "domain_name": "TÀI CHÍNH",
+      "description": "Công nợ phải thu từ khách hàng và đại lý",
+      "owner": null,
+      "schema_fields_count": 14,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_budget",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_budget,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:tichnh",
+      "domain_name": "TÀI CHÍNH",
+      "description": "Ngân sách chi phí và doanh thu theo từng trung tâm",
+      "owner": null,
+      "schema_fields_count": 12,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 3,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_budget_variance",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_budget_variance,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:tichnh",
+      "domain_name": "TÀI CHÍNH",
+      "description": "Chênh lệch giữa ngân sách và chi phí doanh thu thực tế",
+      "owner": null,
+      "schema_fields_count": 13,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 3,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_cash_flow",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_cash_flow,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:tichnh",
+      "domain_name": "TÀI CHÍNH",
+      "description": "Dòng tiền thu chi của doanh nghiệp theo từng ngày",
+      "owner": null,
+      "schema_fields_count": 12,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_contract_performance",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_contract_performance,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:cungngtt",
+      "domain_name": "CUNG ỨNG (TT)",
+      "description": "Đánh giá hiệu suất thực hiện hợp đồng",
+      "owner": null,
+      "schema_fields_count": 10,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_customer_complaint",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_customer_complaint,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:humi",
+      "domain_name": "HẬU MÃI",
+      "description": "Khiếu nại của khách hàng về sản phẩm và dịch vụ",
+      "owner": null,
+      "schema_fields_count": 12,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_customer_feedback",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_customer_feedback,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:kinhdoanh",
+      "domain_name": "KINH DOANH",
+      "description": "Phản hồi và khảo sát ý kiến khách hàng sau mua xe",
+      "owner": null,
+      "schema_fields_count": 11,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_customer_satisfaction",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_customer_satisfaction,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:humi",
+      "domain_name": "HẬU MÃI",
+      "description": "Đánh giá mức độ hài lòng của khách hàng sau dịch vụ",
+      "owner": null,
+      "schema_fields_count": 11,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_customs_declaration",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_customs_declaration,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:cungngnh",
+      "domain_name": "CUNG ỨNG (NĐH)",
+      "description": "Tờ khai hải quan cho lô hàng nhập khẩu linh kiện",
+      "owner": null,
+      "schema_fields_count": 15,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_dealer_performance",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_dealer_performance,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:kinhdoanh",
+      "domain_name": "KINH DOANH",
+      "description": "Đánh giá hiệu suất hoạt động của đại lý",
+      "owner": null,
+      "schema_fields_count": 10,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_defect_tracking",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_defect_tracking,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:snxut",
+      "domain_name": "SẢN XUẤT",
+      "description": "Theo dõi lỗi phát sinh trong quá trình sản xuất và lắp ráp",
+      "owner": null,
+      "schema_fields_count": 15,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 2,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_downtime",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_downtime,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:snxut",
+      "domain_name": "SẢN XUẤT",
+      "description": "Ghi nhận thời gian dừng máy và nguyên nhân ngừng sản xuất",
+      "owner": null,
+      "schema_fields_count": 13,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 3,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_fixed_asset",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_fixed_asset,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:tichnh",
+      "domain_name": "TÀI CHÍNH",
+      "description": "Tài sản cố định nhà xưởng, máy móc thiết bị sản xuất",
+      "owner": null,
+      "schema_fields_count": 15,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 2,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_foreign_audit",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_foreign_audit,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:cungngnh",
+      "domain_name": "CUNG ỨNG (NĐH)",
+      "description": "Kết quả kiểm toán nhà cung cấp nước ngoài",
+      "owner": null,
+      "schema_fields_count": 15,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_foreign_contract",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_foreign_contract,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:cungngnh",
+      "domain_name": "CUNG ỨNG (NĐH)",
+      "description": "Hợp đồng mua bán hàng hóa với nhà cung cấp nước ngoài",
+      "owner": null,
+      "schema_fields_count": 15,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_general_ledger",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_general_ledger,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:tichnh",
+      "domain_name": "TÀI CHÍNH",
+      "description": "Sổ cái ghi nhận tất cả bút toán kế toán của doanh nghiệp",
+      "owner": null,
+      "schema_fields_count": 15,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 3,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_goods_issue",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_goods_issue,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:logistic",
+      "domain_name": "LOGISTIC",
+      "description": "Phiếu xuất kho cho sản xuất hoặc các mục đích khác",
+      "owner": null,
+      "schema_fields_count": 12,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 4,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_goods_receipt",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_goods_receipt,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:logistic",
+      "domain_name": "LOGISTIC",
+      "description": "Phiếu nhập kho ghi nhận hàng hóa từ nhà cung cấp",
+      "owner": null,
+      "schema_fields_count": 13,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 4,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_import_cost",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_import_cost,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:cungngnh",
+      "domain_name": "CUNG ỨNG (NĐH)",
+      "description": "Chi phí nhập khẩu linh kiện tổng hợp",
+      "owner": null,
+      "schema_fields_count": 15,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_import_order",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_import_order,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:cungngnh",
+      "domain_name": "CUNG ỨNG (NĐH)",
+      "description": "Đơn nhập khẩu linh kiện từ nhà cung cấp nước ngoài",
+      "owner": null,
+      "schema_fields_count": 15,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_import_schedule",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_import_schedule,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:cungngnh",
+      "domain_name": "CUNG ỨNG (NĐH)",
+      "description": "Lịch trình nhập khẩu linh kiện theo kế hoạch sản xuất",
+      "owner": null,
+      "schema_fields_count": 14,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_incentive_claim",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_incentive_claim,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:kinhdoanh",
+      "domain_name": "KINH DOANH",
+      "description": "Yêu cầu và chi trả ưu đãi, hỗ trợ cho đại lý và khách hàng",
+      "owner": null,
+      "schema_fields_count": 10,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_inventory",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_inventory,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:logistic",
+      "domain_name": "LOGISTIC",
+      "description": "Tồn kho hiện tại của từng vật tư tại từng kho",
+      "owner": null,
+      "schema_fields_count": 13,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 2,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_inventory_forecast",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_inventory_forecast,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:logistic",
+      "domain_name": "LOGISTIC",
+      "description": "Dự báo tồn kho dựa trên tiêu thụ lịch sử và kế hoạch sản xuất",
+      "owner": null,
+      "schema_fields_count": 13,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 2,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_inventory_movement",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_inventory_movement,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:logistic",
+      "domain_name": "LOGISTIC",
+      "description": "Nhật ký di chuyển tồn kho chi tiết từng giao dịch",
+      "owner": null,
+      "schema_fields_count": 11,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 2,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_lead_management",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_lead_management,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:kinhdoanh",
+      "domain_name": "KINH DOANH",
+      "description": "Quản lý khách hàng tiềm năng từ các chiến dịch marketing",
+      "owner": null,
+      "schema_fields_count": 13,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_lead_time",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_lead_time,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:logistic",
+      "domain_name": "LOGISTIC",
+      "description": "Theo dõi thời gian đặt hàng và giao hàng từ nhà cung cấp",
+      "owner": null,
+      "schema_fields_count": 13,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 3,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_letter_of_credit",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_letter_of_credit,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:cungngnh",
+      "domain_name": "CUNG ỨNG (NĐH)",
+      "description": "Thư tín dụng dùng trong thanh toán nhập khẩu",
+      "owner": null,
+      "schema_fields_count": 15,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_local_content",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_local_content,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:cungngtt",
+      "domain_name": "CUNG ỨNG (TT)",
+      "description": "Tỷ lệ nội địa hóa và giá trị linh kiện trong nước",
+      "owner": null,
+      "schema_fields_count": 10,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_maintenance_record",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_maintenance_record,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:humi",
+      "domain_name": "HẬU MÃI",
+      "description": "Lịch sử bảo dưỡng định kỳ của từng xe",
+      "owner": null,
+      "schema_fields_count": 13,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_market_share",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_market_share,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:kinhdoanh",
+      "domain_name": "KINH DOANH",
+      "description": "Dữ liệu thị phần của VinFast theo khu vực và thời gian",
+      "owner": null,
+      "schema_fields_count": 10,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_material_consumption",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_material_consumption,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:snxut",
+      "domain_name": "SẢN XUẤT",
+      "description": "Tiêu hao vật tư trong quá trình sản xuất xe",
+      "owner": null,
+      "schema_fields_count": 12,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 4,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_non_conformance",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_non_conformance,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:cungngtt",
+      "domain_name": "CUNG ỨNG (TT)",
+      "description": "Biên bản không phù hợp khi nhập hàng hoặc trong sản xuất",
+      "owner": null,
+      "schema_fields_count": 12,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_oee_metrics",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_oee_metrics,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:snxut",
+      "domain_name": "SẢN XUẤT",
+      "description": "Chỉ số OEE tổng hợp hiệu quả thiết bị tổng thể",
+      "owner": null,
+      "schema_fields_count": 14,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 2,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_part_inventory",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_part_inventory,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:humi",
+      "domain_name": "HẬU MÃI",
+      "description": "Tồn kho phụ tùng tại các trung tâm dịch vụ",
+      "owner": null,
+      "schema_fields_count": 9,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_physical_inventory",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_physical_inventory,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:logistic",
+      "domain_name": "LOGISTIC",
+      "description": "Kết quả kiểm kê thực tế đối chiếu với tồn kho hệ thống",
+      "owner": null,
+      "schema_fields_count": 13,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 2,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_production_order",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_order,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:snxut",
+      "domain_name": "SẢN XUẤT",
+      "description": "Lệnh sản xuất xe, bao gồm thông tin chi tiết từng lô xe được sản xuất",
+      "owner": null,
+      "schema_fields_count": 14,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 3,
+      "downstream_count": 7
+    },
+    {
+      "dataset": "fact_production_output",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_output,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:snxut",
+      "domain_name": "SẢN XUẤT",
+      "description": "Sản lượng sản xuất thực tế theo từng ca và dây chuyền",
+      "owner": null,
+      "schema_fields_count": 12,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 5,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_production_routing",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_routing,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:snxut",
+      "domain_name": "SẢN XUẤT",
+      "description": "Quy trình sản xuất và trình tự các công đoạn chế tạo xe",
+      "owner": null,
+      "schema_fields_count": 15,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 3,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_purchase_order",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_purchase_order,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:logistic",
+      "domain_name": "LOGISTIC",
+      "description": "Đơn mua hàng đặt mua vật tư từ nhà cung cấp",
+      "owner": null,
+      "schema_fields_count": 15,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 2,
+      "downstream_count": 2
+    },
+    {
+      "dataset": "fact_purchase_requisition",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_purchase_requisition,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:cungngtt",
+      "domain_name": "CUNG ỨNG (TT)",
+      "description": "Yêu cầu mua hàng nội bộ từ các bộ phận sản xuất",
+      "owner": null,
+      "schema_fields_count": 13,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_quality_inbound",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_quality_inbound,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:cungngnh",
+      "domain_name": "CUNG ỨNG (NĐH)",
+      "description": "Kết quả kiểm tra chất lượng hàng nhập khẩu đầu vào",
+      "owner": null,
+      "schema_fields_count": 15,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_quality_inspection",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_quality_inspection,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:snxut",
+      "domain_name": "SẢN XUẤT",
+      "description": "Kết quả kiểm tra chất lượng tại các trạm kiểm định",
+      "owner": null,
+      "schema_fields_count": 14,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 3,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_recall",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_recall,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:humi",
+      "domain_name": "HẬU MÃI",
+      "description": "Thông tin triệu hồi xe do lỗi kỹ thuật hoặc an toàn",
+      "owner": null,
+      "schema_fields_count": 12,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_reorder_alert",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_reorder_alert,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:logistic",
+      "domain_name": "LOGISTIC",
+      "description": "Cảnh báo tái đặt hàng khi tồn kho dưới điểm tái đặt hàng",
+      "owner": null,
+      "schema_fields_count": 13,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 3,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_revenue",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_revenue,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:tichnh",
+      "domain_name": "TÀI CHÍNH",
+      "description": "Doanh thu bán xe và dịch vụ theo từng kỳ",
+      "owner": null,
+      "schema_fields_count": 14,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 2,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_rfq",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_rfq,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:cungngtt",
+      "domain_name": "CUNG ỨNG (TT)",
+      "description": "Yêu cầu báo giá gửi đến các nhà cung cấp",
+      "owner": null,
+      "schema_fields_count": 12,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_sales_delivery",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_sales_delivery,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:kinhdoanh",
+      "domain_name": "KINH DOANH",
+      "description": "Thông tin bàn giao xe cho khách hàng",
+      "owner": null,
+      "schema_fields_count": 10,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_sales_order",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_sales_order,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:kinhdoanh",
+      "domain_name": "KINH DOANH",
+      "description": "Thông tin chi tiết đơn đặt hàng xe và phụ kiện",
+      "owner": null,
+      "schema_fields_count": 14,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_sales_target",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_sales_target,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:kinhdoanh",
+      "domain_name": "KINH DOANH",
+      "description": "Chỉ tiêu bán hàng theo đại lý và thời gian",
+      "owner": null,
+      "schema_fields_count": 10,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_service_appointment",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_service_appointment,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:humi",
+      "domain_name": "HẬU MÃI",
+      "description": "Lịch hẹn dịch vụ bảo dưỡng và sửa chữa của khách hàng",
+      "owner": null,
+      "schema_fields_count": 11,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_service_campaign",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_service_campaign,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:humi",
+      "domain_name": "HẬU MÃI",
+      "description": "Chiến dịch dịch vụ đặc biệt và triệu hồi chủ động",
+      "owner": null,
+      "schema_fields_count": 10,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_service_order",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_service_order,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:humi",
+      "domain_name": "HẬU MÃI",
+      "description": "Phiếu sửa chữa và chi tiết dịch vụ thực hiện cho xe",
+      "owner": null,
+      "schema_fields_count": 15,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_shipping_manifest",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_shipping_manifest,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:cungngnh",
+      "domain_name": "CUNG ỨNG (NĐH)",
+      "description": "Vận đơn hàng hóa nhập khẩu",
+      "owner": null,
+      "schema_fields_count": 15,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_standard_cost",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_standard_cost,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:tichnh",
+      "domain_name": "TÀI CHÍNH",
+      "description": "Chi phí tiêu chuẩn được xây dựng cho từng sản phẩm",
+      "owner": null,
+      "schema_fields_count": 12,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 2,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_stock_transfer",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_stock_transfer,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:logistic",
+      "domain_name": "LOGISTIC",
+      "description": "Chuyển kho giữa các vị trí trong cùng nhà máy hoặc khác nhà máy",
+      "owner": null,
+      "schema_fields_count": 13,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 2,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_test_drive",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_test_drive,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:kinhdoanh",
+      "domain_name": "KINH DOANH",
+      "description": "Thông tin lịch hẹn và kết quả lái thử xe",
+      "owner": null,
+      "schema_fields_count": 11,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_vehicle_history",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_vehicle_history,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:humi",
+      "domain_name": "HẬU MÃI",
+      "description": "Lịch sử toàn diện của từng xe từ khi xuất xưởng",
+      "owner": null,
+      "schema_fields_count": 9,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_vendor_audit",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_vendor_audit,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:cungngtt",
+      "domain_name": "CUNG ỨNG (TT)",
+      "description": "Lịch sử kiểm toán và đánh giá nhà cung cấp",
+      "owner": null,
+      "schema_fields_count": 12,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_vendor_evaluation",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_vendor_evaluation,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:cungngtt",
+      "domain_name": "CUNG ỨNG (TT)",
+      "description": "Đánh giá tổng quan nhà cung cấp theo từng kỳ",
+      "owner": null,
+      "schema_fields_count": 10,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_vendor_payment",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_vendor_payment,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:cungngtt",
+      "domain_name": "CUNG ỨNG (TT)",
+      "description": "Lịch sử thanh toán cho nhà cung cấp",
+      "owner": null,
+      "schema_fields_count": 11,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_vendor_quality",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_vendor_quality,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:cungngtt",
+      "domain_name": "CUNG ỨNG (TT)",
+      "description": "Dữ liệu chất lượng hàng hóa từ nhà cung cấp",
+      "owner": null,
+      "schema_fields_count": 13,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_vendor_scorecard",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_vendor_scorecard,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:cungngtt",
+      "domain_name": "CUNG ỨNG (TT)",
+      "description": "Bảng điểm tổng hợp hiệu suất nhà cung cấp theo thời gian",
+      "owner": null,
+      "schema_fields_count": 11,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_warranty_claim",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_warranty_claim,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:humi",
+      "domain_name": "HẬU MÃI",
+      "description": "Yêu cầu bảo hành từ đại lý và trung tâm dịch vụ",
+      "owner": null,
+      "schema_fields_count": 13,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_wip_tracking",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_wip_tracking,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": "urn:li:domain:snxut",
+      "domain_name": "SẢN XUẤT",
+      "description": "Theo dõi sản phẩm dở dang trên dây chuyền sản xuất",
+      "owner": null,
+      "schema_fields_count": 12,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 3,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "dim_battery_pack",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_battery_pack,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": null,
+      "domain_name": null,
+      "description": "Danh mục bộ pin xe điện VinFast",
+      "owner": null,
+      "schema_fields_count": 14,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "dim_bms_config",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_bms_config,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": null,
+      "domain_name": null,
+      "description": "Cấu hình hệ thống quản lý pin (BMS)",
+      "owner": null,
+      "schema_fields_count": 15,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "dim_charging_connector",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_charging_connector,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": null,
+      "domain_name": null,
+      "description": "Danh mục đầu cắm sạc tại trạm VGreen",
+      "owner": null,
+      "schema_fields_count": 12,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "dim_charging_station",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_charging_station,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": null,
+      "domain_name": null,
+      "description": "Danh mục trạm sạc điện VinFast trên toàn quốc",
+      "owner": null,
+      "schema_fields_count": 13,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "dim_component",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_component,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": null,
+      "domain_name": null,
+      "description": "Danh mục linh kiện sử dụng trong thiết kế xe",
+      "owner": null,
+      "schema_fields_count": 13,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "dim_drawing",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_drawing,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": null,
+      "domain_name": null,
+      "description": "Danh mục bản vẽ kỹ thuật",
+      "owner": null,
+      "schema_fields_count": 14,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "dim_engineering_change",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_engineering_change,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": null,
+      "domain_name": null,
+      "description": "Danh mục thay đổi kỹ thuật trên sản phẩm",
+      "owner": null,
+      "schema_fields_count": 15,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "dim_ev_model",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_ev_model,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": null,
+      "domain_name": null,
+      "description": "Danh mục model xe điện VinFast",
+      "owner": null,
+      "schema_fields_count": 13,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "dim_ev_owner",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_ev_owner,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": null,
+      "domain_name": null,
+      "description": "Danh mục chủ sở hữu xe điện VinFast",
+      "owner": null,
+      "schema_fields_count": 11,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "dim_platform",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_platform,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": null,
+      "domain_name": null,
+      "description": "Danh mục nền tảng khung gầm xe điện",
+      "owner": null,
+      "schema_fields_count": 12,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "dim_project",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_project,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": null,
+      "domain_name": null,
+      "description": "Danh mục dự án phát triển xe của VinFast",
+      "owner": null,
+      "schema_fields_count": 13,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "dim_specification",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_specification,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": null,
+      "domain_name": null,
+      "description": "Danh mục thông số kỹ thuật của xe và linh kiện",
+      "owner": null,
+      "schema_fields_count": 13,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_battery_health",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_battery_health,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": null,
+      "domain_name": null,
+      "description": "Tình trạng sức khỏe pin xe điện",
+      "owner": null,
+      "schema_fields_count": 14,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_battery_swap",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_battery_swap,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": null,
+      "domain_name": null,
+      "description": "Giao dịch đổi pin cho xe điện VinFast",
+      "owner": null,
+      "schema_fields_count": 13,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_bom_engineering",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_bom_engineering,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": null,
+      "domain_name": null,
+      "description": "BOM kỹ thuật (Engineering BOM)",
+      "owner": null,
+      "schema_fields_count": 15,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_change_request",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_change_request,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": null,
+      "domain_name": null,
+      "description": "Yêu cầu thay đổi sản phẩm/quy trình",
+      "owner": null,
+      "schema_fields_count": 15,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_charging_session",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_charging_session,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": null,
+      "domain_name": null,
+      "description": "Chi tiết phiên sạc tại trạm sạc VGreen",
+      "owner": null,
+      "schema_fields_count": 15,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_charging_station_maintenance",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_charging_station_maintenance,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": null,
+      "domain_name": null,
+      "description": "Lịch sử bảo trì trạm sạc VGreen",
+      "owner": null,
+      "schema_fields_count": 14,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_design_release",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_design_release,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": null,
+      "domain_name": null,
+      "description": "Phát hành thiết kế bản vẽ và tài liệu kỹ thuật",
+      "owner": null,
+      "schema_fields_count": 12,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_dvp",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_dvp,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": null,
+      "domain_name": null,
+      "description": "Kế hoạch xác nhận thiết kế (DVP)",
+      "owner": null,
+      "schema_fields_count": 14,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_energy_consumption",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_energy_consumption,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": null,
+      "domain_name": null,
+      "description": "Tiêu thụ năng lượng của xe điện",
+      "owner": null,
+      "schema_fields_count": 13,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_ev_fleet",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_ev_fleet,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": null,
+      "domain_name": null,
+      "description": "Dữ liệu đội xe điện (dành cho quản lý vận hành)",
+      "owner": null,
+      "schema_fields_count": 13,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_fmea",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_fmea,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": null,
+      "domain_name": null,
+      "description": "Phân tích chế độ lỗi và ảnh hưởng (FMEA)",
+      "owner": null,
+      "schema_fields_count": 15,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_homologation",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_homologation,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": null,
+      "domain_name": null,
+      "description": "Chứng nhận kiểu (Homologation) cho xe điện",
+      "owner": null,
+      "schema_fields_count": 14,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_prototype",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_prototype,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": null,
+      "domain_name": null,
+      "description": "Quản lý nguyên mẫu xe trong quá trình phát triển",
+      "owner": null,
+      "schema_fields_count": 14,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_range_tracking",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_range_tracking,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": null,
+      "domain_name": null,
+      "description": "Theo dõi phạm vi hoạt động thực tế của xe điện",
+      "owner": null,
+      "schema_fields_count": 13,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_soc_log",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_soc_log,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": null,
+      "domain_name": null,
+      "description": "Log trạng thái sạc pin (SOC) theo thời gian thực",
+      "owner": null,
+      "schema_fields_count": 13,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_telemetry",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_telemetry,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": null,
+      "domain_name": null,
+      "description": "Dữ liệu từ xa (telemetry) của xe điện",
+      "owner": null,
+      "schema_fields_count": 15,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_test_cycle",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_test_cycle,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": null,
+      "domain_name": null,
+      "description": "Chu kỳ thử nghiệm xe điện và linh kiện",
+      "owner": null,
+      "schema_fields_count": 15,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    },
+    {
+      "dataset": "fact_test_result",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_test_result,PROD)",
+      "platform": "redshift",
+      "environment": "PROD",
+      "domain_urn": null,
+      "domain_name": null,
+      "description": "Kết quả thử nghiệm xe và linh kiện",
+      "owner": null,
+      "schema_fields_count": 15,
+      "schema_version": 0,
+      "primary_keys": [],
+      "foreign_keys_count": 0,
+      "dataset_glossary_terms": [],
+      "upstream_count": 0,
+      "downstream_count": 0
+    }
+  ],
+  "glossary_terms": [
+    {
+      "urn": "urn:li:glossaryTerm:3-way%20matching",
+      "name": "3-Way Matching"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:abc%20classification",
+      "name": "ABC Classification"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:AccountBalance",
+      "name": "AccountBalance"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:actual%20cost",
+      "name": "Actual Cost"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:CustomerAccount",
+      "name": "CustomerAccount"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:SavingAccount",
+      "name": "SavingAccount"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:aging%20inventory",
+      "name": "Aging Inventory"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:andon",
+      "name": "Andon"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:approved%20supplier%20list",
+      "name": "Approved Supplier List"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:balance%20sheet",
+      "name": "Balance Sheet"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:benchmarking",
+      "name": "Benchmarking"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:bill%20of%20lading%20%28b/l%29",
+      "name": "Bill of Lading (B/L)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:bms%20%28battery%20management%20system%29",
+      "name": "BMS (Battery Management System)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:bom%20%28bill%20of%20materials%29",
+      "name": "BOM (Bill of Materials)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:bonded%20warehouse",
+      "name": "Bonded Warehouse"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:budget%20variance",
+      "name": "Budget Variance"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:cad%20model%20%28computer-aided%20design%29",
+      "name": "CAD Model (Computer-Aided Design)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:cae%20%28computer-aided%20engineering%29",
+      "name": "CAE (Computer-Aided Engineering)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:calibration",
+      "name": "Calibration"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:capacity%20utilization",
+      "name": "Capacity Utilization"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:capex%20%28capital%20expenditure%29",
+      "name": "CAPEX (Capital Expenditure)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:cash%20conversion%20cycle",
+      "name": "Cash Conversion Cycle"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:ccs%20%28combined%20charging%20system%29",
+      "name": "CCS (Combined Charging System)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:certificate%20of%20origin%20%28co%29",
+      "name": "Certificate of Origin (CO)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:changeover%20time",
+      "name": "Changeover Time"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:cif/fob",
+      "name": "CIF/FOB"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:cogs%20%28cost%20of%20goods%20sold%29",
+      "name": "COGS (Cost of Goods Sold)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:commercial%20invoice",
+      "name": "Commercial Invoice"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:competitive%20benchmarking",
+      "name": "Competitive Benchmarking"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:contract%20management",
+      "name": "Contract Management"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:conversion%20rate",
+      "name": "Conversion Rate"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:coverage%20date",
+      "name": "Coverage Date"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:cross-docking",
+      "name": "Cross-docking"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:customer%20acquisition%20cost",
+      "name": "Customer Acquisition Cost"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:customer%20lifetime%20value",
+      "name": "Customer Lifetime Value"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:customer%20satisfaction%20index",
+      "name": "Customer Satisfaction Index"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:customs%20clearance",
+      "name": "Customs Clearance"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:cycle%20count",
+      "name": "Cycle Count"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:cycle%20time",
+      "name": "Cycle Time"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:dc%20fast%20charger",
+      "name": "DC Fast Charger"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:dealer%20margin",
+      "name": "Dealer Margin"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:dealer%20network",
+      "name": "Dealer Network"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:defect%20rate",
+      "name": "Defect Rate"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:depreciation",
+      "name": "Depreciation"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:design%20freeze",
+      "name": "Design Freeze"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:dfm/dfa%20%28design%20for%20manufacturing/assembly%29",
+      "name": "DFM/DFA (Design for Manufacturing/Assembly)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:dio%20%28days%20inventory%20outstanding%29",
+      "name": "DIO (Days Inventory Outstanding)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:dpo%20%28days%20payable%20outstanding%29",
+      "name": "DPO (Days Payable Outstanding)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:drop%20shipment",
+      "name": "Drop Shipment"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:dso%20%28days%20sales%20outstanding%29",
+      "name": "DSO (Days Sales Outstanding)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:dual%20sourcing",
+      "name": "Dual Sourcing"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:dvp%26r%20%28design%20verification%20plan%20%26%20report%29",
+      "name": "DVP&R (Design Verification Plan & Report)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:ebitda",
+      "name": "EBITDA"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:eoq%20%28economic%20order%20quantity%29",
+      "name": "EOQ (Economic Order Quantity)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:extended%20warranty",
+      "name": "Extended Warranty"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:fast%20charging",
+      "name": "Fast Charging"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:fefo%20%28first%20expiry%20first%20out%29",
+      "name": "FEFO (First Expiry First Out)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:fifo%20%28first%20in%20first%20out%29",
+      "name": "FIFO (First In First Out)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:first%20pass%20yield%20%28fpy%29",
+      "name": "First Pass Yield (FPY)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:first%20visit%20fix%20rate",
+      "name": "First Visit Fix Rate"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:fleet%20availability%20rate",
+      "name": "Fleet Availability Rate"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:fleet%20sales",
+      "name": "Fleet Sales"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:fmea%20%28failure%20mode%20and%20effects%20analysis%29",
+      "name": "FMEA (Failure Mode and Effects Analysis)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:force%20majeure",
+      "name": "Force Majeure"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:freight%20forwarder",
+      "name": "Freight Forwarder"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:geographic%20penetration",
+      "name": "Geographic Penetration"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:goods%20in%20transit%20%28git%29",
+      "name": "Goods In Transit (GIT)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:goodwill%20policy",
+      "name": "Goodwill Policy"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:grn%20%28goods%20received%20note%29",
+      "name": "GRN (Goods Received Note)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:gross%20margin",
+      "name": "Gross Margin"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:hil%20testing%20%28hardware-in-the-loop%29",
+      "name": "HIL Testing (Hardware-in-the-Loop)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:homologation",
+      "name": "Homologation"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:hs%20code",
+      "name": "HS Code"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:import%20duty",
+      "name": "Import Duty"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:incentive%20program",
+      "name": "Incentive Program"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:incoterms",
+      "name": "Incoterms"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:inventory%20turnover",
+      "name": "Inventory Turnover"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:ip%20rating%20%28ingress%20protection%29",
+      "name": "IP Rating (Ingress Protection)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:irr%20%28internal%20rate%20of%20return%29",
+      "name": "IRR (Internal Rate of Return)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:jit%20%28just-in-time%29",
+      "name": "JIT (Just-In-Time)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:just-in-time%20%28jit%29",
+      "name": "Just-in-Time (JIT)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:kanban",
+      "name": "Kanban"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:kwh%20%28kilowatt-gi%E1%BB%9D%29",
+      "name": "kWh (Kilowatt-giờ)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:lead%20time",
+      "name": "Lead Time"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:letter%20of%20credit%20%28l/c%29",
+      "name": "Letter of Credit (L/C)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:lfp%20battery",
+      "name": "LFP Battery"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:lithium-ion",
+      "name": "Lithium-ion"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:local%20content",
+      "name": "Local Content"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:make%20or%20buy%20decision",
+      "name": "Make or Buy Decision"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:market%20share",
+      "name": "Market Share"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:min-max%20stock",
+      "name": "Min-Max Stock"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:model%20lifecycle",
+      "name": "Model Lifecycle"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:months%20of%20inventory",
+      "name": "Months of Inventory"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:moq%20%28minimum%20order%20quantity%29",
+      "name": "MOQ (Minimum Order Quantity)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:msrp%20%28manufacturer%27s%20suggested%20retail%20price%29",
+      "name": "MSRP (Manufacturer's Suggested Retail Price)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:mtbf%20%28mean%20time%20between%20failures%29",
+      "name": "MTBF (Mean Time Between Failures)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:mttr%20%28mean%20time%20to%20repair%29",
+      "name": "MTTR (Mean Time To Repair)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:ncr%20%28non-conformance%20report%29",
+      "name": "NCR (Non-Conformance Report)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:nmc%20battery",
+      "name": "NMC Battery"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:nvh%20%28noise%2C%20vibration%2C%20harshness%29",
+      "name": "NVH (Noise, Vibration, Harshness)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:ocean%20freight",
+      "name": "Ocean Freight"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:oee%20%28overall%20equipment%20effectiveness%29",
+      "name": "OEE (Overall Equipment Effectiveness)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:one%20pedal%20driving",
+      "name": "One Pedal Driving"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:opex%20%28operating%20expenses%29",
+      "name": "OPEX (Operating Expenses)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:option%20take%20rate",
+      "name": "Option Take Rate"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:overturn%20rate",
+      "name": "Overturn Rate"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:p%26l%20%28profit%20%26%20loss%29",
+      "name": "P&L (Profit & Loss)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:packing%20list",
+      "name": "Packing List"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:part%20return%20rate",
+      "name": "Part Return Rate"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:parts%20availability%20rate",
+      "name": "Parts Availability Rate"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:platform%20architecture",
+      "name": "Platform Architecture"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:po%20%28purchase%20order%29",
+      "name": "PO (Purchase Order)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:preferential%20tariff",
+      "name": "Preferential Tariff"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:preferred%20supplier",
+      "name": "Preferred Supplier"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:preventive%20maintenance",
+      "name": "Preventive Maintenance"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:production%20order",
+      "name": "Production Order"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:prototype",
+      "name": "Prototype"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:quality%20gate",
+      "name": "Quality Gate"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:range%20%28t%E1%BA%A7m%20xa%29",
+      "name": "Range (Tầm xa)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:regenerative%20braking",
+      "name": "Regenerative Braking"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:reorder%20point%20%28rop%29",
+      "name": "Reorder Point (ROP)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:residual%20value",
+      "name": "Residual Value"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:rework%20rate",
+      "name": "Rework Rate"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:rfq%20%28request%20for%20quotation%29",
+      "name": "RFQ (Request for Quotation)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:routing",
+      "name": "Routing"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:rsm%20%28regional%20service%20manager%29",
+      "name": "RSM (Regional Service Manager)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:safety%20stock",
+      "name": "Safety Stock"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:sales%20mix",
+      "name": "Sales Mix"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:sales%20target",
+      "name": "Sales Target"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:service%20absorption%20rate",
+      "name": "Service Absorption Rate"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:service%20campaign",
+      "name": "Service Campaign"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:service%20retention%20rate",
+      "name": "Service Retention Rate"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:shelf%20life",
+      "name": "Shelf Life"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:smed%20%28single%20minute%20exchange%20of%20die%29",
+      "name": "SMED (Single Minute Exchange of Die)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:soc%20%28state%20of%20charge%29",
+      "name": "SOC (State of Charge)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:soh%20%28state%20of%20health%29",
+      "name": "SoH (State of Health)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:soh%20%28stock%20on%20hand%29",
+      "name": "SOH (Stock On Hand)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:sor%20%28statement%20of%20requirements%29",
+      "name": "SOR (Statement of Requirements)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:standard%20cost",
+      "name": "Standard Cost"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:supplier%20audit",
+      "name": "Supplier Audit"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:supplier%20development",
+      "name": "Supplier Development"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:supplier%20evaluation",
+      "name": "Supplier Evaluation"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:supplier%20tier%20management",
+      "name": "Supplier Tier Management"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:supply%20chain%20risk",
+      "name": "Supply Chain Risk"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:takt%20time",
+      "name": "Takt Time"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:technical%20service%20bulletin",
+      "name": "Technical Service Bulletin"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:thermal%20management",
+      "name": "Thermal Management"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:throughput",
+      "name": "Throughput"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:traceability",
+      "name": "Traceability"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:trade%20spend",
+      "name": "Trade Spend"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:transfer%20price",
+      "name": "Transfer Price"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:unit%20economics",
+      "name": "Unit Economics"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:v2g%20%28vehicle-to-grid%29",
+      "name": "V2G (Vehicle-to-Grid)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:variance%20analysis",
+      "name": "Variance Analysis"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:vehicle%20off-road%20rate",
+      "name": "Vehicle Off-road Rate"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:vendor%20managed%20inventory",
+      "name": "Vendor Managed Inventory"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:vendor%20scorecard",
+      "name": "Vendor Scorecard"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:virtual%20validation",
+      "name": "Virtual Validation"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:vpcr%20%28verification%20prototype%20confirmation%20review%29",
+      "name": "VPCR (Verification Prototype Confirmation Review)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:wacc%20%28weighted%20average%20cost%20of%20capital%29",
+      "name": "WACC (Weighted Average Cost of Capital)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:warranty%20claim",
+      "name": "Warranty Claim"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:warranty%20reserve",
+      "name": "Warranty Reserve"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:wholesale%20volume",
+      "name": "Wholesale Volume"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:wip%20%28work%20in%20process%29",
+      "name": "WIP (Work In Process)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:wltp%20%28worldwide%20harmonized%20light%20vehicles%20test%20procedure%29",
+      "name": "WLTP (Worldwide Harmonized Light Vehicles Test Procedure)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:wms%20%28warehouse%20management%20system%29",
+      "name": "WMS (Warehouse Management System)"
+    },
+    {
+      "urn": "urn:li:glossaryTerm:working%20capital",
+      "name": "Working Capital"
+    }
+  ]
+}

@@ -172,7 +172,19 @@ class FireworksLLM(BaseLLM):
         ctx_list = [context_xml] if context_xml else None
         raw = await self.generate(prompt, context=ctx_list, history=history)
         try:
-            return json.loads(raw)
+            parsed = json.loads(raw)
         except json.JSONDecodeError:
             log.warning("llm_json_parse_failed", raw=raw[:200])
-            return {"answer": raw, "citation_ids": [], "confidence": "low", "insufficient_context": True}
+            parsed = None
+        # The model may echo the JSON-schema shape ({"type": "object"}) instead of
+        # a real payload. Rejecting that as a parse failure falls back to a safe
+        # default instead of leaking the schema descriptor as the answer.
+        if not isinstance(parsed, dict) or isinstance(parsed, dict) and set(parsed.keys()) == {"type"}:
+            log.warning("llm_structured_placeholder", raw=raw[:200])
+            return {
+                "answer": raw if isinstance(raw, str) and raw.strip() else "Không thể tạo câu trả lời.",
+                "citation_ids": [],
+                "confidence": "low",
+                "insufficient_context": True,
+            }
+        return parsed

@@ -95,7 +95,42 @@ class Settings(BaseSettings):
     CACHE_ENABLED: bool = True
     CACHE_DEFAULT_TTL_SECONDS: int = 300
 
+    # Graph reasoning / recursive impact analysis.
+    GRAPH_MAX_DEPTH: int = 3
+    GRAPH_DIRECT_DEPTH: int = 1
+    IMPACT_MAX_NODES: int = 200
+    IMPACT_DEFAULT_DEPTH: int = 3
+    INTENT_CLASSIFIER_ENABLED: bool = True
+    QUERY_PLANNER_ENABLED: bool = True
+    PLANNER_FALLBACK_TO_REGEX: bool = True
+
+    # Thinking Mode: an independent planning/reasoning layer for complex /
+    # system-level / multi-hop questions (see retrieval/thinking/).
+    THINKING_MODE_ENABLED: bool = True
+    THINKING_MAX_STEPS: int = 8
+
+    # Visual Understanding: an independent image-analysis layer (Qwen2.5-VL via
+    # Fireworks) that performs OCR + structured extraction of data-related images
+    # (dashboard, ERD, SQL, error, metadata, requirement, table, lineage,
+    # workflow, access/permission). Its JSON output feeds the existing router /
+    # skills; it never answers the user directly (see retrieval/visual/).
+    VISION_ENABLED: bool = True
+    USE_MOCK_VISION: bool = False
+    FIREWORKS_VISION_MODEL_ID: str = "accounts/fireworks/models/qwen3p7-plus"
+    VISION_MAX_IMAGES: int = 4
+    VISION_MAX_IMAGE_BYTES: int = 15 * 1024 * 1024  # 15 MB
+    VISION_TIMEOUT_SECONDS: int = 60
+
     LOCAL_STORAGE_PATH: str = "./data/documents"
+
+    # Image Storage: real local/object storage for uploaded images. The database
+    # only keeps metadata; binary payloads live under IMAGE_STORAGE_PATH.
+    IMAGE_STORAGE_PATH: str = "./data/images"
+    IMAGE_THUMBNAIL_SIZE: int = 320
+    IMAGE_THUMBNAIL_QUALITY: int = 80
+    # Soft-deleted images are moved to a trash dir until purged.
+    IMAGE_TRASH_PATH: str = "./data/images/.trash"
+    IMAGE_RERUN_COOLDOWN_SECONDS: int = 5
 
     @model_validator(mode="after")
     def _validate_config(self) -> "Settings":

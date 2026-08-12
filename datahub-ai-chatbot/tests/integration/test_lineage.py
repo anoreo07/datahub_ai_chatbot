@@ -60,7 +60,10 @@ async def test_lineage_no_upstream(db_session) -> None:
     assert not response.insufficient_context
     assert len(response.entities) == 1
     assert response.entities[0].name == "dim_material"
-    assert response.answer.strip() == "Dataset dim_material hiện không có lineage (upstream/downstream) được ghi nhận."
+    assert response.answer.strip() == (
+        "Dataset dim_material hiện không có lineage (upstream/downstream) "
+        "được ghi nhận."
+    )
 
 
 @pytest.mark.asyncio
@@ -76,7 +79,9 @@ async def test_owner_no_owner_short_answer(db_session) -> None:
     assert response.intent == "OWNER_LOOKUP"
     assert response.confidence == "high"
     assert not response.insufficient_context
-    assert response.answer.strip() == "Dataset dim_inventory_category hiện không có người sở hữu (owner)."
+    assert response.answer.strip() == (
+        "Dataset dim_inventory_category hiện không có người sở hữu (owner)."
+    )
 
 
 @pytest.mark.asyncio

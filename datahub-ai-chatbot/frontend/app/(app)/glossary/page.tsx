@@ -5,6 +5,7 @@ import { Loader2, BookOpen } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
+import { Pagination } from "@/components/ui/pagination";
 import {
   Dialog,
   DialogContent,
@@ -15,12 +16,15 @@ import {
 import { apiFetch } from "@/lib/api";
 import type { GlossaryTerm } from "@/lib/types";
 
+const PER_PAGE = 12;
+
 export default function GlossaryPage() {
   const [terms, setTerms] = useState<GlossaryTerm[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [filter, setFilter] = useState("");
   const [selected, setSelected] = useState<GlossaryTerm | null>(null);
+  const [page, setPage] = useState(0);
 
   useEffect(() => {
     apiFetch<{ terms: GlossaryTerm[] }>("/api/v1/glossary/terms")
@@ -37,12 +41,19 @@ export default function GlossaryPage() {
     );
   }, [terms, filter]);
 
+  const pageCount = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
+  const currentPage = Math.min(page, pageCount - 1);
+  const pageTerms = filtered.slice(currentPage * PER_PAGE, currentPage * PER_PAGE + PER_PAGE);
+
   return (
     <div className="h-full overflow-y-auto">
       <div className="mx-auto max-w-5xl space-y-4 p-6">
         <Input
           value={filter}
-          onChange={(e) => setFilter(e.target.value)}
+          onChange={(e) => {
+            setFilter(e.target.value);
+            setPage(0);
+          }}
           placeholder="Lọc glossary…"
         />
 
@@ -56,7 +67,7 @@ export default function GlossaryPage() {
           <>
             <p className="text-sm text-muted-foreground">{filtered.length} terms</p>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {filtered.map((t) => (
+              {pageTerms.map((t) => (
                 <Card
                   key={t.urn}
                   className="cursor-pointer transition-shadow hover:shadow-md"
@@ -77,6 +88,7 @@ export default function GlossaryPage() {
                 </Card>
               ))}
             </div>
+            <Pagination page={currentPage} pageCount={pageCount} onPageChange={setPage} />
           </>
         )}
       </div>

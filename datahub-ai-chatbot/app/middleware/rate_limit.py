@@ -1,9 +1,9 @@
 import time
 from collections import defaultdict
 
-from fastapi import HTTPException, Request
+from fastapi import Request
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
-from starlette.responses import Response
+from starlette.responses import JSONResponse, Response
 
 from config.settings import settings
 from infrastructure.redis import get_redis
@@ -48,6 +48,11 @@ class RedisRateLimiter(RateLimiter):
     async def is_allowed(self, key: str) -> bool:
         redis = await self._get_redis()
         count = await redis.incr(key)
+        # Set the TTL only on the first request of a window so the counter
+        # resets after ``window_seconds`` of inactivity. Refreshing the TTL on
+        # every request would otherwise let the counter grow monotonically under
+        # continuous traffic and permanently block the client after
+        # ``max_requests`` total requests (not per-window).
         if count == 1:
             await redis.expire(key, self._window_seconds)
         return count <= self._max_requests
@@ -72,6 +77,9 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         route_key = f"rate_limit:{client_ip}:{request.url.path}"
 
         if not await self._limiter.is_allowed(route_key):
-            raise HTTPException(status_code=429, detail="Too many requests. Please slow down.")
+            return JSONResponse(
+                status_code=429,
+                content={"detail": "Too many requests. Please slow down."},
+            )
 
         return await call_next(request)

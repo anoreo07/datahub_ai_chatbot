@@ -1,0 +1,1955 @@
+{
+  "generated_at": "2026-08-12T15:51:39.764865",
+  "datasets": [
+    {
+      "dataset": "dim_certification",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_certification,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "dim_service_center",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_service_center,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "dim_assembly_line",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_assembly_line,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": true,
+      "has_downstream": true,
+      "upstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_plant,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_worker,PROD)"
+      ],
+      "downstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_station,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_downtime,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_material_consumption,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_oee_metrics,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_order,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_output,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_routing,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_wip_tracking,PROD)"
+      ],
+      "expected_upstream_from_source": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_plant,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_worker,PROD)"
+      ],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "dim_contract",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_contract,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "dim_cost_center",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_cost_center,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": true,
+      "has_downstream": true,
+      "upstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_plant,PROD)"
+      ],
+      "downstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_actual_cost,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_budget,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_budget_variance,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_fixed_asset,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_general_ledger,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_goods_issue,PROD)"
+      ],
+      "expected_upstream_from_source": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_plant,PROD)"
+      ],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "dim_country",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_country,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "dim_customer",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_customer,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "dim_dealer",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_dealer,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "dim_domestic_vendor",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_domestic_vendor,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "dim_fiscal_calendar",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_fiscal_calendar,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "dim_foreign_vendor",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_foreign_vendor,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "dim_gl_account",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_gl_account,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": false,
+      "has_downstream": true,
+      "upstream": [],
+      "downstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_actual_cost,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_budget,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_budget_variance,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_general_ledger,PROD)"
+      ],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "dim_hs_code",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_hs_code,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "dim_import_duty",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_import_duty,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "dim_incoterm",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_incoterm,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "dim_inventory_category",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_inventory_category,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": true,
+      "has_downstream": false,
+      "upstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material,PROD)"
+      ],
+      "downstream": [],
+      "expected_upstream_from_source": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material,PROD)"
+      ],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "dim_material",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": false,
+      "has_downstream": true,
+      "upstream": [],
+      "downstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_inventory_category,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_goods_issue,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_goods_receipt,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_inventory,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_inventory_forecast,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_inventory_movement,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_lead_time,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_material_consumption,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_physical_inventory,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_purchase_order,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_reorder_alert,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_standard_cost,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_stock_transfer,PROD)"
+      ],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "dim_material_group",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material_group,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "dim_plant",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_plant,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": false,
+      "has_downstream": true,
+      "upstream": [],
+      "downstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_assembly_line,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_cost_center,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_shift,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_warehouse,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_worker,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_fixed_asset,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_order,PROD)"
+      ],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "dim_port",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_port,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "dim_procurement_category",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_procurement_category,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "dim_product",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_product,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": false,
+      "has_downstream": true,
+      "upstream": [],
+      "downstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_order,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_output,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_routing,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_revenue,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_standard_cost,PROD)"
+      ],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "dim_product_model",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_product_model,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "dim_profit_center",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_profit_center,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": false,
+      "has_downstream": true,
+      "upstream": [],
+      "downstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_budget,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_budget_variance,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_general_ledger,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_revenue,PROD)"
+      ],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "dim_promotion",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_promotion,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "dim_region",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_region,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "dim_repair_code",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_repair_code,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "dim_sales_channel",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_sales_channel,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "dim_shift",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_shift,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": true,
+      "has_downstream": true,
+      "upstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_plant,PROD)"
+      ],
+      "downstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_downtime,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_material_consumption,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_oee_metrics,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_output,PROD)"
+      ],
+      "expected_upstream_from_source": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_plant,PROD)"
+      ],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "dim_spare_part",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_spare_part,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "dim_station",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_station,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": true,
+      "has_downstream": true,
+      "upstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_assembly_line,PROD)"
+      ],
+      "downstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_defect_tracking,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_downtime,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_output,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_routing,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_quality_inspection,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_wip_tracking,PROD)"
+      ],
+      "expected_upstream_from_source": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_assembly_line,PROD)"
+      ],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "dim_supplier",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_supplier,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": false,
+      "has_downstream": true,
+      "upstream": [],
+      "downstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_vendor_invoice,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_ap_payable,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_goods_receipt,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_lead_time,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_purchase_order,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_reorder_alert,PROD)"
+      ],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "dim_technician",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_technician,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "dim_uom",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_uom,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "dim_vendor_invoice",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_vendor_invoice,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": true,
+      "has_downstream": false,
+      "upstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_supplier,PROD)"
+      ],
+      "downstream": [],
+      "expected_upstream_from_source": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_supplier,PROD)"
+      ],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "dim_warehouse",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_warehouse,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": true,
+      "has_downstream": true,
+      "upstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_plant,PROD)"
+      ],
+      "downstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_goods_issue,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_goods_receipt,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_inventory,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_inventory_forecast,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_inventory_movement,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_physical_inventory,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_reorder_alert,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_stock_transfer,PROD)"
+      ],
+      "expected_upstream_from_source": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_plant,PROD)"
+      ],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "dim_warranty_policy",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_warranty_policy,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "dim_worker",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_worker,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": true,
+      "has_downstream": true,
+      "upstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_plant,PROD)"
+      ],
+      "downstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_assembly_line,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_quality_inspection,PROD)"
+      ],
+      "expected_upstream_from_source": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_plant,PROD)"
+      ],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "fact_actual_cost",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_actual_cost,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": true,
+      "has_downstream": false,
+      "upstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_cost_center,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_gl_account,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_order,PROD)"
+      ],
+      "downstream": [],
+      "expected_upstream_from_source": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_cost_center,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_gl_account,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_order,PROD)"
+      ],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "fact_ap_payable",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_ap_payable,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": true,
+      "has_downstream": false,
+      "upstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_supplier,PROD)"
+      ],
+      "downstream": [],
+      "expected_upstream_from_source": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_supplier,PROD)"
+      ],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "fact_ar_receivable",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_ar_receivable,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_budget",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_budget,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": true,
+      "has_downstream": false,
+      "upstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_cost_center,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_gl_account,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_profit_center,PROD)"
+      ],
+      "downstream": [],
+      "expected_upstream_from_source": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_cost_center,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_gl_account,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_profit_center,PROD)"
+      ],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "fact_budget_variance",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_budget_variance,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": true,
+      "has_downstream": false,
+      "upstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_cost_center,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_gl_account,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_profit_center,PROD)"
+      ],
+      "downstream": [],
+      "expected_upstream_from_source": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_cost_center,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_gl_account,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_profit_center,PROD)"
+      ],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "fact_cash_flow",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_cash_flow,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_contract_performance",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_contract_performance,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_customer_complaint",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_customer_complaint,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_customer_feedback",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_customer_feedback,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_customer_satisfaction",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_customer_satisfaction,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_customs_declaration",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_customs_declaration,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_dealer_performance",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_dealer_performance,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_defect_tracking",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_defect_tracking,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": true,
+      "has_downstream": false,
+      "upstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_station,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_order,PROD)"
+      ],
+      "downstream": [],
+      "expected_upstream_from_source": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_station,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_order,PROD)"
+      ],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "fact_downtime",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_downtime,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": true,
+      "has_downstream": false,
+      "upstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_assembly_line,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_shift,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_station,PROD)"
+      ],
+      "downstream": [],
+      "expected_upstream_from_source": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_assembly_line,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_shift,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_station,PROD)"
+      ],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "fact_fixed_asset",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_fixed_asset,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": true,
+      "has_downstream": false,
+      "upstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_cost_center,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_plant,PROD)"
+      ],
+      "downstream": [],
+      "expected_upstream_from_source": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_cost_center,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_plant,PROD)"
+      ],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "fact_foreign_audit",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_foreign_audit,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_foreign_contract",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_foreign_contract,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_general_ledger",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_general_ledger,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": true,
+      "has_downstream": false,
+      "upstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_cost_center,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_gl_account,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_profit_center,PROD)"
+      ],
+      "downstream": [],
+      "expected_upstream_from_source": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_cost_center,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_gl_account,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_profit_center,PROD)"
+      ],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "fact_goods_issue",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_goods_issue,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": true,
+      "has_downstream": false,
+      "upstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_cost_center,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_warehouse,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_order,PROD)"
+      ],
+      "downstream": [],
+      "expected_upstream_from_source": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_cost_center,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_warehouse,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_order,PROD)"
+      ],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "fact_goods_receipt",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_goods_receipt,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": true,
+      "has_downstream": false,
+      "upstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_supplier,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_warehouse,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_purchase_order,PROD)"
+      ],
+      "downstream": [],
+      "expected_upstream_from_source": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_supplier,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_warehouse,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_purchase_order,PROD)"
+      ],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "fact_import_cost",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_import_cost,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_import_order",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_import_order,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_import_schedule",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_import_schedule,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_incentive_claim",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_incentive_claim,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_inventory",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_inventory,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": true,
+      "has_downstream": false,
+      "upstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_warehouse,PROD)"
+      ],
+      "downstream": [],
+      "expected_upstream_from_source": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_warehouse,PROD)"
+      ],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "fact_inventory_forecast",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_inventory_forecast,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": true,
+      "has_downstream": false,
+      "upstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_warehouse,PROD)"
+      ],
+      "downstream": [],
+      "expected_upstream_from_source": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_warehouse,PROD)"
+      ],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "fact_inventory_movement",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_inventory_movement,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": true,
+      "has_downstream": false,
+      "upstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_warehouse,PROD)"
+      ],
+      "downstream": [],
+      "expected_upstream_from_source": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_warehouse,PROD)"
+      ],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "fact_lead_management",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_lead_management,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_lead_time",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_lead_time,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": true,
+      "has_downstream": false,
+      "upstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_supplier,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_purchase_order,PROD)"
+      ],
+      "downstream": [],
+      "expected_upstream_from_source": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_supplier,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_purchase_order,PROD)"
+      ],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "fact_letter_of_credit",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_letter_of_credit,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_local_content",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_local_content,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_maintenance_record",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_maintenance_record,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_market_share",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_market_share,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_material_consumption",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_material_consumption,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": true,
+      "has_downstream": false,
+      "upstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_assembly_line,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_shift,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_order,PROD)"
+      ],
+      "downstream": [],
+      "expected_upstream_from_source": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_assembly_line,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_shift,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_order,PROD)"
+      ],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "fact_non_conformance",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_non_conformance,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_oee_metrics",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_oee_metrics,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": true,
+      "has_downstream": false,
+      "upstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_assembly_line,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_shift,PROD)"
+      ],
+      "downstream": [],
+      "expected_upstream_from_source": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_assembly_line,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_shift,PROD)"
+      ],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "fact_part_inventory",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_part_inventory,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_physical_inventory",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_physical_inventory,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": true,
+      "has_downstream": false,
+      "upstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_warehouse,PROD)"
+      ],
+      "downstream": [],
+      "expected_upstream_from_source": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_warehouse,PROD)"
+      ],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "fact_production_order",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_order,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": true,
+      "has_downstream": true,
+      "upstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_assembly_line,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_plant,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_product,PROD)"
+      ],
+      "downstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_actual_cost,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_defect_tracking,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_goods_issue,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_material_consumption,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_output,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_quality_inspection,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_wip_tracking,PROD)"
+      ],
+      "expected_upstream_from_source": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_assembly_line,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_plant,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_product,PROD)"
+      ],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "fact_production_output",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_output,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": true,
+      "has_downstream": false,
+      "upstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_assembly_line,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_product,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_shift,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_station,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_order,PROD)"
+      ],
+      "downstream": [],
+      "expected_upstream_from_source": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_assembly_line,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_product,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_shift,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_station,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_order,PROD)"
+      ],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "fact_production_routing",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_routing,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": true,
+      "has_downstream": false,
+      "upstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_assembly_line,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_product,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_station,PROD)"
+      ],
+      "downstream": [],
+      "expected_upstream_from_source": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_assembly_line,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_product,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_station,PROD)"
+      ],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "fact_purchase_order",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_purchase_order,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": true,
+      "has_downstream": true,
+      "upstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_supplier,PROD)"
+      ],
+      "downstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_goods_receipt,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_lead_time,PROD)"
+      ],
+      "expected_upstream_from_source": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_supplier,PROD)"
+      ],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "fact_purchase_requisition",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_purchase_requisition,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_quality_inbound",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_quality_inbound,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_quality_inspection",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_quality_inspection,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": true,
+      "has_downstream": false,
+      "upstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_station,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_worker,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_order,PROD)"
+      ],
+      "downstream": [],
+      "expected_upstream_from_source": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_station,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_worker,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_order,PROD)"
+      ],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "fact_recall",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_recall,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_reorder_alert",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_reorder_alert,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": true,
+      "has_downstream": false,
+      "upstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_supplier,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_warehouse,PROD)"
+      ],
+      "downstream": [],
+      "expected_upstream_from_source": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_supplier,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_warehouse,PROD)"
+      ],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "fact_revenue",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_revenue,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": true,
+      "has_downstream": false,
+      "upstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_product,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_profit_center,PROD)"
+      ],
+      "downstream": [],
+      "expected_upstream_from_source": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_product,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_profit_center,PROD)"
+      ],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "fact_rfq",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_rfq,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_sales_delivery",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_sales_delivery,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_sales_order",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_sales_order,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_sales_target",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_sales_target,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_service_appointment",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_service_appointment,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_service_campaign",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_service_campaign,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_service_order",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_service_order,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_shipping_manifest",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_shipping_manifest,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_standard_cost",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_standard_cost,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": true,
+      "has_downstream": false,
+      "upstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_product,PROD)"
+      ],
+      "downstream": [],
+      "expected_upstream_from_source": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_product,PROD)"
+      ],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "fact_stock_transfer",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_stock_transfer,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": true,
+      "has_downstream": false,
+      "upstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_warehouse,PROD)"
+      ],
+      "downstream": [],
+      "expected_upstream_from_source": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_warehouse,PROD)"
+      ],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "fact_test_drive",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_test_drive,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_vehicle_history",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_vehicle_history,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_vendor_audit",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_vendor_audit,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_vendor_evaluation",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_vendor_evaluation,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_vendor_payment",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_vendor_payment,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_vendor_quality",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_vendor_quality,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_vendor_scorecard",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_vendor_scorecard,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_warranty_claim",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_warranty_claim,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_wip_tracking",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_wip_tracking,PROD)",
+      "lineage_status": "PRESENT",
+      "has_upstream": true,
+      "has_downstream": false,
+      "upstream": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_assembly_line,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_station,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_order,PROD)"
+      ],
+      "downstream": [],
+      "expected_upstream_from_source": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_assembly_line,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_station,PROD)",
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_order,PROD)"
+      ],
+      "lineage_vs_source": "consistent",
+      "classification": "PRESENT"
+    },
+    {
+      "dataset": "dim_battery_pack",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_battery_pack,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "dim_bms_config",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_bms_config,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "dim_charging_connector",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_charging_connector,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "dim_charging_station",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_charging_station,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "dim_component",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_component,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "dim_drawing",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_drawing,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "dim_engineering_change",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_engineering_change,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "dim_ev_model",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_ev_model,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "dim_ev_owner",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_ev_owner,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "dim_platform",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_platform,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "dim_project",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_project,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "dim_specification",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_specification,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_battery_health",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_battery_health,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_battery_swap",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_battery_swap,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_bom_engineering",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_bom_engineering,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_change_request",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_change_request,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_charging_session",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_charging_session,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_charging_station_maintenance",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_charging_station_maintenance,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_design_release",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_design_release,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_dvp",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_dvp,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_energy_consumption",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_energy_consumption,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_ev_fleet",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_ev_fleet,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_fmea",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_fmea,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_homologation",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_homologation,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_prototype",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_prototype,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_range_tracking",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_range_tracking,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_soc_log",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_soc_log,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_telemetry",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_telemetry,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_test_cycle",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_test_cycle,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    },
+    {
+      "dataset": "fact_test_result",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_test_result,PROD)",
+      "lineage_status": "NONE",
+      "has_upstream": false,
+      "has_downstream": false,
+      "upstream": [],
+      "downstream": [],
+      "expected_upstream_from_source": [],
+      "lineage_vs_source": "consistent",
+      "classification": "NONE"
+    }
+  ]
+}

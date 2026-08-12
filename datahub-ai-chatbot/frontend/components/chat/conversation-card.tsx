@@ -6,6 +6,7 @@ import {
   MessageSquare,
   Pencil,
   Pin,
+  Star,
   Trash2,
 } from "lucide-react";
 
@@ -33,15 +34,18 @@ interface ConversationCardProps {
   conversation: Conversation;
   active?: boolean;
   collapsed?: boolean;
+  pinned?: boolean;
+  favorite?: boolean;
   onSelect?: () => void;
   onDelete?: (id: string) => void;
   onRename?: (id: string, title: string) => void;
   onTogglePin?: (id: string) => void;
+  onToggleFavorite?: (id: string) => void;
 }
 
 function shortTitle(c: Conversation) {
-  const q = c.last_question?.trim();
-  if (q) return q.length > 37 ? q.slice(0, 37) + "…" : q;
+  const base = c.title?.trim() || c.last_question?.trim();
+  if (base) return base.length > 30 ? base.slice(0, 30) + "…" : base;
   return "Cuộc trò chuyện";
 }
 
@@ -49,10 +53,13 @@ export function ConversationCard({
   conversation,
   active,
   collapsed,
+  pinned,
+  favorite,
   onSelect,
   onDelete,
   onRename,
   onTogglePin,
+  onToggleFavorite,
 }: ConversationCardProps) {
   const [editing, setEditing] = useState(false);
   const [confirmingDelete, setConfirmingDelete] = useState(false);
@@ -103,12 +110,16 @@ export function ConversationCard({
           className="flex min-w-0 flex-1 items-center gap-2 text-left"
         >
           <MessageSquare className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-          <span className="truncate text-sm">{shortTitle(conversation)}</span>
+          <span className="truncate text-sm">
+            {pinned && <Pin className="mr-1 inline h-3 w-3 fill-current text-primary" />}
+            {favorite && <Star className="mr-1 inline h-3 w-3 fill-current text-warning" />}
+            {shortTitle(conversation)}
+          </span>
         </button>
       )}
 
       {!editing && (
-        <div className="flex shrink-0 items-center">
+        <div className="flex shrink-0 items-center gap-0.5 pl-2">
           <Button
             variant="ghost"
             size="icon"
@@ -129,12 +140,16 @@ export function ConversationCard({
                 <MoreHorizontal className="h-3.5 w-3.5" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-40">
+            <DropdownMenuContent align="end" className="w-44">
               <DropdownMenuItem onClick={() => setEditing(true)}>
                 <Pencil className="h-4 w-4" /> Đổi tên
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => onTogglePin?.(conversation.conversation_id)}>
-                <Pin className="h-4 w-4" /> Ghim
+                <Pin className={cn("h-4 w-4", pinned && "fill-current")} /> {pinned ? "Bỏ ghim" : "Ghim"}
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => onToggleFavorite?.(conversation.conversation_id)}>
+                <Star className={cn("h-4 w-4", favorite && "fill-current text-warning")} />{" "}
+                {favorite ? "Bỏ khỏi yêu thích" : "Yêu thích"}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem

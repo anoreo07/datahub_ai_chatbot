@@ -1,5 +1,7 @@
 from pydantic import BaseModel
 
+from app.schemas.quality import QualityReport
+
 
 class ChatRequest(BaseModel):
     question: str
@@ -7,6 +9,13 @@ class ChatRequest(BaseModel):
     filters: dict = {}
     suggested_name: str | None = None
     model: str | None = None
+    # Optional selected "+" menu action (e.g. "search", "sql", "impact", "lineage",
+    # "quality", "report"). Treated as an intent hint by the semantic intent
+    # resolver — never a mandatory execution path.
+    selected_action: str | None = None
+    # Optional data-related image attachments as `data:` URLs (base64). When
+    # present, the Visual Understanding layer runs first and feeds the router.
+    images: list[str] = []
 
 
 class Suggestion(BaseModel):
@@ -57,3 +66,6 @@ class ChatResponse(BaseModel):
     conversation_id: str | None = None
     suggestion: Suggestion | None = None
     lineage: LineageData | None = None
+    quality_report: QualityReport | None = None
+    # Structured vision-extraction result (present only for image requests).
+    vision: dict | None = None

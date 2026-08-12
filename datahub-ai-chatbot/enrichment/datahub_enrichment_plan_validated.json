@@ -1,0 +1,4132 @@
+{
+  "dry_run": true,
+  "generated_at": "2026-08-12T15:04:01.622130",
+  "summary": {
+    "total_mutations": 212
+  },
+  "mutations": [
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:3-way%20matching",
+      "entity_urn": "urn:li:glossaryTerm:3-way%20matching",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": "urn:li:domain:logistic",
+      "new_value": "urn:li:domain:cungngtt",
+      "status": "SKIP_CONFLICT_EXISTING",
+      "confidence": "CONFIRMED(source)/conflict",
+      "evidence": "source yaml domain 'CUNG ỨNG (TT)' vs current DataHub 'urn:li:domain:logistic'",
+      "reason": "existing domain value is valid; no-overwrite policy (requires explicit migration rule)",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:abc%20classification",
+      "entity_urn": "urn:li:glossaryTerm:abc%20classification",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": "urn:li:domain:cungngtt",
+      "new_value": "urn:li:domain:logistic",
+      "status": "SKIP_CONFLICT_EXISTING",
+      "confidence": "CONFIRMED(source)/conflict",
+      "evidence": "source yaml domain 'LOGISTIC' vs current DataHub 'urn:li:domain:cungngtt'",
+      "reason": "existing domain value is valid; no-overwrite policy (requires explicit migration rule)",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:AccountBalance",
+      "entity_urn": "urn:li:glossaryTerm:AccountBalance",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": null,
+      "status": "SKIP_NO_SOURCE",
+      "confidence": "n/a",
+      "evidence": "term not present in verified source mock-data/glossary",
+      "reason": "no source metadata to attach domain; leave UNKNOWN",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:CustomerAccount",
+      "entity_urn": "urn:li:glossaryTerm:CustomerAccount",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": null,
+      "status": "SKIP_NO_SOURCE",
+      "confidence": "n/a",
+      "evidence": "term not present in verified source mock-data/glossary",
+      "reason": "no source metadata to attach domain; leave UNKNOWN",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:SavingAccount",
+      "entity_urn": "urn:li:glossaryTerm:SavingAccount",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": null,
+      "status": "SKIP_NO_SOURCE",
+      "confidence": "n/a",
+      "evidence": "term not present in verified source mock-data/glossary",
+      "reason": "no source metadata to attach domain; leave UNKNOWN",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:actual%20cost",
+      "entity_urn": "urn:li:glossaryTerm:actual%20cost",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:tichnh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/actual cost domain: 'TÀI CHÍNH'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'TÀI CHÍNH' -> urn:li:domain:tichnh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:aging%20inventory",
+      "entity_urn": "urn:li:glossaryTerm:aging%20inventory",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:logistic",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/aging inventory domain: 'LOGISTIC'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'LOGISTIC' -> urn:li:domain:logistic"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:andon",
+      "entity_urn": "urn:li:glossaryTerm:andon",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:snxut",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/andon domain: 'SẢN XUẤT'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'SẢN XUẤT' -> urn:li:domain:snxut"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:approved%20supplier%20list",
+      "entity_urn": "urn:li:glossaryTerm:approved%20supplier%20list",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:cungngtt",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/approved supplier list domain: 'CUNG ỨNG (TT)'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'CUNG ỨNG (TT)' -> urn:li:domain:cungngtt"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:balance%20sheet",
+      "entity_urn": "urn:li:glossaryTerm:balance%20sheet",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:tichnh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/balance sheet domain: 'TÀI CHÍNH'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'TÀI CHÍNH' -> urn:li:domain:tichnh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:benchmarking",
+      "entity_urn": "urn:li:glossaryTerm:benchmarking",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:phttrinxe",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/benchmarking domain: 'PHÁT TRIỂN XE'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'PHÁT TRIỂN XE' -> urn:li:domain:phttrinxe"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:bill%20of%20lading%20%28b/l%29",
+      "entity_urn": "urn:li:glossaryTerm:bill%20of%20lading%20%28b/l%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:cungngnh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/bill of lading (b/l) domain: 'CUNG ỨNG (NĐH)'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'CUNG ỨNG (NĐH)' -> urn:li:domain:cungngnh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:bms%20%28battery%20management%20system%29",
+      "entity_urn": "urn:li:glossaryTerm:bms%20%28battery%20management%20system%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:vgreen",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/bms (battery management system) domain: 'VGreen'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'VGreen' -> urn:li:domain:vgreen"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:bom%20%28bill%20of%20materials%29",
+      "entity_urn": "urn:li:glossaryTerm:bom%20%28bill%20of%20materials%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:snxut",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/bom (bill of materials) domain: 'SẢN XUẤT'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'SẢN XUẤT' -> urn:li:domain:snxut"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:bonded%20warehouse",
+      "entity_urn": "urn:li:glossaryTerm:bonded%20warehouse",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:cungngnh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/bonded warehouse domain: 'CUNG ỨNG (NĐH)'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'CUNG ỨNG (NĐH)' -> urn:li:domain:cungngnh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:budget%20variance",
+      "entity_urn": "urn:li:glossaryTerm:budget%20variance",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:tichnh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/budget variance domain: 'TÀI CHÍNH'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'TÀI CHÍNH' -> urn:li:domain:tichnh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:cad%20model%20%28computer-aided%20design%29",
+      "entity_urn": "urn:li:glossaryTerm:cad%20model%20%28computer-aided%20design%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:phttrinxe",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/cad model (computer-aided design) domain: 'PHÁT TRIỂN XE'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'PHÁT TRIỂN XE' -> urn:li:domain:phttrinxe"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:cae%20%28computer-aided%20engineering%29",
+      "entity_urn": "urn:li:glossaryTerm:cae%20%28computer-aided%20engineering%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:phttrinxe",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/cae (computer-aided engineering) domain: 'PHÁT TRIỂN XE'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'PHÁT TRIỂN XE' -> urn:li:domain:phttrinxe"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:calibration",
+      "entity_urn": "urn:li:glossaryTerm:calibration",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:phttrinxe",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/calibration domain: 'PHÁT TRIỂN XE'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'PHÁT TRIỂN XE' -> urn:li:domain:phttrinxe"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:capacity%20utilization",
+      "entity_urn": "urn:li:glossaryTerm:capacity%20utilization",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:snxut",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/capacity utilization domain: 'SẢN XUẤT'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'SẢN XUẤT' -> urn:li:domain:snxut"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:capex%20%28capital%20expenditure%29",
+      "entity_urn": "urn:li:glossaryTerm:capex%20%28capital%20expenditure%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:tichnh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/capex (capital expenditure) domain: 'TÀI CHÍNH'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'TÀI CHÍNH' -> urn:li:domain:tichnh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:cash%20conversion%20cycle",
+      "entity_urn": "urn:li:glossaryTerm:cash%20conversion%20cycle",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:tichnh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/cash conversion cycle domain: 'TÀI CHÍNH'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'TÀI CHÍNH' -> urn:li:domain:tichnh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:ccs%20%28combined%20charging%20system%29",
+      "entity_urn": "urn:li:glossaryTerm:ccs%20%28combined%20charging%20system%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:vgreen",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/ccs (combined charging system) domain: 'VGreen'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'VGreen' -> urn:li:domain:vgreen"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:certificate%20of%20origin%20%28co%29",
+      "entity_urn": "urn:li:glossaryTerm:certificate%20of%20origin%20%28co%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:cungngnh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/certificate of origin (co) domain: 'CUNG ỨNG (NĐH)'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'CUNG ỨNG (NĐH)' -> urn:li:domain:cungngnh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:changeover%20time",
+      "entity_urn": "urn:li:glossaryTerm:changeover%20time",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:snxut",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/changeover time domain: 'SẢN XUẤT'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'SẢN XUẤT' -> urn:li:domain:snxut"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:cif/fob",
+      "entity_urn": "urn:li:glossaryTerm:cif/fob",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:cungngnh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/cif/fob domain: 'CUNG ỨNG (NĐH)'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'CUNG ỨNG (NĐH)' -> urn:li:domain:cungngnh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:cogs%20%28cost%20of%20goods%20sold%29",
+      "entity_urn": "urn:li:glossaryTerm:cogs%20%28cost%20of%20goods%20sold%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:tichnh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/cogs (cost of goods sold) domain: 'TÀI CHÍNH'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'TÀI CHÍNH' -> urn:li:domain:tichnh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:commercial%20invoice",
+      "entity_urn": "urn:li:glossaryTerm:commercial%20invoice",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:cungngnh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/commercial invoice domain: 'CUNG ỨNG (NĐH)'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'CUNG ỨNG (NĐH)' -> urn:li:domain:cungngnh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:competitive%20benchmarking",
+      "entity_urn": "urn:li:glossaryTerm:competitive%20benchmarking",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:kinhdoanh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/competitive benchmarking domain: 'KINH DOANH'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'KINH DOANH' -> urn:li:domain:kinhdoanh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:contract%20management",
+      "entity_urn": "urn:li:glossaryTerm:contract%20management",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:cungngtt",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/contract management domain: 'CUNG ỨNG (TT)'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'CUNG ỨNG (TT)' -> urn:li:domain:cungngtt"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:conversion%20rate",
+      "entity_urn": "urn:li:glossaryTerm:conversion%20rate",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:kinhdoanh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/conversion rate domain: 'KINH DOANH'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'KINH DOANH' -> urn:li:domain:kinhdoanh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:coverage%20date",
+      "entity_urn": "urn:li:glossaryTerm:coverage%20date",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:logistic",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/coverage date domain: 'LOGISTIC'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'LOGISTIC' -> urn:li:domain:logistic"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:cross-docking",
+      "entity_urn": "urn:li:glossaryTerm:cross-docking",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:logistic",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/cross-docking domain: 'LOGISTIC'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'LOGISTIC' -> urn:li:domain:logistic"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:customer%20acquisition%20cost",
+      "entity_urn": "urn:li:glossaryTerm:customer%20acquisition%20cost",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:kinhdoanh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/customer acquisition cost domain: 'KINH DOANH'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'KINH DOANH' -> urn:li:domain:kinhdoanh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:customer%20lifetime%20value",
+      "entity_urn": "urn:li:glossaryTerm:customer%20lifetime%20value",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:kinhdoanh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/customer lifetime value domain: 'KINH DOANH'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'KINH DOANH' -> urn:li:domain:kinhdoanh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:customer%20satisfaction%20index",
+      "entity_urn": "urn:li:glossaryTerm:customer%20satisfaction%20index",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:humi",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/customer satisfaction index domain: 'HẬU MÃI'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'HẬU MÃI' -> urn:li:domain:humi"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:customs%20clearance",
+      "entity_urn": "urn:li:glossaryTerm:customs%20clearance",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:cungngnh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/customs clearance domain: 'CUNG ỨNG (NĐH)'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'CUNG ỨNG (NĐH)' -> urn:li:domain:cungngnh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:cycle%20count",
+      "entity_urn": "urn:li:glossaryTerm:cycle%20count",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:logistic",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/cycle count domain: 'LOGISTIC'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'LOGISTIC' -> urn:li:domain:logistic"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:cycle%20time",
+      "entity_urn": "urn:li:glossaryTerm:cycle%20time",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:snxut",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/cycle time domain: 'SẢN XUẤT'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'SẢN XUẤT' -> urn:li:domain:snxut"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:dc%20fast%20charger",
+      "entity_urn": "urn:li:glossaryTerm:dc%20fast%20charger",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:vgreen",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/dc fast charger domain: 'VGreen'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'VGreen' -> urn:li:domain:vgreen"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:dealer%20margin",
+      "entity_urn": "urn:li:glossaryTerm:dealer%20margin",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:kinhdoanh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/dealer margin domain: 'KINH DOANH'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'KINH DOANH' -> urn:li:domain:kinhdoanh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:dealer%20network",
+      "entity_urn": "urn:li:glossaryTerm:dealer%20network",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:kinhdoanh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/dealer network domain: 'KINH DOANH'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'KINH DOANH' -> urn:li:domain:kinhdoanh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:defect%20rate",
+      "entity_urn": "urn:li:glossaryTerm:defect%20rate",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:snxut",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/defect rate domain: 'SẢN XUẤT'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'SẢN XUẤT' -> urn:li:domain:snxut"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:depreciation",
+      "entity_urn": "urn:li:glossaryTerm:depreciation",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:tichnh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/depreciation domain: 'TÀI CHÍNH'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'TÀI CHÍNH' -> urn:li:domain:tichnh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:design%20freeze",
+      "entity_urn": "urn:li:glossaryTerm:design%20freeze",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:phttrinxe",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/design freeze domain: 'PHÁT TRIỂN XE'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'PHÁT TRIỂN XE' -> urn:li:domain:phttrinxe"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:dfm/dfa%20%28design%20for%20manufacturing/assembly%29",
+      "entity_urn": "urn:li:glossaryTerm:dfm/dfa%20%28design%20for%20manufacturing/assembly%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:phttrinxe",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/dfm/dfa (design for manufacturing/assembly) domain: 'PHÁT TRIỂN XE'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'PHÁT TRIỂN XE' -> urn:li:domain:phttrinxe"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:dio%20%28days%20inventory%20outstanding%29",
+      "entity_urn": "urn:li:glossaryTerm:dio%20%28days%20inventory%20outstanding%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:logistic",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/dio (days inventory outstanding) domain: 'LOGISTIC'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'LOGISTIC' -> urn:li:domain:logistic"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:dpo%20%28days%20payable%20outstanding%29",
+      "entity_urn": "urn:li:glossaryTerm:dpo%20%28days%20payable%20outstanding%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:tichnh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/dpo (days payable outstanding) domain: 'TÀI CHÍNH'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'TÀI CHÍNH' -> urn:li:domain:tichnh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:drop%20shipment",
+      "entity_urn": "urn:li:glossaryTerm:drop%20shipment",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:logistic",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/drop shipment domain: 'LOGISTIC'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'LOGISTIC' -> urn:li:domain:logistic"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:dso%20%28days%20sales%20outstanding%29",
+      "entity_urn": "urn:li:glossaryTerm:dso%20%28days%20sales%20outstanding%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:tichnh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/dso (days sales outstanding) domain: 'TÀI CHÍNH'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'TÀI CHÍNH' -> urn:li:domain:tichnh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:dual%20sourcing",
+      "entity_urn": "urn:li:glossaryTerm:dual%20sourcing",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:cungngnh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/dual sourcing domain: 'CUNG ỨNG (NĐH)'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'CUNG ỨNG (NĐH)' -> urn:li:domain:cungngnh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:dvp%26r%20%28design%20verification%20plan%20%26%20report%29",
+      "entity_urn": "urn:li:glossaryTerm:dvp%26r%20%28design%20verification%20plan%20%26%20report%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:phttrinxe",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/dvp&r (design verification plan & report) domain: 'PHÁT TRIỂN XE'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'PHÁT TRIỂN XE' -> urn:li:domain:phttrinxe"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:ebitda",
+      "entity_urn": "urn:li:glossaryTerm:ebitda",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:tichnh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/ebitda domain: 'TÀI CHÍNH'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'TÀI CHÍNH' -> urn:li:domain:tichnh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:eoq%20%28economic%20order%20quantity%29",
+      "entity_urn": "urn:li:glossaryTerm:eoq%20%28economic%20order%20quantity%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:logistic",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/eoq (economic order quantity) domain: 'LOGISTIC'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'LOGISTIC' -> urn:li:domain:logistic"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:extended%20warranty",
+      "entity_urn": "urn:li:glossaryTerm:extended%20warranty",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:humi",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/extended warranty domain: 'HẬU MÃI'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'HẬU MÃI' -> urn:li:domain:humi"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:fast%20charging",
+      "entity_urn": "urn:li:glossaryTerm:fast%20charging",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:vgreen",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/fast charging domain: 'VGreen'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'VGreen' -> urn:li:domain:vgreen"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:fefo%20%28first%20expiry%20first%20out%29",
+      "entity_urn": "urn:li:glossaryTerm:fefo%20%28first%20expiry%20first%20out%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:logistic",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/fefo (first expiry first out) domain: 'LOGISTIC'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'LOGISTIC' -> urn:li:domain:logistic"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:fifo%20%28first%20in%20first%20out%29",
+      "entity_urn": "urn:li:glossaryTerm:fifo%20%28first%20in%20first%20out%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:logistic",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/fifo (first in first out) domain: 'LOGISTIC'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'LOGISTIC' -> urn:li:domain:logistic"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:first%20pass%20yield%20%28fpy%29",
+      "entity_urn": "urn:li:glossaryTerm:first%20pass%20yield%20%28fpy%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:snxut",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/first pass yield (fpy) domain: 'SẢN XUẤT'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'SẢN XUẤT' -> urn:li:domain:snxut"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:first%20visit%20fix%20rate",
+      "entity_urn": "urn:li:glossaryTerm:first%20visit%20fix%20rate",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:humi",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/first visit fix rate domain: 'HẬU MÃI'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'HẬU MÃI' -> urn:li:domain:humi"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:fleet%20availability%20rate",
+      "entity_urn": "urn:li:glossaryTerm:fleet%20availability%20rate",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:humi",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/fleet availability rate domain: 'HẬU MÃI'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'HẬU MÃI' -> urn:li:domain:humi"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:fleet%20sales",
+      "entity_urn": "urn:li:glossaryTerm:fleet%20sales",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:kinhdoanh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/fleet sales domain: 'KINH DOANH'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'KINH DOANH' -> urn:li:domain:kinhdoanh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:fmea%20%28failure%20mode%20and%20effects%20analysis%29",
+      "entity_urn": "urn:li:glossaryTerm:fmea%20%28failure%20mode%20and%20effects%20analysis%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:phttrinxe",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/fmea (failure mode and effects analysis) domain: 'PHÁT TRIỂN XE'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'PHÁT TRIỂN XE' -> urn:li:domain:phttrinxe"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:force%20majeure",
+      "entity_urn": "urn:li:glossaryTerm:force%20majeure",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:cungngnh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/force majeure domain: 'CUNG ỨNG (NĐH)'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'CUNG ỨNG (NĐH)' -> urn:li:domain:cungngnh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:freight%20forwarder",
+      "entity_urn": "urn:li:glossaryTerm:freight%20forwarder",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:cungngnh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/freight forwarder domain: 'CUNG ỨNG (NĐH)'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'CUNG ỨNG (NĐH)' -> urn:li:domain:cungngnh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:geographic%20penetration",
+      "entity_urn": "urn:li:glossaryTerm:geographic%20penetration",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:kinhdoanh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/geographic penetration domain: 'KINH DOANH'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'KINH DOANH' -> urn:li:domain:kinhdoanh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:goods%20in%20transit%20%28git%29",
+      "entity_urn": "urn:li:glossaryTerm:goods%20in%20transit%20%28git%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:logistic",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/goods in transit (git) domain: 'LOGISTIC'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'LOGISTIC' -> urn:li:domain:logistic"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:goodwill%20policy",
+      "entity_urn": "urn:li:glossaryTerm:goodwill%20policy",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:humi",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/goodwill policy domain: 'HẬU MÃI'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'HẬU MÃI' -> urn:li:domain:humi"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:grn%20%28goods%20received%20note%29",
+      "entity_urn": "urn:li:glossaryTerm:grn%20%28goods%20received%20note%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:cungngtt",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/grn (goods received note) domain: 'CUNG ỨNG (TT)'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'CUNG ỨNG (TT)' -> urn:li:domain:cungngtt"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:gross%20margin",
+      "entity_urn": "urn:li:glossaryTerm:gross%20margin",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:tichnh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/gross margin domain: 'TÀI CHÍNH'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'TÀI CHÍNH' -> urn:li:domain:tichnh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:hil%20testing%20%28hardware-in-the-loop%29",
+      "entity_urn": "urn:li:glossaryTerm:hil%20testing%20%28hardware-in-the-loop%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:phttrinxe",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/hil testing (hardware-in-the-loop) domain: 'PHÁT TRIỂN XE'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'PHÁT TRIỂN XE' -> urn:li:domain:phttrinxe"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:homologation",
+      "entity_urn": "urn:li:glossaryTerm:homologation",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:phttrinxe",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/homologation domain: 'PHÁT TRIỂN XE'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'PHÁT TRIỂN XE' -> urn:li:domain:phttrinxe"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:hs%20code",
+      "entity_urn": "urn:li:glossaryTerm:hs%20code",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:cungngnh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/hs code domain: 'CUNG ỨNG (NĐH)'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'CUNG ỨNG (NĐH)' -> urn:li:domain:cungngnh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:import%20duty",
+      "entity_urn": "urn:li:glossaryTerm:import%20duty",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:cungngnh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/import duty domain: 'CUNG ỨNG (NĐH)'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'CUNG ỨNG (NĐH)' -> urn:li:domain:cungngnh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:incentive%20program",
+      "entity_urn": "urn:li:glossaryTerm:incentive%20program",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:kinhdoanh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/incentive program domain: 'KINH DOANH'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'KINH DOANH' -> urn:li:domain:kinhdoanh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:incoterms",
+      "entity_urn": "urn:li:glossaryTerm:incoterms",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:cungngnh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/incoterms domain: 'CUNG ỨNG (NĐH)'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'CUNG ỨNG (NĐH)' -> urn:li:domain:cungngnh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:inventory%20turnover",
+      "entity_urn": "urn:li:glossaryTerm:inventory%20turnover",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:logistic",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/inventory turnover domain: 'LOGISTIC'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'LOGISTIC' -> urn:li:domain:logistic"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:ip%20rating%20%28ingress%20protection%29",
+      "entity_urn": "urn:li:glossaryTerm:ip%20rating%20%28ingress%20protection%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:vgreen",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/ip rating (ingress protection) domain: 'VGreen'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'VGreen' -> urn:li:domain:vgreen"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:irr%20%28internal%20rate%20of%20return%29",
+      "entity_urn": "urn:li:glossaryTerm:irr%20%28internal%20rate%20of%20return%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:tichnh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/irr (internal rate of return) domain: 'TÀI CHÍNH'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'TÀI CHÍNH' -> urn:li:domain:tichnh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:jit%20%28just-in-time%29",
+      "entity_urn": "urn:li:glossaryTerm:jit%20%28just-in-time%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:snxut",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/jit (just-in-time) domain: 'SẢN XUẤT'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'SẢN XUẤT' -> urn:li:domain:snxut"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:just-in-time%20%28jit%29",
+      "entity_urn": "urn:li:glossaryTerm:just-in-time%20%28jit%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:cungngnh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/just-in-time (jit) domain: 'CUNG ỨNG (NĐH)'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'CUNG ỨNG (NĐH)' -> urn:li:domain:cungngnh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:kanban",
+      "entity_urn": "urn:li:glossaryTerm:kanban",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:snxut",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/kanban domain: 'SẢN XUẤT'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'SẢN XUẤT' -> urn:li:domain:snxut"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:kwh%20%28kilowatt-gi%E1%BB%9D%29",
+      "entity_urn": "urn:li:glossaryTerm:kwh%20%28kilowatt-gi%E1%BB%9D%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:vgreen",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/kwh (kilowatt-giờ) domain: 'VGreen'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'VGreen' -> urn:li:domain:vgreen"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:lead%20time",
+      "entity_urn": "urn:li:glossaryTerm:lead%20time",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:logistic",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/lead time domain: 'LOGISTIC'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'LOGISTIC' -> urn:li:domain:logistic"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:letter%20of%20credit%20%28l/c%29",
+      "entity_urn": "urn:li:glossaryTerm:letter%20of%20credit%20%28l/c%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:cungngnh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/letter of credit (l/c) domain: 'CUNG ỨNG (NĐH)'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'CUNG ỨNG (NĐH)' -> urn:li:domain:cungngnh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:lfp%20battery",
+      "entity_urn": "urn:li:glossaryTerm:lfp%20battery",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:vgreen",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/lfp battery domain: 'VGreen'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'VGreen' -> urn:li:domain:vgreen"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:lithium-ion",
+      "entity_urn": "urn:li:glossaryTerm:lithium-ion",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:vgreen",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/lithium-ion domain: 'VGreen'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'VGreen' -> urn:li:domain:vgreen"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:local%20content",
+      "entity_urn": "urn:li:glossaryTerm:local%20content",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:cungngtt",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/local content domain: 'CUNG ỨNG (TT)'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'CUNG ỨNG (TT)' -> urn:li:domain:cungngtt"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:make%20or%20buy%20decision",
+      "entity_urn": "urn:li:glossaryTerm:make%20or%20buy%20decision",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:cungngtt",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/make or buy decision domain: 'CUNG ỨNG (TT)'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'CUNG ỨNG (TT)' -> urn:li:domain:cungngtt"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:market%20share",
+      "entity_urn": "urn:li:glossaryTerm:market%20share",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:kinhdoanh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/market share domain: 'KINH DOANH'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'KINH DOANH' -> urn:li:domain:kinhdoanh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:min-max%20stock",
+      "entity_urn": "urn:li:glossaryTerm:min-max%20stock",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:logistic",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/min-max stock domain: 'LOGISTIC'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'LOGISTIC' -> urn:li:domain:logistic"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:model%20lifecycle",
+      "entity_urn": "urn:li:glossaryTerm:model%20lifecycle",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:kinhdoanh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/model lifecycle domain: 'KINH DOANH'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'KINH DOANH' -> urn:li:domain:kinhdoanh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:months%20of%20inventory",
+      "entity_urn": "urn:li:glossaryTerm:months%20of%20inventory",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:kinhdoanh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/months of inventory domain: 'KINH DOANH'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'KINH DOANH' -> urn:li:domain:kinhdoanh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:moq%20%28minimum%20order%20quantity%29",
+      "entity_urn": "urn:li:glossaryTerm:moq%20%28minimum%20order%20quantity%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:logistic",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/moq (minimum order quantity) domain: 'LOGISTIC'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'LOGISTIC' -> urn:li:domain:logistic"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:msrp%20%28manufacturer%27s%20suggested%20retail%20price%29",
+      "entity_urn": "urn:li:glossaryTerm:msrp%20%28manufacturer%27s%20suggested%20retail%20price%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:kinhdoanh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/msrp (manufacturer's suggested retail price) domain: 'KINH DOANH'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'KINH DOANH' -> urn:li:domain:kinhdoanh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:mtbf%20%28mean%20time%20between%20failures%29",
+      "entity_urn": "urn:li:glossaryTerm:mtbf%20%28mean%20time%20between%20failures%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:humi",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/mtbf (mean time between failures) domain: 'HẬU MÃI'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'HẬU MÃI' -> urn:li:domain:humi"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:mttr%20%28mean%20time%20to%20repair%29",
+      "entity_urn": "urn:li:glossaryTerm:mttr%20%28mean%20time%20to%20repair%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:humi",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/mttr (mean time to repair) domain: 'HẬU MÃI'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'HẬU MÃI' -> urn:li:domain:humi"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:ncr%20%28non-conformance%20report%29",
+      "entity_urn": "urn:li:glossaryTerm:ncr%20%28non-conformance%20report%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:cungngtt",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/ncr (non-conformance report) domain: 'CUNG ỨNG (TT)'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'CUNG ỨNG (TT)' -> urn:li:domain:cungngtt"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:nmc%20battery",
+      "entity_urn": "urn:li:glossaryTerm:nmc%20battery",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:vgreen",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/nmc battery domain: 'VGreen'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'VGreen' -> urn:li:domain:vgreen"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:nvh%20%28noise%2C%20vibration%2C%20harshness%29",
+      "entity_urn": "urn:li:glossaryTerm:nvh%20%28noise%2C%20vibration%2C%20harshness%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:phttrinxe",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/nvh (noise, vibration, harshness) domain: 'PHÁT TRIỂN XE'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'PHÁT TRIỂN XE' -> urn:li:domain:phttrinxe"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:ocean%20freight",
+      "entity_urn": "urn:li:glossaryTerm:ocean%20freight",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:cungngnh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/ocean freight domain: 'CUNG ỨNG (NĐH)'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'CUNG ỨNG (NĐH)' -> urn:li:domain:cungngnh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:oee%20%28overall%20equipment%20effectiveness%29",
+      "entity_urn": "urn:li:glossaryTerm:oee%20%28overall%20equipment%20effectiveness%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:snxut",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/oee (overall equipment effectiveness) domain: 'SẢN XUẤT'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'SẢN XUẤT' -> urn:li:domain:snxut"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:one%20pedal%20driving",
+      "entity_urn": "urn:li:glossaryTerm:one%20pedal%20driving",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:vgreen",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/one pedal driving domain: 'VGreen'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'VGreen' -> urn:li:domain:vgreen"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:opex%20%28operating%20expenses%29",
+      "entity_urn": "urn:li:glossaryTerm:opex%20%28operating%20expenses%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:tichnh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/opex (operating expenses) domain: 'TÀI CHÍNH'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'TÀI CHÍNH' -> urn:li:domain:tichnh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:option%20take%20rate",
+      "entity_urn": "urn:li:glossaryTerm:option%20take%20rate",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:kinhdoanh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/option take rate domain: 'KINH DOANH'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'KINH DOANH' -> urn:li:domain:kinhdoanh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:overturn%20rate",
+      "entity_urn": "urn:li:glossaryTerm:overturn%20rate",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:humi",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/overturn rate domain: 'HẬU MÃI'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'HẬU MÃI' -> urn:li:domain:humi"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:p%26l%20%28profit%20%26%20loss%29",
+      "entity_urn": "urn:li:glossaryTerm:p%26l%20%28profit%20%26%20loss%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:tichnh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/p&l (profit & loss) domain: 'TÀI CHÍNH'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'TÀI CHÍNH' -> urn:li:domain:tichnh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:packing%20list",
+      "entity_urn": "urn:li:glossaryTerm:packing%20list",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:cungngnh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/packing list domain: 'CUNG ỨNG (NĐH)'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'CUNG ỨNG (NĐH)' -> urn:li:domain:cungngnh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:part%20return%20rate",
+      "entity_urn": "urn:li:glossaryTerm:part%20return%20rate",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:humi",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/part return rate domain: 'HẬU MÃI'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'HẬU MÃI' -> urn:li:domain:humi"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:parts%20availability%20rate",
+      "entity_urn": "urn:li:glossaryTerm:parts%20availability%20rate",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:humi",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/parts availability rate domain: 'HẬU MÃI'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'HẬU MÃI' -> urn:li:domain:humi"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:platform%20architecture",
+      "entity_urn": "urn:li:glossaryTerm:platform%20architecture",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:phttrinxe",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/platform architecture domain: 'PHÁT TRIỂN XE'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'PHÁT TRIỂN XE' -> urn:li:domain:phttrinxe"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:po%20%28purchase%20order%29",
+      "entity_urn": "urn:li:glossaryTerm:po%20%28purchase%20order%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:cungngtt",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/po (purchase order) domain: 'CUNG ỨNG (TT)'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'CUNG ỨNG (TT)' -> urn:li:domain:cungngtt"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:preferential%20tariff",
+      "entity_urn": "urn:li:glossaryTerm:preferential%20tariff",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:cungngnh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/preferential tariff domain: 'CUNG ỨNG (NĐH)'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'CUNG ỨNG (NĐH)' -> urn:li:domain:cungngnh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:preferred%20supplier",
+      "entity_urn": "urn:li:glossaryTerm:preferred%20supplier",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:cungngtt",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/preferred supplier domain: 'CUNG ỨNG (TT)'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'CUNG ỨNG (TT)' -> urn:li:domain:cungngtt"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:preventive%20maintenance",
+      "entity_urn": "urn:li:glossaryTerm:preventive%20maintenance",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:humi",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/preventive maintenance domain: 'HẬU MÃI'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'HẬU MÃI' -> urn:li:domain:humi"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:production%20order",
+      "entity_urn": "urn:li:glossaryTerm:production%20order",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:snxut",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/production order domain: 'SẢN XUẤT'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'SẢN XUẤT' -> urn:li:domain:snxut"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:prototype",
+      "entity_urn": "urn:li:glossaryTerm:prototype",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:phttrinxe",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/prototype domain: 'PHÁT TRIỂN XE'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'PHÁT TRIỂN XE' -> urn:li:domain:phttrinxe"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:quality%20gate",
+      "entity_urn": "urn:li:glossaryTerm:quality%20gate",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:snxut",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/quality gate domain: 'SẢN XUẤT'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'SẢN XUẤT' -> urn:li:domain:snxut"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:range%20%28t%E1%BA%A7m%20xa%29",
+      "entity_urn": "urn:li:glossaryTerm:range%20%28t%E1%BA%A7m%20xa%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:vgreen",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/range (tầm xa) domain: 'VGreen'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'VGreen' -> urn:li:domain:vgreen"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:regenerative%20braking",
+      "entity_urn": "urn:li:glossaryTerm:regenerative%20braking",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:vgreen",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/regenerative braking domain: 'VGreen'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'VGreen' -> urn:li:domain:vgreen"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:reorder%20point%20%28rop%29",
+      "entity_urn": "urn:li:glossaryTerm:reorder%20point%20%28rop%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:logistic",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/reorder point (rop) domain: 'LOGISTIC'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'LOGISTIC' -> urn:li:domain:logistic"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:residual%20value",
+      "entity_urn": "urn:li:glossaryTerm:residual%20value",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:kinhdoanh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/residual value domain: 'KINH DOANH'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'KINH DOANH' -> urn:li:domain:kinhdoanh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:rework%20rate",
+      "entity_urn": "urn:li:glossaryTerm:rework%20rate",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:snxut",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/rework rate domain: 'SẢN XUẤT'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'SẢN XUẤT' -> urn:li:domain:snxut"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:rfq%20%28request%20for%20quotation%29",
+      "entity_urn": "urn:li:glossaryTerm:rfq%20%28request%20for%20quotation%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:cungngtt",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/rfq (request for quotation) domain: 'CUNG ỨNG (TT)'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'CUNG ỨNG (TT)' -> urn:li:domain:cungngtt"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:routing",
+      "entity_urn": "urn:li:glossaryTerm:routing",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:snxut",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/routing domain: 'SẢN XUẤT'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'SẢN XUẤT' -> urn:li:domain:snxut"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:rsm%20%28regional%20service%20manager%29",
+      "entity_urn": "urn:li:glossaryTerm:rsm%20%28regional%20service%20manager%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:humi",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/rsm (regional service manager) domain: 'HẬU MÃI'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'HẬU MÃI' -> urn:li:domain:humi"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:safety%20stock",
+      "entity_urn": "urn:li:glossaryTerm:safety%20stock",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:logistic",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/safety stock domain: 'LOGISTIC'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'LOGISTIC' -> urn:li:domain:logistic"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:sales%20mix",
+      "entity_urn": "urn:li:glossaryTerm:sales%20mix",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:kinhdoanh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/sales mix domain: 'KINH DOANH'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'KINH DOANH' -> urn:li:domain:kinhdoanh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:sales%20target",
+      "entity_urn": "urn:li:glossaryTerm:sales%20target",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:kinhdoanh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/sales target domain: 'KINH DOANH'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'KINH DOANH' -> urn:li:domain:kinhdoanh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:service%20absorption%20rate",
+      "entity_urn": "urn:li:glossaryTerm:service%20absorption%20rate",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:humi",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/service absorption rate domain: 'HẬU MÃI'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'HẬU MÃI' -> urn:li:domain:humi"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:service%20campaign",
+      "entity_urn": "urn:li:glossaryTerm:service%20campaign",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:humi",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/service campaign domain: 'HẬU MÃI'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'HẬU MÃI' -> urn:li:domain:humi"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:service%20retention%20rate",
+      "entity_urn": "urn:li:glossaryTerm:service%20retention%20rate",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:humi",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/service retention rate domain: 'HẬU MÃI'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'HẬU MÃI' -> urn:li:domain:humi"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:shelf%20life",
+      "entity_urn": "urn:li:glossaryTerm:shelf%20life",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:logistic",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/shelf life domain: 'LOGISTIC'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'LOGISTIC' -> urn:li:domain:logistic"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:smed%20%28single%20minute%20exchange%20of%20die%29",
+      "entity_urn": "urn:li:glossaryTerm:smed%20%28single%20minute%20exchange%20of%20die%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:snxut",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/smed (single minute exchange of die) domain: 'SẢN XUẤT'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'SẢN XUẤT' -> urn:li:domain:snxut"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:soc%20%28state%20of%20charge%29",
+      "entity_urn": "urn:li:glossaryTerm:soc%20%28state%20of%20charge%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:vgreen",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/soc (state of charge) domain: 'VGreen'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'VGreen' -> urn:li:domain:vgreen"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:soh%20%28state%20of%20health%29",
+      "entity_urn": "urn:li:glossaryTerm:soh%20%28state%20of%20health%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:vgreen",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/soh (state of health) domain: 'VGreen'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'VGreen' -> urn:li:domain:vgreen"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:soh%20%28stock%20on%20hand%29",
+      "entity_urn": "urn:li:glossaryTerm:soh%20%28stock%20on%20hand%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:logistic",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/soh (stock on hand) domain: 'LOGISTIC'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'LOGISTIC' -> urn:li:domain:logistic"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:sor%20%28statement%20of%20requirements%29",
+      "entity_urn": "urn:li:glossaryTerm:sor%20%28statement%20of%20requirements%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:phttrinxe",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/sor (statement of requirements) domain: 'PHÁT TRIỂN XE'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'PHÁT TRIỂN XE' -> urn:li:domain:phttrinxe"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:standard%20cost",
+      "entity_urn": "urn:li:glossaryTerm:standard%20cost",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:tichnh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/standard cost domain: 'TÀI CHÍNH'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'TÀI CHÍNH' -> urn:li:domain:tichnh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:supplier%20audit",
+      "entity_urn": "urn:li:glossaryTerm:supplier%20audit",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:cungngtt",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/supplier audit domain: 'CUNG ỨNG (TT)'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'CUNG ỨNG (TT)' -> urn:li:domain:cungngtt"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:supplier%20development",
+      "entity_urn": "urn:li:glossaryTerm:supplier%20development",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:cungngtt",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/supplier development domain: 'CUNG ỨNG (TT)'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'CUNG ỨNG (TT)' -> urn:li:domain:cungngtt"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:supplier%20evaluation",
+      "entity_urn": "urn:li:glossaryTerm:supplier%20evaluation",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:cungngtt",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/supplier evaluation domain: 'CUNG ỨNG (TT)'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'CUNG ỨNG (TT)' -> urn:li:domain:cungngtt"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:supplier%20tier%20management",
+      "entity_urn": "urn:li:glossaryTerm:supplier%20tier%20management",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:cungngtt",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/supplier tier management domain: 'CUNG ỨNG (TT)'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'CUNG ỨNG (TT)' -> urn:li:domain:cungngtt"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:supply%20chain%20risk",
+      "entity_urn": "urn:li:glossaryTerm:supply%20chain%20risk",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:cungngnh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/supply chain risk domain: 'CUNG ỨNG (NĐH)'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'CUNG ỨNG (NĐH)' -> urn:li:domain:cungngnh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:takt%20time",
+      "entity_urn": "urn:li:glossaryTerm:takt%20time",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:snxut",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/takt time domain: 'SẢN XUẤT'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'SẢN XUẤT' -> urn:li:domain:snxut"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:technical%20service%20bulletin",
+      "entity_urn": "urn:li:glossaryTerm:technical%20service%20bulletin",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:humi",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/technical service bulletin domain: 'HẬU MÃI'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'HẬU MÃI' -> urn:li:domain:humi"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:thermal%20management",
+      "entity_urn": "urn:li:glossaryTerm:thermal%20management",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:vgreen",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/thermal management domain: 'VGreen'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'VGreen' -> urn:li:domain:vgreen"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:throughput",
+      "entity_urn": "urn:li:glossaryTerm:throughput",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:snxut",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/throughput domain: 'SẢN XUẤT'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'SẢN XUẤT' -> urn:li:domain:snxut"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:traceability",
+      "entity_urn": "urn:li:glossaryTerm:traceability",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:snxut",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/traceability domain: 'SẢN XUẤT'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'SẢN XUẤT' -> urn:li:domain:snxut"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:trade%20spend",
+      "entity_urn": "urn:li:glossaryTerm:trade%20spend",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:kinhdoanh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/trade spend domain: 'KINH DOANH'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'KINH DOANH' -> urn:li:domain:kinhdoanh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:transfer%20price",
+      "entity_urn": "urn:li:glossaryTerm:transfer%20price",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:tichnh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/transfer price domain: 'TÀI CHÍNH'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'TÀI CHÍNH' -> urn:li:domain:tichnh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:unit%20economics",
+      "entity_urn": "urn:li:glossaryTerm:unit%20economics",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:tichnh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/unit economics domain: 'TÀI CHÍNH'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'TÀI CHÍNH' -> urn:li:domain:tichnh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:v2g%20%28vehicle-to-grid%29",
+      "entity_urn": "urn:li:glossaryTerm:v2g%20%28vehicle-to-grid%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:vgreen",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/v2g (vehicle-to-grid) domain: 'VGreen'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'VGreen' -> urn:li:domain:vgreen"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:variance%20analysis",
+      "entity_urn": "urn:li:glossaryTerm:variance%20analysis",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:tichnh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/variance analysis domain: 'TÀI CHÍNH'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'TÀI CHÍNH' -> urn:li:domain:tichnh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:vehicle%20off-road%20rate",
+      "entity_urn": "urn:li:glossaryTerm:vehicle%20off-road%20rate",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:humi",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/vehicle off-road rate domain: 'HẬU MÃI'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'HẬU MÃI' -> urn:li:domain:humi"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:vendor%20managed%20inventory",
+      "entity_urn": "urn:li:glossaryTerm:vendor%20managed%20inventory",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:cungngtt",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/vendor managed inventory domain: 'CUNG ỨNG (TT)'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'CUNG ỨNG (TT)' -> urn:li:domain:cungngtt"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:vendor%20scorecard",
+      "entity_urn": "urn:li:glossaryTerm:vendor%20scorecard",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:cungngtt",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/vendor scorecard domain: 'CUNG ỨNG (TT)'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'CUNG ỨNG (TT)' -> urn:li:domain:cungngtt"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:virtual%20validation",
+      "entity_urn": "urn:li:glossaryTerm:virtual%20validation",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:phttrinxe",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/virtual validation domain: 'PHÁT TRIỂN XE'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'PHÁT TRIỂN XE' -> urn:li:domain:phttrinxe"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:vpcr%20%28verification%20prototype%20confirmation%20review%29",
+      "entity_urn": "urn:li:glossaryTerm:vpcr%20%28verification%20prototype%20confirmation%20review%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:phttrinxe",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/vpcr (verification prototype confirmation review) domain: 'PHÁT TRIỂN XE'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'PHÁT TRIỂN XE' -> urn:li:domain:phttrinxe"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:wacc%20%28weighted%20average%20cost%20of%20capital%29",
+      "entity_urn": "urn:li:glossaryTerm:wacc%20%28weighted%20average%20cost%20of%20capital%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:tichnh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/wacc (weighted average cost of capital) domain: 'TÀI CHÍNH'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'TÀI CHÍNH' -> urn:li:domain:tichnh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:warranty%20claim",
+      "entity_urn": "urn:li:glossaryTerm:warranty%20claim",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:humi",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/warranty claim domain: 'HẬU MÃI'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'HẬU MÃI' -> urn:li:domain:humi"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:warranty%20reserve",
+      "entity_urn": "urn:li:glossaryTerm:warranty%20reserve",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:humi",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/warranty reserve domain: 'HẬU MÃI'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'HẬU MÃI' -> urn:li:domain:humi"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:wholesale%20volume",
+      "entity_urn": "urn:li:glossaryTerm:wholesale%20volume",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:kinhdoanh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/wholesale volume domain: 'KINH DOANH'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'KINH DOANH' -> urn:li:domain:kinhdoanh"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:wip%20%28work%20in%20process%29",
+      "entity_urn": "urn:li:glossaryTerm:wip%20%28work%20in%20process%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:snxut",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/wip (work in process) domain: 'SẢN XUẤT'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'SẢN XUẤT' -> urn:li:domain:snxut"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:wltp%20%28worldwide%20harmonized%20light%20vehicles%20test%20procedure%29",
+      "entity_urn": "urn:li:glossaryTerm:wltp%20%28worldwide%20harmonized%20light%20vehicles%20test%20procedure%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:vgreen",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/wltp (worldwide harmonized light vehicles test procedure) domain: 'VGreen'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'VGreen' -> urn:li:domain:vgreen"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:wms%20%28warehouse%20management%20system%29",
+      "entity_urn": "urn:li:glossaryTerm:wms%20%28warehouse%20management%20system%29",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:logistic",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/wms (warehouse management system) domain: 'LOGISTIC'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'LOGISTIC' -> urn:li:domain:logistic"
+      ]
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:working%20capital",
+      "entity_urn": "urn:li:glossaryTerm:working%20capital",
+      "entity_type": "glossary_term",
+      "property": "domain",
+      "old_value": null,
+      "new_value": "urn:li:domain:tichnh",
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": "source yaml glossary/working capital domain: 'TÀI CHÍNH'",
+      "reason": "verified source defines term domain; DataHub currently has none",
+      "validated": true,
+      "validations": [
+        "source domain 'TÀI CHÍNH' -> urn:li:domain:tichnh"
+      ]
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_assembly_line,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_assembly_line,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "assembly_line_id"
+        ],
+        "foreignKeys": [
+          "plant_id->dim_plant.plant_id",
+          "supervisor_id->dim_worker.worker_id"
+        ],
+        "isPartOfKey_fields": [
+          "assembly_line_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "dim_assembly_line.assembly_line_id": "explicit 'Khóa chính' in source business_definition",
+        "dim_assembly_line.plant_id->dim_plant.plant_id": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "dim_assembly_line.supervisor_id->dim_worker.worker_id": "explicit 'tham chiếu đến <table>' in source business_definition; ref field derived = target PK"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_cost_center,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_cost_center,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "cost_center_id"
+        ],
+        "foreignKeys": [
+          "plant_id->dim_plant.plant_id"
+        ],
+        "isPartOfKey_fields": [
+          "cost_center_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "dim_cost_center.cost_center_id": "explicit 'Khóa chính' in source business_definition",
+        "dim_cost_center.plant_id->dim_plant.plant_id": "explicit 'tham chiếu đến <table>' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_fiscal_calendar,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_fiscal_calendar,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "fiscal_date_id"
+        ],
+        "foreignKeys": [],
+        "isPartOfKey_fields": [
+          "fiscal_date_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "dim_fiscal_calendar.fiscal_date_id": "explicit 'Khóa chính' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_gl_account,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_gl_account,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "gl_account_id"
+        ],
+        "foreignKeys": [],
+        "isPartOfKey_fields": [
+          "gl_account_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "dim_gl_account.gl_account_id": "explicit 'Khóa chính' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_inventory_category,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_inventory_category,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "material_code"
+        ],
+        "foreignKeys": [
+          "material_code->dim_material.material_code"
+        ],
+        "isPartOfKey_fields": [
+          "material_code"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "dim_inventory_category.material_code": "explicit 'Khóa chính' in source business_definition",
+        "dim_inventory_category.material_code->dim_material.material_code": "explicit 'tham chiếu đến <table>' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "material_code"
+        ],
+        "foreignKeys": [],
+        "isPartOfKey_fields": [
+          "material_code"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "dim_material.material_code": "explicit 'Khóa chính' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_plant,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_plant,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "plant_id"
+        ],
+        "foreignKeys": [],
+        "isPartOfKey_fields": [
+          "plant_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "dim_plant.plant_id": "explicit 'Khóa chính' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_product,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_product,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "product_id"
+        ],
+        "foreignKeys": [],
+        "isPartOfKey_fields": [
+          "product_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "dim_product.product_id": "explicit 'Khóa chính' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_profit_center,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_profit_center,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "profit_center_id"
+        ],
+        "foreignKeys": [],
+        "isPartOfKey_fields": [
+          "profit_center_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "dim_profit_center.profit_center_id": "explicit 'Khóa chính' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_shift,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_shift,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "shift_id"
+        ],
+        "foreignKeys": [
+          "plant_id->dim_plant.plant_id"
+        ],
+        "isPartOfKey_fields": [
+          "shift_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "dim_shift.shift_id": "explicit 'Khóa chính' in source business_definition",
+        "dim_shift.plant_id->dim_plant.plant_id": "explicit 'tham chiếu đến <table>' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_station,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_station,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "station_id"
+        ],
+        "foreignKeys": [
+          "assembly_line_id->dim_assembly_line.assembly_line_id"
+        ],
+        "isPartOfKey_fields": [
+          "station_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "dim_station.station_id": "explicit 'Khóa chính' in source business_definition",
+        "dim_station.assembly_line_id->dim_assembly_line.assembly_line_id": "explicit 'tham chiếu đến <table>' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_supplier,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_supplier,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "supplier_id"
+        ],
+        "foreignKeys": [],
+        "isPartOfKey_fields": [
+          "supplier_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "dim_supplier.supplier_id": "explicit 'Khóa chính' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_uom,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_uom,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "uom_code"
+        ],
+        "foreignKeys": [],
+        "isPartOfKey_fields": [
+          "uom_code"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "dim_uom.uom_code": "explicit 'Khóa chính' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_vendor_invoice,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_vendor_invoice,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "invoice_id"
+        ],
+        "foreignKeys": [
+          "supplier_id->dim_supplier.supplier_id"
+        ],
+        "isPartOfKey_fields": [
+          "invoice_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "dim_vendor_invoice.invoice_id": "explicit 'Khóa chính' in source business_definition",
+        "dim_vendor_invoice.supplier_id->dim_supplier.supplier_id": "explicit 'tham chiếu đến <table>' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_warehouse,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_warehouse,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "warehouse_id"
+        ],
+        "foreignKeys": [
+          "plant_id->dim_plant.plant_id"
+        ],
+        "isPartOfKey_fields": [
+          "warehouse_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "dim_warehouse.warehouse_id": "explicit 'Khóa chính' in source business_definition",
+        "dim_warehouse.plant_id->dim_plant.plant_id": "explicit 'tham chiếu đến <table>' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_worker,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_worker,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "worker_id"
+        ],
+        "foreignKeys": [
+          "plant_id->dim_plant.plant_id"
+        ],
+        "isPartOfKey_fields": [
+          "worker_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "dim_worker.worker_id": "explicit 'Khóa chính' in source business_definition",
+        "dim_worker.plant_id->dim_plant.plant_id": "explicit 'tham chiếu đến <table>' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_actual_cost,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_actual_cost,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "actual_cost_id"
+        ],
+        "foreignKeys": [
+          "cost_center_id->dim_cost_center.cost_center_id",
+          "gl_account_id->dim_gl_account.gl_account_id",
+          "order_id->fact_production_order.order_id"
+        ],
+        "isPartOfKey_fields": [
+          "actual_cost_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "fact_actual_cost.actual_cost_id": "explicit 'Khóa chính' in source business_definition",
+        "fact_actual_cost.cost_center_id->dim_cost_center.cost_center_id": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_actual_cost.gl_account_id->dim_gl_account.gl_account_id": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_actual_cost.order_id->fact_production_order.order_id": "explicit 'tham chiếu đến <table>' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_ap_payable,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_ap_payable,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "payable_id"
+        ],
+        "foreignKeys": [
+          "supplier_id->dim_supplier.supplier_id"
+        ],
+        "isPartOfKey_fields": [
+          "payable_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "fact_ap_payable.payable_id": "explicit 'Khóa chính' in source business_definition",
+        "fact_ap_payable.supplier_id->dim_supplier.supplier_id": "explicit 'tham chiếu đến <table>' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_ar_receivable,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_ar_receivable,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "receivable_id"
+        ],
+        "foreignKeys": [],
+        "isPartOfKey_fields": [
+          "receivable_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "fact_ar_receivable.receivable_id": "explicit 'Khóa chính' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_budget,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_budget,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "budget_id"
+        ],
+        "foreignKeys": [
+          "cost_center_id->dim_cost_center.cost_center_id",
+          "gl_account_id->dim_gl_account.gl_account_id",
+          "profit_center_id->dim_profit_center.profit_center_id"
+        ],
+        "isPartOfKey_fields": [
+          "budget_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "fact_budget.budget_id": "explicit 'Khóa chính' in source business_definition",
+        "fact_budget.cost_center_id->dim_cost_center.cost_center_id": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_budget.profit_center_id->dim_profit_center.profit_center_id": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_budget.gl_account_id->dim_gl_account.gl_account_id": "explicit 'tham chiếu đến <table>' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_budget_variance,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_budget_variance,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "variance_id"
+        ],
+        "foreignKeys": [
+          "cost_center_id->dim_cost_center.cost_center_id",
+          "gl_account_id->dim_gl_account.gl_account_id",
+          "profit_center_id->dim_profit_center.profit_center_id"
+        ],
+        "isPartOfKey_fields": [
+          "variance_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "fact_budget_variance.variance_id": "explicit 'Khóa chính' in source business_definition",
+        "fact_budget_variance.cost_center_id->dim_cost_center.cost_center_id": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_budget_variance.profit_center_id->dim_profit_center.profit_center_id": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_budget_variance.gl_account_id->dim_gl_account.gl_account_id": "explicit 'tham chiếu đến <table>' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_cash_flow,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_cash_flow,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "cash_flow_id"
+        ],
+        "foreignKeys": [],
+        "isPartOfKey_fields": [
+          "cash_flow_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "fact_cash_flow.cash_flow_id": "explicit 'Khóa chính' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_defect_tracking,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_defect_tracking,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "defect_id"
+        ],
+        "foreignKeys": [
+          "order_id->fact_production_order.order_id",
+          "station_id->dim_station.station_id"
+        ],
+        "isPartOfKey_fields": [
+          "defect_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "fact_defect_tracking.defect_id": "explicit 'Khóa chính' in source business_definition",
+        "fact_defect_tracking.order_id->fact_production_order.order_id": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_defect_tracking.station_id->dim_station.station_id": "explicit 'tham chiếu đến <table>' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_downtime,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_downtime,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "downtime_id"
+        ],
+        "foreignKeys": [
+          "assembly_line_id->dim_assembly_line.assembly_line_id",
+          "shift_id->dim_shift.shift_id",
+          "station_id->dim_station.station_id"
+        ],
+        "isPartOfKey_fields": [
+          "downtime_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "fact_downtime.downtime_id": "explicit 'Khóa chính' in source business_definition",
+        "fact_downtime.assembly_line_id->dim_assembly_line.assembly_line_id": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_downtime.station_id->dim_station.station_id": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_downtime.shift_id->dim_shift.shift_id": "explicit 'tham chiếu đến <table>' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_fixed_asset,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_fixed_asset,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "asset_id"
+        ],
+        "foreignKeys": [
+          "cost_center_id->dim_cost_center.cost_center_id",
+          "plant_id->dim_plant.plant_id"
+        ],
+        "isPartOfKey_fields": [
+          "asset_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "fact_fixed_asset.asset_id": "explicit 'Khóa chính' in source business_definition",
+        "fact_fixed_asset.plant_id->dim_plant.plant_id": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_fixed_asset.cost_center_id->dim_cost_center.cost_center_id": "explicit 'tham chiếu đến <table>' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_general_ledger,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_general_ledger,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "journal_entry_id"
+        ],
+        "foreignKeys": [
+          "cost_center_id->dim_cost_center.cost_center_id",
+          "gl_account_id->dim_gl_account.gl_account_id",
+          "profit_center_id->dim_profit_center.profit_center_id"
+        ],
+        "isPartOfKey_fields": [
+          "journal_entry_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "fact_general_ledger.journal_entry_id": "explicit 'Khóa chính' in source business_definition",
+        "fact_general_ledger.gl_account_id->dim_gl_account.gl_account_id": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_general_ledger.cost_center_id->dim_cost_center.cost_center_id": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_general_ledger.profit_center_id->dim_profit_center.profit_center_id": "explicit 'tham chiếu đến <table>' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_goods_issue,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_goods_issue,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "goods_issue_id"
+        ],
+        "foreignKeys": [
+          "cost_center_id->dim_cost_center.cost_center_id",
+          "material_code->dim_material.material_code",
+          "order_id->fact_production_order.order_id",
+          "warehouse_id->dim_warehouse.warehouse_id"
+        ],
+        "isPartOfKey_fields": [
+          "goods_issue_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "fact_goods_issue.goods_issue_id": "explicit 'Khóa chính' in source business_definition",
+        "fact_goods_issue.order_id->fact_production_order.order_id": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_goods_issue.material_code->dim_material.material_code": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_goods_issue.warehouse_id->dim_warehouse.warehouse_id": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_goods_issue.cost_center_id->dim_cost_center.cost_center_id": "explicit 'tham chiếu đến <table>' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_goods_receipt,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_goods_receipt,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "goods_receipt_id"
+        ],
+        "foreignKeys": [
+          "material_code->dim_material.material_code",
+          "po_number->fact_purchase_order.po_number",
+          "supplier_id->dim_supplier.supplier_id",
+          "warehouse_id->dim_warehouse.warehouse_id"
+        ],
+        "isPartOfKey_fields": [
+          "goods_receipt_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "fact_goods_receipt.goods_receipt_id": "explicit 'Khóa chính' in source business_definition",
+        "fact_goods_receipt.po_number->fact_purchase_order.po_number": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_goods_receipt.supplier_id->dim_supplier.supplier_id": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_goods_receipt.material_code->dim_material.material_code": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_goods_receipt.warehouse_id->dim_warehouse.warehouse_id": "explicit 'tham chiếu đến <table>' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_inventory,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_inventory,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "inventory_id"
+        ],
+        "foreignKeys": [
+          "material_code->dim_material.material_code",
+          "warehouse_id->dim_warehouse.warehouse_id"
+        ],
+        "isPartOfKey_fields": [
+          "inventory_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "fact_inventory.inventory_id": "explicit 'Khóa chính' in source business_definition",
+        "fact_inventory.material_code->dim_material.material_code": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_inventory.warehouse_id->dim_warehouse.warehouse_id": "explicit 'tham chiếu đến <table>' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_inventory_forecast,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_inventory_forecast,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "forecast_id"
+        ],
+        "foreignKeys": [
+          "material_code->dim_material.material_code",
+          "warehouse_id->dim_warehouse.warehouse_id"
+        ],
+        "isPartOfKey_fields": [
+          "forecast_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "fact_inventory_forecast.forecast_id": "explicit 'Khóa chính' in source business_definition",
+        "fact_inventory_forecast.material_code->dim_material.material_code": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_inventory_forecast.warehouse_id->dim_warehouse.warehouse_id": "explicit 'tham chiếu đến <table>' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_inventory_movement,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_inventory_movement,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "movement_id"
+        ],
+        "foreignKeys": [
+          "material_code->dim_material.material_code",
+          "warehouse_id->dim_warehouse.warehouse_id"
+        ],
+        "isPartOfKey_fields": [
+          "movement_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "fact_inventory_movement.movement_id": "explicit 'Khóa chính' in source business_definition",
+        "fact_inventory_movement.material_code->dim_material.material_code": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_inventory_movement.warehouse_id->dim_warehouse.warehouse_id": "explicit 'tham chiếu đến <table>' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_lead_time,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_lead_time,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "lead_time_id"
+        ],
+        "foreignKeys": [
+          "material_code->dim_material.material_code",
+          "po_number->fact_purchase_order.po_number",
+          "supplier_id->dim_supplier.supplier_id"
+        ],
+        "isPartOfKey_fields": [
+          "lead_time_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "fact_lead_time.lead_time_id": "explicit 'Khóa chính' in source business_definition",
+        "fact_lead_time.po_number->fact_purchase_order.po_number": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_lead_time.supplier_id->dim_supplier.supplier_id": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_lead_time.material_code->dim_material.material_code": "explicit 'tham chiếu đến <table>' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_material_consumption,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_material_consumption,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "consumption_id"
+        ],
+        "foreignKeys": [
+          "assembly_line_id->dim_assembly_line.assembly_line_id",
+          "material_code->dim_material.material_code",
+          "order_id->fact_production_order.order_id",
+          "shift_id->dim_shift.shift_id"
+        ],
+        "isPartOfKey_fields": [
+          "consumption_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "fact_material_consumption.consumption_id": "explicit 'Khóa chính' in source business_definition",
+        "fact_material_consumption.order_id->fact_production_order.order_id": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_material_consumption.material_code->dim_material.material_code": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_material_consumption.assembly_line_id->dim_assembly_line.assembly_line_id": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_material_consumption.shift_id->dim_shift.shift_id": "explicit 'tham chiếu đến <table>' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_oee_metrics,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_oee_metrics,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "oee_id"
+        ],
+        "foreignKeys": [
+          "assembly_line_id->dim_assembly_line.assembly_line_id",
+          "shift_id->dim_shift.shift_id"
+        ],
+        "isPartOfKey_fields": [
+          "oee_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "fact_oee_metrics.oee_id": "explicit 'Khóa chính' in source business_definition",
+        "fact_oee_metrics.assembly_line_id->dim_assembly_line.assembly_line_id": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_oee_metrics.shift_id->dim_shift.shift_id": "explicit 'tham chiếu đến <table>' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_physical_inventory,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_physical_inventory,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "physical_inventory_id"
+        ],
+        "foreignKeys": [
+          "material_code->dim_material.material_code",
+          "warehouse_id->dim_warehouse.warehouse_id"
+        ],
+        "isPartOfKey_fields": [
+          "physical_inventory_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "fact_physical_inventory.physical_inventory_id": "explicit 'Khóa chính' in source business_definition",
+        "fact_physical_inventory.material_code->dim_material.material_code": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_physical_inventory.warehouse_id->dim_warehouse.warehouse_id": "explicit 'tham chiếu đến <table>' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_order,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_order,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "order_id"
+        ],
+        "foreignKeys": [
+          "assembly_line_id->dim_assembly_line.assembly_line_id",
+          "plant_id->dim_plant.plant_id",
+          "product_id->dim_product.product_id"
+        ],
+        "isPartOfKey_fields": [
+          "order_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "fact_production_order.order_id": "explicit 'Khóa chính' in source business_definition",
+        "fact_production_order.product_id->dim_product.product_id": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_production_order.plant_id->dim_plant.plant_id": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_production_order.assembly_line_id->dim_assembly_line.assembly_line_id": "explicit 'tham chiếu đến <table>' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_output,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_output,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "output_id"
+        ],
+        "foreignKeys": [
+          "assembly_line_id->dim_assembly_line.assembly_line_id",
+          "order_id->fact_production_order.order_id",
+          "product_id->dim_product.product_id",
+          "shift_id->dim_shift.shift_id",
+          "station_id->dim_station.station_id"
+        ],
+        "isPartOfKey_fields": [
+          "output_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "fact_production_output.output_id": "explicit 'Khóa chính' in source business_definition",
+        "fact_production_output.order_id->fact_production_order.order_id": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_production_output.shift_id->dim_shift.shift_id": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_production_output.assembly_line_id->dim_assembly_line.assembly_line_id": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_production_output.station_id->dim_station.station_id": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_production_output.product_id->dim_product.product_id": "explicit 'tham chiếu đến <table>' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_routing,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_routing,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "routing_id"
+        ],
+        "foreignKeys": [
+          "assembly_line_id->dim_assembly_line.assembly_line_id",
+          "product_id->dim_product.product_id",
+          "station_id->dim_station.station_id"
+        ],
+        "isPartOfKey_fields": [
+          "routing_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "fact_production_routing.routing_id": "explicit 'Khóa chính' in source business_definition",
+        "fact_production_routing.product_id->dim_product.product_id": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_production_routing.assembly_line_id->dim_assembly_line.assembly_line_id": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_production_routing.station_id->dim_station.station_id": "explicit 'tham chiếu đến <table>' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_purchase_order,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_purchase_order,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "po_number"
+        ],
+        "foreignKeys": [
+          "material_code->dim_material.material_code",
+          "supplier_id->dim_supplier.supplier_id"
+        ],
+        "isPartOfKey_fields": [
+          "po_number"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "fact_purchase_order.po_number": "explicit 'Khóa chính' in source business_definition",
+        "fact_purchase_order.supplier_id->dim_supplier.supplier_id": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_purchase_order.material_code->dim_material.material_code": "explicit 'tham chiếu đến <table>' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_quality_inspection,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_quality_inspection,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "inspection_id"
+        ],
+        "foreignKeys": [
+          "inspection_station->dim_station.station_id",
+          "inspector_id->dim_worker.worker_id",
+          "order_id->fact_production_order.order_id"
+        ],
+        "isPartOfKey_fields": [
+          "inspection_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "fact_quality_inspection.inspection_id": "explicit 'Khóa chính' in source business_definition",
+        "fact_quality_inspection.order_id->fact_production_order.order_id": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_quality_inspection.inspection_station->dim_station.station_id": "explicit 'tham chiếu đến <table>' in source business_definition; ref field derived = target PK",
+        "fact_quality_inspection.inspector_id->dim_worker.worker_id": "explicit 'tham chiếu đến <table>' in source business_definition; ref field derived = target PK"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_reorder_alert,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_reorder_alert,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "alert_id"
+        ],
+        "foreignKeys": [
+          "material_code->dim_material.material_code",
+          "supplier_id->dim_supplier.supplier_id",
+          "warehouse_id->dim_warehouse.warehouse_id"
+        ],
+        "isPartOfKey_fields": [
+          "alert_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "fact_reorder_alert.alert_id": "explicit 'Khóa chính' in source business_definition",
+        "fact_reorder_alert.material_code->dim_material.material_code": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_reorder_alert.warehouse_id->dim_warehouse.warehouse_id": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_reorder_alert.supplier_id->dim_supplier.supplier_id": "explicit 'tham chiếu đến <table>' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_revenue,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_revenue,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "revenue_id"
+        ],
+        "foreignKeys": [
+          "product_id->dim_product.product_id",
+          "profit_center_id->dim_profit_center.profit_center_id"
+        ],
+        "isPartOfKey_fields": [
+          "revenue_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "fact_revenue.revenue_id": "explicit 'Khóa chính' in source business_definition",
+        "fact_revenue.product_id->dim_product.product_id": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_revenue.profit_center_id->dim_profit_center.profit_center_id": "explicit 'tham chiếu đến <table>' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_standard_cost,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_standard_cost,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "standard_cost_id"
+        ],
+        "foreignKeys": [
+          "material_code->dim_material.material_code",
+          "product_id->dim_product.product_id"
+        ],
+        "isPartOfKey_fields": [
+          "standard_cost_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "fact_standard_cost.standard_cost_id": "explicit 'Khóa chính' in source business_definition",
+        "fact_standard_cost.product_id->dim_product.product_id": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_standard_cost.material_code->dim_material.material_code": "explicit 'tham chiếu đến <table>' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_stock_transfer,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_stock_transfer,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "transfer_id"
+        ],
+        "foreignKeys": [
+          "from_warehouse_id->dim_warehouse.warehouse_id",
+          "material_code->dim_material.material_code",
+          "to_warehouse_id->dim_warehouse.warehouse_id"
+        ],
+        "isPartOfKey_fields": [
+          "transfer_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "fact_stock_transfer.transfer_id": "explicit 'Khóa chính' in source business_definition",
+        "fact_stock_transfer.material_code->dim_material.material_code": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_stock_transfer.from_warehouse_id->dim_warehouse.warehouse_id": "explicit 'tham chiếu đến <table>' in source business_definition; ref field derived = target PK",
+        "fact_stock_transfer.to_warehouse_id->dim_warehouse.warehouse_id": "explicit 'tham chiếu đến <table>' in source business_definition; ref field derived = target PK"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_wip_tracking,PROD)",
+      "entity_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_wip_tracking,PROD)",
+      "entity_type": "dataset",
+      "property": "schemaMetadata(primaryKeys, foreignKeys, field.isPartOfKey)",
+      "old_value": {
+        "primaryKeys": [],
+        "foreignKeys": [],
+        "isPartOfKey_fields": []
+      },
+      "new_value": {
+        "primaryKeys": [
+          "wip_id"
+        ],
+        "foreignKeys": [
+          "assembly_line_id->dim_assembly_line.assembly_line_id",
+          "order_id->fact_production_order.order_id",
+          "station_id->dim_station.station_id"
+        ],
+        "isPartOfKey_fields": [
+          "wip_id"
+        ]
+      },
+      "status": "PLANNED_WRITE",
+      "confidence": "CONFIRMED",
+      "evidence": {
+        "fact_wip_tracking.wip_id": "explicit 'Khóa chính' in source business_definition",
+        "fact_wip_tracking.order_id->fact_production_order.order_id": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_wip_tracking.assembly_line_id->dim_assembly_line.assembly_line_id": "explicit 'tham chiếu đến <table>' in source business_definition",
+        "fact_wip_tracking.station_id->dim_station.station_id": "explicit 'tham chiếu đến <table>' in source business_definition"
+      },
+      "reason": "primary/foreign key metadata explicitly declared in verified source (mock-data/*.yaml business_definition); DataHub schema currently lacks them",
+      "validated": true,
+      "validations": []
+    }
+  ]
+}

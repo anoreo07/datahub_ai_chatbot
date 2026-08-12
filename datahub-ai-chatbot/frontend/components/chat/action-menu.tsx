@@ -2,7 +2,6 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  FileUp,
   Search,
   TerminalSquare,
   Activity,
@@ -13,7 +12,6 @@ import {
 } from "lucide-react";
 
 export type ActionKind =
-  | "upload"
   | "search"
   | "sql"
   | "impact"
@@ -31,14 +29,6 @@ export interface ActionDef {
 }
 
 const ITEMS: ActionDef[] = [
-  {
-    kind: "upload",
-    title: "Upload Document",
-    desc: "So sánh schema file với DataHub",
-    icon: FileUp,
-    prompt: "Upload tài liệu để so sánh schema với DataHub ",
-    placeholder: "Chọn file hoặc gõ mô tả dataset cần so sánh…",
-  },
   {
     kind: "search",
     title: "Search Dataset",

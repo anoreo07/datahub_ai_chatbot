@@ -1,16 +1,19 @@
 "use client";
 
-import { useState } from "react";
-import { Loader2 } from "lucide-react";
+import { useCallback, useState } from "react";
+import { Loader2, PlugZap } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { apiFetch } from "@/lib/api";
 import { cn } from "@/lib/utils";
 
-const TABS = ["Sync", "Index", "Documents"] as const;
+import { RolesPanel } from "./roles-panel";
+
+const TABS = ["Sync", "Index", "Documents", "DataHub", "Roles"] as const;
 type Tab = (typeof TABS)[number];
 
 export default function AdminPage() {
@@ -36,6 +39,8 @@ export default function AdminPage() {
         {tab === "Sync" && <SyncPanel />}
         {tab === "Index" && <IndexPanel />}
         {tab === "Documents" && <DocumentsPanel />}
+        {tab === "DataHub" && <DataHubPanel />}
+        {tab === "Roles" && <RolesPanel />}
       </div>
     </div>
   );
@@ -177,6 +182,87 @@ function DocumentsPanel() {
           {loading && <Loader2 className="animate-spin" />} Import
         </Button>
         {result && <p className="text-sm text-muted-foreground">{result}</p>}
+      </CardContent>
+    </Card>
+  );
+}
+
+interface DataHubHealth {
+  status: string;
+  mode: string;
+  gms_url?: string;
+  latency_ms?: number;
+  checked_at?: string;
+}
+
+function DataHubPanel() {
+  const [checking, setChecking] = useState(false);
+  const [health, setHealth] = useState<DataHubHealth | null>(null);
+  const [error, setError] = useState("");
+
+  const run = useCallback(async () => {
+    setChecking(true);
+    setError("");
+    try {
+      const data = await apiFetch<DataHubHealth>("/api/v1/datasources/datahub/health");
+      setHealth(data);
+    } catch (e) {
+      setError((e as Error).message);
+      setHealth({ status: "error", mode: "graphql" });
+    } finally {
+      setChecking(false);
+    }
+  }, []);
+
+  const ok = health?.status === "ok";
+
+  return (
+    <Card>
+      <CardHeader className="flex-row items-center justify-between">
+        <CardTitle>Kết nối DataHub</CardTitle>
+        <Button onClick={run} disabled={checking} size="sm">
+          {checking ? <Loader2 className="animate-spin" /> : <PlugZap />} Kiểm tra kết nối
+        </Button>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {error && <p className="text-sm text-destructive">{error}</p>}
+
+        <div className="space-y-3 rounded-lg border p-4 text-sm">
+          <div className="flex items-center justify-between">
+            <span className="text-muted-foreground">KẾT NỐI DATAHUB (URL)</span>
+            <span className="font-mono font-medium">{health?.gms_url || "-"}</span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-muted-foreground">Chế độ</span>
+            <Badge variant="secondary">{health?.mode === "mock" ? "Mock" : "GraphQL (GMS)"}</Badge>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-muted-foreground">Trạng thái</span>
+            <span className="flex items-center gap-2">
+              {health && (
+                <Badge variant={ok ? "success" : "destructive"}>{health.status}</Badge>
+              )}
+              {health?.latency_ms != null && (
+                <span className="text-xs text-muted-foreground">{health.latency_ms} ms</span>
+              )}
+            </span>
+          </div>
+          {health?.checked_at && (
+            <div className="flex items-center justify-between border-t pt-2">
+              <span className="text-muted-foreground">Thời điểm kiểm tra</span>
+              <span className="text-xs text-muted-foreground">
+                {new Date(health.checked_at).toLocaleString()}
+              </span>
+            </div>
+          )}
+        </div>
+
+        {!health && !error && (
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <PlugZap className="h-4 w-4" />
+            Nhấn &ldquo;Kiểm tra kết nối&rdquo; để ping DataHub GMS API.
+          </div>
+        )}
       </CardContent>
     </Card>
   );

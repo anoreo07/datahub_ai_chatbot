@@ -123,6 +123,74 @@ class ConversationHistory(Base):
     conversation_id: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
     question: Mapped[str] = mapped_column(Text, nullable=False)
     answer: Mapped[str] = mapped_column(Text, nullable=False)
+    title: Mapped[str | None] = mapped_column(String(512), nullable=True)
+    is_pinned: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    is_favorite: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+
+
+class RbacRoleDB(Base):
+    __tablename__ = "rbac_roles"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    name: Mapped[str] = mapped_column(String(128), unique=True, nullable=False, index=True)
+    description: Mapped[str | None] = mapped_column(String(512), nullable=True)
+    # All-domain role flag (e.g. the built-in admin role).
+    is_admin: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    # Legacy fallback: role derived from a user's group membership.
+    group_names: Mapped[list[str]] = mapped_column(
+        postgresql.ARRAY(String), nullable=False, default=list
+    )
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+
+class RbacRoleDomainDB(Base):
+    __tablename__ = "rbac_role_domains"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    role_id: Mapped[int] = mapped_column(
+        Integer, ForeignKey("rbac_roles.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    domain: Mapped[str] = mapped_column(String(128), nullable=False)
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+
+
+class UserAccount(Base):
+    __tablename__ = "rbac_users"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    user_id: Mapped[str] = mapped_column(String(128), unique=True, nullable=False, index=True)
+    username: Mapped[str] = mapped_column(String(128), unique=True, nullable=False, index=True)
+    email: Mapped[str] = mapped_column(String(256), nullable=False, default="")
+    display_name: Mapped[str] = mapped_column(String(512), nullable=False, default="")
+    is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
+    is_admin: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    password_hash: Mapped[str | None] = mapped_column(String(256), nullable=True)
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+
+class RbacUserRole(Base):
+    __tablename__ = "rbac_user_roles"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    user_id: Mapped[str] = mapped_column(String(128), nullable=False, index=True)
+    role_id: Mapped[int] = mapped_column(
+        Integer, ForeignKey("rbac_roles.id", ondelete="CASCADE"), nullable=False, index=True
+    )
     created_at: Mapped[datetime.datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
@@ -162,6 +230,71 @@ class IndexJob(Base):
     )
     completed_at: Mapped[datetime.datetime | None] = mapped_column(
         DateTime(timezone=True), nullable=True
+    )
+    updated_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+
+class ImageStatus(enum.StrEnum):
+    UPLOADED = "uploaded"
+    ANALYZING = "analyzing"
+    ANALYZED = "analyzed"
+    FAILED = "failed"
+
+
+class ImageRecord(Base):
+    """Metadata for an uploaded image. Binary payload lives on storage, not here."""
+
+    __tablename__ = "image_records"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    image_id: Mapped[str] = mapped_column(String(64), nullable=False, unique=True, index=True)
+    user_id: Mapped[str] = mapped_column(String(128), nullable=False, index=True)
+    conversation_id: Mapped[str | None] = mapped_column(String(64), nullable=True, index=True)
+    original_filename: Mapped[str] = mapped_column(String(512), nullable=False)
+    filename: Mapped[str] = mapped_column(String(512), nullable=False)
+    mime_type: Mapped[str] = mapped_column(String(128), nullable=False)
+    size: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    storage_path: Mapped[str] = mapped_column(String(1024), nullable=False)
+    thumbnail_path: Mapped[str | None] = mapped_column(String(1024), nullable=True)
+    upload_time: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_time: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+    status: Mapped[str] = mapped_column(
+        String(16), nullable=False, default=ImageStatus.UPLOADED.value, index=True
+    )
+    vision_cache_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    content_hash: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+    # Soft-delete support.
+    is_deleted: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False, index=True)
+    deleted_at: Mapped[datetime.datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    # Vision / Image Context results (JSON payload, cached after re-run).
+    image_type: Mapped[str | None] = mapped_column(String(32), nullable=True)
+    dataset_detected: Mapped[str | None] = mapped_column(String(512), nullable=True)
+    vision_result: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    image_context: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    parse_error: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+
+
+class VisionCacheRecord(Base):
+    """Cached vision analysis result keyed by image content hash."""
+
+    __tablename__ = "vision_cache_records"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    cache_id: Mapped[str] = mapped_column(String(64), nullable=False, unique=True, index=True)
+    content_hash: Mapped[str] = mapped_column(String(64), nullable=False, unique=True, index=True)
+    model_id: Mapped[str] = mapped_column(String(128), nullable=False, default="")
+    vision_result: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    image_context: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
     )
     updated_at: Mapped[datetime.datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()

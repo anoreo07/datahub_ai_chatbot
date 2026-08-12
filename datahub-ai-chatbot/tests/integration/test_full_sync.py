@@ -12,6 +12,7 @@ async def test_full_sync_creates_entities(db_session) -> None:
     assert results.get("dataset", 0) >= 2
     assert results.get("dashboard", 0) >= 1
     assert results.get("glossary_term", 0) >= 5
+    assert results.get("document", 0) >= 1
 
 
 @pytest.mark.asyncio
@@ -52,3 +53,14 @@ async def test_full_sync_stores_payload(db_session) -> None:
     assert entity.payload.get("name") == "sales.orders"
     assert entity.domain == "Sales"
     assert entity.datahub_url is not None
+
+
+@pytest.mark.asyncio
+async def test_full_sync_documents_persisted(db_session) -> None:
+    orchestrator = SyncOrchestrator(db_session)
+    await orchestrator.run_full_sync()
+
+    entity_repo = EntityRepository(db_session)
+    doc = await entity_repo.get_by_urn("urn:li:document:MonthlyRevenueMethodology")
+    assert doc is not None
+    assert doc.entity_type == "document"

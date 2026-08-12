@@ -1,7 +1,5 @@
 from pydantic import BaseModel
 
-from app.schemas.chat import LineageData
-
 
 class SchemaColumn(BaseModel):
     name: str
@@ -69,24 +67,6 @@ class ImpactResponse(BaseModel):
     affected_jobs: list[ImpactItem] = []
     business_impact: list[str] = []
     risk_level: str = "low"
-    valid: bool = False
-
-
-class QualityDimension(BaseModel):
-    key: str
-    label: str
-    score: int = 0
-    status: str = "Missing"
-    detail: str = ""
-
-
-class QualityResponse(BaseModel):
-    dataset: str = ""
-    urn: str = ""
-    dimensions: list[QualityDimension] = []
-    overall_score: int = 0
-    highlights: list[str] = []
-    recommendations: list[str] = []
     valid: bool = False
 
 

@@ -1,0 +1,1514 @@
+{
+  "generated_at": "2026-08-12T15:51:39.766274",
+  "datasets": [
+    {
+      "dataset": "dim_certification",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_certification,PROD)",
+      "owner_status": "PRESENT",
+      "datahub_owners": [
+        {
+          "type": "NONE",
+          "owner": {
+            "urn": "urn:li:corpuser:dang-quang-huy",
+            "username": "dang-quang-huy",
+            "properties": {
+              "displayName": "Đặng Quang Huy",
+              "email": "huydq@vinfast.vn"
+            }
+          }
+        }
+      ],
+      "source_owner_ids": [
+        "procurement"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "DataHub owner present: [{\"type\": \"NONE\", \"owner\": {\"urn\": \"urn:li:corpuser:dang-quang-huy\", \"username\": \"dang-quang-huy\", \"properties\": {\"displayName\": \"Đặng Quang Huy\", \"email\": \"huydq@vinfast.vn\"}}}]"
+    },
+    {
+      "dataset": "dim_service_center",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_service_center,PROD)",
+      "owner_status": "PRESENT",
+      "datahub_owners": [
+        {
+          "type": "NONE",
+          "owner": {
+            "urn": "urn:li:corpuser:dang-quang-huy",
+            "username": "dang-quang-huy",
+            "properties": {
+              "displayName": "Đặng Quang Huy",
+              "email": "huydq@vinfast.vn"
+            }
+          }
+        }
+      ],
+      "source_owner_ids": [
+        "after_sales_ops"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "DataHub owner present: [{\"type\": \"NONE\", \"owner\": {\"urn\": \"urn:li:corpuser:dang-quang-huy\", \"username\": \"dang-quang-huy\", \"properties\": {\"displayName\": \"Đặng Quang Huy\", \"email\": \"huydq@vinfast.vn\"}}}]"
+    },
+    {
+      "dataset": "dim_assembly_line",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_assembly_line,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "plant-operations"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['plant-operations'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_contract",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_contract,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "procurement"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['procurement'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_cost_center",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_cost_center,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "finance-controlling"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['finance-controlling'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_country",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_country,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "NDH_TRADE"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['NDH_TRADE'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_customer",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_customer,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "crm_team"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['crm_team'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_dealer",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_dealer,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "sales_ops"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['sales_ops'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_domestic_vendor",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_domestic_vendor,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "procurement"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['procurement'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_fiscal_calendar",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_fiscal_calendar,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "finance-controlling"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['finance-controlling'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_foreign_vendor",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_foreign_vendor,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "NDH_PROCUREMENT"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['NDH_PROCUREMENT'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_gl_account",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_gl_account,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "finance-controlling"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['finance-controlling'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_hs_code",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_hs_code,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "NDH_CUSTOMS"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['NDH_CUSTOMS'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_import_duty",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_import_duty,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "NDH_TAX"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['NDH_TAX'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_incoterm",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_incoterm,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "NDH_LOGISTICS"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['NDH_LOGISTICS'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_inventory_category",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_inventory_category,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "inventory-management"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['inventory-management'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_material",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "material-management"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['material-management'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_material_group",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material_group,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "procurement"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['procurement'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_plant",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_plant,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "plant-operations"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['plant-operations'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_port",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_port,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "NDH_LOGISTICS"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['NDH_LOGISTICS'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_procurement_category",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_procurement_category,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "procurement"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['procurement'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_product",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_product,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "product-master-team"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['product-master-team'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_product_model",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_product_model,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "product_management"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['product_management'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_profit_center",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_profit_center,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "finance-controlling"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['finance-controlling'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_promotion",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_promotion,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "marketing"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['marketing'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_region",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_region,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "sales_ops"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['sales_ops'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_repair_code",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_repair_code,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "technical_training"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['technical_training'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_sales_channel",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_sales_channel,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "sales_ops"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['sales_ops'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_shift",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_shift,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "production-planning"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['production-planning'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_spare_part",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_spare_part,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "spare_part_management"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['spare_part_management'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_station",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_station,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "plant-operations"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['plant-operations'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_supplier",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_supplier,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "procurement-team"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['procurement-team'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_technician",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_technician,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "hr_after_sales"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['hr_after_sales'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_uom",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_uom,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "master-data-team"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['master-data-team'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_vendor_invoice",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_vendor_invoice,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "finance-accounting"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['finance-accounting'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_warehouse",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_warehouse,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "warehouse-management"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['warehouse-management'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_warranty_policy",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_warranty_policy,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "after_sales_ops"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['after_sales_ops'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_worker",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_worker,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "hr-system"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['hr-system'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_actual_cost",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_actual_cost,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "finance-controlling"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['finance-controlling'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_ap_payable",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_ap_payable,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "finance-accounting"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['finance-accounting'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_ar_receivable",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_ar_receivable,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "finance-accounting"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['finance-accounting'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_budget",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_budget,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "finance-controlling"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['finance-controlling'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_budget_variance",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_budget_variance,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "finance-controlling"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['finance-controlling'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_cash_flow",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_cash_flow,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "finance-treasury"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['finance-treasury'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_contract_performance",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_contract_performance,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "procurement"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['procurement'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_customer_complaint",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_customer_complaint,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "customer_care"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['customer_care'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_customer_feedback",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_customer_feedback,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "crm_team"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['crm_team'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_customer_satisfaction",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_customer_satisfaction,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "customer_care"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['customer_care'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_customs_declaration",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_customs_declaration,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "NDH_CUSTOMS"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['NDH_CUSTOMS'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_dealer_performance",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_dealer_performance,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "dealer_management"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['dealer_management'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_defect_tracking",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_defect_tracking,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "quality-team"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['quality-team'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_downtime",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_downtime,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "maintenance-team"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['maintenance-team'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_fixed_asset",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_fixed_asset,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "finance-accounting"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['finance-accounting'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_foreign_audit",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_foreign_audit,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "NDH_SQE"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['NDH_SQE'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_foreign_contract",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_foreign_contract,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "NDH_LEGAL"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['NDH_LEGAL'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_general_ledger",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_general_ledger,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "finance-accounting"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['finance-accounting'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_goods_issue",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_goods_issue,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "warehouse-management"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['warehouse-management'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_goods_receipt",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_goods_receipt,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "warehouse-management"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['warehouse-management'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_import_cost",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_import_cost,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "NDH_FINANCE"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['NDH_FINANCE'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_import_order",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_import_order,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "NDH_PROCUREMENT"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['NDH_PROCUREMENT'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_import_schedule",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_import_schedule,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "NDH_PLANNING"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['NDH_PLANNING'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_incentive_claim",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_incentive_claim,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "sales_ops"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['sales_ops'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_inventory",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_inventory,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "inventory-management"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['inventory-management'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_inventory_forecast",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_inventory_forecast,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "demand-planning"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['demand-planning'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_inventory_movement",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_inventory_movement,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "warehouse-management"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['warehouse-management'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_lead_management",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_lead_management,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "marketing"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['marketing'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_lead_time",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_lead_time,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "procurement-team"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['procurement-team'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_letter_of_credit",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_letter_of_credit,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "NDH_FINANCE"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['NDH_FINANCE'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_local_content",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_local_content,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "localization_team"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['localization_team'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_maintenance_record",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_maintenance_record,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "after_sales_ops"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['after_sales_ops'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_market_share",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_market_share,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "market_intelligence"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['market_intelligence'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_material_consumption",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_material_consumption,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "material-control"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['material-control'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_non_conformance",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_non_conformance,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "quality_management"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['quality_management'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_oee_metrics",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_oee_metrics,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "plant-operations"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['plant-operations'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_part_inventory",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_part_inventory,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "spare_part_management"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['spare_part_management'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_physical_inventory",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_physical_inventory,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "inventory-management"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['inventory-management'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_production_order",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_order,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "production-planning"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['production-planning'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_production_output",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_output,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "production-supervisor"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['production-supervisor'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_production_routing",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_routing,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "process-engineering"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['process-engineering'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_purchase_order",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_purchase_order,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "procurement-team"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['procurement-team'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_purchase_requisition",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_purchase_requisition,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "procurement"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['procurement'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_quality_inbound",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_quality_inbound,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "NDH_QUALITY"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['NDH_QUALITY'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_quality_inspection",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_quality_inspection,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "quality-team"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['quality-team'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_recall",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_recall,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "quality_management"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['quality_management'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_reorder_alert",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_reorder_alert,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "procurement-team"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['procurement-team'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_revenue",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_revenue,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "finance-accounting"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['finance-accounting'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_rfq",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_rfq,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "procurement"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['procurement'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_sales_delivery",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_sales_delivery,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "sales_ops"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['sales_ops'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_sales_order",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_sales_order,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "sales_ops"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['sales_ops'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_sales_target",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_sales_target,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "sales_planning"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['sales_planning'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_service_appointment",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_service_appointment,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "after_sales_ops"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['after_sales_ops'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_service_campaign",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_service_campaign,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "after_sales_ops"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['after_sales_ops'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_service_order",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_service_order,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "after_sales_ops"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['after_sales_ops'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_shipping_manifest",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_shipping_manifest,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "NDH_LOGISTICS"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['NDH_LOGISTICS'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_standard_cost",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_standard_cost,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "finance-controlling"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['finance-controlling'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_stock_transfer",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_stock_transfer,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "warehouse-management"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['warehouse-management'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_test_drive",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_test_drive,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "sales_ops"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['sales_ops'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_vehicle_history",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_vehicle_history,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "after_sales_ops"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['after_sales_ops'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_vendor_audit",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_vendor_audit,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "quality_management"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['quality_management'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_vendor_evaluation",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_vendor_evaluation,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "procurement"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['procurement'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_vendor_payment",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_vendor_payment,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "finance"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['finance'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_vendor_quality",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_vendor_quality,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "quality_management"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['quality_management'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_vendor_scorecard",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_vendor_scorecard,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "procurement"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['procurement'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_warranty_claim",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_warranty_claim,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "warranty_management"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['warranty_management'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_wip_tracking",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_wip_tracking,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "production-supervisor"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['production-supervisor'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_battery_pack",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_battery_pack,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "VGREEN_BATTERY"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['VGREEN_BATTERY'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_bms_config",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_bms_config,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "VGREEN_BMS"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['VGREEN_BMS'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_charging_connector",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_charging_connector,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "VGREEN_HARDWARE"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['VGREEN_HARDWARE'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_charging_station",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_charging_station,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "VGREEN_OPERATIONS"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['VGREEN_OPERATIONS'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_component",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_component,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "RD_COMPONENT_ENG"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['RD_COMPONENT_ENG'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_drawing",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_drawing,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "RD_CAD"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['RD_CAD'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_engineering_change",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_engineering_change,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "RD_ENGINEERING"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['RD_ENGINEERING'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_ev_model",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_ev_model,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "VGREEN_PRODUCT"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['VGREEN_PRODUCT'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_ev_owner",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_ev_owner,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "VGREEN_CUSTOMER"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['VGREEN_CUSTOMER'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_platform",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_platform,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "RD_VEHICLE_ARCH"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['RD_VEHICLE_ARCH'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_project",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_project,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "RD_PROJECT_MGMT"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['RD_PROJECT_MGMT'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "dim_specification",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_specification,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "RD_SYSTEM_ENG"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['RD_SYSTEM_ENG'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_battery_health",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_battery_health,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "VGREEN_BATTERY"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['VGREEN_BATTERY'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_battery_swap",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_battery_swap,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "VGREEN_SWAP"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['VGREEN_SWAP'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_bom_engineering",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_bom_engineering,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "RD_BOM_MGMT"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['RD_BOM_MGMT'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_change_request",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_change_request,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "RD_CCB"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['RD_CCB'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_charging_session",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_charging_session,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "VGREEN_CHARGING"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['VGREEN_CHARGING'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_charging_station_maintenance",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_charging_station_maintenance,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "VGREEN_MAINTENANCE"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['VGREEN_MAINTENANCE'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_design_release",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_design_release,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "RD_DESIGN"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['RD_DESIGN'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_dvp",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_dvp,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "RD_DVP"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['RD_DVP'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_energy_consumption",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_energy_consumption,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "VGREEN_ANALYTICS"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['VGREEN_ANALYTICS'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_ev_fleet",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_ev_fleet,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "VGREEN_FLEET"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['VGREEN_FLEET'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_fmea",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_fmea,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "RD_QUALITY_ENG"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['RD_QUALITY_ENG'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_homologation",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_homologation,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "RD_REGULATORY"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['RD_REGULATORY'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_prototype",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_prototype,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "RD_PROTOTYPE"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['RD_PROTOTYPE'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_range_tracking",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_range_tracking,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "VGREEN_ANALYTICS"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['VGREEN_ANALYTICS'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_soc_log",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_soc_log,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "VGREEN_TELEMETRY"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['VGREEN_TELEMETRY'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_telemetry",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_telemetry,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "VGREEN_TELEMETRY"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['VGREEN_TELEMETRY'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_test_cycle",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_test_cycle,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "RD_TEST_LAB"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['RD_TEST_LAB'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    },
+    {
+      "dataset": "fact_test_result",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_test_result,PROD)",
+      "owner_status": "NONE",
+      "datahub_owners": [],
+      "source_owner_ids": [
+        "RD_TEST_VALIDATION"
+      ],
+      "source_owner_ids_resolvable": [],
+      "note": "source references unresolved owner id(s) ['RD_TEST_VALIDATION'] (not defined in owners.yaml, no corpuser entity) -> left NONE, not fabricated"
+    }
+  ]
+}

@@ -1,0 +1,211 @@
+{
+  "generated_at": "2026-08-12T15:51:39.762824",
+  "groups": [
+    {
+      "group_id": "prefix_charging_station",
+      "datasets": [
+        "dim_charging_station",
+        "fact_charging_station_maintenance"
+      ],
+      "reason": "shared normalized two-token prefix"
+    },
+    {
+      "group_id": "token_battery",
+      "datasets": [
+        "dim_battery_pack",
+        "fact_battery_health",
+        "fact_battery_swap"
+      ],
+      "reason": "shared normalized single-token root"
+    },
+    {
+      "group_id": "token_budget",
+      "datasets": [
+        "fact_budget",
+        "fact_budget_variance"
+      ],
+      "reason": "shared normalized single-token root"
+    },
+    {
+      "group_id": "token_charging",
+      "datasets": [
+        "dim_charging_connector",
+        "dim_charging_station",
+        "fact_charging_session",
+        "fact_charging_station_maintenance"
+      ],
+      "reason": "shared normalized single-token root"
+    },
+    {
+      "group_id": "token_contract",
+      "datasets": [
+        "dim_contract",
+        "fact_contract_performance"
+      ],
+      "reason": "shared normalized single-token root"
+    },
+    {
+      "group_id": "token_customer",
+      "datasets": [
+        "dim_customer",
+        "fact_customer_complaint",
+        "fact_customer_feedback",
+        "fact_customer_satisfaction"
+      ],
+      "reason": "shared normalized single-token root"
+    },
+    {
+      "group_id": "token_dealer",
+      "datasets": [
+        "dim_dealer",
+        "fact_dealer_performance"
+      ],
+      "reason": "shared normalized single-token root"
+    },
+    {
+      "group_id": "token_ev",
+      "datasets": [
+        "dim_ev_model",
+        "dim_ev_owner",
+        "fact_ev_fleet"
+      ],
+      "reason": "shared normalized single-token root"
+    },
+    {
+      "group_id": "token_foreign",
+      "datasets": [
+        "dim_foreign_vendor",
+        "fact_foreign_audit",
+        "fact_foreign_contract"
+      ],
+      "reason": "shared normalized single-token root"
+    },
+    {
+      "group_id": "token_goods",
+      "datasets": [
+        "fact_goods_issue",
+        "fact_goods_receipt"
+      ],
+      "reason": "shared normalized single-token root"
+    },
+    {
+      "group_id": "token_import",
+      "datasets": [
+        "dim_import_duty",
+        "fact_import_cost",
+        "fact_import_order",
+        "fact_import_schedule"
+      ],
+      "reason": "shared normalized single-token root"
+    },
+    {
+      "group_id": "token_inventory",
+      "datasets": [
+        "dim_inventory_category",
+        "fact_inventory",
+        "fact_inventory_forecast",
+        "fact_inventory_movement"
+      ],
+      "reason": "shared normalized single-token root"
+    },
+    {
+      "group_id": "token_lead",
+      "datasets": [
+        "fact_lead_management",
+        "fact_lead_time"
+      ],
+      "reason": "shared normalized single-token root"
+    },
+    {
+      "group_id": "token_material",
+      "datasets": [
+        "dim_material",
+        "dim_material_group",
+        "fact_material_consumption"
+      ],
+      "reason": "shared normalized single-token root"
+    },
+    {
+      "group_id": "token_product",
+      "datasets": [
+        "dim_product",
+        "dim_product_model"
+      ],
+      "reason": "shared normalized single-token root"
+    },
+    {
+      "group_id": "token_production",
+      "datasets": [
+        "fact_production_order",
+        "fact_production_output",
+        "fact_production_routing"
+      ],
+      "reason": "shared normalized single-token root"
+    },
+    {
+      "group_id": "token_purchase",
+      "datasets": [
+        "fact_purchase_order",
+        "fact_purchase_requisition"
+      ],
+      "reason": "shared normalized single-token root"
+    },
+    {
+      "group_id": "token_quality",
+      "datasets": [
+        "fact_quality_inbound",
+        "fact_quality_inspection"
+      ],
+      "reason": "shared normalized single-token root"
+    },
+    {
+      "group_id": "token_sales",
+      "datasets": [
+        "dim_sales_channel",
+        "fact_sales_delivery",
+        "fact_sales_order",
+        "fact_sales_target"
+      ],
+      "reason": "shared normalized single-token root"
+    },
+    {
+      "group_id": "token_service",
+      "datasets": [
+        "dim_service_center",
+        "fact_service_appointment",
+        "fact_service_campaign",
+        "fact_service_order"
+      ],
+      "reason": "shared normalized single-token root"
+    },
+    {
+      "group_id": "token_test",
+      "datasets": [
+        "fact_test_cycle",
+        "fact_test_drive",
+        "fact_test_result"
+      ],
+      "reason": "shared normalized single-token root"
+    },
+    {
+      "group_id": "token_vendor",
+      "datasets": [
+        "dim_vendor_invoice",
+        "fact_vendor_audit",
+        "fact_vendor_evaluation",
+        "fact_vendor_payment",
+        "fact_vendor_quality",
+        "fact_vendor_scorecard"
+      ],
+      "reason": "shared normalized single-token root"
+    },
+    {
+      "group_id": "token_warranty",
+      "datasets": [
+        "dim_warranty_policy",
+        "fact_warranty_claim"
+      ],
+      "reason": "shared normalized single-token root"
+    }
+  ]
+}

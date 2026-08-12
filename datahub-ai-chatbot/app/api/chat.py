@@ -36,7 +36,9 @@ async def chat(
     return await service.answer(request.question, user=current_user,
                                 conversation_id=request.conversation_id,
                                 suggested_name=request.suggested_name,
-                                model=request.model)
+                                model=request.model,
+                                selected_action=request.selected_action,
+                                images=request.images)
 
 
 @router.post("/stream")
@@ -67,6 +69,8 @@ async def chat_stream(
                     conversation_id=request.conversation_id,
                     suggested_name=request.suggested_name,
                     model=request.model,
+                    selected_action=request.selected_action,
+                    images=request.images,
                     on_status=on_status,
                     on_token=on_token,
                 )

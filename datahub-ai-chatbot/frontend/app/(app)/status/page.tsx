@@ -1,19 +1,23 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { RefreshCw, Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Pagination } from "@/components/ui/pagination";
 import { apiFetch } from "@/lib/api";
 import type { HealthResponse, HealthLog, StatsResponse } from "@/lib/types";
+
+const LOGS_PER_PAGE = 10;
 
 export default function StatusPage() {
   const [health, setHealth] = useState<HealthResponse | null>(null);
   const [logs, setLogs] = useState<HealthLog[]>([]);
   const [stats, setStats] = useState<StatsResponse | null>(null);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(0);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -26,12 +30,28 @@ export default function StatusPage() {
       setHealth(h);
       setLogs(l.logs || []);
       setStats(s);
+      setPage(0);
     } catch {
       /* server may be down in dev without backend */
     } finally {
       setLoading(false);
     }
   }, []);
+
+  const sortedLogs = useMemo(
+    () =>
+      [...logs].sort(
+        (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+      ),
+    [logs]
+  );
+
+  const pageCount = Math.max(1, Math.ceil(sortedLogs.length / LOGS_PER_PAGE));
+  const currentPage = Math.min(page, pageCount - 1);
+  const pageLogs = sortedLogs.slice(
+    currentPage * LOGS_PER_PAGE,
+    currentPage * LOGS_PER_PAGE + LOGS_PER_PAGE
+  );
 
   useEffect(() => {
     load();
@@ -114,7 +134,7 @@ export default function StatusPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {logs.map((l, i) => (
+                    {pageLogs.map((l, i) => (
                       <tr key={i} className="border-b last:border-0">
                         <td className="py-2">{new Date(l.timestamp).toLocaleString()}</td>
                         <td className="py-2">
@@ -123,7 +143,7 @@ export default function StatusPage() {
                         <td className="py-2">{l.duration_ms != null ? `${l.duration_ms} ms` : "-"}</td>
                       </tr>
                     ))}
-                    {logs.length === 0 && (
+                    {pageLogs.length === 0 && (
                       <tr>
                         <td colSpan={3} className="py-4 text-center text-muted-foreground">
                           Chưa có healthcheck nào.
@@ -132,6 +152,13 @@ export default function StatusPage() {
                     )}
                   </tbody>
                 </table>
+                <Pagination
+                  page={currentPage}
+                  pageCount={pageCount}
+                  onPageChange={setPage}
+                  showTotal
+                  total={sortedLogs.length}
+                />
               </CardContent>
             </Card>
           </>

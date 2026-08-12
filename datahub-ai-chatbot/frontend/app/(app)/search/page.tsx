@@ -8,8 +8,11 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { Pagination } from "@/components/ui/pagination";
 import { apiFetch } from "@/lib/api";
 import type { SearchResponse } from "@/lib/types";
+
+const PER_PAGE = 10;
 
 export default function SearchPage() {
   const [q, setQ] = useState("");
@@ -19,22 +22,29 @@ export default function SearchPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [result, setResult] = useState<SearchResponse | null>(null);
+  const [page, setPage] = useState(0);
 
   const run = async () => {
     setLoading(true);
     setError("");
     try {
-      const params = new URLSearchParams({ q: q || "*", limit: "30" });
+      const params = new URLSearchParams({ q: q || "*", limit: "200" });
       if (entityType) params.set("entity_type", entityType);
       if (domain) params.set("domain", domain);
       if (platform) params.set("platform", platform);
       setResult(await apiFetch<SearchResponse>(`/api/v1/search?${params}`));
+      setPage(0);
     } catch (e) {
       setError((e as Error).message);
     } finally {
       setLoading(false);
     }
   };
+
+  const results = result?.results || [];
+  const pageCount = Math.max(1, Math.ceil(results.length / PER_PAGE));
+  const currentPage = Math.min(page, pageCount - 1);
+  const pageResults = results.slice(currentPage * PER_PAGE, currentPage * PER_PAGE + PER_PAGE);
 
   return (
     <div className="h-full overflow-y-auto">
@@ -88,10 +98,10 @@ export default function SearchPage() {
         {result && !loading && (
           <>
             <p className="text-sm text-muted-foreground">
-              {result.results.length} kết quả
+              {results.length} kết quả
             </p>
             <div className="space-y-2">
-              {result.results.map((r) => (
+              {pageResults.map((r) => (
                 <Card key={r.urn}>
                   <CardContent className="flex items-start justify-between gap-3 pt-4">
                     <div className="min-w-0">
@@ -114,6 +124,7 @@ export default function SearchPage() {
                 </Card>
               ))}
             </div>
+            <Pagination page={currentPage} pageCount={pageCount} onPageChange={setPage} />
           </>
         )}
       </div>

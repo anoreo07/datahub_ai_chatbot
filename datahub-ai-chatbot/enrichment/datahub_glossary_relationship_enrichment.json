@@ -1,0 +1,8 @@
+{
+  "generated_at": "2026-08-12T15:51:39.763356",
+  "relationships_found": 0,
+  "total_datasets": 135,
+  "total_glossary_terms": 167,
+  "relationships": [],
+  "note": "No dataset<->term relationships were auto-inferred. Only explicit DataHub terminology (dataset.glossaryTerms / field.glossaryTerms) is reported. Semantic similarity is NOT used to create relationships (no-hallucination policy)."
+}

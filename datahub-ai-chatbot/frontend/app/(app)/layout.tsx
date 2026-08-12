@@ -10,6 +10,7 @@ import { useApp } from "@/lib/app-store";
 const TITLES: Record<string, string> = {
   "/chat": "Chat",
   "/search": "Search Metadata",
+  "/storage": "Storage",
   "/glossary": "Glossary Terms",
   "/entities": "Browse Entities",
   "/admin": "Administration",

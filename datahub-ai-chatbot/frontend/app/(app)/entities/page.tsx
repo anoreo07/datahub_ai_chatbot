@@ -4,28 +4,36 @@ import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 
 import { Card, CardContent } from "@/components/ui/card";
+import { Pagination } from "@/components/ui/pagination";
 import { cn } from "@/lib/utils";
 import { apiFetch } from "@/lib/api";
 import type { SearchResponse } from "@/lib/types";
 
 const TYPES = ["dataset", "dashboard", "glossary_term", "document"];
+const PER_PAGE = 10;
 
 export default function EntitiesPage() {
   const [type, setType] = useState("dataset");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [items, setItems] = useState<SearchResponse["results"]>([]);
+  const [page, setPage] = useState(0);
 
   useEffect(() => {
     setLoading(true);
     setError("");
+    setPage(0);
     apiFetch<SearchResponse>(
-      `/api/v1/search?q=*&entity_type=${type}&limit=50`
+      `/api/v1/search?q=*&entity_type=${type}&limit=200`
     )
       .then((d) => setItems(d.results || []))
       .catch((e) => setError((e as Error).message))
       .finally(() => setLoading(false));
   }, [type]);
+
+  const pageCount = Math.max(1, Math.ceil(items.length / PER_PAGE));
+  const currentPage = Math.min(page, pageCount - 1);
+  const pageItems = items.slice(currentPage * PER_PAGE, currentPage * PER_PAGE + PER_PAGE);
 
   return (
     <div className="h-full overflow-y-auto">
@@ -54,7 +62,7 @@ export default function EntitiesPage() {
         ) : (
           <div className="space-y-2">
             <p className="text-sm text-muted-foreground">{items.length} {type}</p>
-            {items.map((r) => (
+            {pageItems.map((r) => (
               <Card key={r.urn}>
                 <CardContent className="flex items-center justify-between gap-3 pt-4">
                   <div className="min-w-0">
@@ -74,6 +82,7 @@ export default function EntitiesPage() {
                 </CardContent>
               </Card>
             ))}
+            <Pagination page={currentPage} pageCount={pageCount} onPageChange={setPage} />
           </div>
         )}
       </div>

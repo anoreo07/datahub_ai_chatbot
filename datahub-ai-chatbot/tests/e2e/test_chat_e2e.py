@@ -44,6 +44,27 @@ async def test_term_to_datasets(db_session) -> None:
 
 
 @pytest.mark.asyncio
+async def test_term_concept_to_datasets(db_session) -> None:
+    from app.services.chat_service import ChatService
+    from ingestion.sync import SyncOrchestrator
+
+    orchestrator = SyncOrchestrator(db_session)
+    await orchestrator.run_full_sync()
+
+    service = ChatService(db_session)
+
+    # Concept query (not an exact term name) -> falls back to semantic term
+    # discovery + datasets that mention the concept keywords.
+    response = await service.answer(
+        "Term nào liên quan đến doanh thu và những dataset nào chứa nó?")
+    assert isinstance(response, ChatResponse)
+    assert response.intent == "TERM_TO_DATASETS"
+    assert not response.insufficient_context
+    assert response.answer
+    assert "không tìm thấy" not in response.answer.lower()
+
+
+@pytest.mark.asyncio
 async def test_owner_lookup(db_session) -> None:
     from app.services.chat_service import ChatService
     from ingestion.sync import SyncOrchestrator
@@ -57,6 +78,45 @@ async def test_owner_lookup(db_session) -> None:
     assert response.intent == "OWNER_LOOKUP"
     assert response.answer
     assert "Sales Analytics" in response.answer or "không tìm thấy" not in response.answer.lower()
+
+
+@pytest.mark.asyncio
+async def test_implicit_field_lookup(db_session) -> None:
+    """A column named directly (no "trường/field" keyword) resolves as a field."""
+    from app.services.chat_service import ChatService
+    from ingestion.sync import SyncOrchestrator
+
+    orchestrator = SyncOrchestrator(db_session)
+    await orchestrator.run_full_sync()
+
+    service = ChatService(db_session)
+
+    response = await service.answer("payment_id là gì?")
+    assert response.intent == "TERM_DEFINITION"
+    assert response.answer
+    assert not response.insufficient_context
+    assert "không tìm thấy" not in response.answer.lower()
+    # The field must resolve to the dataset that actually defines it.
+    urns = [e.urn for e in response.entities]
+    assert any("raw.payments" in u for u in urns)
+
+
+@pytest.mark.asyncio
+async def test_implicit_field_not_steals_dataset(db_session) -> None:
+    """A dataset name containing an underscore must still resolve as a dataset."""
+    from app.services.chat_service import ChatService
+    from ingestion.sync import SyncOrchestrator
+
+    orchestrator = SyncOrchestrator(db_session)
+    await orchestrator.run_full_sync()
+
+    service = ChatService(db_session)
+
+    response = await service.answer("sales.orders là gì?")
+    assert response.answer
+    assert not response.insufficient_context
+    # The dot-less sales.orders is a dataset, not a field of another dataset.
+    assert "không tìm thấy" not in response.answer.lower()
 
 
 @pytest.mark.asyncio

@@ -51,9 +51,9 @@ export function SidebarHeader({ collapsed, onToggle, onSearch }: SidebarHeaderPr
         <Image
           src="/logo.png"
           alt="DataAtlas"
-          width={30}
-          height={30}
-          className="h-8 w-8 shrink-0 rounded-lg object-contain"
+          width={40}
+          height={40}
+          className="h-10 w-10 shrink-0 rounded-lg object-contain"
         />
         <div className="flex flex-col items-center gap-1">
           {searchButton}
@@ -65,16 +65,16 @@ export function SidebarHeader({ collapsed, onToggle, onSearch }: SidebarHeaderPr
   }
 
   return (
-    <div className="flex items-center gap-2 border-b px-3 py-3">
-      <div className="flex min-w-0 flex-1 items-center gap-2 overflow-hidden">
+    <div className="flex items-center gap-3 border-b px-4 py-4">
+      <div className="flex min-w-0 flex-1 items-center gap-2.5 overflow-hidden">
         <Image
           src="/logo.png"
           alt="DataAtlas"
-          width={30}
-          height={30}
-          className="h-8 w-8 shrink-0 rounded-lg object-contain"
+          width={40}
+          height={40}
+          className="h-10 w-10 shrink-0 rounded-lg object-contain"
         />
-        <span className="truncate text-sm font-semibold tracking-tight">DataAtlas</span>
+        <span className="truncate font-display text-lg tracking-tight">DataAtlas</span>
       </div>
 
       <div className="flex shrink-0 items-center gap-1">

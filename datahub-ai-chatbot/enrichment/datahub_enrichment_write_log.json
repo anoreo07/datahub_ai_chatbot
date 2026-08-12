@@ -1,0 +1,2440 @@
+{
+  "applied_at": "2026-08-12T15:56:39.113998",
+  "total": 236,
+  "by_status": {
+    "SKIPPED_ALREADY_DESIRED": 2,
+    "VERIFIED": 234
+  },
+  "failed": 0,
+  "writes": [
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:aging%20inventory",
+      "urn": "urn:li:glossaryTerm:aging%20inventory",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:logistic",
+      "status": "SKIPPED_ALREADY_DESIRED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:andon",
+      "urn": "urn:li:glossaryTerm:andon",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:snxut",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:approved%20supplier%20list",
+      "urn": "urn:li:glossaryTerm:approved%20supplier%20list",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:cungngtt",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:balance%20sheet",
+      "urn": "urn:li:glossaryTerm:balance%20sheet",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:tichnh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:benchmarking",
+      "urn": "urn:li:glossaryTerm:benchmarking",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:phttrinxe",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:bill%20of%20lading%20%28b/l%29",
+      "urn": "urn:li:glossaryTerm:bill%20of%20lading%20%28b/l%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:cungngnh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:bms%20%28battery%20management%20system%29",
+      "urn": "urn:li:glossaryTerm:bms%20%28battery%20management%20system%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:vgreen",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:bom%20%28bill%20of%20materials%29",
+      "urn": "urn:li:glossaryTerm:bom%20%28bill%20of%20materials%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:snxut",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:bonded%20warehouse",
+      "urn": "urn:li:glossaryTerm:bonded%20warehouse",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:cungngnh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:budget%20variance",
+      "urn": "urn:li:glossaryTerm:budget%20variance",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:tichnh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:cad%20model%20%28computer-aided%20design%29",
+      "urn": "urn:li:glossaryTerm:cad%20model%20%28computer-aided%20design%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:phttrinxe",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:cae%20%28computer-aided%20engineering%29",
+      "urn": "urn:li:glossaryTerm:cae%20%28computer-aided%20engineering%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:phttrinxe",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:calibration",
+      "urn": "urn:li:glossaryTerm:calibration",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:phttrinxe",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:capacity%20utilization",
+      "urn": "urn:li:glossaryTerm:capacity%20utilization",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:snxut",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:capex%20%28capital%20expenditure%29",
+      "urn": "urn:li:glossaryTerm:capex%20%28capital%20expenditure%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:tichnh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:cash%20conversion%20cycle",
+      "urn": "urn:li:glossaryTerm:cash%20conversion%20cycle",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:tichnh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:ccs%20%28combined%20charging%20system%29",
+      "urn": "urn:li:glossaryTerm:ccs%20%28combined%20charging%20system%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:vgreen",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:certificate%20of%20origin%20%28co%29",
+      "urn": "urn:li:glossaryTerm:certificate%20of%20origin%20%28co%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:cungngnh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:changeover%20time",
+      "urn": "urn:li:glossaryTerm:changeover%20time",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:snxut",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:cif/fob",
+      "urn": "urn:li:glossaryTerm:cif/fob",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:cungngnh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:cogs%20%28cost%20of%20goods%20sold%29",
+      "urn": "urn:li:glossaryTerm:cogs%20%28cost%20of%20goods%20sold%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:tichnh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:commercial%20invoice",
+      "urn": "urn:li:glossaryTerm:commercial%20invoice",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:cungngnh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:competitive%20benchmarking",
+      "urn": "urn:li:glossaryTerm:competitive%20benchmarking",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:kinhdoanh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:contract%20management",
+      "urn": "urn:li:glossaryTerm:contract%20management",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:cungngtt",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:conversion%20rate",
+      "urn": "urn:li:glossaryTerm:conversion%20rate",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:kinhdoanh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:coverage%20date",
+      "urn": "urn:li:glossaryTerm:coverage%20date",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:logistic",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:cross-docking",
+      "urn": "urn:li:glossaryTerm:cross-docking",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:logistic",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:customer%20acquisition%20cost",
+      "urn": "urn:li:glossaryTerm:customer%20acquisition%20cost",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:kinhdoanh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:customer%20lifetime%20value",
+      "urn": "urn:li:glossaryTerm:customer%20lifetime%20value",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:kinhdoanh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:customer%20satisfaction%20index",
+      "urn": "urn:li:glossaryTerm:customer%20satisfaction%20index",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:humi",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:customs%20clearance",
+      "urn": "urn:li:glossaryTerm:customs%20clearance",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:cungngnh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:cycle%20count",
+      "urn": "urn:li:glossaryTerm:cycle%20count",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:logistic",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:cycle%20time",
+      "urn": "urn:li:glossaryTerm:cycle%20time",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:snxut",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:dc%20fast%20charger",
+      "urn": "urn:li:glossaryTerm:dc%20fast%20charger",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:vgreen",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:dealer%20margin",
+      "urn": "urn:li:glossaryTerm:dealer%20margin",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:kinhdoanh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:dealer%20network",
+      "urn": "urn:li:glossaryTerm:dealer%20network",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:kinhdoanh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:defect%20rate",
+      "urn": "urn:li:glossaryTerm:defect%20rate",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:snxut",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:depreciation",
+      "urn": "urn:li:glossaryTerm:depreciation",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:tichnh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:design%20freeze",
+      "urn": "urn:li:glossaryTerm:design%20freeze",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:phttrinxe",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:dfm/dfa%20%28design%20for%20manufacturing/assembly%29",
+      "urn": "urn:li:glossaryTerm:dfm/dfa%20%28design%20for%20manufacturing/assembly%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:phttrinxe",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:dio%20%28days%20inventory%20outstanding%29",
+      "urn": "urn:li:glossaryTerm:dio%20%28days%20inventory%20outstanding%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:logistic",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:dpo%20%28days%20payable%20outstanding%29",
+      "urn": "urn:li:glossaryTerm:dpo%20%28days%20payable%20outstanding%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:tichnh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:drop%20shipment",
+      "urn": "urn:li:glossaryTerm:drop%20shipment",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:logistic",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:dso%20%28days%20sales%20outstanding%29",
+      "urn": "urn:li:glossaryTerm:dso%20%28days%20sales%20outstanding%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:tichnh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:dual%20sourcing",
+      "urn": "urn:li:glossaryTerm:dual%20sourcing",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:cungngnh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:dvp%26r%20%28design%20verification%20plan%20%26%20report%29",
+      "urn": "urn:li:glossaryTerm:dvp%26r%20%28design%20verification%20plan%20%26%20report%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:phttrinxe",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:ebitda",
+      "urn": "urn:li:glossaryTerm:ebitda",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:tichnh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:eoq%20%28economic%20order%20quantity%29",
+      "urn": "urn:li:glossaryTerm:eoq%20%28economic%20order%20quantity%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:logistic",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:extended%20warranty",
+      "urn": "urn:li:glossaryTerm:extended%20warranty",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:humi",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:fast%20charging",
+      "urn": "urn:li:glossaryTerm:fast%20charging",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:vgreen",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:fefo%20%28first%20expiry%20first%20out%29",
+      "urn": "urn:li:glossaryTerm:fefo%20%28first%20expiry%20first%20out%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:logistic",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:fifo%20%28first%20in%20first%20out%29",
+      "urn": "urn:li:glossaryTerm:fifo%20%28first%20in%20first%20out%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:logistic",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:first%20pass%20yield%20%28fpy%29",
+      "urn": "urn:li:glossaryTerm:first%20pass%20yield%20%28fpy%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:snxut",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:first%20visit%20fix%20rate",
+      "urn": "urn:li:glossaryTerm:first%20visit%20fix%20rate",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:humi",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:fleet%20availability%20rate",
+      "urn": "urn:li:glossaryTerm:fleet%20availability%20rate",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:humi",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:fleet%20sales",
+      "urn": "urn:li:glossaryTerm:fleet%20sales",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:kinhdoanh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:fmea%20%28failure%20mode%20and%20effects%20analysis%29",
+      "urn": "urn:li:glossaryTerm:fmea%20%28failure%20mode%20and%20effects%20analysis%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:phttrinxe",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:force%20majeure",
+      "urn": "urn:li:glossaryTerm:force%20majeure",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:cungngnh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:freight%20forwarder",
+      "urn": "urn:li:glossaryTerm:freight%20forwarder",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:cungngnh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:geographic%20penetration",
+      "urn": "urn:li:glossaryTerm:geographic%20penetration",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:kinhdoanh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:goods%20in%20transit%20%28git%29",
+      "urn": "urn:li:glossaryTerm:goods%20in%20transit%20%28git%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:logistic",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:goodwill%20policy",
+      "urn": "urn:li:glossaryTerm:goodwill%20policy",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:humi",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:grn%20%28goods%20received%20note%29",
+      "urn": "urn:li:glossaryTerm:grn%20%28goods%20received%20note%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:cungngtt",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:gross%20margin",
+      "urn": "urn:li:glossaryTerm:gross%20margin",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:tichnh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:hil%20testing%20%28hardware-in-the-loop%29",
+      "urn": "urn:li:glossaryTerm:hil%20testing%20%28hardware-in-the-loop%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:phttrinxe",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:homologation",
+      "urn": "urn:li:glossaryTerm:homologation",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:phttrinxe",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:hs%20code",
+      "urn": "urn:li:glossaryTerm:hs%20code",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:cungngnh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:import%20duty",
+      "urn": "urn:li:glossaryTerm:import%20duty",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:cungngnh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:incentive%20program",
+      "urn": "urn:li:glossaryTerm:incentive%20program",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:kinhdoanh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:incoterms",
+      "urn": "urn:li:glossaryTerm:incoterms",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:cungngnh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:inventory%20turnover",
+      "urn": "urn:li:glossaryTerm:inventory%20turnover",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:logistic",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:ip%20rating%20%28ingress%20protection%29",
+      "urn": "urn:li:glossaryTerm:ip%20rating%20%28ingress%20protection%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:vgreen",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:irr%20%28internal%20rate%20of%20return%29",
+      "urn": "urn:li:glossaryTerm:irr%20%28internal%20rate%20of%20return%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:tichnh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:jit%20%28just-in-time%29",
+      "urn": "urn:li:glossaryTerm:jit%20%28just-in-time%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:snxut",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:just-in-time%20%28jit%29",
+      "urn": "urn:li:glossaryTerm:just-in-time%20%28jit%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:cungngnh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:kanban",
+      "urn": "urn:li:glossaryTerm:kanban",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:snxut",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:kwh%20%28kilowatt-gi%E1%BB%9D%29",
+      "urn": "urn:li:glossaryTerm:kwh%20%28kilowatt-gi%E1%BB%9D%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:vgreen",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:lead%20time",
+      "urn": "urn:li:glossaryTerm:lead%20time",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:logistic",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:letter%20of%20credit%20%28l/c%29",
+      "urn": "urn:li:glossaryTerm:letter%20of%20credit%20%28l/c%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:cungngnh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:lfp%20battery",
+      "urn": "urn:li:glossaryTerm:lfp%20battery",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:vgreen",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:lithium-ion",
+      "urn": "urn:li:glossaryTerm:lithium-ion",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:vgreen",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:local%20content",
+      "urn": "urn:li:glossaryTerm:local%20content",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:cungngtt",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:make%20or%20buy%20decision",
+      "urn": "urn:li:glossaryTerm:make%20or%20buy%20decision",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:cungngtt",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:market%20share",
+      "urn": "urn:li:glossaryTerm:market%20share",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:kinhdoanh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:min-max%20stock",
+      "urn": "urn:li:glossaryTerm:min-max%20stock",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:logistic",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:model%20lifecycle",
+      "urn": "urn:li:glossaryTerm:model%20lifecycle",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:kinhdoanh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:months%20of%20inventory",
+      "urn": "urn:li:glossaryTerm:months%20of%20inventory",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:kinhdoanh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:moq%20%28minimum%20order%20quantity%29",
+      "urn": "urn:li:glossaryTerm:moq%20%28minimum%20order%20quantity%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:logistic",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:msrp%20%28manufacturer%27s%20suggested%20retail%20price%29",
+      "urn": "urn:li:glossaryTerm:msrp%20%28manufacturer%27s%20suggested%20retail%20price%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:kinhdoanh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:mtbf%20%28mean%20time%20between%20failures%29",
+      "urn": "urn:li:glossaryTerm:mtbf%20%28mean%20time%20between%20failures%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:humi",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:mttr%20%28mean%20time%20to%20repair%29",
+      "urn": "urn:li:glossaryTerm:mttr%20%28mean%20time%20to%20repair%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:humi",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:ncr%20%28non-conformance%20report%29",
+      "urn": "urn:li:glossaryTerm:ncr%20%28non-conformance%20report%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:cungngtt",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:nmc%20battery",
+      "urn": "urn:li:glossaryTerm:nmc%20battery",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:vgreen",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:nvh%20%28noise%2C%20vibration%2C%20harshness%29",
+      "urn": "urn:li:glossaryTerm:nvh%20%28noise%2C%20vibration%2C%20harshness%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:phttrinxe",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:ocean%20freight",
+      "urn": "urn:li:glossaryTerm:ocean%20freight",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:cungngnh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:oee%20%28overall%20equipment%20effectiveness%29",
+      "urn": "urn:li:glossaryTerm:oee%20%28overall%20equipment%20effectiveness%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:snxut",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:one%20pedal%20driving",
+      "urn": "urn:li:glossaryTerm:one%20pedal%20driving",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:vgreen",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:opex%20%28operating%20expenses%29",
+      "urn": "urn:li:glossaryTerm:opex%20%28operating%20expenses%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:tichnh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:option%20take%20rate",
+      "urn": "urn:li:glossaryTerm:option%20take%20rate",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:kinhdoanh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:overturn%20rate",
+      "urn": "urn:li:glossaryTerm:overturn%20rate",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:humi",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:p%26l%20%28profit%20%26%20loss%29",
+      "urn": "urn:li:glossaryTerm:p%26l%20%28profit%20%26%20loss%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:tichnh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:packing%20list",
+      "urn": "urn:li:glossaryTerm:packing%20list",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:cungngnh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:part%20return%20rate",
+      "urn": "urn:li:glossaryTerm:part%20return%20rate",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:humi",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:parts%20availability%20rate",
+      "urn": "urn:li:glossaryTerm:parts%20availability%20rate",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:humi",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:platform%20architecture",
+      "urn": "urn:li:glossaryTerm:platform%20architecture",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:phttrinxe",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:po%20%28purchase%20order%29",
+      "urn": "urn:li:glossaryTerm:po%20%28purchase%20order%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:cungngtt",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:preferential%20tariff",
+      "urn": "urn:li:glossaryTerm:preferential%20tariff",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:cungngnh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:preferred%20supplier",
+      "urn": "urn:li:glossaryTerm:preferred%20supplier",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:cungngtt",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:preventive%20maintenance",
+      "urn": "urn:li:glossaryTerm:preventive%20maintenance",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:humi",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:production%20order",
+      "urn": "urn:li:glossaryTerm:production%20order",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:snxut",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:prototype",
+      "urn": "urn:li:glossaryTerm:prototype",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:phttrinxe",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:quality%20gate",
+      "urn": "urn:li:glossaryTerm:quality%20gate",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:snxut",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:range%20%28t%E1%BA%A7m%20xa%29",
+      "urn": "urn:li:glossaryTerm:range%20%28t%E1%BA%A7m%20xa%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:vgreen",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:regenerative%20braking",
+      "urn": "urn:li:glossaryTerm:regenerative%20braking",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:vgreen",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:reorder%20point%20%28rop%29",
+      "urn": "urn:li:glossaryTerm:reorder%20point%20%28rop%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:logistic",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:residual%20value",
+      "urn": "urn:li:glossaryTerm:residual%20value",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:kinhdoanh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:rework%20rate",
+      "urn": "urn:li:glossaryTerm:rework%20rate",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:snxut",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:rfq%20%28request%20for%20quotation%29",
+      "urn": "urn:li:glossaryTerm:rfq%20%28request%20for%20quotation%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:cungngtt",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:routing",
+      "urn": "urn:li:glossaryTerm:routing",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:snxut",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:rsm%20%28regional%20service%20manager%29",
+      "urn": "urn:li:glossaryTerm:rsm%20%28regional%20service%20manager%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:humi",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:safety%20stock",
+      "urn": "urn:li:glossaryTerm:safety%20stock",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:logistic",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:sales%20mix",
+      "urn": "urn:li:glossaryTerm:sales%20mix",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:kinhdoanh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:sales%20target",
+      "urn": "urn:li:glossaryTerm:sales%20target",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:kinhdoanh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:service%20absorption%20rate",
+      "urn": "urn:li:glossaryTerm:service%20absorption%20rate",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:humi",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:service%20campaign",
+      "urn": "urn:li:glossaryTerm:service%20campaign",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:humi",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:service%20retention%20rate",
+      "urn": "urn:li:glossaryTerm:service%20retention%20rate",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:humi",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:shelf%20life",
+      "urn": "urn:li:glossaryTerm:shelf%20life",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:logistic",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:smed%20%28single%20minute%20exchange%20of%20die%29",
+      "urn": "urn:li:glossaryTerm:smed%20%28single%20minute%20exchange%20of%20die%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:snxut",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:soc%20%28state%20of%20charge%29",
+      "urn": "urn:li:glossaryTerm:soc%20%28state%20of%20charge%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:vgreen",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:soh%20%28state%20of%20health%29",
+      "urn": "urn:li:glossaryTerm:soh%20%28state%20of%20health%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:vgreen",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:soh%20%28stock%20on%20hand%29",
+      "urn": "urn:li:glossaryTerm:soh%20%28stock%20on%20hand%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:logistic",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:sor%20%28statement%20of%20requirements%29",
+      "urn": "urn:li:glossaryTerm:sor%20%28statement%20of%20requirements%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:phttrinxe",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:standard%20cost",
+      "urn": "urn:li:glossaryTerm:standard%20cost",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:tichnh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:supplier%20audit",
+      "urn": "urn:li:glossaryTerm:supplier%20audit",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:cungngtt",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:supplier%20development",
+      "urn": "urn:li:glossaryTerm:supplier%20development",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:cungngtt",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:supplier%20evaluation",
+      "urn": "urn:li:glossaryTerm:supplier%20evaluation",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:cungngtt",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:supplier%20tier%20management",
+      "urn": "urn:li:glossaryTerm:supplier%20tier%20management",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:cungngtt",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:supply%20chain%20risk",
+      "urn": "urn:li:glossaryTerm:supply%20chain%20risk",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:cungngnh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:takt%20time",
+      "urn": "urn:li:glossaryTerm:takt%20time",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:snxut",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:technical%20service%20bulletin",
+      "urn": "urn:li:glossaryTerm:technical%20service%20bulletin",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:humi",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:thermal%20management",
+      "urn": "urn:li:glossaryTerm:thermal%20management",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:vgreen",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:throughput",
+      "urn": "urn:li:glossaryTerm:throughput",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:snxut",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:traceability",
+      "urn": "urn:li:glossaryTerm:traceability",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:snxut",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:trade%20spend",
+      "urn": "urn:li:glossaryTerm:trade%20spend",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:kinhdoanh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:transfer%20price",
+      "urn": "urn:li:glossaryTerm:transfer%20price",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:tichnh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:unit%20economics",
+      "urn": "urn:li:glossaryTerm:unit%20economics",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:tichnh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:v2g%20%28vehicle-to-grid%29",
+      "urn": "urn:li:glossaryTerm:v2g%20%28vehicle-to-grid%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:vgreen",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:variance%20analysis",
+      "urn": "urn:li:glossaryTerm:variance%20analysis",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:tichnh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:vehicle%20off-road%20rate",
+      "urn": "urn:li:glossaryTerm:vehicle%20off-road%20rate",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:humi",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:vendor%20managed%20inventory",
+      "urn": "urn:li:glossaryTerm:vendor%20managed%20inventory",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:cungngtt",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:vendor%20scorecard",
+      "urn": "urn:li:glossaryTerm:vendor%20scorecard",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:cungngtt",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:virtual%20validation",
+      "urn": "urn:li:glossaryTerm:virtual%20validation",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:phttrinxe",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:vpcr%20%28verification%20prototype%20confirmation%20review%29",
+      "urn": "urn:li:glossaryTerm:vpcr%20%28verification%20prototype%20confirmation%20review%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:phttrinxe",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:wacc%20%28weighted%20average%20cost%20of%20capital%29",
+      "urn": "urn:li:glossaryTerm:wacc%20%28weighted%20average%20cost%20of%20capital%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:tichnh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:warranty%20claim",
+      "urn": "urn:li:glossaryTerm:warranty%20claim",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:humi",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:warranty%20reserve",
+      "urn": "urn:li:glossaryTerm:warranty%20reserve",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:humi",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:wholesale%20volume",
+      "urn": "urn:li:glossaryTerm:wholesale%20volume",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:kinhdoanh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:wip%20%28work%20in%20process%29",
+      "urn": "urn:li:glossaryTerm:wip%20%28work%20in%20process%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:snxut",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:wltp%20%28worldwide%20harmonized%20light%20vehicles%20test%20procedure%29",
+      "urn": "urn:li:glossaryTerm:wltp%20%28worldwide%20harmonized%20light%20vehicles%20test%20procedure%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:vgreen",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:wms%20%28warehouse%20management%20system%29",
+      "urn": "urn:li:glossaryTerm:wms%20%28warehouse%20management%20system%29",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:logistic",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "glossary_domain:urn:li:glossaryTerm:working%20capital",
+      "urn": "urn:li:glossaryTerm:working%20capital",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:tichnh",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "dataset_domain:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_battery_pack,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_battery_pack,PROD)",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:vgreen",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "dataset_domain:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_bms_config,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_bms_config,PROD)",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:vgreen",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "dataset_domain:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_charging_connector,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_charging_connector,PROD)",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:vgreen",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "dataset_domain:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_charging_station,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_charging_station,PROD)",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:vgreen",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "dataset_domain:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_component,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_component,PROD)",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:phttrinxe",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "dataset_domain:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_drawing,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_drawing,PROD)",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:phttrinxe",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "dataset_domain:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_engineering_change,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_engineering_change,PROD)",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:phttrinxe",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "dataset_domain:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_ev_model,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_ev_model,PROD)",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:vgreen",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "dataset_domain:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_ev_owner,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_ev_owner,PROD)",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:vgreen",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "dataset_domain:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_platform,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_platform,PROD)",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:phttrinxe",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "dataset_domain:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_project,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_project,PROD)",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:phttrinxe",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "dataset_domain:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_specification,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_specification,PROD)",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:phttrinxe",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "dataset_domain:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_battery_health,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_battery_health,PROD)",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:vgreen",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "dataset_domain:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_battery_swap,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_battery_swap,PROD)",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:vgreen",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "dataset_domain:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_bom_engineering,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_bom_engineering,PROD)",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:phttrinxe",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "dataset_domain:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_change_request,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_change_request,PROD)",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:phttrinxe",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "dataset_domain:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_charging_session,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_charging_session,PROD)",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:vgreen",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "dataset_domain:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_charging_station_maintenance,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_charging_station_maintenance,PROD)",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:vgreen",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "dataset_domain:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_design_release,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_design_release,PROD)",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:phttrinxe",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "dataset_domain:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_dvp,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_dvp,PROD)",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:phttrinxe",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "dataset_domain:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_energy_consumption,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_energy_consumption,PROD)",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:vgreen",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "dataset_domain:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_ev_fleet,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_ev_fleet,PROD)",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:vgreen",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "dataset_domain:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_fmea,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_fmea,PROD)",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:phttrinxe",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "dataset_domain:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_homologation,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_homologation,PROD)",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:phttrinxe",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "dataset_domain:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_prototype,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_prototype,PROD)",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:phttrinxe",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "dataset_domain:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_range_tracking,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_range_tracking,PROD)",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:vgreen",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "dataset_domain:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_soc_log,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_soc_log,PROD)",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:vgreen",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "dataset_domain:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_telemetry,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_telemetry,PROD)",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:vgreen",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "dataset_domain:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_test_cycle,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_test_cycle,PROD)",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:phttrinxe",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "dataset_domain:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_test_result,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_test_result,PROD)",
+      "kind": "domain",
+      "conf": "CONFIRMED",
+      "expected": "urn:li:domain:phttrinxe",
+      "status": "VERIFIED"
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_assembly_line,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_assembly_line,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "assembly_line_id"
+      ],
+      "expected_fks": [
+        "plant_id->dim_plant.plant_id"
+      ],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "assembly_line_id"
+      ],
+      "actual_fk_pairs": [
+        "plant_id->plant_id@dim_plant"
+      ]
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_cost_center,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_cost_center,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "cost_center_id"
+      ],
+      "expected_fks": [
+        "plant_id->dim_plant.plant_id"
+      ],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "cost_center_id"
+      ],
+      "actual_fk_pairs": [
+        "plant_id->plant_id@dim_plant"
+      ]
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_fiscal_calendar,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_fiscal_calendar,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "fiscal_date_id"
+      ],
+      "expected_fks": [],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "fiscal_date_id"
+      ],
+      "actual_fk_pairs": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_gl_account,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_gl_account,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "gl_account_id"
+      ],
+      "expected_fks": [],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "gl_account_id"
+      ],
+      "actual_fk_pairs": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_inventory_category,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_inventory_category,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "material_code"
+      ],
+      "expected_fks": [
+        "material_code->dim_material.material_code"
+      ],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "material_code"
+      ],
+      "actual_fk_pairs": [
+        "material_code->material_code@dim_material"
+      ]
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_material,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "material_code"
+      ],
+      "expected_fks": [],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "material_code"
+      ],
+      "actual_fk_pairs": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_plant,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_plant,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "plant_id"
+      ],
+      "expected_fks": [],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "plant_id"
+      ],
+      "actual_fk_pairs": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_product,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_product,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "product_id"
+      ],
+      "expected_fks": [],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "product_id"
+      ],
+      "actual_fk_pairs": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_profit_center,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_profit_center,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "profit_center_id"
+      ],
+      "expected_fks": [],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "profit_center_id"
+      ],
+      "actual_fk_pairs": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_shift,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_shift,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "shift_id"
+      ],
+      "expected_fks": [
+        "plant_id->dim_plant.plant_id"
+      ],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "shift_id"
+      ],
+      "actual_fk_pairs": [
+        "plant_id->plant_id@dim_plant"
+      ]
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_station,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_station,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "station_id"
+      ],
+      "expected_fks": [
+        "assembly_line_id->dim_assembly_line.assembly_line_id"
+      ],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "station_id"
+      ],
+      "actual_fk_pairs": [
+        "assembly_line_id->assembly_line_id@dim_assembly_line"
+      ]
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_supplier,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_supplier,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "supplier_id"
+      ],
+      "expected_fks": [],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "supplier_id"
+      ],
+      "actual_fk_pairs": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_uom,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_uom,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "uom_code"
+      ],
+      "expected_fks": [],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "uom_code"
+      ],
+      "actual_fk_pairs": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_vendor_invoice,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_vendor_invoice,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "invoice_id"
+      ],
+      "expected_fks": [
+        "supplier_id->dim_supplier.supplier_id"
+      ],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "invoice_id"
+      ],
+      "actual_fk_pairs": [
+        "supplier_id->supplier_id@dim_supplier"
+      ]
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_warehouse,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_warehouse,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "warehouse_id"
+      ],
+      "expected_fks": [
+        "plant_id->dim_plant.plant_id"
+      ],
+      "status": "SKIPPED_ALREADY_DESIRED"
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,dim_worker,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dim_worker,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "worker_id"
+      ],
+      "expected_fks": [
+        "plant_id->dim_plant.plant_id"
+      ],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "worker_id"
+      ],
+      "actual_fk_pairs": [
+        "plant_id->plant_id@dim_plant"
+      ]
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_actual_cost,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_actual_cost,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "actual_cost_id"
+      ],
+      "expected_fks": [
+        "cost_center_id->dim_cost_center.cost_center_id",
+        "gl_account_id->dim_gl_account.gl_account_id",
+        "order_id->fact_production_order.order_id"
+      ],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "actual_cost_id"
+      ],
+      "actual_fk_pairs": [
+        "cost_center_id->cost_center_id@dim_cost_center",
+        "gl_account_id->gl_account_id@dim_gl_account",
+        "order_id->order_id@fact_production_order"
+      ]
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_ap_payable,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_ap_payable,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "payable_id"
+      ],
+      "expected_fks": [
+        "supplier_id->dim_supplier.supplier_id"
+      ],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "payable_id"
+      ],
+      "actual_fk_pairs": [
+        "supplier_id->supplier_id@dim_supplier"
+      ]
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_ar_receivable,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_ar_receivable,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "receivable_id"
+      ],
+      "expected_fks": [],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "receivable_id"
+      ],
+      "actual_fk_pairs": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_budget,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_budget,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "budget_id"
+      ],
+      "expected_fks": [
+        "cost_center_id->dim_cost_center.cost_center_id",
+        "gl_account_id->dim_gl_account.gl_account_id",
+        "profit_center_id->dim_profit_center.profit_center_id"
+      ],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "budget_id"
+      ],
+      "actual_fk_pairs": [
+        "cost_center_id->cost_center_id@dim_cost_center",
+        "gl_account_id->gl_account_id@dim_gl_account",
+        "profit_center_id->profit_center_id@dim_profit_center"
+      ]
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_budget_variance,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_budget_variance,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "variance_id"
+      ],
+      "expected_fks": [
+        "cost_center_id->dim_cost_center.cost_center_id",
+        "gl_account_id->dim_gl_account.gl_account_id",
+        "profit_center_id->dim_profit_center.profit_center_id"
+      ],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "variance_id"
+      ],
+      "actual_fk_pairs": [
+        "cost_center_id->cost_center_id@dim_cost_center",
+        "gl_account_id->gl_account_id@dim_gl_account",
+        "profit_center_id->profit_center_id@dim_profit_center"
+      ]
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_cash_flow,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_cash_flow,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "cash_flow_id"
+      ],
+      "expected_fks": [],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "cash_flow_id"
+      ],
+      "actual_fk_pairs": []
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_defect_tracking,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_defect_tracking,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "defect_id"
+      ],
+      "expected_fks": [
+        "order_id->fact_production_order.order_id",
+        "station_id->dim_station.station_id"
+      ],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "defect_id"
+      ],
+      "actual_fk_pairs": [
+        "order_id->order_id@fact_production_order",
+        "station_id->station_id@dim_station"
+      ]
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_downtime,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_downtime,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "downtime_id"
+      ],
+      "expected_fks": [
+        "assembly_line_id->dim_assembly_line.assembly_line_id",
+        "shift_id->dim_shift.shift_id",
+        "station_id->dim_station.station_id"
+      ],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "downtime_id"
+      ],
+      "actual_fk_pairs": [
+        "assembly_line_id->assembly_line_id@dim_assembly_line",
+        "shift_id->shift_id@dim_shift",
+        "station_id->station_id@dim_station"
+      ]
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_fixed_asset,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_fixed_asset,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "asset_id"
+      ],
+      "expected_fks": [
+        "cost_center_id->dim_cost_center.cost_center_id",
+        "plant_id->dim_plant.plant_id"
+      ],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "asset_id"
+      ],
+      "actual_fk_pairs": [
+        "cost_center_id->cost_center_id@dim_cost_center",
+        "plant_id->plant_id@dim_plant"
+      ]
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_general_ledger,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_general_ledger,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "journal_entry_id"
+      ],
+      "expected_fks": [
+        "cost_center_id->dim_cost_center.cost_center_id",
+        "gl_account_id->dim_gl_account.gl_account_id",
+        "profit_center_id->dim_profit_center.profit_center_id"
+      ],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "journal_entry_id"
+      ],
+      "actual_fk_pairs": [
+        "cost_center_id->cost_center_id@dim_cost_center",
+        "gl_account_id->gl_account_id@dim_gl_account",
+        "profit_center_id->profit_center_id@dim_profit_center"
+      ]
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_goods_issue,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_goods_issue,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "goods_issue_id"
+      ],
+      "expected_fks": [
+        "cost_center_id->dim_cost_center.cost_center_id",
+        "material_code->dim_material.material_code",
+        "order_id->fact_production_order.order_id",
+        "warehouse_id->dim_warehouse.warehouse_id"
+      ],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "goods_issue_id"
+      ],
+      "actual_fk_pairs": [
+        "cost_center_id->cost_center_id@dim_cost_center",
+        "material_code->material_code@dim_material",
+        "order_id->order_id@fact_production_order",
+        "warehouse_id->warehouse_id@dim_warehouse"
+      ]
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_goods_receipt,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_goods_receipt,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "goods_receipt_id"
+      ],
+      "expected_fks": [
+        "material_code->dim_material.material_code",
+        "po_number->fact_purchase_order.po_number",
+        "supplier_id->dim_supplier.supplier_id",
+        "warehouse_id->dim_warehouse.warehouse_id"
+      ],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "goods_receipt_id"
+      ],
+      "actual_fk_pairs": [
+        "material_code->material_code@dim_material",
+        "po_number->po_number@fact_purchase_order",
+        "supplier_id->supplier_id@dim_supplier",
+        "warehouse_id->warehouse_id@dim_warehouse"
+      ]
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_inventory,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_inventory,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "inventory_id"
+      ],
+      "expected_fks": [
+        "material_code->dim_material.material_code",
+        "warehouse_id->dim_warehouse.warehouse_id"
+      ],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "inventory_id"
+      ],
+      "actual_fk_pairs": [
+        "material_code->material_code@dim_material",
+        "warehouse_id->warehouse_id@dim_warehouse"
+      ]
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_inventory_forecast,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_inventory_forecast,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "forecast_id"
+      ],
+      "expected_fks": [
+        "material_code->dim_material.material_code",
+        "warehouse_id->dim_warehouse.warehouse_id"
+      ],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "forecast_id"
+      ],
+      "actual_fk_pairs": [
+        "material_code->material_code@dim_material",
+        "warehouse_id->warehouse_id@dim_warehouse"
+      ]
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_inventory_movement,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_inventory_movement,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "movement_id"
+      ],
+      "expected_fks": [
+        "material_code->dim_material.material_code",
+        "warehouse_id->dim_warehouse.warehouse_id"
+      ],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "movement_id"
+      ],
+      "actual_fk_pairs": [
+        "material_code->material_code@dim_material",
+        "warehouse_id->warehouse_id@dim_warehouse"
+      ]
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_lead_time,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_lead_time,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "lead_time_id"
+      ],
+      "expected_fks": [
+        "material_code->dim_material.material_code",
+        "po_number->fact_purchase_order.po_number",
+        "supplier_id->dim_supplier.supplier_id"
+      ],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "lead_time_id"
+      ],
+      "actual_fk_pairs": [
+        "material_code->material_code@dim_material",
+        "po_number->po_number@fact_purchase_order",
+        "supplier_id->supplier_id@dim_supplier"
+      ]
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_material_consumption,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_material_consumption,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "consumption_id"
+      ],
+      "expected_fks": [
+        "assembly_line_id->dim_assembly_line.assembly_line_id",
+        "material_code->dim_material.material_code",
+        "order_id->fact_production_order.order_id",
+        "shift_id->dim_shift.shift_id"
+      ],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "consumption_id"
+      ],
+      "actual_fk_pairs": [
+        "assembly_line_id->assembly_line_id@dim_assembly_line",
+        "material_code->material_code@dim_material",
+        "order_id->order_id@fact_production_order",
+        "shift_id->shift_id@dim_shift"
+      ]
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_oee_metrics,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_oee_metrics,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "oee_id"
+      ],
+      "expected_fks": [
+        "assembly_line_id->dim_assembly_line.assembly_line_id",
+        "shift_id->dim_shift.shift_id"
+      ],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "oee_id"
+      ],
+      "actual_fk_pairs": [
+        "assembly_line_id->assembly_line_id@dim_assembly_line",
+        "shift_id->shift_id@dim_shift"
+      ]
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_physical_inventory,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_physical_inventory,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "physical_inventory_id"
+      ],
+      "expected_fks": [
+        "material_code->dim_material.material_code",
+        "warehouse_id->dim_warehouse.warehouse_id"
+      ],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "physical_inventory_id"
+      ],
+      "actual_fk_pairs": [
+        "material_code->material_code@dim_material",
+        "warehouse_id->warehouse_id@dim_warehouse"
+      ]
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_order,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_order,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "order_id"
+      ],
+      "expected_fks": [
+        "assembly_line_id->dim_assembly_line.assembly_line_id",
+        "plant_id->dim_plant.plant_id",
+        "product_id->dim_product.product_id"
+      ],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "order_id"
+      ],
+      "actual_fk_pairs": [
+        "assembly_line_id->assembly_line_id@dim_assembly_line",
+        "plant_id->plant_id@dim_plant",
+        "product_id->product_id@dim_product"
+      ]
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_output,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_output,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "output_id"
+      ],
+      "expected_fks": [
+        "assembly_line_id->dim_assembly_line.assembly_line_id",
+        "order_id->fact_production_order.order_id",
+        "product_id->dim_product.product_id",
+        "shift_id->dim_shift.shift_id",
+        "station_id->dim_station.station_id"
+      ],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "output_id"
+      ],
+      "actual_fk_pairs": [
+        "assembly_line_id->assembly_line_id@dim_assembly_line",
+        "order_id->order_id@fact_production_order",
+        "product_id->product_id@dim_product",
+        "shift_id->shift_id@dim_shift",
+        "station_id->station_id@dim_station"
+      ]
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_routing,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_production_routing,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "routing_id"
+      ],
+      "expected_fks": [
+        "assembly_line_id->dim_assembly_line.assembly_line_id",
+        "product_id->dim_product.product_id",
+        "station_id->dim_station.station_id"
+      ],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "routing_id"
+      ],
+      "actual_fk_pairs": [
+        "assembly_line_id->assembly_line_id@dim_assembly_line",
+        "product_id->product_id@dim_product",
+        "station_id->station_id@dim_station"
+      ]
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_purchase_order,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_purchase_order,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "po_number"
+      ],
+      "expected_fks": [
+        "material_code->dim_material.material_code",
+        "supplier_id->dim_supplier.supplier_id"
+      ],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "po_number"
+      ],
+      "actual_fk_pairs": [
+        "material_code->material_code@dim_material",
+        "supplier_id->supplier_id@dim_supplier"
+      ]
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_quality_inspection,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_quality_inspection,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "inspection_id"
+      ],
+      "expected_fks": [
+        "inspection_station->dim_station.station_id",
+        "order_id->fact_production_order.order_id"
+      ],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "inspection_id"
+      ],
+      "actual_fk_pairs": [
+        "inspection_station->station_id@dim_station",
+        "order_id->order_id@fact_production_order"
+      ]
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_reorder_alert,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_reorder_alert,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "alert_id"
+      ],
+      "expected_fks": [
+        "material_code->dim_material.material_code",
+        "supplier_id->dim_supplier.supplier_id",
+        "warehouse_id->dim_warehouse.warehouse_id"
+      ],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "alert_id"
+      ],
+      "actual_fk_pairs": [
+        "material_code->material_code@dim_material",
+        "supplier_id->supplier_id@dim_supplier",
+        "warehouse_id->warehouse_id@dim_warehouse"
+      ]
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_revenue,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_revenue,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "revenue_id"
+      ],
+      "expected_fks": [
+        "product_id->dim_product.product_id",
+        "profit_center_id->dim_profit_center.profit_center_id"
+      ],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "revenue_id"
+      ],
+      "actual_fk_pairs": [
+        "product_id->product_id@dim_product",
+        "profit_center_id->profit_center_id@dim_profit_center"
+      ]
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_standard_cost,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_standard_cost,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "standard_cost_id"
+      ],
+      "expected_fks": [
+        "material_code->dim_material.material_code",
+        "product_id->dim_product.product_id"
+      ],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "standard_cost_id"
+      ],
+      "actual_fk_pairs": [
+        "material_code->material_code@dim_material",
+        "product_id->product_id@dim_product"
+      ]
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_stock_transfer,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_stock_transfer,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "transfer_id"
+      ],
+      "expected_fks": [
+        "from_warehouse_id->dim_warehouse.warehouse_id",
+        "material_code->dim_material.material_code",
+        "to_warehouse_id->dim_warehouse.warehouse_id"
+      ],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "transfer_id"
+      ],
+      "actual_fk_pairs": [
+        "from_warehouse_id->warehouse_id@dim_warehouse",
+        "material_code->material_code@dim_material",
+        "to_warehouse_id->warehouse_id@dim_warehouse"
+      ]
+    },
+    {
+      "mut_id": "schema:urn:li:dataset:(urn:li:dataPlatform:redshift,fact_wip_tracking,PROD)",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,fact_wip_tracking,PROD)",
+      "kind": "schema",
+      "conf": "CONFIRMED",
+      "expected_pks": [
+        "wip_id"
+      ],
+      "expected_fks": [
+        "assembly_line_id->dim_assembly_line.assembly_line_id",
+        "order_id->fact_production_order.order_id",
+        "station_id->dim_station.station_id"
+      ],
+      "status": "VERIFIED",
+      "actual_pks": [
+        "wip_id"
+      ],
+      "actual_fk_pairs": [
+        "assembly_line_id->assembly_line_id@dim_assembly_line",
+        "order_id->order_id@fact_production_order",
+        "station_id->station_id@dim_station"
+      ]
+    }
+  ]
+}
