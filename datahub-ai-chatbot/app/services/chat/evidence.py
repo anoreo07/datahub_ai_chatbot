@@ -1,3 +1,4 @@
+import re
 from typing import Any
 
 import structlog
@@ -272,6 +273,25 @@ class EvidenceService:
         if field_answer is not None:
             return field_answer
 
+        # ---------------- focused field identification ---------------- #
+        # A follow-up that names a real field of the referenced schema but is
+        # NOT a property / join / location question ("movement_date là field
+        # nào?", "field đó là gì?") asks WHAT that field is. Answer with the
+        # field's description + type only — never the whole schema listing
+        # again (over-answer, A08/A10). Join/location wording is left to its
+        # dedicated branch below.
+        if hint != "join" and not (
+            res.target_field and re.search(
+                r"liên\s+kết|lien\s+ket|join|khóa\s+liên|khoa\s+lien",
+                question, re.I,
+            )
+        ):
+            focused = await self.evidence_focus_field_answer(
+                uid, cid, question, res, entity, structured, trace_id,
+            )
+            if focused is not None:
+                return focused
+
         # ---------------- join-key matching on the referenced schema ------- #
         if hint == "join" or (hint == "schema" and res.target_field):
             response = await self.evidence_join_answer(
@@ -388,6 +408,91 @@ class EvidenceService:
         return None
 
 
+    async def evidence_focus_field_answer(
+        self, uid: str, cid: str, question: str, res: ContextResolution,
+        entity: str, structured: dict, trace_id: str | None = None,
+    ) -> "ChatResponse | None":
+        """Answer a follow-up that identifies a real field of the referenced
+        schema ("movement_date là field nào?", "field đó là gì?") with a
+        focused answer — the field's description + data type — instead of
+        re-rendering the whole schema (over-answer).
+
+        Only fires when ``focus_field`` names a field that actually exists in
+        the referenced evidence and the question is a "which/what field" ask
+        (no property / join / location wording). Returns ``None`` otherwise so
+        the dedicated branches (property, join, location, glossary...) handle
+        their own shapes.
+        """
+        focus = res.focus_field
+        if not focus:
+            return None
+        # A property request is answered by evidence_field_answer; a location /
+        # join request by its dedicated branch. Only description-flavoured asks
+        # belong here.
+        if res.operation or res.property_name:
+            return None
+        q = (question or "").lower()
+        if re.search(
+            r"\bnằm\s+ở\b|nam\s+o\b|thuộc\s+bảng|thuoc\s+bang|liên\s+kết|"
+            r"lien\s+ket|join\s+key|\bjoin\b", q, re.I,
+        ):
+            return None
+        if not re.search(
+            r"là\s+gì|la\s+gi|là\s+field|là\s+trường|la\s+truong|field\s+nào|"
+            r"field\s+nao|trường\s+nào|truong\s+nao|cột\s+nào|cot\s+nao|"
+            r"\bwhat\b|\bis\s+it\b|mô\s+tả|mo\s+ta|ý\s+nghĩa|y\s+nghia", q, re.I,
+        ):
+            return None
+
+        schema_fields = structured.get("schema_fields") or []
+        target_norm = _normalize_field(focus)
+        entry = next(
+            (f for f in schema_fields
+             if _normalize_field(f.get("name") or "") == target_norm),
+            None,
+        )
+        if entry is None:
+            return None
+        desc = (entry.get("description") or "").strip().strip('"')
+        ftype = (entry.get("type") or entry.get("data_type") or "").strip()
+        if not desc and not ftype:
+            return None
+
+        parts: list[str] = []
+        parts.append(f"Field **{entry.get('name')}** là một trường của **{entity}**")
+        if ftype:
+            parts.append(f"có kiểu dữ liệu **{ftype}**")
+        if desc:
+            parts.append(f"ý nghĩa: “{desc}”")
+        text = f"{parts[0]} ({', '.join(parts[1:])})." if len(parts) > 1 \
+            else f"{parts[0]}."
+        if res.context_only:
+            text += " (dựa trên metadata vừa lấy)"
+        log.info("route_field_focus", trace_id=trace_id, question=question[:120],
+                 evidence=res.referenced_evidence_ids, entity=entity[:80],
+                 field=entry.get("name"))
+        # Re-record the evidence with the field focus so a bare "Còn kiểu dữ
+        # liệu của nó?" / "nó là gì?" follow-up keeps resolving to this field.
+        ev = res.referenced_evidence
+        self.record_evidence(
+            uid, cid, kind=ev.kind, entity_name=ev.entity_name,
+            entity_urn=ev.entity_urn, entity_type=ev.entity_type,
+            structured={
+                **structured,
+                "focus_field": entry.get("name") or focus,
+                "fields": [
+                    (f.get("name") or "").strip()
+                    for f in schema_fields if (f.get("name") or "").strip()
+                ],
+            },
+            tool_name=ev.tool_name, question=question, source=ev.source,
+        )
+        return await self.evidence_finish(
+            uid, cid, question, text, "CONTEXT_FIELD_DESCRIPTION",
+            entity_name=entity, trace_id=trace_id,
+        )
+
+
     async def evidence_field_answer(
         self, uid: str, cid: str, question: str, res: ContextResolution,
         entity: str, structured: dict, trace_id: str | None = None,
@@ -403,7 +508,7 @@ class EvidenceService:
         """
         schema_fields = structured.get("schema_fields") or []
         prop = res.property_name
-        focus = res.focus_field
+        focus = res.focus_field or structured.get("focus_field")
         field_op: FieldOp | None = None
         if prop == "glossary":
             # Field glossary must be decided field-vs-term from the evidence
