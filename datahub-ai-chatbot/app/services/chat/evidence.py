@@ -321,6 +321,18 @@ class EvidenceService:
                 trace_id=trace_id,
             )
 
+        # ---------------- quality report on collected evidence ---------------- #
+        # "Chất lượng của dataset trong ảnh thế nào?" / "chất lượng của nó?"
+        # after a Data Quality Check -> answer deterministically from the stored
+        # quality report (sections + overall score), never re-run the check.
+        if hint == "quality":
+            answer_text = self.evidence_quality_answer(entity, structured)
+            if answer_text is not None:
+                return await self.evidence_finish(
+                    uid, cid, question, answer_text, "QUALITY_REPORT",
+                    entity_name=entity, trace_id=trace_id,
+                )
+
         # ---------------- lineage filter / scope ---------------- #
         if hint == "lineage":
             if not (res.scope_all or res.context_only or has_context_reference(question)):
@@ -663,6 +675,48 @@ class EvidenceService:
             uid, cid, question, text, "CONTEXT_LINEAGE", entity_name=entity,
             trace_id=trace_id,
         )
+
+
+    def evidence_quality_answer(
+        self, entity: str, structured: dict,
+    ) -> str | None:
+        """Deterministic quality answer from a previously recorded quality report.
+
+        Returns ``None`` when the referenced evidence does not hold a real quality
+        report (fall through to the normal pipeline).
+        """
+        if not isinstance(structured, dict):
+            return None
+        if "overall_score" not in structured and not structured.get("sections"):
+            return None
+        overall = structured.get("overall_score")
+        rating = structured.get("rating")
+        sections = structured.get("sections") or []
+        lines = [f"### Chất lượng dữ liệu của **{entity}**"]
+        if overall is not None:
+            score_text = (
+                f"{overall:.1f}/100" if isinstance(overall, (int, float))
+                else str(overall)
+            )
+            rating_text = f" (mức **{rating}**)" if rating else ""
+            lines.append(f"- Điểm tổng thể: **{score_text}**{rating_text}")
+        if sections:
+            for sec in sections:
+                if not isinstance(sec, dict):
+                    continue
+                sec_name = (sec.get("name") or "").strip()
+                score = sec.get("score")
+                if not sec_name or score is None:
+                    continue
+                score_text = (
+                    f"{score:.1f}/100" if isinstance(score, (int, float))
+                    else str(score)
+                )
+                lines.append(f"- {sec_name}: **{score_text}**")
+        else:
+            lines.append("- Chưa có số liệu chi tiết trong metadata vừa lấy.")
+        lines.append("Dựa trên metadata vừa lấy, không tìm kiếm thêm.")
+        return "\n".join(lines)
 
 
     async def evidence_finish(

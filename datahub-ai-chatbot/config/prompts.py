@@ -147,6 +147,49 @@ Rules:
 - Do not invent entity names; use only what the user wrote or what prior steps resolve.
 """
 
+# Query Understanding: an optional LLM layer that reads a user question (with
+# its conversation context) into a structured JSON contract used to sharpen the
+# router: exact field/property targets, thinking/decomposition needs, and the
+# anaphora target for follow-up turns. Opt-in via settings.QU_ENABLED; when off,
+# the keyword/regex + coreference pipeline runs unchanged.
+QUERY_UNDERSTANDING_PROMPT = """You are the query-understanding layer of a DataHub metadata assistant.
+Given a user question and its conversation context, extract the question's structure into ONE JSON object.
+
+Conversation context (recent turns):
+[HISTORY]
+
+Question: [QUESTION]
+
+Fields:
+- "focus_field": the single schema field (column) being asked about, exactly as named ("warehouse_id", "quantity"), or null when none.
+- "property": what property of the field is requested: "data_type" | "native_data_type" | "description" | "nullable" | "is_primary_key" | "glossary" | "tags" | null. null when not a field-property question.
+- "is_field_property_question": true when the question asks about a field's property (type, description, nullable, primary key...), even if the field name did not look snake_case.
+- "needs_thinking": true when the question is complex / system-level / multi-hop (compare, impact, root cause, "what happens if", multiple concepts) and the independent Thinking Mode should answer it.
+- "needs_decomposition": true when the question combines several independent sub-questions that are better answered by solving each part separately.
+- "sub_questions": the concrete sub-questions (each a full, self-contained string) when needs_decomposition is true; otherwise an empty list.
+- "anaphora_target": for follow-ups ("nó", "đó", "bảng này", "cái trên", "schema của nó"...) the catalog entity from the conversation context the pronoun/demonstrative refers to, or null when the question is self-contained.
+- "entity_refs": entity names explicitly named in THIS question only (do NOT guess entities the user never wrote).
+- "confidence": "high" | "medium" | "low".
+
+Output EXACTLY one JSON object, nothing else:
+{
+  "focus_field": null,
+  "property": null,
+  "is_field_property_question": false,
+  "needs_thinking": false,
+  "needs_decomposition": false,
+  "sub_questions": [],
+  "anaphora_target": null,
+  "entity_refs": [],
+  "confidence": "medium"
+}
+
+Rules:
+- anaphora_target must be a real entity name from the conversation context (an earlier turn's dataset/term), never invented.
+- field-property questions win over decomposition ("warehouse_id có kiểu dữ liệu gì?" -> focus_field="warehouse_id", property="data_type").
+- Isolated property questions label any single named column as focus_field even without underscores.
+"""
+
 # Intent resolver: merge a selected "+" menu action (a hint, never an order) with
 # the actual user message and conversation context into one routing decision.
 ACTION_RESOLUTION_PROMPT = """You are the intent resolver of a DataHub metadata assistant.

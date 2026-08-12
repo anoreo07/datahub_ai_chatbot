@@ -60,6 +60,7 @@ from retrieval.evidence import (
 )
 from retrieval.hybrid_search import SearchResult
 from retrieval.intent import QueryIntent
+from retrieval.query_understanding import understand_query
 
 log = structlog.get_logger()
 
@@ -224,6 +225,32 @@ class ChatService:
         if concept_phrase:
             entity_hint = concept_phrase
 
+        # Query Understanding (opt-in): read the effective question + conversation
+        # history into a structured JSON contract — focus_field/property, thinking
+        # and decomposition needs, anaphora target. Every consumer below treats it
+        # as advice only (never an order); when disabled or failed None means the
+        # keyword/regex + coreference heuristics run unchanged.
+        understanding = None
+        if settings.QU_ENABLED:
+            understanding = await understand_query(
+                query, llm=self._ctx.llm, history=history,
+            )
+            if understanding is not None:
+                log.info(
+                    "query_understanding",
+                    trace_id=trace_id,
+                    question=query[:100],
+                    focus_field=understanding.focus_field,
+                    property=understanding.property,
+                    is_field_property=understanding.is_field_property_question,
+                    needs_thinking=understanding.needs_thinking,
+                    needs_decomposition=understanding.needs_decomposition,
+                    sub_questions=len(understanding.sub_questions),
+                    anaphora_target=understanding.anaphora_target,
+                    confidence=understanding.confidence,
+                    source=understanding.source,
+                )
+
         log.info("chat_request", trace_id=trace_id, intent=intent.value,
                  question=question[:100], conversation_id=cid)
 
@@ -296,9 +323,19 @@ class ChatService:
         # entity) is in scope. The keyword heuristic is trusted for UNCERTAIN
         # below anyway; hoisting it here prevents flaky NON_DATAHUB refusals of
         # glossary / schema questions like "Term 3-Way Matching là gì?".
-        if relevance != DataHubRelevance.DATAHUB and _is_datahub_relevant(query):
-            log.info("route_ai_keyword_rescued", trace_id=trace_id, question=query[:100])
-            relevance = DataHubRelevance.DATAHUB
+        if relevance != DataHubRelevance.DATAHUB:
+            # Query-Understanding rescue: an explicit field-property question
+            # ("quantity có kiểu dữ liệu gì?", "warehouse_id nằm ở bảng nào?")
+            # is metadata scope even when the LLM relevance gate hesitates.
+            if (understanding is not None
+                    and (understanding.is_field_property_question
+                         or understanding.focus_field is not None)):
+                log.info("route_qu_relevance_rescued", trace_id=trace_id,
+                         question=query[:100])
+                relevance = DataHubRelevance.DATAHUB
+            elif _is_datahub_relevant(query):
+                log.info("route_ai_keyword_rescued", trace_id=trace_id, question=query[:100])
+                relevance = DataHubRelevance.DATAHUB
         if relevance == DataHubRelevance.NON_DATAHUB:
             log.info("route_ai_non_datahub", trace_id=trace_id, question=query[:100])
             await _emit("generate")
@@ -495,7 +532,7 @@ class ChatService:
         # Runs after the evidence gate (evidence takes precedence for follow-ups)
         # and before the Thinking layer so it never falls into a re-search plan.
         _field_property_response = await self._answer_direct_field_op(
-            query, uid, cid, trace_id,
+            query, uid, cid, trace_id, understanding=understanding,
         )
         if _field_property_response is not None:
             log.info("route_field_property", trace_id=trace_id,
@@ -523,16 +560,19 @@ class ChatService:
         )
         if settings.THINKING_MODE_ENABLED and intent == QueryIntent.GENERAL \
                 and not _ctx_followup:
-            _complex = False
-            try:
-                _complex = await self._ctx.thinking.is_complex(
-                    query, entity_mentions=(
-                        [entity_hint] if entity_hint else None
-                    ), history=history,
-                )
-            except Exception:  # noqa: BLE001
-                log.exception("thinking_complexity_failed", trace_id=trace_id,
-                              question=query[:100])
+            _complex = bool(
+                understanding is not None and understanding.needs_thinking
+            )
+            if not _complex:
+                try:
+                    _complex = await self._ctx.thinking.is_complex(
+                        query, entity_mentions=(
+                            [entity_hint] if entity_hint else None
+                        ), history=history,
+                    )
+                except Exception:  # noqa: BLE001
+                    log.exception("thinking_complexity_failed", trace_id=trace_id,
+                                  question=query[:100])
             if _complex:
                 await _emit("thinking")
             try:
@@ -707,6 +747,41 @@ class ChatService:
         # LLM-planned multi-step questions) go through the DAG tool orchestrator
         # (parallel branches + retries). Single-intent plans keep the direct
         # structured path below for lower latency.
+        #
+        # Query-Understanding decomposition: when the LLM reads the question as
+        # several independent sub-questions and no plan steps exist yet, build a
+        # composite plan so the DAG executor resolves each sub-question's entity
+        # in parallel branches instead of one generic search.
+        if (understanding is not None and understanding.needs_decomposition
+                and understanding.sub_questions and not plan.steps):
+            from retrieval.query_models import PlanStep
+            _qu_steps: list[PlanStep] = []
+            for _sq in understanding.sub_questions:
+                _sq_name = intent_classifier.regex_plan(_sq).primary_entity
+                if _sq_name:
+                    _qu_steps.append(PlanStep(
+                        op="resolve_entity", params={"name": _sq_name},
+                        purpose=f"query understanding sub-question: {_sq[:80]}",
+                    ))
+            if _qu_steps:
+                from retrieval.query_models import QueryPlan
+                plan = QueryPlan(
+                    intent="COMPOSITE_QUERY",
+                    entity_refs=list(dict.fromkeys(
+                        (p.params or {}).get("name", "") for p in _qu_steps
+                    )),
+                    entity_type=plan.entity_type,
+                    filter=plan.filter,
+                    direction=plan.direction,
+                    confidence="medium",
+                    steps=_qu_steps,
+                    source="query_understanding",
+                )
+                log.info("query_understanding_decompose", trace_id=trace_id,
+                         question=query[:100],
+                         sub_questions=len(understanding.sub_questions),
+                         steps=len(_qu_steps))
+
         import time
         _t0 = time.perf_counter()
         planner_results: list[SearchResult] = []
@@ -771,6 +846,14 @@ class ChatService:
                     inferred_entity, inferred_type = await self._entities.resolve_followup_entity(
                         uid, cid, query, history, active_entities,
                     )
+                # QU rescue: when the coreference pipeline could not bind the
+                # pronoun/demonstrative to an earlier-turn entity, trust the
+                # LLM's anaphora target for this conversation (never invented).
+                if (not inferred_entity and understanding is not None
+                        and understanding.anaphora_target):
+                    inferred_entity = understanding.anaphora_target
+                    log.info("route_qu_anaphora", trace_id=trace_id,
+                             question=query[:100], target=inferred_entity)
                 log.info("route_anaphora", trace_id=trace_id, question=query[:100],
                          has_anaphora=has_anaphora, is_ellipsis=is_ellipsis,
                          inferred_entity=inferred_entity, inferred_type=inferred_type,
@@ -1294,10 +1377,17 @@ class ChatService:
 
     async def _answer_direct_field_op(
         self, query: str, uid: str, cid: str, trace_id: str | None = None,
+        understanding=None,
     ) -> "ChatResponse | None":
         """Answer a self-contained field question that names its own entity and
         field ("warehouse_id của fact_inventory_movement có kiểu dữ liệu gì?")
         directly from the resolved dataset's schema metadata.
+
+        When Query Understanding is enabled, its JSON contract rescues
+        field-property questions the regex router could not parse (single-word
+        fields like "quantity", or a bare column token without the "của <entity>"
+        clause): the LLM-supplied ``focus_field`` + ``property`` drive the same
+        deterministic schema answer.
 
         Returns ``None`` (falls through to the search pipeline) when no explicit
         ``entity.field`` pair can be extracted, the entity can't be trusted, or
@@ -1307,8 +1397,25 @@ class ChatService:
 
         op = parse_field_operation(query)
         if op is None or op.op == "find_field":
-            return None
+            # QU rescue: the question explicitly targets one field property but
+            # the field token was not snake_case / not in a "field của entity"
+            # clause. The LLM's focus_field + property are the missing pair.
+            if (understanding is not None
+                    and understanding.is_field_property_question
+                    and understanding.focus_field
+                    and understanding.property):
+                op = FieldOp(
+                    op="get_property",
+                    property=understanding.property,
+                    field=understanding.focus_field,
+                )
+            else:
+                return None
         entity_name, field = extract_field_entity(query)
+        if not entity_name and understanding is not None and understanding.entity_refs:
+            entity_name = understanding.entity_refs[0]
+        if not field and understanding is not None and understanding.focus_field:
+            field = understanding.focus_field
         if not entity_name or not field:
             return None
         resolution = await self._ctx.entity_resolver.resolve(

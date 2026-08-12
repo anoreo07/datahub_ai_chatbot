@@ -109,6 +109,13 @@ class Settings(BaseSettings):
     THINKING_MODE_ENABLED: bool = True
     THINKING_MAX_STEPS: int = 8
 
+    # Query Understanding: an optional LLM layer that reads a question into a
+    # structured JSON contract (focus_field / property, needs_thinking,
+    # needs_decomposition + sub_questions, anaphora_target). When disabled
+    # (default) the keyword/regex + coreference pipeline runs unchanged, so
+    # enabling it is a strict behavioural opt-in. See retrieval/query_understanding.py.
+    QU_ENABLED: bool = False
+
     # Visual Understanding: an independent image-analysis layer (Qwen2.5-VL via
     # Fireworks) that performs OCR + structured extraction of data-related images
     # (dashboard, ERD, SQL, error, metadata, requirement, table, lineage,
