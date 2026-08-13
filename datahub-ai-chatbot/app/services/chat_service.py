@@ -1250,20 +1250,78 @@ class ChatService:
             confidence = "high"
             if on_token:
                 await on_token(answer_text)
+        elif intent == QueryIntent.DOCUMENT_QA and results and not impact_mode:
+            # Deterministic document-detail answer: a document entity's own
+            # description answers "tài liệu X mô tả điều gì?" directly. Prefer
+            # a document-typed result when the top hit is a same-named dashboard
+            # or dataset.
+            _doc = next(
+                (r for r in results if (r.payload or {}).get("entity_type") == "document"),
+                results[0],
+            )
+            _doc_payload = (_doc.payload or {}) if _doc.payload else {}
+            _doc_desc = (_doc_payload.get("description") or "").strip()
+            if _doc.entity_type == "document" and _doc_desc:
+                _doc_name = _doc.name or (_doc_payload.get("display_name")) or ""
+                answer_text = f"Tài liệu **{_doc_name}** mô tả: {_doc_desc}"
+                citations = []
+                docs, context_xml = build_context(results)
+                confidence = "high"
+                if on_token:
+                    await on_token(answer_text)
+            else:
+                if on_token:
+                    answer_text, citations, docs, context_xml, confidence = (
+                        await generator.generate_stream(
+                            question_for_gen, results, intent, history=history,
+                            on_token=on_token, recommendation=recommendation,
+                        )
+                    )
+                else:
+                    answer_text, citations, docs, context_xml, confidence = (
+                        await generator.generate(
+                            question_for_gen, results, intent, history=history,
+                            recommendation=recommendation,
+                        )
+                    )
         elif intent == QueryIntent.SCHEMA_LOOKUP and results and not impact_mode:
             # Deterministic schema listing from the resolved metadata: always
             # names the actual fields instead of asking the LLM to paraphrase
-            # (or a mock to drop them). Matches the evidence-layer wording.
+            # (or a mock to drop them). When the retrieval produced a cross-
+            # dataset join analysis ("liên kết/trường chung giữa X và Y"), that
+            # answer supersedes the bare field list.
             _payload = (results[0].payload or {}) if results[0].payload else {}
             _schema_fields = [
                 f.get("name") or "" for f in (_payload.get("schema_fields") or [])
                 if (f.get("name") or "").strip()
             ]
-            if _schema_fields:
+            _join_analysis = _payload.get("join_analysis")
+            if _join_analysis:
+                answer_text = _join_analysis.strip()
+                citations = []
+                docs, context_xml = build_context(results)
+                confidence = "high"
+                if on_token:
+                    await on_token(answer_text)
+            elif _schema_fields:
                 answer_text = (
                     f"Dataset **{results[0].name}** có các trường: "
                     f"{', '.join(_schema_fields)}."
                 )
+                if re.search(
+                    r"glossary|glossar|thuật ngữ|thuat ngu|giải thích|giai thich|"
+                    r"định nghĩa|dinh nghia|term",
+                    query, re.I,
+                ):
+                    _terms = [t for t in (_payload.get("glossary_terms") or []) if t]
+                    if _terms:
+                        answer_text += (
+                            f" Glossary terms của dataset: {', '.join(_terms)}."
+                        )
+                    else:
+                        answer_text += (
+                            " Dataset này chưa có glossary term nào được gắn."
+                        )
                 citations = []
                 docs, context_xml = build_context(results)
                 confidence = "high"

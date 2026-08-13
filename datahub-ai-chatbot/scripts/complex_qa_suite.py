@@ -147,9 +147,13 @@ case("E07", "entity_resolution", "admin", [
 
 # --- field questions --------------------------------------------------------
 case("F01", "field_questions", "admin", [
-    t("Trường warehouse_manager trong dim_warehouse có ý nghĩa gì?",
-      "SCHEMA_LOOKUP", ["warehouse_manager", "dim_warehouse"],
-      not_subs=["no thuoc linh vuc", "Không tìm thấy dataset"]),
+    # "Trường X trong dataset Y có ý nghĩa gì?" asks WHAT that field means. The
+    # focused-field answer (CONTEXT_FIELD_DESCRIPTION) is the deliberate
+    # over-answer fix; SCHEMA_LOOKUP is the legacy whole-schema route.
+    dict(question="Trường warehouse_manager trong dim_warehouse có ý nghĩa gì?",
+         intent=["SCHEMA_LOOKUP", "CONTEXT_FIELD_DESCRIPTION"],
+         subs=["warehouse_manager", "dim_warehouse"],
+         not_subs=["no thuoc linh vuc", "Không tìm thấy dataset"]),
 ])
 case("F02", "field_questions", "admin", [
     # promotion_id lives in the promotion master (dim_promotion), not in
@@ -469,12 +473,12 @@ async def run_case(client: httpx.AsyncClient, token: str, case: Case) -> dict:
     return {"turn_reports": turn_reports}
 
 
-def render(results: list[dict], text_only: bool = False) -> str:
+def render(results: list[dict], cases: list[Case] | None = None, text_only: bool = False) -> str:
     L: list[str] = []
     totals: dict[str, int] = {c: 0 for c in CRITERIA}
     total_cases = 0
     total_turns = 0
-    for case, res in zip(CASES, results):
+    for case, res in zip(cases or CASES, results):
         ok = all(all(r["scores"].values()) for r in res["turn_reports"])
         total_cases += 1
         for r in res["turn_reports"]:
@@ -495,7 +499,7 @@ def render(results: list[dict], text_only: bool = False) -> str:
                     L.append(f"        FAIL: {', '.join(failed)}")
                     L.append(f"        intent={r['got'].get('intent')} answer={r['got'].get('answer','')[:220]}")
     # summary
-    passed = sum(1 for c, res in zip(CASES, results)
+    passed = sum(1 for c, res in zip(cases or CASES, results)
                  if all(all(r["scores"].values()) for r in res["turn_reports"]))
     L.append("")
     L.append(f"=== SUMMARY: {passed}/{total_cases} cases PASS ===")
@@ -529,7 +533,7 @@ def main() -> int:
                     tokens[case.role] = await login(case.role, args.base_url)
                 res = await run_case(client, tokens[case.role], case)
                 results.append(res)
-            print(render(results))
+            print(render(results, cases=selected))
             if args.json:
                 with open(args.json, "w", encoding="utf-8") as f:
                     json.dump([{

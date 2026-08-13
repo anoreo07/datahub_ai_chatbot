@@ -368,6 +368,50 @@ async def test_image_context_flows_to_dataset_and_join(db_session) -> None:
     assert "warehouse_id" in r2.answer
 
 
+@pytest.mark.asyncio
+async def test_standalone_cross_dataset_join_uses_join_analysis(db_session) -> None:
+    """A self-contained join question ("trường chung để liên kết giữa X và Y")
+    must render the cross-dataset join analysis, not a bare whole-schema listing.
+    """
+    from app.services.chat_service import ChatService
+
+    await _seed(db_session)
+    service = ChatService(db_session)
+    _wire_lineage_inventory(service)
+    cid = "ctx-join-standalone"
+
+    r = await service.answer(
+        "fact_inventory và dim_warehouse có trường nào chung để liên kết?",
+        conversation_id=cid,
+    )
+    assert r.intent == "SCHEMA_LOOKUP", r.answer
+    assert "warehouse_id" in r.answer, r.answer
+    assert "dim_warehouse" in r.answer, r.answer
+    assert "fact_inventory" in r.answer, r.answer
+    assert "liên kết" in r.answer.lower(), r.answer
+
+
+@pytest.mark.asyncio
+async def test_standalone_join_no_shared_field_is_grounded(db_session) -> None:
+    """Join question between datasets WITHOUT a shared field stays grounded:
+    states no direct shared key and lists candidate FK columns instead of
+    inventing a join."""
+    from app.services.chat_service import ChatService
+
+    await _seed(db_session)
+    service = ChatService(db_session)
+    _wire_lineage_inventory(service)
+    cid = "ctx-join-none"
+
+    r = await service.answer(
+        "fact_goods_receipt và dim_warehouse_zone có trường nào chung để liên kết?",
+        conversation_id=cid,
+    )
+    assert r.intent == "SCHEMA_LOOKUP", r.answer
+    assert "dim_warehouse_zone" in r.answer, r.answer
+    assert "không" in r.answer.lower() or "chưa" in r.answer.lower(), r.answer
+
+
 # --------------------------------------------------------------------------- #
 # Thinking Mode: state events + context-first ordering
 # --------------------------------------------------------------------------- #
