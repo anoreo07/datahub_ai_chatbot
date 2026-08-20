@@ -1,1 +1,0 @@
-# Pinecone integration tests

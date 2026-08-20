@@ -1,6 +1,0 @@
-source:
-  type: datahub-debug
-  config: {}
-
-sink:
-  # sink configs

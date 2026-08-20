@@ -1,4 +1,0 @@
-{
-  "query": "{ __schema { queryType { name } } }",
-  "variables": {}
-}

@@ -1,6 +1,0 @@
-input SortQueriesInput {
-  """
-  A criterion to sort query results on
-  """
-  sortCriterion: SortCriterion!
-}

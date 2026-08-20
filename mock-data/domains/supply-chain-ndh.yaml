@@ -1,9 +1,0 @@
-domain: CUNG ỨNG (NĐH)
-description: Dữ liệu quản lý nhà cung cấp nước ngoài (NĐH), nhập khẩu linh kiện, hải quan và vận chuyển quốc tế
-business_objective: Đảm bảo cung ứng linh kiện nhập khẩu đúng tiến độ, quản lý chi phí nhập khẩu và tuân thủ hải quan
-owner: nguyen-van-minh
-technical_owner: tran-duc-anh
-tags:
-  - SupplyChain
-  - Silver
-  - Critical

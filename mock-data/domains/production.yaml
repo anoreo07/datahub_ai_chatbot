@@ -1,9 +1,0 @@
-domain: SẢN XUẤT
-description: Dữ liệu liên quan đến quy trình sản xuất, lắp ráp ô tô, quản lý dây chuyền và chất lượng sản phẩm
-business_objective: Tối ưu hóa hiệu suất sản xuất, đảm bảo chất lượng xe xuất xưởng, giảm thời gian dừng máy
-owner: le-van-tuan
-technical_owner: tran-duc-anh
-tags:
-  - Manufacturing
-  - Gold
-  - Critical

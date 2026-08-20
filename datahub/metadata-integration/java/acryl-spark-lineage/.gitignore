@@ -1,7 +1,0 @@
-# Temporary upstream files - downloaded only when patching
-patches/upstream-*/
-patches/backup-*/
-
-# Build artifacts
-build/
-.gradle/

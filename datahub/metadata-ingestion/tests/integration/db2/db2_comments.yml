@@ -1,5 +1,0 @@
-type: db2
-config:
-  schema_pattern:
-    allow:
-    - comments

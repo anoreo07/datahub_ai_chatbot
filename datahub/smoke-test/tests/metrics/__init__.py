@@ -1,2 +1,0 @@
-# Metrics smoke tests package
-

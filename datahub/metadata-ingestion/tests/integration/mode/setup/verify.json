@@ -1,9 +1,0 @@
-{
-  "workspace": "dummy_workspace",
-  "workspace_token": "234112185554",
-  "_links": {
-    "self": {
-      "href": "/api/dummy_workspace"
-    }
-  }
-}

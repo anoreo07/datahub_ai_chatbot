@@ -1,9 +1,0 @@
-{
-    "password": "ELASTICSEARCH_PASSWORD",
-    "opendistro_security_roles": [
-        "ROLE"
-    ],
-    "backend_roles": [
-        "BACKEND_ROLES"
-    ]
-}

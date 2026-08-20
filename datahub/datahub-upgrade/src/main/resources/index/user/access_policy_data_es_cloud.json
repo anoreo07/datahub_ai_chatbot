@@ -1,9 +1,0 @@
-{
-    "cluster":[ "monitor" ],
-    "indices":[
-       {
-          "names":["PREFIX*"],
-          "privileges":["all"]
-       }
-    ]
- }
