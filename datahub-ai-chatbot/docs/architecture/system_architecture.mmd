@@ -1,0 +1,164 @@
+graph TD
+    subgraph frontend["FRONTEND — Next.js (frontend/)"]
+        UI["Chat UI
+components/chat/ (chat-input, message-bubble,
+conversation-history, lineage-graph, markdown)"]
+        STREAM["lib/stream.ts — SSE client
+POST /api/v1/chat/stream
+events: status / token / done / error"]
+        REST["lib/api.ts — REST client
+fetch + JWT Bearer header"]
+        AUTHUI["lib/auth.ts — token storage / login"]
+    end
+
+    subgraph api["BACKEND — FastAPI (app/main.py)"]
+        MW["Middleware:
+ErrorHandling, Metrics, RateLimit"]
+        ROUTERS["Routers (app/api/):
+actions, auth, chat, conversations, datasource,
+documents, glossary, health, index, me,
+metrics, roles, search, storage, sync"]
+        AUTH["app/auth/ — JWT identity,
+get_current_user, AuthorizationService
+(RBAC domains + entity ACL)"]
+    end
+
+    subgraph services["SERVICE LAYER"]
+        CS["ChatService (app/services/chat_service.py)
+answer() + stream — orchestrator"]
+        CC["ChatContext (app/services/chat/context.py)
+shared collaborators"]
+        DOMAIN["Domain services (app/services/chat/):
+context, question_analysis, entity_resolution,
+evidence, flows, lineage, listing,
+structured_retrieval, field_ops, access, vision"]
+        CONV["app/services/ — conversation memory,
+conversation_context, image_upload, vision_service"]
+        ACT["ActionService (app/services/action_service.py)
+SQL / impact / quality / metadata report / lineage"]
+    end
+
+    subgraph rag["RAG / RETRIEVAL (retrieval/)"]
+        INTENT["IntentResolver + classifier
+intent.py (QueryIntent enum), classifier.py (QueryPlan)"]
+        RESOLVER["EntityResolver / EntityExtractor
+retrieval/entity_resolver.py, entity_extraction.py"]
+        HYBRID["HybridSearch
+retrieval/hybrid_search.py (keyword + vector)"]
+        RERANK["Reranker
+retrieval/reranker.py"]
+        CTXBUILD["ContextBuilder
+retrieval/context_builder.py (E1..En evidence)"]
+        THINK["ThinkingModeOrchestrator
+retrieval/thinking/, planner_executor.py, tools.py"]
+        VISUAL["VisualUnderstandingSkill
+retrieval/visual/"]
+        SEM["SemanticExpander
+retrieval/semantic_expansion.py"]
+    end
+
+    subgraph llm["LLM LAYER (llm/)"]
+        LLMCLIENT["create_llm_client() (llm/client.py)
+provider registry (llm/registry.py)"]
+        FIRE["Fireworks provider
+deepseek-v4-flash / qwen2.5-vl (vision)"]
+        MOCKLLM["MockLLM fallback
+(config: USE_MOCK_LLM)"]
+        GEN["AnswerGenerator (llm/generator.py)
+RAG answer + citations"]
+    end
+
+    subgraph ingest["INGESTION (ingestion/)"]
+        FACTORY["create_datahub_source() (ingestion/__init__.py)
+USE_MOCK_DATAHUB ? Mock : GraphQL"]
+        MOCK["MockDataHubSource (mock_source.py)
+fixtures data"]
+        GQL["GraphQLDataHubSource (graphql_source.py)
+real DataHub GraphQL API"]
+        SYNC["SyncOrchestrator (ingestion/sync.py)
+checkpoint-based sync"]
+        PARSERS["document_parsers/ — PDF, DOCX, HTML
++ SSRF guard"]
+    end
+
+    subgraph indexing["INDEXING (indexing/)"]
+        CHUNK["chunker.py — text chunking
+target 600 tokens / overlap 75"]
+        EMBED["embedder.py — OllamaEmbedder
+(nomic-embed-text, 768 dim) | MockEmbedder"]
+        PIPELINE["pipeline.py — process_pending_jobs"]
+        VSTORE["vector_store + keyword_index
+OpenSearch index | fake_search (USE_FAKE_OPENSEARCH)"]
+    end
+
+    subgraph storage["STORAGE"]
+        PG[("PostgreSQL — database/
+entities, entity_chunks, sync_checkpoints,
+conversation_history, entity_acls,
+rbac roles, audit_logs, image_records")]
+        OS[("OpenSearch — RAG chunks")]
+        REDIS[("Redis — infrastructure/redis
+cache + queues")]
+        FS[("Filesystem — images, documents")]
+    end
+
+    subgraph ext["EXTERNAL"]
+        DH["DataHub instance (GraphQL API)"]
+    end
+
+    subgraph workers["WORKERS (workers/)"]
+        WSYNC["sync_worker"]
+        WIDX["indexing_worker"]
+        WDOC["document_worker (empty loop)"]
+        WEMB["embedding_worker (empty loop)"]
+    end
+
+    UI --> STREAM
+    UI --> REST
+    STREAM --> MW
+    REST --> MW
+    MW --> ROUTERS
+    ROUTERS --> AUTH
+    AUTH --> CS
+    ROUTERS --> ACT
+    CS --> CC
+    CC --> DOMAIN
+    DOMAIN --> CONV
+    CS --> INTENT
+    CS --> RESOLVER
+    CS --> HYBRID
+    CS --> RERANK
+    CS --> CTXBUILD
+    CS --> THINK
+    CS --> VISUAL
+    CS --> SEM
+    CC --> LLMCLIENT
+    LLMCLIENT --> FIRE
+    LLMCLIENT --> MOCKLLM
+    GEN --> LLMCLIENT
+    DOMAIN --> GEN
+    CS --> FACTORY
+    FACTORY --> MOCK
+    FACTORY --> GQL
+    GQL --> DH
+    SYNC --> MOCK
+    SYNC --> GQL
+    SYNC --> PARSERS
+    CS --> SYNC
+    PIPELINE --> CHUNK
+    CHUNK --> EMBED
+    EMBED --> VSTORE
+    SYNC --> PIPELINE
+    VSTORE --> OS
+    VSTORE --> REDIS
+    HYBRID --> VSTORE
+    EMBED --> LLMCLIENT
+    ACT --> PG
+    DOMAIN --> PG
+    CC --> REDIS
+    CONV --> PG
+    CONV --> FS
+    WSYNC --> SYNC
+    WIDX --> PIPELINE
+    WDOC --> CONV
+    WEMB --> EMBED

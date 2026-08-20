@@ -1,0 +1,220 @@
+{
+  "schema_version": "1.0.0",
+  "generated_on": "2026-08-17",
+  "basis": "golden_benchmark.jsonl x 48 tests, FIRST INCORRECT STATE per test, no code changes",
+  "total_fail": 41,
+  "total_pass": 7,
+  "clusters": [
+    {
+      "id": "RC10",
+      "name": "Term->datasets reverse-linkage retrieval misses linked datasets",
+      "description": "Queries 'term X thuộc về datasets nào' return empty even though ground-truth edge map has many dataset<->term edges; reverse edges are not retrieved.",
+      "failure_types": [
+        "RETRIEVAL_FAILURE"
+      ],
+      "tests": [
+        "U-001"
+      ],
+      "count": 1,
+      "first_incorrect_state": "retrieval",
+      "fix_area": "Reverse-linkage retrieval must query edges in both directions and fall back to the dataset/term edge map when candidate search is empty.",
+      "evidence": "U-001: PII term->datasets returned empty; ground truth has 23 edges incl. stg_contact<->PII, stg_pbed<->PII."
+    },
+    {
+      "id": "RC11",
+      "name": "Domain constraint not applied as a filter",
+      "description": "When the query states a domain (e.g. TÀI CHÍNH), the resolver ignores it and returns an ambiguous clarification instead of using the domain to scope candidates.",
+      "failure_types": [
+        "DOMAIN_DISAMBIGUATION_FAILURE"
+      ],
+      "tests": [
+        "W-001"
+      ],
+      "count": 1,
+      "first_incorrect_state": "domain_resolution",
+      "fix_area": "Extract domain constraint from query and pass it to resolver/retrieval as a candidate filter before ambiguity decision.",
+      "evidence": "W-001: domain TÀI CHÍNH dropped -> ambiguous clarify instead of domain-scoped resolution."
+    },
+    {
+      "id": "RC1a",
+      "name": "False-positive ambiguity gate",
+      "description": "Resolver returns ambiguous=False with a single clear top candidate, but response surfaces an ambiguous clarification because a runner-up candidate (different entity type) passes the ambiguity threshold.",
+      "failure_types": [
+        "ENTITY_RESOLUTION_FAILURE"
+      ],
+      "tests": [
+        "A-001",
+        "O-001"
+      ],
+      "count": 2,
+      "first_incorrect_state": "entity_resolution",
+      "fix_area": "Ambiguity gate must consider top-score margin and entity-type consistency; only trigger clarification when top candidates share the same type or score gap is small.",
+      "evidence": "A-001: resolver_result ambiguous=False exact=False top_score=0.7628 candidates=2, runner-up is a glossary term; response ambiguous=True. O-001: same pattern (ambiguous=True clarify with runner-up of different type)."
+    },
+    {
+      "id": "RC1b",
+      "name": "Fuzzy name-matching resolves the wrong entity",
+      "description": "resolver_name_query returns db_rows=0 for the exact name; the fuzzy fallback then resolves an unrelated entity that happens to share tokens, sending wrong URN downstream (tools run on wrong entity, sometimes yielding UNKNOWN).",
+      "failure_types": [
+        "ENTITY_RESOLUTION_FAILURE"
+      ],
+      "tests": [
+        "B-001",
+        "CASE3-001",
+        "G-002",
+        "O-002",
+        "T-001",
+        "V-001",
+        "X-001"
+      ],
+      "count": 7,
+      "first_incorrect_state": "entity_resolution",
+      "fix_area": "Fuzzy fallback must require a minimum score threshold per entity-type and optionally trigger abstention/UNKNOWN instead of returning a low-confidence wrong entity.",
+      "evidence": "B-001/G-002/O-002/T-001/X-001: db_rows=0 then fuzzy match to unrelated entity. V-001: fact_mcr unresolved -> chat_not_found. CASE3-001: fuzzy resolved '[VN] Dealer OUT' instead of intended entity."
+    },
+    {
+      "id": "RC2",
+      "name": "Intent keyword router misroutes NL discovery & reverses linkage direction",
+      "description": "Keyword-based intent router picks the wrong tool for natural-language discovery and dataset<->term linkage queries; for F-series the linkage direction is reversed, for B-series NL discovery is routed to TERM_TO_DATASETS.",
+      "failure_types": [
+        "INTENT_FAILURE"
+      ],
+      "tests": [
+        "B-002",
+        "B-003",
+        "F-001",
+        "F-002",
+        "F-003"
+      ],
+      "count": 5,
+      "first_incorrect_state": "intent",
+      "fix_area": "Intent classification should use the LLM intent classifier (or hybrid) instead of hard keyword rules for discovery/linkage; linkage direction must respect query subject-object.",
+      "evidence": "B-002/B-003: NL discovery routed to TERM_TO_DATASETS, wrong tool, no entity context. F-001/F-002/F-003: dataset->term linkage reversed; resolved '[VN] Dealer OUT'."
+    },
+    {
+      "id": "RC3",
+      "name": "Count tool invoked without entity/domain filter",
+      "description": "count_entities is called with entity_hint=None, so it returns the global dataset count ('Có tổng cộng 500 datasets') instead of counting the scoped subset the user asked about.",
+      "failure_types": [
+        "TOOL_ARGUMENT_FAILURE"
+      ],
+      "tests": [
+        "C-001",
+        "C-002",
+        "C-003"
+      ],
+      "count": 3,
+      "first_incorrect_state": "tool_arguments",
+      "fix_area": "Tool selector must propagate resolved entity/domain into count_entities arguments; validate argument non-null before invocation.",
+      "evidence": "C-001/2/3: count tool output global total 500; expected a scoped count for the queried entity/domain."
+    },
+    {
+      "id": "RC4",
+      "name": "Glossary resolution lacks domain scoping & duplicate-term surfacing",
+      "description": "Glossary-term queries are resolved to datasets with similar names (Demand -> 'Demand check'), domain context is dropped, and terms with multiple URNs (Coverage Date x2) surface only one definition.",
+      "failure_types": [
+        "DOMAIN_DISAMBIGUATION_FAILURE",
+        "ENTITY_RESOLUTION_FAILURE"
+      ],
+      "tests": [
+        "CASE1-001",
+        "CASE1-002",
+        "E-001",
+        "L-001"
+      ],
+      "count": 4,
+      "first_incorrect_state": "entity_resolution",
+      "fix_area": "Glossary resolver must prefer glossaryTerm type, apply domain filter, and surface all duplicate-term URNs with disambiguation.",
+      "evidence": "CASE1-001: 'Demand là gì?' -> dataset 'Demand check'. CASE1-002: domain SẢN XUẤT dropped -> ambiguous clarify 'CP sản xuất bình quân/xe SOP'. E-001/L-001: Coverage Date 2 URNs only 1 surfaced."
+    },
+    {
+      "id": "RC5",
+      "name": "Composite / multi-hop / comparison queries not decomposed",
+      "description": "Thinking/planning mode attempts comparisons across many datasets in one turn, collapses multi-hop lineage chains into a single schema lookup, and answers only part of two-part / two-dataset questions.",
+      "failure_types": [
+        "PLANNER_DECOMPOSITION_FAILURE"
+      ],
+      "tests": [
+        "CASE1-003",
+        "CASE5-001",
+        "R-001",
+        "S-001"
+      ],
+      "count": 4,
+      "first_incorrect_state": "planner_decomposition",
+      "fix_area": "Planner must decompose composite queries into per-entity sub-tasks with intermediate results; multi-hop lineage must be planned as a chain of hops.",
+      "evidence": "CASE1-003: comparison across 6 datasets in one turn. CASE5-001: 5-hop chain collapsed to SCHEMA_LOOKUP. R-001: only 1 of 2 datasets resolved. S-001: only 1 of 2 parts answered."
+    },
+    {
+      "id": "RC6",
+      "name": "Report / dashboard discovery fails",
+      "description": "Queries targeting report/dashboard entities resolve to datasets (or are blocked by the ambiguity gate) because report-type entities are not surfaced/discovered; sometimes the correct dashboard is in candidates but not chosen.",
+      "failure_types": [
+        "REPORT_DISCOVERY_FAILURE"
+      ],
+      "tests": [
+        "CASE2-001",
+        "CASE2-002",
+        "H-001",
+        "H-002",
+        "H-003"
+      ],
+      "count": 5,
+      "first_incorrect_state": "report_discovery",
+      "fix_area": "Discovery must include report/dashboard entity types and route report-intent queries to them; ambiguity gate must not hide report entities.",
+      "evidence": "H-001: resolved dataset 'Mapping Supplier & Buyer Report' instead of report. H-002/CASE2-001: dashboard in candidates but ambiguity gate blocked. CASE2-002: rpt_survey_weekly_supply_capacity not discovered."
+    },
+    {
+      "id": "RC7",
+      "name": "Lineage queries resolve wrong entity before lineage tool runs",
+      "description": "For lineage questions the resolver returns the wrong dataset (e.g. complaint daily report instead of the supply-capacity report), so the lineage tool correctly returns UNKNOWN but on the wrong entity.",
+      "failure_types": [
+        "ENTITY_RESOLUTION_FAILURE"
+      ],
+      "tests": [
+        "CASE4-001",
+        "CASE6-001",
+        "J-001",
+        "M-001",
+        "N-001"
+      ],
+      "count": 5,
+      "first_incorrect_state": "entity_resolution",
+      "fix_area": "Resolve the exact lineage source entity (match by report name, not fuzzy dataset tokens) before invoking the lineage tool; feed resolved URN explicitly.",
+      "evidence": "CASE4-001: resolved '[CSKH]_Daily Report_Báo cáo khiếu nại KH...' instead of Report_Supply_Capacity. J-001/M-001/N-001/CASE6-001: lineage UNKNOWN on wrong entity."
+    },
+    {
+      "id": "RC8",
+      "name": "Field-property / formula evidence not injected into context",
+      "description": "Field-level description/owner and metric formula from the ground-truth entity description are not assembled into the evidence/context, so the answer lists fields without explaining the target field or claims no formula exists.",
+      "failure_types": [
+        "EVIDENCE_SELECTION_FAILURE",
+        "METRIC_FORMULA_DISCOVERY_FAILURE"
+      ],
+      "tests": [
+        "G-001",
+        "G-003",
+        "K-001"
+      ],
+      "count": 3,
+      "first_incorrect_state": "evidence_selection",
+      "fix_area": "Evidence builder must extract field definitions/owners and metric formulas from entity metadata and include them in the context sent to the LLM.",
+      "evidence": "G-001/G-003: fields listed but target field not explained. K-001: formula exists in description but answer said 'không có công thức'."
+    },
+    {
+      "id": "RC9",
+      "name": "Multi-turn context / anaphora not propagated",
+      "description": "In a follow-up turn the whole query is fuzzy-matched as an entity name instead of resolving the anaphoric reference (e.g. 'công thức của nó') against the prior turn's entity; OWNER_LOOKUP runs on the wrong target.",
+      "failure_types": [
+        "CONTEXT_PROPAGATION_FAILURE"
+      ],
+      "tests": [
+        "Q-001"
+      ],
+      "count": 1,
+      "first_incorrect_state": "context_propagation",
+      "fix_area": "Resolver must merge conversation history references before name matching; anaphora resolution should substitute the prior entity URN.",
+      "evidence": "Q-001: follow-up 'công thức của nó' treated as entity name; context from conversation history not propagated to resolver."
+    }
+  ]
+}

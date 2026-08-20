@@ -1,5 +1,6 @@
 from ingestion.mappers import BaseMapper
 from ingestion.models import CanonicalEntity, Owner
+from ingestion.normalizer import clean_name
 
 
 class DashboardMapper(BaseMapper):
@@ -10,7 +11,7 @@ class DashboardMapper(BaseMapper):
         domain_info = raw.get("domain") or {}
 
         urn = raw.get("urn", "")
-        name = properties.get("name") or raw.get("name", "")
+        name = clean_name(properties.get("name") or raw.get("name", "")) or ""
         description = properties.get("description") or raw.get("description")
         owners = self._map_owners(ownership)
         upstreams, downstreams = self._extract_lineage(raw)
@@ -19,9 +20,9 @@ class DashboardMapper(BaseMapper):
             urn=urn,
             entity_type="dashboard",
             name=name,
-            display_name=raw.get("displayName") or name,
+            display_name=clean_name(raw.get("displayName") or name) or name,
             description=description,
-            platform=platform_info.get("name"),
+            platform=clean_name(platform_info.get("name")),
             environment="PROD",
             domain=self._map_domain(domain_info),
             owners=owners,

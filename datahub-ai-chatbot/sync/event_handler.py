@@ -35,8 +35,10 @@ class MetadataEventHandler:
         try:
             return await self._retry.execute(self._handle_single, event)
         except Exception as e:
-            log.error("event_handler_failed", event_id=event.event_id, error=str(e))
-            await self._dlq.push(event, str(e))
+            from guardrails.sanitizer import mask_secrets
+            err = mask_secrets(str(e))
+            log.error("event_handler_failed", event_id=event.event_id, error=err)
+            await self._dlq.push(event, err)
             return False
 
     async def _handle_single(self, event: MetadataChangeEvent) -> bool:

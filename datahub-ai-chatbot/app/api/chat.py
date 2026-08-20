@@ -75,7 +75,8 @@ async def chat_stream(
                     on_token=on_token,
                 )
             except Exception as exc:  # noqa: BLE001
-                await queue.put(await _sse("error", {"detail": str(exc)}))
+                from guardrails.sanitizer import mask_secrets
+                await queue.put(await _sse("error", {"detail": mask_secrets(str(exc))}))
             else:
                 await queue.put(await _sse("done", response.model_dump(mode="json")))
             finally:

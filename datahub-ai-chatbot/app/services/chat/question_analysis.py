@@ -161,6 +161,18 @@ _DOMAIN_LISTING_RE = re.compile(
 
 log = structlog.get_logger()
 
+# Multi-hop chain: "từ report capacity → định nghĩa → cột → công thức → nguồn
+# dữ liệu thô" (arrow chain) or "trong domain X tìm report về Y, term liên
+# quan, dataset nguồn và lineage" (comma chain). Walked hop by hop, missing
+# hops marked UNKNOWN. Must win over SCHEMA_LOOKUP / LINEAGE / TERM_DEFINITION.
+_MULTI_HOP_CHAIN_RE = re.compile(
+    r"(?:→|->|➔|⇒|arrow|chuỗi|chained|hop\b)|"
+    r"(?:từ|tu|from)\s+[\w\.\- ]{1,40}\s*(?:→|->)|"
+    r"(?:tìm|tim|find)\s+(?:report|báo cáo|bao cao)\b[^\n]{0,120}\b"
+    r"(?:term|thuật ngữ|thuat ngu|lineage|nguồn|nguon|dataset nguồn)",
+    re.I,
+)
+
 # Join / schema-relationship vocabulary. "Trong fact_sales_order, trường nào dùng
 # để liên kết dim_warehouse?" is a schema-join question — the intent router hears
 # "trường" and would otherwise run generic SCHEMA_LOOKUP that turns the whole
@@ -170,7 +182,11 @@ _JOIN_SIGNAL_RE = re.compile(
     r"nối với|noi voi|\blink(?:ed|s)?\b|mối quan hệ giữa|moi quan he giua|"
     r"giữa .*\bvà\b.*(?:trường|field|dataset|bảng)|"
     r"between .*\band\b.*(?:field|column|dataset|table)|"
-    r"relationship between|quan hệ giữa|relate)",
+    r"relationship between|quan hệ giữa|relate|"
+    r"trường nào chung|truong nao chung|trường chung|truong chung|"
+    r"common (?:fields?|columns?|keys?)|shared (?:fields?|columns?|keys?)|"
+    r"fields? in common|giống nhau|giong nhau|"
+    r"so sánh|so sanh|compare|comparison)",
     re.IGNORECASE,
 )
 _JOIN_TOKEN_RE = re.compile(
@@ -199,6 +215,15 @@ _CONCEPT_TO_DATASETS_RE = re.compile(
     r"|(?:term|thuật ngữ|thuat ngu)\s+(?:nào|nao)\s+liên quan\s*"
     r"(?:đến|den|to)?\s+[\wÀ-ỹ][\wÀ-ỹ \-\._]*?\s+(?:và|va)\s+"
     r"(?:những|nhung)?\s*(?:dataset|bảng|bang|table)\s+nào",
+    re.IGNORECASE,
+)
+# Term->datasets ASK: "tìm dataset tính/chứa/lưu nhu cầu linh kiện", "dataset
+# nào dựa trên <term>". The concept after the ask verb is a glossary term whose
+# linked datasets are the answer ("nhu cầu linh kiện" -> mrp_stock_req). Must
+# NOT hijack field-location or column-meaning asks (guarded by the caller).
+_TERM_TO_DATASETS_ASK_RE = re.compile(
+    r"(?:dataset|bảng|bang|table)[^?]{0,40}?"
+    r"\b(?:tính|tinh|chứa|chua|dựa|dua|lưu|luu|ghi|lấy|lay|nắm|nam)\b\s+",
     re.IGNORECASE,
 )
 # Extracts the concept phrase that follows "khái niệm / concept" so the
@@ -523,7 +548,19 @@ def _extract_field_identifier(question: str) -> str | None:
     into an unrelated match ("Bonded Warehouse"), so the field is never
     considered. A preserved identifier is the strongest signal that the user
     is asking about a *column* even when they omit the words "field/trường".
+
+    The identifier right after a field signal ("trường X", "field X", "cột X")
+    wins: in a compound "trong dataset Y có trường X" the dataset name is ALSO
+    snake_case and appears first, so a naive first-match picks the dataset
+    instead of the column ("dim_businessunit ... trường bu_short_name").
     """
+    m = re.search(
+        r"(?:trường|truong|cột|cot|field|column|col)\s+[\"“”'`]?"
+        r"([a-z0-9_]+(?:\.[a-z0-9_]+)*)",
+        question, re.I,
+    )
+    if m:
+        return m.group(1)
     m = re.search(r"[A-Za-z0-9_]+(?:\.[A-Za-z0-9_]+)+", question)
     if m:
         return m.group(0)
@@ -542,6 +579,114 @@ def _extract_filter_value(question: str, intent: QueryIntent) -> str:
             ]
             return " ".join(tokens).strip("?!.,:")
     return ""
+
+
+def _is_field_location_question(question: str) -> bool:
+    """True when the question asks WHERE a column lives ("dataset nào chứa
+    trường X?", "trường X nằm trong dataset nào?", "warehouse_id nằm trong
+    những dataset nào?", "X liên kết với bảng nào qua trường Y?").
+
+    Such questions are a LISTING of every dataset carrying the field - several
+    results are the answer, never an ambiguity clarification. Also excludes the
+    formula-of-column phrasing ("công thức của X") which resolves the column as
+    a glossary metric instead, and column-MEANING phrasing ("trường X nghĩa là
+    gì?") which answers the field's meaning inside its dataset.
+    """
+    q = _norm_vn(question)
+    if re.search(r"công thức|cong thuc|formula|cách tính|cach tinh", q):
+        return False
+    # Column-definition asks ("trường X nghĩa là gì?", "...có trường Y nghĩa
+    # là gì?") ask the field's MEANING inside its dataset, not WHERE it lives.
+    if re.search(r"nghĩa|nghia|meaning|ý nghĩa|y nghia|có nghĩa|co nghia", q, re.I):
+        return False
+    has_field_signal = bool(re.search(
+        r"trường|truong|cột|cot|field|column|schema",
+        q, re.I,
+    ))
+    has_bare_id = bool(re.search(r"[a-z0-9]{2,}(?:\.[a-z0-9_]+)+|[a-z0-9]{2,}_[a-z0-9_]+", q, re.I))
+    if not (has_field_signal or has_bare_id):
+        return False
+    # Explicit "trường X nằm/ở/trong dataset nào" / "trường X thuộc bảng nào".
+    if re.search(
+        r"(?:trường|truong|cột|cot|field|column)\s+[\"“”'`]?[a-z0-9_\.\-]{2,}"
+        r"\s+(?:thuộc|thuoc|nằm|nam|ở)\s+(?:trong)?\s*(?:những|nhung)?"
+        r"\s*(?:dataset|bảng|bang|table|asset)",
+        q, re.I,
+    ):
+        return True
+    # Bare-identifier location: "warehouse_id nằm trong những dataset nào",
+    # "promotion_id thuộc bảng nào".
+    if re.search(
+        r"[a-z0-9_]{2,}(?:\.[a-z0-9_]+)*\s+(?:nằm|nam|ở|thuộc|thuoc)"
+        r"\s+(?:trong|ở\s+trong)?\s*(?:những|nhung)?\s*(?:dataset|bảng|bang|table)",
+        q, re.I,
+    ):
+        return True
+    # Join-sharing phrasing: "X liên kết với bảng nào qua trường Y", "nối với
+    # dataset nào bằng field Z". The shared column names the listing datasets.
+    if re.search(
+        r"(?:liên kết|lien ket|join|nối|noi|kết nối|ket noi|được sync|duoc sync)"
+        r"[^\n]{0,40}?(?:qua|theo|bằng|bang)\s*(?:trường|truong|field|cột|cot)?\s*"
+        r"[a-z0-9_\.\-]{2,}",
+        q, re.I,
+    ):
+        return True
+    return bool(
+        has_field_signal
+        and re.search(
+            r"(dataset|bảng|bang|table|asset)[^?]{0,50}?"
+            r"(chứa|chua|contains?|has|có trường|co truong|chứa trường|chua truong)"
+            r"|trường.*(thuộc|nằm|nam|trong dataset|trong bảng)"
+            r"|(nằm|nam|ở|trong dataset nào|trong bảng nào)"
+            r"|chứa trường|chua truong",
+            q, re.I,
+        )
+    )
+
+def _is_column_meaning_question(question: str) -> bool:
+    """True for column-definition asks ("trường X nghĩa là gì?", "trường X
+    có nghĩa là gì?", "ý nghĩa của trường X", "what does field X mean?").
+
+    These ask the MEANING of a column - the answer is the field description /
+    name-derived meaning inside its dataset, NOT a glossary-term formula. The
+    formula-of-column guard must not hijack them.
+    """
+    q = _norm_vn(question)
+    if re.search(r"công thức|cong thuc|formula|cách tính|cach tinh", q):
+        return False
+    has_field_signal = bool(re.search(
+        r"trường|truong|cột|cot|field|column|col\b",
+        q, re.I,
+    ))
+    meaning_signal = bool(re.search(
+        r"nghĩa gì|nghia gi|nghĩa là gì|nghia la gi|có nghĩa|co nghia|"
+        r"ý nghĩa|y nghia|meaning|nghĩa|nghia",
+        q, re.I,
+    ))
+    return bool(has_field_signal and meaning_signal)
+
+
+def _is_term_in_dataset_question(question: str) -> bool:
+    """True for the "term/formula X trong dataset Y" compound pattern.
+
+    "công thức Coverage Date trong Fact_Inventory_Coverage là gì?" names BOTH
+    the term and the dataset; every resolved candidate (the dataset + the
+    same-named terms) is the answer, never an ambiguity clarification.
+
+    The dataset may be referenced with the word "dataset/bảng" or by its bare
+    identifier ("trong Fact_Inventory_Coverage"); a bare "domain" reference
+    ("trong domain SẢN XUẤT") is NOT a dataset anchor.
+    """
+    q = _norm_vn(question)
+    return bool(re.search(
+        r"(?:công thức|cong thuc|formula|cách tính|cach tinh|định nghĩa|"
+        r"dinh nghia|nghĩa|nghia)"
+        r"[^.!?]{0,60}?"
+        r"trong\s+(?:(?:dataset|bảng|bang)\s+)?"
+        r"(?!domain\b)[\"“”'`]?[a-z0-9_]+",
+        q, re.I,
+    ))
+
 
 def _extract_identifiers(question: str) -> list[str]:
     out: list[str] = []
@@ -670,7 +815,10 @@ def _looks_like_join(question: str) -> bool:
     if not question or not _JOIN_SIGNAL_RE.search(question):
         return False
     # "giữa/between" alone is too loose: require two real identifiers.
-    if _JOIN_SIGNAL_RE.search(question).group(0).lower() in ("giữa", "between"):
+    matched = _JOIN_SIGNAL_RE.search(question).group(0).lower()
+    if matched in ("giữa", "between"):
+        return _count_identifiers(question) >= 2
+    if matched in ("so sánh", "so sanh", "compare", "comparison"):
         return _count_identifiers(question) >= 2
     return _count_identifiers(question) >= 2 or (
         "liên kết" in question.lower() or "lien ket" in question.lower()

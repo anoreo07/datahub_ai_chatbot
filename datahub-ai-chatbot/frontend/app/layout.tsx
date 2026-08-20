@@ -24,8 +24,8 @@ const russoOne = Russo_One({
 
 export const metadata: Metadata = {
   title: {
-    default: "DataAtlas",
-    template: "%s · DataAtlas",
+    default: "V-DataAtlas",
+    template: "%s · V-DataAtlas",
   },
   description:
     "AI Metadata Assistant cho DataHub — tra cứu datasets, glossary, owners, lineage và tạo SQL từ metadata.",

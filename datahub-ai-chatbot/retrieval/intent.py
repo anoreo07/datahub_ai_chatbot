@@ -19,6 +19,7 @@ class QueryIntent(StrEnum):
     RELATED_DATASETS = "RELATED_DATASETS"
     SEMANTIC_SEARCH = "SEMANTIC_SEARCH"
     MULTI_ENTITY_QUERY = "MULTI_ENTITY_QUERY"
+    MULTI_HOP_CHAIN = "MULTI_HOP_CHAIN"
     # --- legacy intents kept for compatibility with existing routing ---------
     FIND_ENTITY = "FIND_ENTITY"
     TERM_TO_DATASETS = "TERM_TO_DATASETS"
@@ -56,6 +57,7 @@ LEGACY_FOR: dict["QueryIntent", "QueryIntent"] = {
     QueryIntent.RELATED_DATASETS: QueryIntent.FIND_ENTITY,
     QueryIntent.SEMANTIC_SEARCH: QueryIntent.GENERAL,
     QueryIntent.MULTI_ENTITY_QUERY: QueryIntent.GENERAL,
+    QueryIntent.MULTI_HOP_CHAIN: QueryIntent.FIND_ENTITY,
 }
 
 
@@ -93,6 +95,18 @@ _RULE_STRINGS: list[tuple[str, QueryIntent]] = [
     (r"(?:và (?:ai|cái gì|what|của|do)? (?:ai|what|cái gì|nào|sau))|(?:and then|and what|and who|and its)",
      QueryIntent.COMPOSITE_QUERY),
     (r"(?:nhiều|nhieu|một số|mot so|several)\s+(?:dataset|bảng|table|entity)(?:s|es)?\b", QueryIntent.MULTI_ENTITY_QUERY),
+    # Multi-hop chain: "từ report capacity → định nghĩa → cột → công thức →
+    # nguồn dữ liệu thô" (arrow chain) or "trong domain X, tìm report về Y,
+    # term liên quan, dataset nguồn và lineage" (comma chain). The answer walks
+    # each hop and marks missing data UNKNOWN. Must win over SCHEMA_LOOKUP /
+    # LINEAGE / TERM_DEFINITION, which would each grab just one hop.
+    (r"(?:->|\u2192|\u2794|\u21d2|arrow|chuỗi|chained|hop\b)",
+     QueryIntent.MULTI_HOP_CHAIN),
+    (r"(?:từ|tu|from)\s+[\w\.\- ]{1,40}\s*(?:->|\u2192|\u2794|\u21d2)",
+     QueryIntent.MULTI_HOP_CHAIN),
+    (r"(?:tìm|tim|find)\s+(?:report|báo cáo|bao cao)\b[^\n]{0,120}\b"
+     r"(?:term|thuật ngữ|thuat ngu|lineage|nguồn|nguon|dataset nguồn)",
+     QueryIntent.MULTI_HOP_CHAIN),
     # Graph / traversal questions (shortest/longest path, cycle, reachability).
     (r"(?:đường ngắn nhất|duong ngan nhat|shortest path|longest path|chuỗi dài nhất|duong di dai nhat|"
      r"mối quan hệ|moi quan he|relationship|chu kỳ|chu ky|cycle|phụ thuộc lẫn nhau|circular|loop\b)",
@@ -131,8 +145,24 @@ _RULE_STRINGS: list[tuple[str, QueryIntent]] = [
     # Relationship / membership queries FIRST so they win over generic TERM_DEFINITION ("là gì").
     (r"(?:thuộc|thuoc|nằm|nam|được chia|belong|belongs|belonging|in)\s+(?:về|ve|trong|to|in)?\s*(?:domain|lĩnh vực|linh vuc|miền|mien)\s+(?:nào|nao|what|which)", QueryIntent.ENTITY_DOMAIN),
     (r"(?:which|what)\s+(?:domain|lĩnh vực|linh vuc|miền|mien)\b", QueryIntent.ENTITY_DOMAIN),
+    # Schema/field + domain/owner composite ("schema X, field chứa số lượng,
+    # và domain của dataset này") is a SCHEMA_LOOKUP answer with the domain
+    # appended — wins over the bare "domain của" rule below.
+    (r"(?:schema|field|trường|truong|column|cột|cot|cấu trúc)\b[^\n]{0,90}\b"
+     r"(?:và|va|vao)\b[^\n]{0,90}\b"
+     r"(?:domain|lĩnh vực|linh vuc|miền|mien|owner)\b",
+     QueryIntent.SCHEMA_LOOKUP),
     (r"(?:domain|lĩnh vực|linh vuc|miền|mien)\s+(?:của|cua|of|thuộc|belongs? to)\b", QueryIntent.ENTITY_DOMAIN),
     # Owner membership questions
+    # Role + domain / owner ("vai trò, domain và owner của X") is a composite
+    # metadata question answered from the domain payload — wins over the single
+    # OWNER_LOOKUP rule below so both domain and owner are reported.
+    (r"(?:vai trò|vai tro|role)\b[^\n]{0,60}?\b"
+     r"(?:domain|lĩnh vực|linh vuc|miền|mien|owner)\b",
+     QueryIntent.ENTITY_DOMAIN),
+    (r"(?:domain|lĩnh vực|linh vuc|miền|mien)\b[^\n]{0,60}?\bowner\b|\bowner\b"
+     r"[^\n]{0,60}?\b(?:domain|lĩnh vực|linh vuc|miền|mien)\b",
+     QueryIntent.ENTITY_DOMAIN),
     (r"(?:thuộc về ai|thuộc ai|thuộc sở hữu|sở hữu của ai|so huu cua ai|người sở hữu|nguoi so huu|chủ sở hữu|chu so huu|belongs to whom|owned by whom|whose)", QueryIntent.OWNER_LOOKUP),
     (r"(ai sở hữu|ai so huu|ai là chủ|ai la chu|\bowner\b\s+(of|la|is|của|cua|nào|nao|nà|na)|the\s+owner|của ai|cua ai|who (owns|is the owner)|của owner nào|cua owner nao|owner của ai|owner cua ai)", QueryIntent.OWNER_LOOKUP),
     # Schema / field queries must win over the generic "là gì" definition rule:
@@ -148,6 +178,9 @@ _RULE_STRINGS: list[tuple[str, QueryIntent]] = [
     # Count queries — "có bao nhiêu datasets?", "lĩnh vực tài chính có bao nhiêu datasets"
     (r"(có bao nhiêu|co bao nhieu|bao nhiêu|bao nhieu|how many|số lượng|so luong|count|tổng cộng|tong cong)\s+(dataset|dashboard|glossary(?:\s+term)?|asset|entity)s?", QueryIntent.COUNT_ENTITIES),
     (r"(dataset|dashboard|glossary(?:\s+term)?|asset|entity)s?\s+(có bao nhiêu|co bao nhieu|bao nhiêu|how many|số lượng|so luong|count)", QueryIntent.COUNT_ENTITIES),
+    # Total-count phrasing — "tính tổng số dataset", "tổng số dashboard trong hệ thống".
+    (r"(tính tổng số|tinh tong so|tổng số|tong so|tổng cộng|tong cong)\s+(dataset|dashboard|glossary(?:\s+term)?|asset|entity)s?", QueryIntent.COUNT_ENTITIES),
+    (r"(dataset|dashboard|glossary(?:\s+term)?|asset|entity)s?\s+(tính tổng số|tinh tong so|tổng số|tong so)", QueryIntent.COUNT_ENTITIES),
     # Domain queries — "domain vgreen bao gồm những asset nào", "những asset thuộc domain X", "lĩnh vực tài chính gồm những dataset nào"
     (r"(domain|miền|lĩnh vực)\s+[\w\.\- ]{1,60}?\s+(bao gồm|gồm|có (những|các|asset|entity|dataset)|chứa|include|includes?|has|have|contain)", QueryIntent.DOMAIN_QUERY),
     (r"(assets?|entities?|datasets?|dashboards?|bảng|bang)\s+(?:(that\s+are|are|which\s+are|which|nào|nao)\s+)?(trong|thuộc|thuoc|in|belonging to|belong to)\s+(the\s+)?(domain|miền|lĩnh vực)\s+[\w\.\- ]{1,60}", QueryIntent.DOMAIN_QUERY),
@@ -182,13 +215,25 @@ _RULE_STRINGS: list[tuple[str, QueryIntent]] = [
     (r"(dataset|asset|entity)s?\s+(đã\s+)?(được\s+)?(xác nhận|certified)", QueryIntent.CERTIFIED_LIST),
     (r"certified\s+(dataset|asset|entity)s?", QueryIntent.CERTIFIED_LIST),
     (r"danh sách\s+(đã\s+)?certified", QueryIntent.CERTIFIED_LIST),
-    (r"(dataset nào|dataset.*gắn|entity.*associated|find dataset|entity nào)", QueryIntent.TERM_TO_DATASETS),
+    (r"(?:dataset|asset|entity|dashboard)s?\s+(?:nào|which|mà)\s+(?:được\s+)?gắn\s+term|"
+     r"(?:dataset|asset|entity)s?\s+.*\bgắn\s+với\b|"
+     r"(?:dataset|asset|entity)s?\s+.*\bglossary\b|"
+     r"entity.*associated|find dataset", QueryIntent.TERM_TO_DATASETS),
     (r"(term nào liên quan|terms? (?:related to|liên quan đến|about)\s|terms?.*(?:doanh thu|tồn kho|liên quan|chứa|liệt kê))", QueryIntent.TERM_TO_DATASETS),
     (r"terms?\s+(?:nào|nao|which|what)\s+(?:liên quan|lien quan|related|theo)\s", QueryIntent.TERM_TO_DATASETS),
     # Document QA — bare "tài liệu X mô tả điều gì" (not necessarily "theo tài liệu").
     (r"(tài liệu|tai lieu|documents?|reports?)\s+[\w\.\- ]{1,80}?\s+"
      r"(mô tả|mo ta|nói về|noi ve|nội dung|noi dung|describe|explain|giải thích|"
      r"nói gì|noi gi|bao gồm gì|about)", QueryIntent.DOCUMENT_QA),
+    # Dashboard / report description — "mô tả chi tiết của dashboard X",
+    # "X là dashboard gì" -> TERM_DEFINITION so the exact-name dashboard is
+    # resolved (not a hybrid whole-sentence query that arbitrarily picks one
+    # of several same-named dashboards).
+    (r"(dashboard|report|báo cáo|bao cao)\s+[\w\.\- ]{1,80}?\s+"
+     r"(mô tả|mo ta|miêu tả|mieu ta|chi tiết|chi tiet|nội dung|noi dung|"
+     r"describe|description|explain|giải thích|giai thich)", QueryIntent.TERM_DEFINITION),
+    (r"(mô tả|mo ta|miêu tả|mieu ta|chi tiết|chi tiet)\s+(của|cua|of|về|ve)\s+"
+     r"(dashboard|report|báo cáo|bao cao)\b", QueryIntent.TERM_DEFINITION),
     (r"(theo tài liệu|document|report nói gì|theo document)", QueryIntent.DOCUMENT_QA),
     (r"(link|url|đường dẫn|datahub.*link)", QueryIntent.DATAHUB_URL),
     (r"(có tồn tại|tồn tại không|exist|có\s+không|co khong|có\s+\S+(?:\s+\S+)?\s+không)", QueryIntent.ENTITY_EXISTS),

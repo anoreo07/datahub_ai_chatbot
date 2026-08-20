@@ -50,7 +50,7 @@ export function SidebarHeader({ collapsed, onToggle, onSearch }: SidebarHeaderPr
       <div className="flex flex-col items-center gap-2 border-b py-3">
         <Image
           src="/logo.png"
-          alt="DataAtlas"
+          alt="V-DataAtlas"
           width={40}
           height={40}
           className="h-10 w-10 shrink-0 rounded-lg object-contain"
@@ -69,12 +69,12 @@ export function SidebarHeader({ collapsed, onToggle, onSearch }: SidebarHeaderPr
       <div className="flex min-w-0 flex-1 items-center gap-2.5 overflow-hidden">
         <Image
           src="/logo.png"
-          alt="DataAtlas"
+          alt="V-DataAtlas"
           width={40}
           height={40}
           className="h-10 w-10 shrink-0 rounded-lg object-contain"
         />
-        <span className="truncate font-display text-lg tracking-tight">DataAtlas</span>
+        <span className="truncate font-display text-lg tracking-tight">V-DataAtlas</span>
       </div>
 
       <div className="flex shrink-0 items-center gap-1">

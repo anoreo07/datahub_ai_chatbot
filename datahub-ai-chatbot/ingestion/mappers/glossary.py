@@ -1,5 +1,6 @@
 from ingestion.mappers import BaseMapper
 from ingestion.models import CanonicalEntity, Owner
+from ingestion.normalizer import clean_name
 
 
 class GlossaryTermMapper(BaseMapper):
@@ -9,7 +10,7 @@ class GlossaryTermMapper(BaseMapper):
         domain_info = raw.get("domain") or {}
 
         urn = raw.get("urn", "")
-        name = props.get("name") or raw.get("name", "")
+        name = clean_name(props.get("name") or raw.get("name", "")) or ""
         description = props.get("description") or raw.get("description")
 
         owners = self._map_owners(ownership)
@@ -25,7 +26,7 @@ class GlossaryTermMapper(BaseMapper):
             urn=urn,
             entity_type="glossary_term",
             name=name,
-            display_name=raw.get("displayName") or name,
+            display_name=clean_name(raw.get("displayName") or name) or name,
             description=description,
             domain=self._map_domain(domain_info),
             owners=owners,
@@ -75,7 +76,7 @@ class GlossaryNodeMapper(BaseMapper):
     def to_canonical(self, raw: dict, url_builder: object | None = None) -> CanonicalEntity:
         props = raw.get("properties") or {}
         urn = raw.get("urn", "")
-        name = props.get("name") or raw.get("name", "")
+        name = clean_name(props.get("name") or raw.get("name", "")) or ""
         description = props.get("description") or raw.get("description")
 
         children: list[str] = []
@@ -88,7 +89,7 @@ class GlossaryNodeMapper(BaseMapper):
             urn=urn,
             entity_type="glossary_node",
             name=name,
-            display_name=raw.get("displayName") or name,
+            display_name=clean_name(raw.get("displayName") or name) or name,
             description=description,
             downstreams=children,
             deleted=False,

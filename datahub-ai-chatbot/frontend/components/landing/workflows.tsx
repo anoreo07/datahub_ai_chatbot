@@ -148,7 +148,7 @@ export function Workflows() {
           <SectionHeading
             eyebrow="Workflows"
             title="One platform, many data workflows"
-            description="Instead of opening six different tools, your team can ask about any of these — and DataAtlas pulls the DataHub metadata to answer."
+            description="Instead of opening six different tools, your team can ask about any of these — and V-DataAtlas pulls the DataHub metadata to answer."
           />
         </Reveal>
 

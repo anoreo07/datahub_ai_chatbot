@@ -104,11 +104,23 @@ Output EXACTLY one JSON object, nothing else:
   "confidence": "high|medium|low"
 }
 
+Examples:
+Q: "ai là người tạo ra chuỗi cộng dồn fact_inventory_movement?"
+A: {"intent": "OWNER_LOOKUP", "entity_refs": ["fact_inventory_movement"], "entity_type": "dataset", "filter": {"dimension": null, "value": null}, "direction": null, "params": {"depth": null, "top_k": null}, "is_composite": false, "confidence": "high"}
+
+Q: "ai sở hữu dataset finance.monthly_revenue?"
+A: {"intent": "OWNER_LOOKUP", "entity_refs": ["finance.monthly_revenue"], "entity_type": "dataset", "filter": {"dimension": null, "value": null}, "direction": null, "params": {"depth": null, "top_k": null}, "is_composite": false, "confidence": "high"}
+
+Q: "dataset nào được tạo bởi Dang Quang Huy?"
+A: {"intent": "ENTITIES_BY_OWNER", "entity_refs": ["Dang Quang Huy"], "entity_type": "dataset", "filter": {"dimension": "owner", "value": "Dang Quang Huy"}, "direction": null, "params": {"depth": null, "top_k": null}, "is_composite": false, "confidence": "high"}
+
 Rules:
 - entity_refs: the raw names as the user typed them (do NOT guess/expand). Empty list when none.
 - "IMPACT" is the INTENT for "what downstream/consumers would be affected by changing X". Use direction=downstream.
 - is_composite=true when the question mixes multiple intents (e.g. schema + lineage, or owner + schema).
 - Do NOT infer real entity names from descriptions; only use names the user wrote.
+- "ai là người tạo ra / ai tạo ra / who created" a dataset is OWNER_LOOKUP (created-by is an ownership fact), NOT a free-form GENERAL search.
+- "dataset nào (được tạo bởi / do) <person>" is ENTITIES_BY_OWNER with filter.dimension=owner.
 """
 
 # Query planner: turn a (possibly composite) question into concrete, ordered
@@ -158,6 +170,9 @@ Given a user question and its conversation context, extract the question's struc
 Conversation context (recent turns):
 [HISTORY]
 
+Grounding context (use this to check every claim you make):
+[CHECKLIST_CONTEXT]
+
 Question: [QUESTION]
 
 Fields:
@@ -166,9 +181,21 @@ Fields:
 - "is_field_property_question": true when the question asks about a field's property (type, description, nullable, primary key...), even if the field name did not look snake_case.
 - "needs_thinking": true when the question is complex / system-level / multi-hop (compare, impact, root cause, "what happens if", multiple concepts) and the independent Thinking Mode should answer it.
 - "needs_decomposition": true when the question combines several independent sub-questions that are better answered by solving each part separately.
-- "sub_questions": the concrete sub-questions (each a full, self-contained string) when needs_decomposition is true; otherwise an empty list.
+- "sub_questions": when needs_decomposition is true, a list of sub-question objects, each:
+    {
+      "question": "<full, self-contained sub-question string>",
+      "intent": "<high-level intent label: FIELD_PROPERTY | SCHEMA_FIELD_LOOKUP | ENTITY_LOOKUP | LINEAGE | TERM_DEFINITION | IMPACT | GENERAL | null>",
+      "entity_ref": {"explicit_name": "<dataset/term name named in THIS sub-question, or null>", "anaphora_target": "<entity from conversation context this sub-question refers back to, or null>"},
+      "field_ref": "<schema field this sub-question asks about, or null>",
+      "property": "<one of the property values above, or null>",
+      "constraint": {"context_only": <true if this sub-question must be answered only from already-fetched context / no fresh cross-catalog search>, "output_format_constraint": "<e.g. 'list of field names' | 'single value' | null>"},
+      "evidence_quality_check_needed": <true if answering safely requires verifying the current evidence is grounded in a real schema field of the active entity>
+    }
+  Otherwise an empty list.
 - "anaphora_target": for follow-ups ("nó", "đó", "bảng này", "cái trên", "schema của nó"...) the catalog entity from the conversation context the pronoun/demonstrative refers to, or null when the question is self-contained.
 - "entity_refs": entity names explicitly named in THIS question only (do NOT guess entities the user never wrote).
+- "complexity_reason": a short reason when needs_thinking or needs_decomposition is true, else null.
+- "parse_confidence": "high" | "medium" | "low" — how confident you are that the parse captures the question.
 - "confidence": "high" | "medium" | "low".
 
 Output EXACTLY one JSON object, nothing else:
@@ -181,11 +208,15 @@ Output EXACTLY one JSON object, nothing else:
   "sub_questions": [],
   "anaphora_target": null,
   "entity_refs": [],
+  "complexity_reason": null,
+  "parse_confidence": "medium",
   "confidence": "medium"
 }
 
 Rules:
 - anaphora_target must be a real entity name from the conversation context (an earlier turn's dataset/term), never invented.
+- entity_ref.explicit_name may only be a name the user actually wrote in this question; use anaphora_target for refer-backs.
+- field_ref may only be a field name that exists in the known schema fields (checklist) OR was literally named by the user; never invent column names.
 - field-property questions win over decomposition ("warehouse_id có kiểu dữ liệu gì?" -> focus_field="warehouse_id", property="data_type").
 - Isolated property questions label any single named column as focus_field even without underscores.
 """

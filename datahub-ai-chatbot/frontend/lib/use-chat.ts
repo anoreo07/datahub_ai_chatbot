@@ -139,64 +139,74 @@ export function useChat() {
       setStep("classify");
       streamingRef.current = true;
 
-      await streamChat(
-        {
-          question: q,
-          conversation_id: conversationIdRef.current || undefined,
-          suggested_name: suggestedName,
-          model,
-          selected_action: selectedAction,
-          images: images && images.length ? images : undefined,
-        },
-        {
-          onStatus: (s) => setStep(STEPS[s] || s),
-          onToken: (text) => {
-            setMessages((prev) =>
-              prev.map((m) => (m.id === botId ? { ...m, content: m.content + text } : m))
-            );
+      try {
+        await streamChat(
+          {
+            question: q,
+            conversation_id: conversationIdRef.current || undefined,
+            suggested_name: suggestedName,
+            model,
+            selected_action: selectedAction,
+            images: images && images.length ? images : undefined,
           },
-          onDone: (data: ChatResponse) => {
-            conversationIdRef.current = data.conversation_id || conversationIdRef.current;
-            setMessages((prev) =>
-              prev.map((m) =>
-                m.id === botId
-                  ? {
-                      ...m,
-                      streaming: false,
-                      content: m.content || data.answer,
-                      citations: data.citations,
-                      entities: data.entities,
-                      lineage: data.lineage,
-                      quality_report: data.quality_report,
-                      suggestion: data.suggestion,
-                      confidence: data.confidence,
-                      ambiguous: data.ambiguous,
-                      intent: data.intent,
-                      conversation_id: data.conversation_id,
-                    }
-                  : m
-              )
-            );
-            setIsStreaming(false);
-            setStep("");
-            streamingRef.current = false;
-          },
-          onError: (message: string) => {
-            setMessages((prev) =>
-              prev.map((m) => (m.id === botId ? { ...m, streaming: false, content: `⚠️ ${message}` } : m))
-            );
-            setIsStreaming(false);
-            setStep("");
-            streamingRef.current = false;
-          },
-        }
-      );
+          {
+            onStatus: (s) => setStep(STEPS[s] || s),
+            onToken: (text) => {
+              setMessages((prev) =>
+                prev.map((m) => (m.id === botId ? { ...m, content: m.content + text } : m))
+              );
+            },
+            onDone: (data: ChatResponse) => {
+              conversationIdRef.current = data.conversation_id || conversationIdRef.current;
+              setMessages((prev) =>
+                prev.map((m) =>
+                  m.id === botId
+                    ? {
+                        ...m,
+                        streaming: false,
+                        content: m.content || data.answer,
+                        citations: data.citations,
+                        entities: data.entities,
+                        lineage: data.lineage,
+                        quality_report: data.quality_report,
+                        suggestion: data.suggestion,
+                        confidence: data.confidence,
+                        ambiguous: data.ambiguous,
+                        intent: data.intent,
+                        conversation_id: data.conversation_id,
+                      }
+                    : m
+                )
+              );
+            },
+            onError: (message: string) => {
+              setMessages((prev) =>
+                prev.map((m) => (m.id === botId ? { ...m, streaming: false, content: `⚠️ ${message}` } : m))
+              );
+            },
+          }
+        );
+      } catch {
+        setMessages((prev) =>
+          prev.map((m) =>
+            m.id === botId
+              ? { ...m, streaming: false, content: "⚠️ Đã xảy ra lỗi khi tải câu trả lời." }
+              : m
+          )
+        );
+      } finally {
+        setIsStreaming(false);
+        setStep("");
+        streamingRef.current = false;
+      }
     },
     []
   );
 
   const applySuggestion = useCallback(
-    (suggested: string) => {
+    async (
+      suggested: string,
+    ) => {
       const q = lastQuestionRef.current;
       if (!q || streamingRef.current) return;
       const botId = uid();
@@ -213,57 +223,65 @@ export function useChat() {
       setStep("classify");
       streamingRef.current = true;
 
-      void streamChat(
-        {
-          question: q,
-          conversation_id: conversationIdRef.current || undefined,
-          suggested_name: suggested,
-        },
-        {
-          onStatus: (s) => setStep(STEPS[s] || s),
-          onToken: (text) => {
-            setMessages((prev) =>
-              prev.map((m) => (m.id === botId ? { ...m, content: m.content + text } : m))
-            );
+      try {
+        await streamChat(
+          {
+            question: q,
+            conversation_id: conversationIdRef.current || undefined,
+            suggested_name: suggested,
           },
-          onDone: (data: ChatResponse) => {
-            conversationIdRef.current = data.conversation_id || conversationIdRef.current;
-            setMessages((prev) =>
-              prev.map((m) =>
-                m.id === botId
-                  ? {
-                      ...m,
-                      streaming: false,
-                      content: m.content || data.answer,
-                      citations: data.citations,
-                      entities: data.entities,
-                      lineage: data.lineage,
-                      quality_report: data.quality_report,
-                      suggestion: data.suggestion,
-                      confidence: data.confidence,
-                      ambiguous: data.ambiguous,
-                      intent: data.intent,
-                      conversation_id: data.conversation_id,
-                    }
-                  : m
-              )
-            );
-            setIsStreaming(false);
-            setStep("");
-            streamingRef.current = false;
-          },
-          onError: (message: string) => {
-            setMessages((prev) =>
-              prev.map((m) =>
-                m.id === botId ? { ...m, streaming: false, content: `⚠️ ${message}` } : m
-              )
-            );
-            setIsStreaming(false);
-            setStep("");
-            streamingRef.current = false;
-          },
-        }
-      );
+          {
+            onStatus: (s) => setStep(STEPS[s] || s),
+            onToken: (text) => {
+              setMessages((prev) =>
+                prev.map((m) => (m.id === botId ? { ...m, content: m.content + text } : m))
+              );
+            },
+            onDone: (data: ChatResponse) => {
+              conversationIdRef.current = data.conversation_id || conversationIdRef.current;
+              setMessages((prev) =>
+                prev.map((m) =>
+                  m.id === botId
+                    ? {
+                        ...m,
+                        streaming: false,
+                        content: m.content || data.answer,
+                        citations: data.citations,
+                        entities: data.entities,
+                        lineage: data.lineage,
+                        quality_report: data.quality_report,
+                        suggestion: data.suggestion,
+                        confidence: data.confidence,
+                        ambiguous: data.ambiguous,
+                        intent: data.intent,
+                        conversation_id: data.conversation_id,
+                      }
+                    : m
+                )
+              );
+            },
+            onError: (message: string) => {
+              setMessages((prev) =>
+                prev.map((m) =>
+                  m.id === botId ? { ...m, streaming: false, content: `⚠️ ${message}` } : m
+                )
+              );
+            },
+          }
+        );
+      } catch {
+        setMessages((prev) =>
+          prev.map((m) =>
+            m.id === botId
+              ? { ...m, streaming: false, content: "⚠️ Đã xảy ra lỗi khi tải câu trả lời." }
+              : m
+          )
+        );
+      } finally {
+        setIsStreaming(false);
+        setStep("");
+        streamingRef.current = false;
+      }
     },
     []
   );

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import Image from "next/image";
 import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
 
@@ -24,15 +23,8 @@ function WelcomeScreen({ onPick }: { onPick: (q: string) => void }) {
       transition={{ duration: 0.3 }}
       className="flex flex-col items-center justify-center gap-5 px-6 text-center"
     >
-      <Image
-        src="/logo.png"
-        alt="DataAtlas"
-        width={96}
-        height={96}
-        className="h-20 w-20 shrink-0 rounded-2xl object-contain shadow-md"
-      />
       <div>
-        <h1 className="text-3xl font-semibold tracking-tight">Chào bạn, trợ lý DataAtlas</h1>
+        <h1 className="text-3xl font-semibold tracking-tight">Chào bạn, trợ lý V-DataAtlas</h1>
         <p className="mx-auto mt-2 max-w-md text-[15px] text-muted-foreground">
           Hỏi tôi về datasets, glossary terms, owners, lineage hoặc yêu cầu tạo SQL dựa trên metadata.
         </p>

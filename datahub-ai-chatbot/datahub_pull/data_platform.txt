@@ -1,0 +1,86 @@
+{"urn": "urn:li:dataPlatform:Cisco", "type": "DATA_PLATFORM", "name": "Cisco", "properties": {"type": "OTHERS", "displayName": null}}
+{"urn": "urn:li:dataPlatform:DMS", "type": "DATA_PLATFORM", "name": "DMS", "properties": {"type": "OTHERS", "displayName": null}}
+{"urn": "urn:li:dataPlatform:ECUS", "type": "DATA_PLATFORM", "name": "ECUS", "properties": {"type": "OTHERS", "displayName": null}}
+{"urn": "urn:li:dataPlatform:EXCEL", "type": "DATA_PLATFORM", "name": "EXCEL", "properties": {"type": "OTHERS", "displayName": null}}
+{"urn": "urn:li:dataPlatform:Excel", "type": "DATA_PLATFORM", "name": "Excel", "properties": {"type": "OTHERS", "displayName": null}}
+{"urn": "urn:li:dataPlatform:JIRA", "type": "DATA_PLATFORM", "name": "JIRA", "properties": {"type": "OTHERS", "displayName": null}}
+{"urn": "urn:li:dataPlatform:MES", "type": "DATA_PLATFORM", "name": "MES", "properties": {"type": "OTHERS", "displayName": null}}
+{"urn": "urn:li:dataPlatform:OpenApi", "type": "DATA_PLATFORM", "name": "OpenApi", "properties": {"type": "OTHERS", "displayName": "OpenAPI"}}
+{"urn": "urn:li:dataPlatform:PLM", "type": "DATA_PLATFORM", "name": "PLM", "properties": {"type": "OTHERS", "displayName": null}}
+{"urn": "urn:li:dataPlatform:SAP", "type": "DATA_PLATFORM", "name": "SAP", "properties": {"type": "OTHERS", "displayName": null}}
+{"urn": "urn:li:dataPlatform:Saleforce", "type": "DATA_PLATFORM", "name": "Saleforce", "properties": {"type": "OTHERS", "displayName": null}}
+{"urn": "urn:li:dataPlatform:Salesforce", "type": "DATA_PLATFORM", "name": "Salesforce", "properties": {"type": "OTHERS", "displayName": null}}
+{"urn": "urn:li:dataPlatform:TFS", "type": "DATA_PLATFORM", "name": "TFS", "properties": {"type": "OTHERS", "displayName": null}}
+{"urn": "urn:li:dataPlatform:adlsGen1", "type": "DATA_PLATFORM", "name": "adlsGen1", "properties": {"type": "FILE_SYSTEM", "displayName": "Azure Data Lake (Gen 1)"}}
+{"urn": "urn:li:dataPlatform:adlsGen2", "type": "DATA_PLATFORM", "name": "adlsGen2", "properties": {"type": "FILE_SYSTEM", "displayName": "Azure Data Lake (Gen 2)"}}
+{"urn": "urn:li:dataPlatform:airflow", "type": "DATA_PLATFORM", "name": "airflow", "properties": {"type": "OTHERS", "displayName": "Airflow"}}
+{"urn": "urn:li:dataPlatform:ambry", "type": "DATA_PLATFORM", "name": "ambry", "properties": {"type": "OBJECT_STORE", "displayName": "Ambry"}}
+{"urn": "urn:li:dataPlatform:athena", "type": "DATA_PLATFORM", "name": "athena", "properties": {"type": "RELATIONAL_DB", "displayName": "AWS Athena"}}
+{"urn": "urn:li:dataPlatform:bigquery", "type": "DATA_PLATFORM", "name": "bigquery", "properties": {"type": "RELATIONAL_DB", "displayName": "BigQuery"}}
+{"urn": "urn:li:dataPlatform:cassandra", "type": "DATA_PLATFORM", "name": "cassandra", "properties": {"type": "KEY_VALUE_STORE", "displayName": "Cassandra"}}
+{"urn": "urn:li:dataPlatform:clickhouse", "type": "DATA_PLATFORM", "name": "clickhouse", "properties": {"type": "RELATIONAL_DB", "displayName": "ClickHouse"}}
+{"urn": "urn:li:dataPlatform:cockroachdb", "type": "DATA_PLATFORM", "name": "cockroachdb", "properties": {"type": "RELATIONAL_DB", "displayName": "CockroachDb"}}
+{"urn": "urn:li:dataPlatform:couchbase", "type": "DATA_PLATFORM", "name": "couchbase", "properties": {"type": "KEY_VALUE_STORE", "displayName": "Couchbase"}}
+{"urn": "urn:li:dataPlatform:csv", "type": "DATA_PLATFORM", "name": "csv", "properties": {"type": "OTHERS", "displayName": "CSV"}}
+{"urn": "urn:li:dataPlatform:dagster", "type": "DATA_PLATFORM", "name": "dagster", "properties": {"type": "OTHERS", "displayName": "Dagster"}}
+{"urn": "urn:li:dataPlatform:databricks", "type": "DATA_PLATFORM", "name": "databricks", "properties": {"type": "OTHERS", "displayName": "Databricks"}}
+{"urn": "urn:li:dataPlatform:db2", "type": "DATA_PLATFORM", "name": "db2", "properties": {"type": "RELATIONAL_DB", "displayName": "DB2"}}
+{"urn": "urn:li:dataPlatform:dbt", "type": "DATA_PLATFORM", "name": "dbt", "properties": {"type": "OTHERS", "displayName": "dbt"}}
+{"urn": "urn:li:dataPlatform:delta-lake", "type": "DATA_PLATFORM", "name": "delta-lake", "properties": {"type": "OTHERS", "displayName": "Delta Lake"}}
+{"urn": "urn:li:dataPlatform:dremio", "type": "DATA_PLATFORM", "name": "dremio", "properties": {"type": "QUERY_ENGINE", "displayName": "Dremio"}}
+{"urn": "urn:li:dataPlatform:druid", "type": "DATA_PLATFORM", "name": "druid", "properties": {"type": "OLAP_DATASTORE", "displayName": "Druid"}}
+{"urn": "urn:li:dataPlatform:dynamodb", "type": "DATA_PLATFORM", "name": "dynamodb", "properties": {"type": "KEY_VALUE_STORE", "displayName": "DynamoDB"}}
+{"urn": "urn:li:dataPlatform:elasticsearch", "type": "DATA_PLATFORM", "name": "elasticsearch", "properties": {"type": "OTHERS", "displayName": "Elasticsearch"}}
+{"urn": "urn:li:dataPlatform:excel", "type": "DATA_PLATFORM", "name": "excel", "properties": {"type": "OTHERS", "displayName": "Excel"}}
+{"urn": "urn:li:dataPlatform:external", "type": "DATA_PLATFORM", "name": "external", "properties": {"type": "OTHERS", "displayName": "External Source"}}
+{"urn": "urn:li:dataPlatform:feast", "type": "DATA_PLATFORM", "name": "feast", "properties": {"type": "OTHERS", "displayName": "Feast"}}
+{"urn": "urn:li:dataPlatform:file", "type": "DATA_PLATFORM", "name": "file", "properties": {"type": "OTHERS", "displayName": "File"}}
+{"urn": "urn:li:dataPlatform:fivetran", "type": "DATA_PLATFORM", "name": "fivetran", "properties": {"type": "OTHERS", "displayName": "Fivetran"}}
+{"urn": "urn:li:dataPlatform:gcs", "type": "DATA_PLATFORM", "name": "gcs", "properties": {"type": "FILE_SYSTEM", "displayName": "Google Cloud Storage"}}
+{"urn": "urn:li:dataPlatform:glue", "type": "DATA_PLATFORM", "name": "glue", "properties": {"type": "OTHERS", "displayName": "Glue"}}
+{"urn": "urn:li:dataPlatform:great-expectations", "type": "DATA_PLATFORM", "name": "great-expectations", "properties": {"type": "OTHERS", "displayName": "Great Expectations"}}
+{"urn": "urn:li:dataPlatform:hana", "type": "DATA_PLATFORM", "name": "hana", "properties": {"type": "RELATIONAL_DB", "displayName": "SAP HANA"}}
+{"urn": "urn:li:dataPlatform:hdfs", "type": "DATA_PLATFORM", "name": "hdfs", "properties": {"type": "FILE_SYSTEM", "displayName": "HDFS"}}
+{"urn": "urn:li:dataPlatform:hive", "type": "DATA_PLATFORM", "name": "hive", "properties": {"type": "FILE_SYSTEM", "displayName": "Hive"}}
+{"urn": "urn:li:dataPlatform:hudi", "type": "DATA_PLATFORM", "name": "hudi", "properties": {"type": "FILE_SYSTEM", "displayName": "Hudi"}}
+{"urn": "urn:li:dataPlatform:iceberg", "type": "DATA_PLATFORM", "name": "iceberg", "properties": {"type": "FILE_SYSTEM", "displayName": "Iceberg"}}
+{"urn": "urn:li:dataPlatform:kafka", "type": "DATA_PLATFORM", "name": "kafka", "properties": {"type": "MESSAGE_BROKER", "displayName": "Kafka"}}
+{"urn": "urn:li:dataPlatform:kafka-connect", "type": "DATA_PLATFORM", "name": "kafka-connect", "properties": {"type": "OTHERS", "displayName": "Kafka Connect"}}
+{"urn": "urn:li:dataPlatform:kusto", "type": "DATA_PLATFORM", "name": "kusto", "properties": {"type": "OLAP_DATASTORE", "displayName": "Kusto"}}
+{"urn": "urn:li:dataPlatform:looker", "type": "DATA_PLATFORM", "name": "looker", "properties": {"type": "OTHERS", "displayName": "Looker"}}
+{"urn": "urn:li:dataPlatform:mariadb", "type": "DATA_PLATFORM", "name": "mariadb", "properties": {"type": "RELATIONAL_DB", "displayName": "MariaDB"}}
+{"urn": "urn:li:dataPlatform:metabase", "type": "DATA_PLATFORM", "name": "metabase", "properties": {"type": "OTHERS", "displayName": "Metabase"}}
+{"urn": "urn:li:dataPlatform:microsoft-teams", "type": "DATA_PLATFORM", "name": "microsoft-teams", "properties": {"type": "OTHERS", "displayName": "Microsoft Teams"}}
+{"urn": "urn:li:dataPlatform:mlflow", "type": "DATA_PLATFORM", "name": "mlflow", "properties": {"type": "OTHERS", "displayName": "MLflow"}}
+{"urn": "urn:li:dataPlatform:mode", "type": "DATA_PLATFORM", "name": "mode", "properties": {"type": "KEY_VALUE_STORE", "displayName": "Mode"}}
+{"urn": "urn:li:dataPlatform:mongodb", "type": "DATA_PLATFORM", "name": "mongodb", "properties": {"type": "KEY_VALUE_STORE", "displayName": "MongoDB"}}
+{"urn": "urn:li:dataPlatform:mssql", "type": "DATA_PLATFORM", "name": "mssql", "properties": {"type": "RELATIONAL_DB", "displayName": "SQL Server"}}
+{"urn": "urn:li:dataPlatform:mysql", "type": "DATA_PLATFORM", "name": "mysql", "properties": {"type": "RELATIONAL_DB", "displayName": "MySQL"}}
+{"urn": "urn:li:dataPlatform:neo4j", "type": "DATA_PLATFORM", "name": "neo4j", "properties": {"type": "OTHERS", "displayName": "Neo4j"}}
+{"urn": "urn:li:dataPlatform:nifi", "type": "DATA_PLATFORM", "name": "nifi", "properties": {"type": "OTHERS", "displayName": "NiFi"}}
+{"urn": "urn:li:dataPlatform:oracle", "type": "DATA_PLATFORM", "name": "oracle", "properties": {"type": "RELATIONAL_DB", "displayName": "Oracle"}}
+{"urn": "urn:li:dataPlatform:pinot", "type": "DATA_PLATFORM", "name": "pinot", "properties": {"type": "OLAP_DATASTORE", "displayName": "Pinot"}}
+{"urn": "urn:li:dataPlatform:postgres", "type": "DATA_PLATFORM", "name": "postgres", "properties": {"type": "RELATIONAL_DB", "displayName": "PostgreSQL"}}
+{"urn": "urn:li:dataPlatform:powerbi", "type": "DATA_PLATFORM", "name": "powerbi", "properties": {"type": "OTHERS", "displayName": "Power BI"}}
+{"urn": "urn:li:dataPlatform:prefect", "type": "DATA_PLATFORM", "name": "prefect", "properties": {"type": "OTHERS", "displayName": "Prefect"}}
+{"urn": "urn:li:dataPlatform:presto", "type": "DATA_PLATFORM", "name": "presto", "properties": {"type": "QUERY_ENGINE", "displayName": "Presto"}}
+{"urn": "urn:li:dataPlatform:presto-on-hive", "type": "DATA_PLATFORM", "name": "presto-on-hive", "properties": {"type": "FILE_SYSTEM", "displayName": "Presto on Hive"}}
+{"urn": "urn:li:dataPlatform:pulsar", "type": "DATA_PLATFORM", "name": "pulsar", "properties": {"type": "MESSAGE_BROKER", "displayName": "Pulsar"}}
+{"urn": "urn:li:dataPlatform:qlik-sense", "type": "DATA_PLATFORM", "name": "qlik-sense", "properties": {"type": "OTHERS", "displayName": "Qlik Sense"}}
+{"urn": "urn:li:dataPlatform:redash", "type": "DATA_PLATFORM", "name": "redash", "properties": {"type": "OTHERS", "displayName": "Redash"}}
+{"urn": "urn:li:dataPlatform:redshift", "type": "DATA_PLATFORM", "name": "redshift", "properties": {"type": "RELATIONAL_DB", "displayName": "Redshift"}}
+{"urn": "urn:li:dataPlatform:s3", "type": "DATA_PLATFORM", "name": "s3", "properties": {"type": "FILE_SYSTEM", "displayName": "AWS S3"}}
+{"urn": "urn:li:dataPlatform:sac", "type": "DATA_PLATFORM", "name": "sac", "properties": {"type": "OTHERS", "displayName": "SAP Analytics Cloud"}}
+{"urn": "urn:li:dataPlatform:sagemaker", "type": "DATA_PLATFORM", "name": "sagemaker", "properties": {"type": "OTHERS", "displayName": "SageMaker"}}
+{"urn": "urn:li:dataPlatform:salesforce", "type": "DATA_PLATFORM", "name": "salesforce", "properties": {"type": "OTHERS", "displayName": "Salesforce"}}
+{"urn": "urn:li:dataPlatform:sigma", "type": "DATA_PLATFORM", "name": "sigma", "properties": {"type": "OTHERS", "displayName": "Sigma"}}
+{"urn": "urn:li:dataPlatform:slack", "type": "DATA_PLATFORM", "name": "slack", "properties": {"type": "OTHERS", "displayName": "Slack"}}
+{"urn": "urn:li:dataPlatform:snowflake", "type": "DATA_PLATFORM", "name": "snowflake", "properties": {"type": "RELATIONAL_DB", "displayName": "Snowflake"}}
+{"urn": "urn:li:dataPlatform:spark", "type": "DATA_PLATFORM", "name": "spark", "properties": {"type": "OTHERS", "displayName": "Spark"}}
+{"urn": "urn:li:dataPlatform:superset", "type": "DATA_PLATFORM", "name": "superset", "properties": {"type": "OTHERS", "displayName": "Superset"}}
+{"urn": "urn:li:dataPlatform:tableau", "type": "DATA_PLATFORM", "name": "tableau", "properties": {"type": "OTHERS", "displayName": "Tableau"}}
+{"urn": "urn:li:dataPlatform:teradata", "type": "DATA_PLATFORM", "name": "teradata", "properties": {"type": "RELATIONAL_DB", "displayName": "Teradata"}}
+{"urn": "urn:li:dataPlatform:trino", "type": "DATA_PLATFORM", "name": "trino", "properties": {"type": "QUERY_ENGINE", "displayName": "Trino"}}
+{"urn": "urn:li:dataPlatform:unknown", "type": "DATA_PLATFORM", "name": "unknown", "properties": {"type": "OTHERS", "displayName": "N/A"}}
+{"urn": "urn:li:dataPlatform:vertica", "type": "DATA_PLATFORM", "name": "vertica", "properties": {"type": "OLAP_DATASTORE", "displayName": "Vertica"}}
+{"urn": "urn:li:dataPlatform:voldemort", "type": "DATA_PLATFORM", "name": "voldemort", "properties": {"type": "KEY_VALUE_STORE", "displayName": "Voldemort"}}

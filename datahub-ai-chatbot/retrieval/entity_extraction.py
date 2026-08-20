@@ -76,7 +76,7 @@ class EntityExtractor:
     _SHARED_CACHE: dict[str, tuple[float, list[dict[str, Any]]]] = {}
     _SHARED_TTL = 300.0  # seconds; matches CACHE_DEFAULT_TTL_SECONDS
 
-    def __init__(self, session: AsyncSession, limit: int = 4000) -> None:
+    def __init__(self, session: AsyncSession, limit: int = 20000) -> None:
         self._repo = EntityRepository(session)
         self._limit = limit
         self._index: list[dict[str, Any]] | None = None
@@ -106,14 +106,27 @@ class EntityExtractor:
                 tokens = tokenize(name, min_len=1)
                 if not tokens:
                     continue
-                index.append({
+                rec = {
                     "norm": " ".join(tokens),
                     "tokens": tokens,
                     "name": name,
                     "display_name": display,
                     "entity_type": e.entity_type or etype,
                     "urn": e.urn,
-                })
+                    "base_tokens": tokens,
+                }
+                # Glossary terms carry an English expansion in parentheses
+                # ("BOM (Bill of Materials)", "MRP (Material Requirements
+                # Planning)"). The bare base name is the form users type, so it
+                # is an equally valid subsequence target: "term BOM" must match
+                # "BOM (Bill of Materials)" at full score, not lose to a
+                # long-named term that merely shares the word.
+                if (e.entity_type or etype) == "glossary_term":
+                    base = name.split("(", 1)[0].strip()
+                    base_tokens = tokenize(base, min_len=1)
+                    if base_tokens:
+                        rec["base_tokens"] = base_tokens
+                index.append(rec)
         # Longest (most specific) matches first so subsuming names win.
         index.sort(key=lambda r: -len(r["tokens"]))
         self._index = index
@@ -136,15 +149,28 @@ class EntityExtractor:
             ent_tokens = rec["tokens"]
             if len(ent_tokens) > len(q_tokens):
                 continue
-            # Contiguous-subsequence match (the decisive signal).
+            # Contiguous-subsequence match (the decisive signal). Glossary terms
+            # also match on their bare base name ("BOM" inside "BOM (Bill of
+            # Materials)").
+            run_len = len(ent_tokens)
             pos = self._find_subsequence(q_tokens, ent_tokens)
             if pos is not None:
                 score = 1.0
                 source = "subsequence"
             else:
-                # Fallback: all entity tokens individually present in the query.
-                score, pos = self._token_overlap(q_tokens, ent_tokens)
-                source = "overlap" if score > 0 else ""
+                base_tokens = rec.get("base_tokens") or ent_tokens
+                if len(base_tokens) <= len(q_tokens):
+                    pos = self._find_subsequence(q_tokens, base_tokens)
+                else:
+                    pos = None
+                if pos is not None:
+                    score = 1.0
+                    source = "subsequence"
+                    run_len = len(base_tokens)
+                else:
+                    # Fallback: all entity tokens individually present in the query.
+                    score, pos = self._token_overlap(q_tokens, ent_tokens)
+                    source = "overlap" if score > 0 else ""
             if score <= 0:
                 continue
             key = rec["urn"]
@@ -159,7 +185,7 @@ class EntityExtractor:
                     urn=rec["urn"],
                     score=score,
                     start=pos if pos is not None else 0,
-                    end=(pos + len(ent_tokens)) if pos is not None else 0,
+                    end=(pos + run_len) if pos is not None else 0,
                     source=source,
                 )
             )
@@ -167,8 +193,12 @@ class EntityExtractor:
         if not matches:
             return await self._fuzzy_fallback(question)
 
-        # Sort: subsequence matches first, then longer runs, then higher score.
-        matches.sort(key=lambda m: (m.source != "subsequence", -(m.end - m.start), -m.score))
+        # Sort: subsequence matches first, then higher overlap score, then
+        # longer matched run. Scoring by overlap fraction (not run length)
+        # keeps e.g. "term BOM" resolving to "BOM (Bill of Materials)" over a
+        # long-named term that merely shares the word, and "bu_short_name trong
+        # báo cáo KQKD hậu mãi" away from an unrelated long-named report.
+        matches.sort(key=lambda m: (m.source != "subsequence", -m.score, -(m.end - m.start)))
         out: list[ExtractedEntity] = []
         seen: set[str] = set()
         for m in matches:

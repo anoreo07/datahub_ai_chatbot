@@ -13,12 +13,49 @@ from app.services.chat.question_analysis import (
     _is_noisy_entity,
     _trusted_resolution,
 )
-from retrieval.entity_resolver import ResolutionResult
+from config.settings import settings
+from retrieval.entity_resolver import QueryScope, ResolutionResult
 from retrieval.fuzzy import fuzzy_score
 from retrieval.hybrid_search import SearchResult
 from retrieval.intent import _norm_vn
 
 log = structlog.get_logger()
+
+# English aliases appear inside parentheses in glossary term names /
+# descriptions ("Nhu cầu linh kiện (Component Demand / Part Demand)"). A
+# KPI title that merely mentions the word outside parentheses ("Tính toán
+# 'Demand of all build phases per variant'") is never an alias candidate.
+_GLOSSARY_ALIAS_PAREN_RE = re.compile(r"\(([^()]*)\)")
+
+
+def _title_english_aliases(name: str, description: str) -> list[str]:
+    """English parenthetical aliases of a glossary term.
+
+    Only the title line carries the English translation: the term name itself
+    ("MRP (Material Requirements Planning)", "PFEP (Plan for Every Part)") or
+    the first description line ("### Nhu cầu linh kiện (Component Demand /
+    Part Demand) - ..."). Parentheses deeper in the description are formula
+    notes / examples ("... trừ đi nhu cầu (Demand) ...") that merely mention
+    the word and must not compete as aliases.
+    """
+    title = name
+    if description:
+        title = f"{name} {description.splitlines()[0]}"
+    candidates = []
+    for m in _GLOSSARY_ALIAS_PAREN_RE.finditer(title):
+        inner = m.group(1).strip()
+        if re.search(r"[A-Za-z]", inner):
+            candidates.append(inner)
+    # The name field sometimes holds the English title without the Vietnamese
+    # ("PFEP (Plan for Every Part)") — dedupe exact repeats across sources.
+    seen = set()
+    out = []
+    for c in candidates:
+        key = c.lower()
+        if key not in seen:
+            seen.add(key)
+            out.append(c)
+    return out
 
 
 class EntityResolutionService:
@@ -97,6 +134,7 @@ class EntityResolutionService:
 
     async def resolve_with_expansion(
         self, term_name: str, question: str, entity_type: str | None = None,
+        scope: QueryScope | None = None,
         trace_id: str | None = None,
     ) -> ResolutionResult | None:
         """Resolve ``term_name``, falling back to semantically expanded synonyms.
@@ -106,14 +144,14 @@ class EntityResolutionService:
         """
         if term_name:
             resolution = await self._ctx.entity_resolver.resolve(
-                term_name, entity_type=entity_type, trace_id=trace_id)
+                term_name, entity_type=entity_type, scope=scope, trace_id=trace_id)
             if _trusted_resolution(resolution):
                 return resolution
 
         expansion = self._ctx.semantic.expand(question)
         for term in expansion.terms[1:]:
             resolution = await self._ctx.entity_resolver.resolve(
-                term, entity_type=entity_type, trace_id=trace_id)
+                term, entity_type=entity_type, scope=scope, trace_id=trace_id)
             if _trusted_resolution(resolution):
                 log.info("resolve_via_semantic_expansion", trace_id=trace_id,
                          original=term_name, expanded=term,
@@ -208,6 +246,85 @@ class EntityResolutionService:
         return None
 
 
+    async def resolve_glossary_by_alias(
+        self, term_name: str, question: str | None = None,
+        trace_id: str | None = None,
+    ) -> list:
+        """Resolve a glossary term referenced by its English parenthetical alias.
+
+        Catalog terms carry an English name in parentheses ("Nhu cầu linh kiện
+        (Component Demand / Part Demand)", "MRP (Material Requirements Planning)",
+        "GIT (Goods In Transit)"). Users ask for these terms using the English
+        alias alone ("Demand là gì?", "MRP là gì?"), but name-based resolution
+        fails because the Vietnamese name does not contain the alias and other
+        terms mention the word in their *name* ("Tính toán 'Demand of all build
+        phases per variant'"). Only title-level parenthetical alias groups are
+        candidates: a KPI title that merely contains the word is not an alias,
+        so it never competes. The query is matched against the question text as
+        a whole, because the extracted "term" for a phrase like "Demand trong
+        domain SẢN XUẤT là gì?" may be canonicalised into an unrelated dataset
+        name.
+        """
+        from retrieval.hybrid_search import SearchResult
+        if not term_name:
+            return []
+        terms = await self._ctx.entity_repo.list_all(
+            entity_type="glossary_term", limit=100000)
+        # English aliases are pure ASCII words ("Component Demand", "Part
+        # Demand", "Material Requirements Planning"). Vietnamese words only
+        # reach the query after diacritic folding ("số lượng" -> "so luong"),
+        # so they would pollute an ASCII token match ("so sánh Demand ..." ->
+        # 'so'). Only raw-ASCII words of the question count, and only alias
+        # groups whose raw text is itself ASCII (an English translation) can
+        # match. This keeps a Vietnamese parenthetical ("(Số lượng)") from ever
+        # competing with a real English alias.
+        query_text = f"{term_name} {question or ''}"
+        # ASCII runs of 2 chars inside Vietnamese words ("gi" from "giữa",
+        # "so" from "so sánh") collide with short English aliases ("GI"). Only
+        # runs of 3+ chars are genuine English words; shorter alias-only
+        # queries (pure acronyms) are handled by the acronym path, not here.
+        qw = {w.lower() for w in re.findall(r"[A-Za-z]{3,}", query_text)}
+        if not qw:
+            return []
+        scored: list[tuple[float, object]] = []
+        for e in terms:
+            aliases = _title_english_aliases(e.name or "", e.description or "")
+            for alias in aliases:
+                # Skip non-ASCII aliases ("Cân đối vật liệu", "Số lượng"):
+                # they are Vietnamese translations, not English aliases.
+                if not alias.isascii():
+                    continue
+                tokens = set(re.findall(r"[A-Za-z]+", alias.lower()))
+                if not tokens:
+                    continue
+                # Prefer aliases that are entirely covered by the query (the
+                # term named exactly the alias) over aliases where the query is
+                # only one of several words.
+                coverage = sum(1 for w in tokens if w in qw) / len(tokens)
+                if coverage > 0:
+                    scored.append((coverage, e))
+        if not scored:
+            return []
+        scored.sort(key=lambda t: -t[0])
+        top_score, top = scored[0]
+        if top_score < 0.25:
+            return []
+        entity_db = await self._ctx.entity_repo.get_by_urn(top.urn)
+        if not entity_db:
+            return []
+        payload = entity_db.payload or {}
+        content = _entity_payload_to_text(entity_db.entity_type, payload)
+        log.info("resolve_glossary_by_alias", trace_id=trace_id, term=term_name,
+                 resolved=entity_db.display_name or entity_db.name,
+                 urn=entity_db.urn, coverage=round(top_score, 2))
+        return [SearchResult(
+            urn=entity_db.urn, entity_type=entity_db.entity_type,
+            name=entity_db.display_name or entity_db.name,
+            score=1.0, datahub_url=entity_db.datahub_url,
+            payload={**payload, "content": content},
+        )]
+
+
     async def resolve_to_results(self, resolution: ResolutionResult,
                                   trace_id: str | None = None) -> list[SearchResult]:
         from retrieval.hybrid_search import SearchResult
@@ -228,6 +345,112 @@ class EntityResolutionService:
         log.info("resolve_to_results", trace_id=trace_id,
                  resolved=None, candidates=len(resolution.candidates))
         return []
+
+    async def resolve_all_exact_to_results(
+        self, resolution: ResolutionResult, trace_id: str | None = None,
+    ) -> list[SearchResult]:
+        """Return EVERY candidate that ties at the EXACT-match threshold.
+
+        Used for same-named glossary terms ("Coverage Date" resolves to two
+        distinct terms at score 1.0). Surfacing all of them keeps the answer
+        grounded on every real catalog entity instead of arbitrarily picking
+        the first.
+        """
+        from retrieval.hybrid_search import SearchResult
+        EXACT = 1.0
+        if resolution.resolved:
+            ties = [
+                c for c in (resolution.candidates or [])
+                if (getattr(c, "score", 0) or 0) >= EXACT
+            ] or [resolution.resolved]
+        else:
+            return []
+        results: list[SearchResult] = []
+        seen: set[str] = set()
+        for ent in ties:
+            urn = ent.urn
+            if not urn or urn in seen:
+                continue
+            seen.add(urn)
+            entity_db = await self._ctx.entity_repo.get_by_urn(urn)
+            if not entity_db:
+                continue
+            payload = entity_db.payload or {}
+            content = _entity_payload_to_text(entity_db.entity_type, payload)
+            results.append(SearchResult(
+                urn=entity_db.urn, entity_type=entity_db.entity_type,
+                name=entity_db.display_name or entity_db.name,
+                score=1.0, datahub_url=entity_db.datahub_url,
+                payload={**payload, "content": content},
+            ))
+        if results:
+            log.info("resolve_all_exact", trace_id=trace_id,
+                     count=len(results),
+                     names=[r.name for r in results])
+        return results
+
+
+    async def resolve_glossary_by_concept(
+        self, concept: str, question: str | None = None,
+        trace_id: str | None = None,
+    ) -> list:
+        """Resolve a glossary term by its Vietnamese (or English) NAME.
+
+        "tìm dataset tính nhu cầu linh kiện" -> the term "Nhu cầu linh kiện"
+        (Component Demand). The alias matcher understands only English aliases,
+        so Vietnamese concept phrases need a name-based match. Scored by
+        normalized-name equality / prefix / token coverage; only trusted results
+        (>= ENTITY_RESOLVER_TRUST_THRESHOLD) are returned as SearchResults.
+        """
+        from retrieval.hybrid_search import SearchResult
+        from retrieval.intent import _norm_vn
+        concept_norm = _norm_vn(concept or "")
+        if not concept_norm:
+            return []
+        cw = {w for w in re.findall(r"[a-z0-9]{3,}", concept_norm)}
+        if not cw:
+            return []
+        terms = await self._ctx.entity_repo.list_all(
+            entity_type="glossary_term", limit=100000)
+        scored: list[tuple[float, object]] = []
+        seen_norm: set[str] = set()
+        for e in terms:
+            name_norm = _norm_vn(e.name or "")
+            if not name_norm or name_norm in seen_norm:
+                continue
+            seen_norm.add(name_norm)
+            nw = {w for w in re.findall(r"[a-z0-9]{3,}", name_norm)}
+            if not nw:
+                continue
+            coverage = len(cw & nw) / len(cw)
+            if coverage <= 0:
+                continue
+            if name_norm.strip() == concept_norm.strip():
+                s = 1.0
+            elif name_norm.startswith(concept_norm.strip() + " "):
+                s = 0.97
+            else:
+                s = 0.5 + 0.4 * coverage
+            if s >= settings.ENTITY_RESOLVER_TRUST_THRESHOLD:
+                scored.append((s, e))
+        if not scored:
+            return []
+        scored.sort(key=lambda t: -t[0])
+        top_score, top = scored[0]
+        entity_db = await self._ctx.entity_repo.get_by_urn(top.urn)
+        if not entity_db:
+            return []
+        payload = entity_db.payload or {}
+        content = _entity_payload_to_text(entity_db.entity_type, payload)
+        log.info("resolve_glossary_by_concept", trace_id=trace_id,
+                 concept=concept, resolved=entity_db.display_name or entity_db.name,
+                 urn=entity_db.urn, score=round(top_score, 2))
+        return [SearchResult(
+            urn=entity_db.urn, entity_type=entity_db.entity_type,
+            name=entity_db.display_name or entity_db.name,
+            score=top_score, datahub_url=entity_db.datahub_url,
+            payload={**payload, "content": content},
+        )]
 
 
     async def display_name(self, urn: str) -> str | None:

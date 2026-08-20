@@ -39,7 +39,7 @@ export function LandingFooter() {
                 height={30}
                 className="h-8 w-8 object-contain"
               />
-              <span className="font-display text-lg tracking-tight text-foreground">DataAtlas</span>
+              <span className="font-display text-lg tracking-tight text-foreground">V-DataAtlas</span>
             </div>
             <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">
               An AI metadata assistant that makes your DataHub collection searchable,
@@ -79,7 +79,7 @@ export function LandingFooter() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-border pt-6 sm:flex-row">
           <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} DataAtlas. All rights reserved.
+            © {new Date().getFullYear()} V-DataAtlas. All rights reserved.
           </p>
           <p className="text-xs text-muted-foreground">
             AI Metadata Assistant for DataHub

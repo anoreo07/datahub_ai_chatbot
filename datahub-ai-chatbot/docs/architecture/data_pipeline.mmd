@@ -1,0 +1,85 @@
+graph TD
+    subgraph sources["DATA SOURCES"]
+        DHS["DataHub GraphQL API
+(graphql_source.py)"]
+        MOCK["MockDataHubSource
+(mock_source.py, USE_MOCK_DATAHUB)"]
+        DOCS["Document import
+app/api/documents.py — URL ingestion"]
+        PULL["Pulled files / fixtures
+(scripts/load_pulled_data.py)"]
+    end
+
+    subgraph sync["SYNC & NORMALIZATION (ingestion/)"]
+        FACT["create_datahub_source()
+ingestion/__init__.py — factory"]
+        ORCH["SyncOrchestrator
+(sync.py — checkpoint, DLQ, retry, locks)"]
+        ENT["EntityRepository.upsert
+(database/repositories/entity_repository.py)"]
+        MAP["mappers/ — CanonicalEntity
+(dataset, dashboard, glossary, document)"]
+    end
+
+    subgraph index["INDEXING (indexing/)"]
+        JOBS["IndexJob queue
+(DB persisted, workers/indexing_worker.py)"]
+        CHUNK["chunker.py
+target 600 tokens, overlap 75"]
+        ENT_DOC["entity_document.py
+build chunk documents per entity type"]
+        EMBED["embedder.py
+OllamaEmbedder (nomic-embed-text, 768)
+| MockEmbedder (USE_MOCK_LLM)"]
+        VSTORE["vector_store + keyword_index
+OpenSearch index | fake_search
+(USE_FAKE_OPENSEARCH)"]
+        CHUNKS["entity_chunks (PostgreSQL)
+content_hash dedup"]
+    end
+
+    subgraph query["RETRIEVAL (retrieval/)"]
+        HYBRID["HybridSearch
+(hybrid_search.py)"]
+        VEC["vector search
+OpenSearch / fake_search"]
+        KW["keyword search
+OpenSearch / keyword_index"]
+        RERANK["Reranker (reranker.py)"]
+        CTX["ContextBuilder (context_builder.py)
+build E1..En evidence context"]
+    end
+
+    subgraph out["ANSWER"]
+        LLM["LLM — AnswerGenerator
+(llm/generator.py)
+Fireworks | MockLLM"]
+        ANS["Answer + citations
+ChatResponse"]
+    end
+
+    DHS --> FACT
+    MOCK --> FACT
+    PULL --> FACT
+    FACT --> ORCH
+    ORCH --> MAP
+    MAP --> ENT
+    ENT --> JOBS
+    DOCS --> ORCH
+    DOCS --> ENT
+
+    JOBS --> CHUNK
+    CHUNK --> ENT_DOC
+    ENT_DOC --> EMBED
+    EMBED --> VSTORE
+    EMBED --> CHUNKS
+    VSTORE --> CHUNKS
+
+    HYBRID --> VEC
+    HYBRID --> KW
+    VEC --> VSTORE
+    KW --> VSTORE
+    HYBRID --> RERANK
+    RERANK --> CTX
+    CTX --> LLM
+    LLM --> ANS

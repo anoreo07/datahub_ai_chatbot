@@ -69,11 +69,13 @@ class DocumentIngestionService:
             content = response.content
             filename = url.split("/")[-1] or "document.html"
         except Exception as e:
-            log.warning("document_download_failed", url=url[:100], error=str(e))
+            from guardrails.sanitizer import mask_secrets
+            err = mask_secrets(str(e))
+            log.warning("document_download_failed", url=url[:100], error=err)
             return DocumentIngestionResult(
                 success=False,
                 source_url=url,
-                error=f"Download failed: {str(e)[:200]}",
+                error=f"Download failed: {err[:200]}",
                 title=title,
             )
 
@@ -195,10 +197,11 @@ class DocumentIngestionService:
             )
         except Exception as e:
             log.exception("document_ingestion_failed", urn=entity_urn, filename=filename)
+            from guardrails.sanitizer import mask_secrets
             return DocumentIngestionResult(
                 success=False,
                 source_url=source_url,
-                error=f"Ingestion failed: {str(e)[:300]}",
+                error=f"Ingestion failed: {mask_secrets(str(e))[:300]}",
                 title=doc_title,
             )
 

@@ -20,7 +20,7 @@ export function FinalCta() {
               <h2 className="text-balance text-3xl font-semibold leading-[1.1] tracking-tight text-foreground sm:text-5xl">
                 Your DataHub already has the knowledge.
                 <br />
-                DataAtlas makes it{" "}
+                V-DataAtlas makes it{" "}
                 <span className="text-primary">conversational</span>.
               </h2>
               <p className="max-w-xl text-balance text-base leading-relaxed text-muted-foreground sm:text-lg">
@@ -29,10 +29,10 @@ export function FinalCta() {
               </p>
               <div className="flex flex-col items-center gap-3 sm:flex-row">
                 <PrimaryLink href="/chat">
-                  Try DataAtlas
+                  Try V-DataAtlas
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
                 </PrimaryLink>
-                <GhostLink href="#datahub">Revisit DataAtlas × DataHub</GhostLink>
+                <GhostLink href="#datahub">Revisit V-DataAtlas × DataHub</GhostLink>
               </div>
             </div>
           </div>

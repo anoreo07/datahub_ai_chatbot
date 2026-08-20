@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
-import { User, Sparkles, ChevronDown, ChevronUp, X } from "lucide-react";
+import { User, Sparkles, ChevronDown, ChevronUp, X, Bot, Copy, Check } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 
 import { Markdown } from "@/components/chat/markdown";
@@ -150,6 +149,38 @@ function Entities({ items }: { items?: ChatMessage["entities"] }) {
   );
 }
 
+function CopyButton({ text, className }: { text: string; className?: string }) {
+  const [copied, setCopied] = useState(false);
+  if (!text.trim()) return null;
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      /* clipboard unavailable */
+    }
+  };
+
+  return (
+    <button
+      type="button"
+      aria-label="Copy nội dung"
+      title="Copy nội dung"
+      onClick={copy}
+      className={cn(
+        "flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground transition-all",
+        "hover:bg-muted hover:text-foreground",
+        "opacity-0 focus-visible:opacity-100 group-hover:opacity-100",
+        className
+      )}
+    >
+      {copied ? <Check className="h-3.5 w-3.5 text-emerald-500" /> : <Copy className="h-3.5 w-3.5" />}
+    </button>
+  );
+}
+
 export function MessageBubble({ message, onApplySuggestion }: MessageBubbleProps) {
   const { user } = useApp();
   const userAvatar = getRoleAvatar(user);
@@ -157,6 +188,9 @@ export function MessageBubble({ message, onApplySuggestion }: MessageBubbleProps
   const isError = message.role === "error";
   const time = formatTime(new Date(message.timestamp).toISOString());
   const [lightbox, setLightbox] = useState<string | null>(null);
+  const copyText = isUser
+    ? message.displayContent || message.content || ""
+    : message.content || "";
 
   return (
     <motion.div
@@ -164,23 +198,35 @@ export function MessageBubble({ message, onApplySuggestion }: MessageBubbleProps
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2 }}
       className={cn(
-        "flex w-full gap-3",
+        "group flex w-full gap-3",
         isUser ? "justify-end -mr-4" : "justify-start -ml-4"
       )}
     >
       {!isUser && (
-        <Avatar className="mt-0.5 h-14 w-14 shrink-0 overflow-hidden rounded-full">
-          <Image
-            src="/logo.png"
-            alt="DataAtlas"
-            width={56}
-            height={56}
-            className="h-full w-full object-cover"
-          />
+        <Avatar className="mt-0.5 h-14 w-14 shrink-0 overflow-hidden rounded-full bg-bot-msg text-bot-msg-foreground">
+          <AvatarImage src="/logo.png" alt="DataHub AI" />
+          <AvatarFallback>
+            <Bot className="h-7 w-7" />
+          </AvatarFallback>
         </Avatar>
       )}
 
-      <div className={cn("flex max-w-[90%] flex-col", isUser ? "items-end" : "items-start sm:max-w-[84%]")}>
+      <div
+        className={cn(
+          "relative flex max-w-[90%] flex-col",
+          isUser ? "items-end" : "items-start sm:max-w-[84%]"
+        )}
+      >
+        {!message.streaming && (
+          <div
+            className={cn(
+              "absolute -top-2.5 z-10",
+              isUser ? "-left-2.5" : "-right-2.5"
+            )}
+          >
+            <CopyButton text={copyText} />
+          </div>
+        )}
         <div
           className={cn(
             "rounded-3xl px-7 py-4 text-[15px] shadow-sm",

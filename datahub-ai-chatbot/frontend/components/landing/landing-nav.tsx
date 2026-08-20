@@ -44,7 +44,7 @@ export function LandingNav() {
           <a
             href="#top"
             className="flex shrink-0 items-center gap-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg"
-            aria-label="DataAtlas home"
+            aria-label="V-DataAtlas home"
           >
             <Image
               src="/dataatlas_logo_transparent.png"
@@ -54,7 +54,7 @@ export function LandingNav() {
               className="h-8 w-8 object-contain"
             />
             <span className="font-display text-lg tracking-tight text-foreground">
-              DataAtlas
+              V-DataAtlas
             </span>
           </a>
 
@@ -81,7 +81,7 @@ export function LandingNav() {
               href="/chat"
               className="hidden rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:inline-flex"
             >
-              Try DataAtlas
+              Try V-DataAtlas
             </Link>
 
             <button
@@ -124,7 +124,7 @@ export function LandingNav() {
                   onClick={() => setOpen(false)}
                   className="inline-flex h-11 items-center justify-center rounded-lg bg-primary text-sm font-semibold text-primary-foreground"
                 >
-                  Try DataAtlas
+                  Try V-DataAtlas
                 </Link>
               </div>
             </div>

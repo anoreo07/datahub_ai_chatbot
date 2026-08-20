@@ -133,7 +133,7 @@ export function HeroVisual() {
           <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-4 shadow-sm">
             <div className="flex items-center gap-2 text-xs font-semibold text-primary">
               <Sparkles className="h-4 w-4" />
-              DataAtlas
+              V-DataAtlas
             </div>
             <div className="min-h-[3.25rem] text-sm leading-relaxed text-foreground">
               {typed}

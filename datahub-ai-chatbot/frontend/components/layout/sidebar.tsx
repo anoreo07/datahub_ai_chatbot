@@ -69,7 +69,7 @@ export function Sidebar() {
   const assistantNav: NavItem[] = [
     { label: "Search DataHub", href: "/search", icon: SearchIcon },
     { label: "Storage", href: "/storage", icon: HardDrive },
-    { label: "DataHub", href: "http://localhost:9002", icon: Database, external: true },
+    { label: "DataHub", href: "https://datahub.vinfastauto.com/", icon: Database, external: true },
   ];
 
   const displayConvs = conversations.map((c) => ({

@@ -1,7 +1,13 @@
 import datetime
+import re
 
 from ingestion.mappers import BaseMapper
 from ingestion.models import CanonicalEntity, Owner, SchemaField
+from ingestion.normalizer import clean_name
+
+_URN_NAME_RE = re.compile(
+    r"urn:li:dataset:\(urn:li:dataPlatform:[^,]+,(.+),(?:PROD|DEV|QA|UAT|ELM)\)$"
+)
 
 
 class DatasetMapper(BaseMapper):
@@ -21,16 +27,18 @@ class DatasetMapper(BaseMapper):
         tags = self._map_tags(tags_info)
 
         urn = raw.get("urn", "")
-        name = raw.get("name", "")
+        name = clean_name(
+            raw.get("name") or properties.get("name") or self._name_from_urn(urn)
+        ) or ""
         description = properties.get("description")
 
         return CanonicalEntity(
             urn=urn,
             entity_type="dataset",
             name=name,
-            display_name=raw.get("displayName") or name,
+            display_name=clean_name(raw.get("displayName") or name) or name,
             description=description,
-            platform=platform_info.get("name"),
+            platform=clean_name(platform_info.get("name")),
             environment=properties.get("environment") or "PROD",
             domain=domain,
             owners=owners,
@@ -105,6 +113,13 @@ class DatasetMapper(BaseMapper):
 
     def _map_tags(self, tags_info: dict) -> list[str]:
         return [t.get("tag", {}).get("name", "") for t in (tags_info.get("tags") or [])]
+
+    @staticmethod
+    def _name_from_urn(urn: str) -> str:
+        m = _URN_NAME_RE.match(urn)
+        if m and m.group(1).strip():
+            return m.group(1).strip()
+        return urn
 
     @staticmethod
     def _normalize_custom_properties(props: object) -> dict:

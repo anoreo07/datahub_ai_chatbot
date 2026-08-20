@@ -81,7 +81,7 @@ export function Capabilities() {
         <Reveal>
           <SectionHeading
             eyebrow="Capabilities"
-            title="What can DataAtlas understand?"
+            title="What can V-DataAtlas understand?"
             description="Everything your DataHub knows — from datasets and schemas to glossary terms, ownership, lineage, and quality — in one conversational assistant."
           />
         </Reveal>

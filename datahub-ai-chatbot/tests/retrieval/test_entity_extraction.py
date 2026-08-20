@@ -76,3 +76,47 @@ async def test_extract_phrase_before_and_after(db_session) -> None:
     q = "Nếu thay đổi dataset dim_warehouse thì những ai bị ảnh hưởng?"
     found = await extractor.extract(q)
     assert found and found[0].urn == "urn:dim_warehouse"
+
+
+@pytest.mark.asyncio
+async def test_extract_glossary_base_name_subsequence_wins(db_session) -> None:
+    """A bare term query ("term BOM") must match the glossary term whose BASE
+    name is the term ("BOM (Bill of Materials)") at full score, not a
+    long-named term that merely shares the word ("Xác định In BOM/Not In BOM").
+    """
+    repo = EntityRepository(db_session)
+    await repo.upsert(_entity(
+        "urn:glossary:bom_bill_of_materials", "BOM (Bill of Materials)",
+        "glossary_term"))
+    await repo.upsert(_entity(
+        "urn:glossary:xac_dinh_bom", "Xác định In BOM/Not In BOM",
+        "glossary_term"))
+
+    extractor = EntityExtractor(db_session)
+    found = await extractor.extract("dataset nào được gắn với term BOM?")
+    assert found
+    assert found[0].urn == "urn:glossary:bom_bill_of_materials"
+    assert found[0].source == "subsequence"
+    assert found[0].score == 1.0
+
+
+@pytest.mark.asyncio
+async def test_extract_overlap_score_beats_run_length(db_session) -> None:
+    """Overlap ties are broken by overlap fraction, not entity name length:
+    the entity whose name shares MORE tokens with the query wins even when a
+    long-named entity has the same number of shared tokens.
+    """
+    repo = EntityRepository(db_session)
+    # "báo cáo ước KQKD" shares 3 of its 4 tokens with the query (0.75).
+    await repo.upsert(_entity("urn:bao_cao_uoc_kqkd", "Báo cáo ước KQKD"))
+    # The long-named dataset shares only 2 of 14 tokens (0.14).
+    await repo.upsert(_entity(
+        "urn:bao_cao_rac",
+        "Báo cáo tình trạng kiểm soát dữ liệu rác và kỷ luật dữ liệu"))
+
+    extractor = EntityExtractor(db_session)
+    found = await extractor.extract(
+        "Trường bu_short_name trong báo cáo KQKD hậu mãi có ý nghĩa gì?")
+    datasets = [m for m in found if m.entity_type == "dataset"]
+    assert datasets
+    assert datasets[0].urn == "urn:bao_cao_uoc_kqkd"

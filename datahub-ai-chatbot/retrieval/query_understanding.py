@@ -56,6 +56,42 @@ _VALID_PROPERTY_PATTERN = re.compile(
 
 
 @dataclass
+class SubQuestionConstraint:
+    """Routing constraints attached to one decomposed sub-question."""
+
+    context_only: bool = False
+    output_format_constraint: str | None = None
+
+
+@dataclass
+class SubQuestionEntityRef:
+    """How a decomposed sub-question points at its target entity."""
+
+    explicit_name: str | None = None
+    anaphora_target: str | None = None
+
+
+@dataclass
+class SubQuestion:
+    """A concrete, self-contained sub-question the LLM reads off the question.
+
+    Carries the routing-relevant fields the pipeline needs to answer it without
+    re-architecting the whole plan: the intent it contributes, the entity it
+    targets (explicit name or conversation anaphora), the field/property pair,
+    the routing constraints, and whether answering it requires checking that the
+    current evidence is actually grounded in the entity's real schema.
+    """
+
+    question: str = ""
+    intent: str | None = None
+    entity_ref: SubQuestionEntityRef | None = None
+    field_ref: str | None = None
+    property: str | None = None
+    constraint: SubQuestionConstraint = field(default_factory=SubQuestionConstraint)
+    evidence_quality_check_needed: bool = False
+
+
+@dataclass
 class UnderstandingResult:
     """The structured read of one user question."""
 
@@ -69,6 +105,9 @@ class UnderstandingResult:
     entity_refs: list[str] = field(default_factory=list)
     confidence: str = "medium"
     source: str = "llm"
+    complexity_reason: str | None = None
+    parse_confidence: str = "medium"
+    sub_question_details: list[SubQuestion] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -82,6 +121,33 @@ class UnderstandingResult:
             "entity_refs": self.entity_refs,
             "confidence": self.confidence,
             "source": self.source,
+            "complexity_reason": self.complexity_reason,
+            "parse_confidence": self.parse_confidence,
+            "sub_question_details": [
+                {
+                    "question": sq.question,
+                    "intent": sq.intent,
+                    "entity_ref": {
+                        "explicit_name": (
+                            sq.entity_ref.explicit_name if sq.entity_ref else None
+                        ),
+                        "anaphora_target": (
+                            sq.entity_ref.anaphora_target if sq.entity_ref else None
+                        ),
+                    } if sq.entity_ref else None,
+                    "field_ref": sq.field_ref,
+                    "property": sq.property,
+                    "constraint": {
+                        "context_only": sq.constraint.context_only,
+                        "output_format_constraint": (
+                            sq.constraint.output_format_constraint
+                            if sq.constraint.output_format_constraint else None
+                        ),
+                    },
+                    "evidence_quality_check_needed": sq.evidence_quality_check_needed,
+                }
+                for sq in self.sub_question_details
+            ],
         }
 
 
@@ -152,6 +218,66 @@ def _conf(value: object) -> str:
     return text if text in ("high", "medium", "low") else "medium"
 
 
+def _parse_sub_questions(raw: object) -> list[tuple[str, SubQuestion]]:
+    """Parse the new structured ``sub_questions`` schema.
+
+    The old schema used a plain list of strings; the new one uses a list of
+    objects. Both are tolerated: a string entry degrades gracefully to
+    ``SubQuestion(question=str)`` so callers that read plain text keep working.
+    Returns ``(text, detail)`` pairs.
+    """
+    if not isinstance(raw, list):
+        return []
+    out: list[tuple[str, SubQuestion]] = []
+    for item in raw[:8]:
+        if isinstance(item, str):
+            text = item.strip()
+            if text:
+                out.append((text, SubQuestion(question=text)))
+            continue
+        if not isinstance(item, dict):
+            continue
+        text = _clean_str(item.get("question")) or ""
+        if not text:
+            continue
+        entity = item.get("entity_ref")
+        entity_ref: SubQuestionEntityRef | None = None
+        if isinstance(entity, dict):
+            entity_ref = SubQuestionEntityRef(
+                explicit_name=_clean_str(entity.get("explicit_name")),
+                anaphora_target=_clean_str(entity.get("anaphora_target")),
+            )
+        elif isinstance(entity, str):
+            entity_ref = SubQuestionEntityRef(explicit_name=entity.strip() or None)
+        constraint_raw = item.get("constraint")
+        constraint = SubQuestionConstraint()
+        if isinstance(constraint_raw, dict):
+            constraint.context_only = _flag(constraint_raw.get("context_only"))
+            constraint.output_format_constraint = _clean_str(
+                constraint_raw.get("output_format_constraint"), limit=256
+            )
+        elif isinstance(constraint_raw, bool):
+            constraint.context_only = constraint_raw
+        prop = _clean_str(item.get("property"))
+        if prop:
+            prop = prop.strip().lower()
+            if not (_VALID_PROPERTY_PATTERN.match(prop) and prop in VALID_PROPERTIES):
+                prop = None
+        detail = SubQuestion(
+            question=text,
+            intent=_clean_str(item.get("intent"), limit=64),
+            entity_ref=entity_ref,
+            field_ref=_clean_str(item.get("field_ref"), limit=256),
+            property=prop,
+            constraint=constraint,
+            evidence_quality_check_needed=_flag(
+                item.get("evidence_quality_check_needed")
+            ),
+        )
+        out.append((text, detail))
+    return out
+
+
 def parse_understanding(raw: str) -> UnderstandingResult | None:
     """Build an ``UnderstandingResult`` from the LLM's raw JSON payload.
 
@@ -162,16 +288,24 @@ def parse_understanding(raw: str) -> UnderstandingResult | None:
     if not isinstance(data, dict):
         return None
 
+    sub_pairs = _parse_sub_questions(data.get("sub_questions"))
+    sub_texts = [t for t, _d in sub_pairs]
+    sub_details = [d for _t, d in sub_pairs]
+    needs_decomposition = _flag(data.get("needs_decomposition")) or bool(sub_details)
+
     result = UnderstandingResult(
         focus_field=_clean_str(data.get("focus_field")),
         is_field_property_question=_flag(data.get("is_field_property_question")),
         needs_thinking=_flag(data.get("needs_thinking")),
-        needs_decomposition=_flag(data.get("needs_decomposition")),
-        sub_questions=_clean_str_list(data.get("sub_questions")),
+        needs_decomposition=needs_decomposition,
+        sub_questions=sub_texts,
         anaphora_target=_clean_str(data.get("anaphora_target")),
         entity_refs=_clean_str_list(data.get("entity_refs")),
         confidence=_conf(data.get("confidence")),
         source="llm",
+        complexity_reason=_clean_str(data.get("complexity_reason"), limit=256),
+        parse_confidence=_conf(data.get("parse_confidence")),
+        sub_question_details=sub_details,
     )
 
     prop = _clean_str(data.get("property"))
@@ -202,24 +336,66 @@ def _format_history(history: list[tuple[str, str]] | None, limit: int = 6) -> st
     return "\n".join(lines)
 
 
+def _format_context_inputs(
+    evidence: list[dict[str, object]] | None,
+    active_entity: str | None,
+    field_names: list[str] | None,
+    catalog_names: list[str] | None,
+) -> str:
+    """Build the grounding block (evidence / active entity / known field names /
+    known catalog names) fed to the LLM so its structured output can be checked
+    against real schema when it flows through the Validator."""
+    blocks: list[str] = []
+    if active_entity:
+        blocks.append(f"Active entity: {active_entity[:160]}")
+    if field_names:
+        listed = ", ".join((f or "").strip() for f in field_names[:60] if f)
+        blocks.append(f"Known schema fields of the active entity: {listed[:1200]}")
+    if catalog_names:
+        listed = ", ".join((n or "").strip() for n in catalog_names[:120] if n)
+        blocks.append(f"Known catalog entities: {listed[:2000]}")
+    if evidence:
+        ev_lines: list[str] = []
+        for ev in evidence[-6:]:
+            ev_id = str(ev.get("evidence_id") or "?")[:8]
+            ent = str(ev.get("entity_name") or "")[:80]
+            kind = str(ev.get("kind") or "")[:20]
+            ev_lines.append(f"- {ev_id} [{kind}] entity={ent}")
+        if ev_lines:
+            blocks.append("Conversation evidence (already fetched):\n" + "\n".join(ev_lines))
+    return "\n".join(blocks or ["(no checklist context)"])
+
+
 async def understand_query(
     question: str,
     llm: BaseLLM,
     history: list[tuple[str, str]] | None = None,
+    *,
+    evidence: list[dict[str, object]] | None = None,
+    active_entity: str | None = None,
+    field_names: list[str] | None = None,
+    catalog_names: list[str] | None = None,
 ) -> UnderstandingResult | None:
     """Read ``question`` into a structured ``UnderstandingResult``.
 
     Returns ``None`` when QU is disabled, the provider is fake, the LLM call
     fails, or the payload is unusable — every caller then keeps its existing
-    behaviour.
+    behaviour. When provided, ``evidence`` / ``active_entity`` / ``field_names``
+    / ``catalog_names`` are exposed as grounding context in the prompt (the
+    Validator then checks every structured claim against them).
     """
     if not settings.QU_ENABLED or settings.USE_MOCK_LLM:
         return None
 
     try:
+        context_block = _format_context_inputs(
+            evidence, active_entity, field_names, catalog_names,
+        )
         system_prompt = QUERY_UNDERSTANDING_PROMPT.replace(
             "[HISTORY]", _format_history(history) if history else "(no prior conversation)",
-        ).replace("[QUESTION]", question[:2000])
+        ).replace("[QUESTION]", question[:2000]).replace(
+            "[CHECKLIST_CONTEXT]", context_block,
+        )
         raw = await llm.generate(
             question,
             history=history,

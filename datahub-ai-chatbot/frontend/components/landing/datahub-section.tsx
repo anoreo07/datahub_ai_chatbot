@@ -17,7 +17,7 @@ export function DataHubSection() {
             <Reveal>
               <SectionHeading
                 align="left"
-                eyebrow="DataAtlas × DataHub"
+                eyebrow="V-DataAtlas × DataHub"
                 title={
                   <>
                     AI intelligence for your <span className="text-primary">DataHub</span>.
@@ -26,7 +26,7 @@ export function DataHubSection() {
                 description={
                   <>
                     DataHub is the metadata layer for your data platform — the catalog,
-                    schema, glossary, ownership, lineage, and governance. DataAtlas is the
+                    schema, glossary, ownership, lineage, and governance. V-DataAtlas is the
                     AI layer on top of it, giving everyone a conversational way to explore
                     and understand that metadata.
                   </>
@@ -42,7 +42,7 @@ export function DataHubSection() {
                   </span>
                   <p className="text-sm leading-relaxed text-muted-foreground">
                     <span className="font-semibold text-foreground">DataHub stays the source of truth.</span>{" "}
-                    Your catalog and governance are untouched — DataAtlas reads from and
+                    Your catalog and governance are untouched — V-DataAtlas reads from and
                     builds on that metadata.
                   </p>
                 </li>
@@ -51,7 +51,7 @@ export function DataHubSection() {
                     <FileSearch className="h-4 w-4" aria-hidden="true" />
                   </span>
                   <p className="text-sm leading-relaxed text-muted-foreground">
-                    <span className="font-semibold text-foreground">DataAtlas doesn&apos;t replace DataHub.</span>{" "}
+                    <span className="font-semibold text-foreground">V-DataAtlas doesn&apos;t replace DataHub.</span>{" "}
                     It sits above it as an AI interaction layer, so asking questions in
                     natural language becomes part of your data workflow.
                   </p>
@@ -62,7 +62,7 @@ export function DataHubSection() {
                   </span>
                   <p className="text-sm leading-relaxed text-muted-foreground">
                     <span className="font-semibold text-foreground">Built on DataHub&apos;s metadata.</span>{" "}
-                    Datasets, fields, glossary terms, ownership, domains, lineage — DataAtlas
+                    Datasets, fields, glossary terms, ownership, domains, lineage — V-DataAtlas
                     connects them all into grounded answers.
                   </p>
                 </li>
@@ -70,20 +70,20 @@ export function DataHubSection() {
             </Reveal>
           </div>
 
-          {/* Right visual: DataAtlas ⇄ DataHub */}
+          {/* Right visual: V-DataAtlas ⇄ DataHub */}
           <Reveal delay={0.15} className="flex items-center justify-center">
             <figure className="w-full max-w-lg">
               <div className="flex items-center justify-between gap-3 rounded-2xl border border-border bg-card p-6 shadow-sm sm:p-10">
                 <div className="flex flex-col items-center gap-2 text-center">
                   <Image
                     src="/dataatlas_logo_transparent.png"
-                    alt="DataAtlas logo"
+                    alt="V-DataAtlas logo"
                     width={72}
                     height={72}
                     className="h-16 w-16 object-contain sm:h-20 sm:w-20"
                   />
                   <figcaption className="flex flex-col">
-                    <span className="font-display text-base tracking-tight text-foreground">DataAtlas</span>
+                    <span className="font-display text-base tracking-tight text-foreground">V-DataAtlas</span>
                     <span className="text-xs text-muted-foreground">AI interaction layer</span>
                   </figcaption>
                 </div>
@@ -112,9 +112,9 @@ export function DataHubSection() {
 
               <p className="mt-4 flex items-center justify-center gap-1.5 text-center text-xs text-muted-foreground">
                 <ArrowUpRight className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
-                You ask DataAtlas&nbsp;
+                You ask V-DataAtlas&nbsp;
                 <ArrowDownRight className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
-                DataAtlas reads DataHub metadata
+                V-DataAtlas reads DataHub metadata
               </p>
             </figure>
           </Reveal>

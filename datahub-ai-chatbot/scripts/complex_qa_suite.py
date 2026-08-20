@@ -148,10 +148,10 @@ case("E07", "entity_resolution", "admin", [
 # --- field questions --------------------------------------------------------
 case("F01", "field_questions", "admin", [
     # "Trường X trong dataset Y có ý nghĩa gì?" asks WHAT that field means. The
-    # focused-field answer (CONTEXT_FIELD_DESCRIPTION) is the deliberate
-    # over-answer fix; SCHEMA_LOOKUP is the legacy whole-schema route.
+    # focused-field answer (FIELD_PROPERTY) is the deliberate over-answer fix;
+    # SCHEMA_LOOKUP is the legacy whole-schema route.
     dict(question="Trường warehouse_manager trong dim_warehouse có ý nghĩa gì?",
-         intent=["SCHEMA_LOOKUP", "CONTEXT_FIELD_DESCRIPTION"],
+         intent=["SCHEMA_LOOKUP", "FIELD_PROPERTY"],
          subs=["warehouse_manager", "dim_warehouse"],
          not_subs=["no thuoc linh vuc", "Không tìm thấy dataset"]),
 ])

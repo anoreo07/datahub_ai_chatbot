@@ -7,6 +7,29 @@ def test_term_definition_vietnamese() -> None:
     assert classify_intent("Revenue là gì") == QueryIntent.TERM_DEFINITION
 
 
+def test_multi_hop_chain() -> None:
+    assert classify_intent(
+        "từ report capacity → định nghĩa capacity → cột liên quan → "
+        "công thức → nguồn dữ liệu thô"
+    ) == QueryIntent.MULTI_HOP_CHAIN
+    assert classify_intent(
+        "từ report capacity -> định nghĩa -> cột -> công thức"
+    ) == QueryIntent.MULTI_HOP_CHAIN
+    assert classify_intent(
+        "trong domain LOGISTIC, tìm report về capacity, term liên quan, "
+        "dataset nguồn và lineage"
+    ) == QueryIntent.MULTI_HOP_CHAIN
+
+
+def test_multi_hop_chain_does_not_steal_other_intents() -> None:
+    assert classify_intent("Revenue là gì") == QueryIntent.TERM_DEFINITION
+    assert classify_intent("định nghĩa Net Revenue") == QueryIntent.TERM_DEFINITION
+    assert classify_intent("Bạn có thể giúp gì?") == QueryIntent.GENERAL
+    assert classify_intent("linh vuc tai chinh gom nhung dataset nao") == QueryIntent.DOMAIN_QUERY
+    assert classify_intent("Dataset sales.orders có bao nhiêu field?") == QueryIntent.SCHEMA_LOOKUP
+    assert classify_intent("tìm report về doanh thu và lineage của nó") == QueryIntent.MULTI_HOP_CHAIN
+
+
 def test_term_definition_english() -> None:
     assert classify_intent("What is the meaning of Revenue?") == QueryIntent.TERM_DEFINITION
     assert classify_intent("define Net Revenue") == QueryIntent.TERM_DEFINITION

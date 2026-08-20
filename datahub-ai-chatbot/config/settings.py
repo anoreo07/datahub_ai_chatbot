@@ -48,14 +48,14 @@ class Settings(BaseSettings):
     OLLAMA_BASE_URL: str = "http://localhost:11434/v1"
 
     LLM_PROVIDER: str = "fireworks"
-    LLM_MODEL: str = "accounts/fireworks/models/deepseek-v4-flash"
+    LLM_MODEL: str = "accounts/fireworks/models/deepseek-v4-flash-0731"
 
     COHERE_API_KEY: str = ""
     AWS_REGION: str = "us-east-1"
     OPENAI_API_KEY: str = ""
 
     FIREWORKS_API_KEY: str = ""
-    FIREWORKS_MODEL_ID: str = "accounts/fireworks/models/deepseek-v4-flash"
+    FIREWORKS_MODEL_ID: str = "accounts/fireworks/models/deepseek-v4-flash-0731"
 
     NVIDIA_API_KEY: str = ""
     NVIDIA_BASE_URL: str = "https://integrate.api.nvidia.com/v1"
@@ -115,6 +115,10 @@ class Settings(BaseSettings):
     # (default) the keyword/regex + coreference pipeline runs unchanged, so
     # enabling it is a strict behavioural opt-in. See retrieval/query_understanding.py.
     QU_ENABLED: bool = False
+    # Shadow mode: run QU + Validator and log everything, but never apply its
+    # routing decisions. Used to measure the contract against the regex fallback
+    # before flipping QU_ENABLED on.
+    QU_SHADOW_MODE: bool = False
 
     # Visual Understanding: an independent image-analysis layer (Qwen2.5-VL via
     # Fireworks) that performs OCR + structured extraction of data-related images

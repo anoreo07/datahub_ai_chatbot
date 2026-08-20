@@ -21,7 +21,7 @@ const STEPS = [
   {
     icon: Lightbulb,
     title: "Understand intent",
-    description: "DataAtlas classifies what you need — find, describe, explain, generate SQL, or analyze.",
+    description: "V-DataAtlas classifies what you need — find, describe, explain, generate SQL, or analyze.",
   },
   {
     icon: Link2,
@@ -48,7 +48,7 @@ export function QuestionFlow() {
           <SectionHeading
             eyebrow="How it works"
             title="From question to data context"
-            description="DataAtlas connects your question to DataHub metadata, step by step — then answers with the context it found."
+            description="V-DataAtlas connects your question to DataHub metadata, step by step — then answers with the context it found."
           />
         </Reveal>
 

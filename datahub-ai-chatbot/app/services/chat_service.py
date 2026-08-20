@@ -1,6 +1,8 @@
 import re
+import time
 import uuid
-from collections.abc import Awaitable, Callable
+from collections.abc import Awaitable, Callable, Sequence
+from typing import Any
 
 import structlog
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -24,9 +26,11 @@ from app.services.chat.question_analysis import (
     _DETERMINISTIC_LISTING_INTENTS,
     _GREETING_RESPONSES,
     _IMAGE_REF_RE,
+    _MULTI_HOP_CHAIN_RE,
     _QUALITY_FAVORED_INTENTS,
     _SYNC_RE,
     _TERM_REMOVE_WORDS,
+    _TERM_TO_DATASETS_ASK_RE,
     _build_access_denied_message,
     _detect_entity_type,
     _detect_listing,
@@ -34,9 +38,13 @@ from app.services.chat.question_analysis import (
     _extract_filter_value,
     _extract_name,
     _has_own_identifier,
+    _is_column_meaning_question,
     _is_contextual_followup,
     _is_datahub_relevant,
+    _is_field_location_question,
     _is_glossary_followup,
+    _is_term_in_dataset_question,
+    _looks_like_join,
     _short_negative_answer,
     _trusted_resolution,
 )
@@ -59,10 +67,381 @@ from retrieval.evidence import (
     parse_field_operation,
 )
 from retrieval.hybrid_search import SearchResult
-from retrieval.intent import QueryIntent
+from retrieval.intent import QueryIntent, _norm_vn
 from retrieval.query_understanding import understand_query
 
 log = structlog.get_logger()
+
+# Standard intent taxonomy the QU layer emits (see QUERY_UNDERSTANDING_PROMPT).
+STANDARD_TAXONOMY = {
+    "FIELD_PROPERTY", "SCHEMA_LOOKUP", "FIND_FIELD", "LINEAGE", "OWNER",
+    "GLOSSARY", "JOIN", "ENTITY_EXISTS", "TERM_TO_DATASETS", "GENERAL",
+    "COUNT",
+}
+
+# Deterministic mapping from the legacy evidence / field-property path labels
+# to the standard taxonomy. Used when the QU layer produced no usable intent:
+# the label a path stamps on the answer ("where the answer came from") is
+# separate from what the question really ASKS. Unlisted labels are kept as-is
+# (OWNER_LOOKUP, ENTITY_DOMAIN, QUALITY_REPORT, SCHEMA_LOOKUP, LINEAGE, ...).
+FALLBACK_INTENT_MAP = {
+    "CONTEXT_FIELD_FIND": "FIELD_PROPERTY",
+    "CONTEXT_FIELD_DESCRIPTION": "FIELD_PROPERTY",
+    "CONTEXT_FIELD_TYPE": "FIELD_PROPERTY",
+    "CONTEXT_FIELD_PROPERTY": "FIELD_PROPERTY",
+    "CONTEXT_FIELD_LOCATION": "SCHEMA_LOOKUP",
+    "CONTEXT_FIELD_GLOSSARY": "GLOSSARY",
+    "CONTEXT_JOIN": "JOIN",
+    "CONTEXT_LINEAGE": "LINEAGE",
+    "CONTEXT_EVIDENCE": "GENERAL",
+}
+
+
+def _qu_primary_intent(understanding) -> str | None:
+    """The question's standard-taxonomy intent as read by the QU layer.
+
+    Prefers the first structured sub-question's intent, then derives a
+    deterministic label from the top-level contract. ``None`` when the QU
+    layer produced nothing usable — the caller falls back to
+    :data:`FALLBACK_INTENT_MAP`.
+    """
+    if understanding is None:
+        return None
+    for sq in understanding.sub_question_details:
+        intent = (sq.intent or "").strip().upper()
+        if intent in STANDARD_TAXONOMY:
+            return intent
+    if understanding.is_field_property_question:
+        return "FIELD_PROPERTY"
+    return None
+
+
+def _unify_intent_label(raw: str, understanding) -> str:
+    """Resolve the final response ``intent`` to the standard taxonomy.
+
+    ``raw`` is the path-stamped label (e.g. ``CONTEXT_FIELD_FIND``); the QU
+    layer's read of the question wins when available, otherwise the
+    deterministic legacy→standard map applies.
+    """
+    qu_intent = _qu_primary_intent(understanding)
+    if qu_intent:
+        return qu_intent
+    return FALLBACK_INTENT_MAP.get(raw, raw)
+
+
+# Concept families whose glossary terms must be disambiguated by domain.
+# "Demand là gì?" maps to several catalog terms (Nhu cầu linh kiện, Demand of
+# all build phases per variant, Required Demand); only a domain (or listing
+# every member) answers it. Keywords are normalized (lowercase, diacritics
+# stripped) and matched against normalized term names.
+_GLOSSARY_CONCEPT_KEYWORDS: dict[str, tuple[str, ...]] = {
+    "demand": ("demand", "nhu cau linh kien"),
+}
+
+_TERM_DOMAIN_CACHE: dict[str, Any] = {
+    "term_domains": None,
+    "built_at": 0.0,
+}
+
+
+# Vietnamese name-derived meaning for the most common catalog columns. Field
+# descriptions are frequently empty in DataHub; "trường X nghĩa là gì?" is
+# answered deterministically from the field name ("bu_short_name" -> "tên viết
+# tắt của đơn vị kinh doanh") rather than by an LLM.
+_FIELD_MEANING_MAP: dict[str, str] = {
+    "bu_short_name": "tên viết tắt của đơn vị kinh doanh (Business Unit short name)",
+    "sod_total_amount": "tổng giá trị đơn bán (Sales Order Detail total amount)",
+    "is_manufacturing": "đánh dấu nhà máy sản xuất (Manufacturing plant flag)",
+    "plant_id": "mã định danh của nhà máy (Plant identifier)",
+    "plant_name": "tên của nhà máy (Plant name)",
+    "material_code": "mã định danh của nguyên vật liệu/linh kiện (Material code)",
+    "material_name": "tên của nguyên vật liệu/linh kiện (Material name)",
+    "vendor_code": "mã định danh của nhà cung cấp (Vendor code)",
+    "vendor_name": "tên của nhà cung cấp (Vendor name)",
+    "order_date": "ngày đặt hàng (Order date)",
+    "sales_order_number": "số đơn hàng bán (Sales order number)",
+    "unit_price": "đơn giá (Unit price)",
+    "quantity": "số lượng (Quantity)",
+    "status": "trạng thái (Status)",
+}
+
+_FIELD_FRAGMENT_VN: tuple[tuple[str, str], ...] = (
+    ("short", "viết tắt"),
+    ("name", "tên"),
+    ("id", "mã định danh"),
+    ("code", "mã"),
+    ("description", "mô tả"),
+    ("amount", "giá trị"),
+    ("total", "tổng"),
+    ("qty", "số lượng"),
+    ("quantity", "số lượng"),
+    ("date", "ngày"),
+    ("status", "trạng thái"),
+    ("type", "loại"),
+    ("flag", "cờ đánh dấu"),
+    ("is_", "cờ đánh dấu"),
+    ("plant", "nhà máy"),
+    ("factory", "nhà máy"),
+    ("manufacturing", "sản xuất"),
+    ("businessunit", "đơn vị kinh doanh"),
+    ("unit", "đơn vị"),
+    ("order", "đơn hàng"),
+    ("salesorder", "đơn bán"),
+    ("price", "giá"),
+    ("key", "khóa"),
+)
+
+
+def _field_meaning(field_name: str) -> str:
+    """Name-derived Vietnamese meaning for a column (grounded, no LLM)."""
+    name = (field_name or "").strip().lower().replace(" ", "_")
+    if not name:
+        return ""
+    if name in _FIELD_MEANING_MAP:
+        return _FIELD_MEANING_MAP[name]
+    parts = [p for p in re.split(r"[_\W]+", name) if p]
+    vn: list[str] = []
+    for p in parts:
+        for frag, v in _FIELD_FRAGMENT_VN:
+            if p == frag or p.startswith(frag):
+                if v not in vn:
+                    vn.append(v)
+                break
+    if vn:
+        return " ".join(vn)
+    return f"dữ liệu của trường {field_name} (theo tên trường)"
+
+
+def _build_grounded_fallback(intent: QueryIntent, results: Sequence[Any]) -> str:
+    """Deterministic metadata-grounded fallback when the LLM provider fails.
+
+    The Fireworks/NVIDIA provider intermittently times out on the corporate
+    network; instead of returning the generic "lỗi khi tạo câu trả lời" string,
+    list the already-resolved entities so the user still gets a grounded,
+    retrieval-level answer.
+    """
+    valid = [r for r in results if (r.name or "").strip()]
+    if not valid:
+        return ""
+    lines: list[str] = []
+    for _i, _r in enumerate(valid[:8], 1):
+        _pl = _r.payload or {}
+        _name = _r.name or ""
+        _bit = f"{_i}. **{_name}**"
+        _plat = (_pl.get("platform") or "").strip()
+        _etype = (_pl.get("entity_type") or _r.entity_type or "").strip()
+        _parts = []
+        if _etype:
+            _parts.append(_etype)
+        if _plat:
+            _parts.append(f"nền tảng {_plat}")
+        if _parts:
+            _bit += f" ({', '.join(_parts)})"
+        _desc = (_pl.get("description") or "").strip()
+        if _desc:
+            _bit += f" — {_desc[:180]}"
+        lines.append(_bit)
+    if intent == QueryIntent.TERM_TO_DATASETS:
+        return ("Các entity liên quan trong metadata DataHub:\n\n"
+                + "\n".join(lines))
+    return "Trong metadata DataHub hiện có các entity liên quan:\n\n" + "\n".join(lines)
+
+
+async def _term_domain_map(entity_repo) -> dict[str, set[str]]:
+    """Map glossary-term URN -> canonical dataset domains linking to it.
+
+    The catalog is static during a session, so the map is cached for the
+    process lifetime.
+    """
+    cached = _TERM_DOMAIN_CACHE["term_domains"]
+    if cached is not None:
+        return cached
+    term_domains: dict[str, set[str]] = {}
+    try:
+        datasets = await entity_repo.list_by_type("dataset", limit=100000)
+    except Exception:  # noqa: BLE001
+        return term_domains
+    for e in datasets:
+        pl = e.payload or {}
+        dom = (pl.get("domain") or "").strip()
+        if not dom:
+            continue
+        for tu in (pl.get("glossary_terms") or []):
+            if not tu:
+                continue
+            term_domains.setdefault(tu, set()).add(dom)
+    _TERM_DOMAIN_CACHE["term_domains"] = term_domains
+    _TERM_DOMAIN_CACHE["built_at"] = time.time()
+    return term_domains
+
+
+async def _term_linked_datasets(entity_repo) -> dict[str, list[str]]:
+    """Map glossary-term URN -> dataset names (across every domain)."""
+    key = "term_datasets"
+    cached = _TERM_DOMAIN_CACHE.get(key)
+    if cached is not None:
+        return cached
+    term_datasets: dict[str, list[str]] = {}
+    try:
+        datasets = await entity_repo.list_by_type("dataset", limit=100000)
+    except Exception:  # noqa: BLE001
+        return term_datasets
+    for e in datasets:
+        pl = e.payload or {}
+        name = (e.name or "").strip()
+        if not name:
+            continue
+        for tu in (pl.get("glossary_terms") or []):
+            if not tu:
+                continue
+            term_datasets.setdefault(tu, []).append(name)
+    _TERM_DOMAIN_CACHE[key] = term_datasets
+    return term_datasets
+
+
+async def _glossary_concept_members(entity_repo, concept: str) -> list[dict]:
+    """Glossary terms belonging to a concept family (name, description, URN)."""
+    keywords = _GLOSSARY_CONCEPT_KEYWORDS.get(concept)
+    if not keywords:
+        return []
+    try:
+        terms = await entity_repo.list_by_type("glossary_term", limit=100000)
+    except Exception:  # noqa: BLE001
+        return []
+    out: list[dict] = []
+    for t in terms:
+        name = (t.name or "").strip()
+        if not name:
+            continue
+        blob = _norm_vn(name)
+        if any(k in blob for k in keywords):
+            pl = t.payload or {}
+            out.append({
+                "urn": t.urn,
+                "name": name,
+                "description": (pl.get("description") or "").strip(),
+            })
+    return out
+
+
+async def _domain_scoped_term_answer(question: str, ctx: "ChatContext",
+                                     results: Sequence[Any]) -> tuple | None:
+    """Domain-scoped glossary answer for a concept family.
+
+    Handles "Demand là gì?" (no domain -> list every family member and ask for
+    the domain), "Demand trong domain SẢN XUẤT là gì?" (pick the member whose
+    linked datasets belong to that domain) and "so sánh Demand giữa A và B"
+    (per-domain resolution, UNKNOWN when a domain has no clear member).
+    Returns the (answer_text, citations, docs, context_xml, confidence) tuple
+    when the question targets a concept family, else ``None`` to fall through
+    to the generic term definition path.
+    """
+    if not results:
+        return None
+    q = _norm_vn(question)
+    if not re.search(r"là gì|la gi|nghĩa|nghia|định nghĩa|dinh nghia|giới thiệu|"
+                     r"so sánh|so sanh|compare|comparison", q):
+        return None
+    concept = next(
+        (c for c, kws in _GLOSSARY_CONCEPT_KEYWORDS.items()
+         if any(k in q for k in kws)),
+        None,
+    )
+    if concept is None:
+        return None
+    entity_repo = ctx.entity_repo
+    members = await _glossary_concept_members(entity_repo, concept)
+    if not members:
+        return None
+    term_domains = await _term_domain_map(entity_repo)
+
+    domains: list[str] = []
+    access = getattr(ctx, "access", None)
+    if access is not None:
+        try:
+            domains = await access.detect_requested_domains(question)
+        except Exception:  # noqa: BLE001
+            domains = []
+
+    def _member_for_domain(domain: str) -> dict | None:
+        dkey = _norm_vn(domain)
+        for m in members:
+            for d in term_domains.get(m["urn"], set()):
+                if _norm_vn(d) == dkey:
+                    return m
+        return None
+
+    def _member_lines(members_: list[dict]) -> str:
+        lines = []
+        for _i, _m in enumerate(members_, 1):
+            _d = ", ".join(sorted(term_domains.get(_m["urn"], set()))) or "chưa xác định"
+            lines.append(f"{_i}. **{_m['name']}** (`{_m['urn']}`) — domain: {_d}")
+        return "\n".join(lines)
+
+    answer_text: str | None = None
+    if len(domains) == 1:
+        m = _member_for_domain(domains[0])
+        if m:
+            _term_ds = await _term_linked_datasets(entity_repo)
+            _ds = [
+                n for n in _term_ds.get(m["urn"], [])
+                if n
+            ]
+            answer_text = (
+                f"Trong domain **{domains[0]}**, **{concept}** tương ứng với "
+                f"thuật ngữ **{m['name']}** (`{m['urn']}`):\n\n{m['description']}"
+            )
+            if _ds:
+                answer_text += f"\n\nLiên quan dataset: **{_ds[0]}**."
+        else:
+            answer_text = (
+                f"Không có thuật ngữ **{concept}** rõ ràng trong domain "
+                f"**{domains[0]}** trong DataHub → UNKNOWN."
+            )
+    elif len(domains) >= 2 and re.search(r"so sánh|so sanh|compare|so với|so voi", q):
+        parts = []
+        for dom in domains:
+            m = _member_for_domain(dom)
+            if m:
+                parts.append(
+                    f"**{dom}**: **{m['name']}** ({m['description'][:200]})"
+                )
+            else:
+                parts.append(
+                    f"**{dom}**: không có thuật ngữ Demand rõ ràng trong "
+                    "DataHub → UNKNOWN"
+                )
+        answer_text = "So sánh Demand theo domain:\n\n" + "\n\n".join(parts)
+    else:
+        # The query may name ONE family member exactly ("Nhu cầu linh kiện
+        # là gì?") — answer that term directly instead of re-listing the whole
+        # family (the concept keyword also matches the member's own name).
+        named_members = [
+            m for m in members if _norm_vn(m["name"]) in q
+        ]
+        if len(named_members) == 1:
+            m = named_members[0]
+            _term_ds = await _term_linked_datasets(entity_repo)
+            _ds = [n for n in _term_ds.get(m["urn"], []) if n]
+            answer_text = (
+                f"Thuật ngữ **{m['name']}** (`{m['urn']}`):\n\n{m['description']}"
+            )
+            if _ds:
+                answer_text += f"\n\nLiên quan dataset: **{_ds[0]}**."
+        else:
+            answer_text = (
+                f"Thuật ngữ **{concept}** có nhiều định nghĩa khác nhau trong "
+                f"DataHub ({len(members)} term liên quan):\n\n{_member_lines(members)}\n\n"
+                "Cần nêu rõ domain (SẢN XUẤT / KINH DOANH / LOGISTIC / ...) để chọn "
+                "đúng định nghĩa."
+            )
+    if not answer_text:
+        return None
+    citations: list = []
+    docs, context_xml = build_context(results)
+    log.info("domain_scoped_glossary", question=question[:100],
+             concept=concept, domains=domains, members=len(members))
+    return (answer_text, citations, docs, context_xml, "high")
 
 
 class ChatService:
@@ -111,6 +490,46 @@ class ChatService:
         return ImageUploadService(
             self._ctx.session, vision_service=self._ctx.conversation_vision,
         )
+
+    async def _generate_or_fallback(
+        self, generator, question: str, results: Sequence[Any],
+        intent: QueryIntent, history: list | None, on_token,
+        recommendation,
+    ) -> tuple:
+        """LLM generation with a deterministic, metadata-grounded fallback.
+
+        The Fireworks/NVIDIA provider intermittently times out on the corporate
+        network; instead of surfacing the generic "lỗi khi tạo câu trả lời"
+        string, fall back to a grounded listing of the already-resolved metadata
+        so the user still receives a retrieval-level answer with provenance.
+        """
+        if on_token:
+            answer_text, citations, docs, context_xml, confidence = (
+                await generator.generate_stream(
+                    question, results, intent, history=history,
+                    on_token=on_token, recommendation=recommendation,
+                )
+            )
+        else:
+            answer_text, citations, docs, context_xml, confidence = (
+                await generator.generate(
+                    question, results, intent, history=history,
+                    recommendation=recommendation,
+                )
+            )
+        if answer_text and "Xin lỗi, đã xảy ra lỗi khi tạo câu trả lời" not in answer_text:
+            return answer_text, citations, docs, context_xml, confidence
+        fallback = _build_grounded_fallback(intent, results)
+        if not fallback:
+            # Nothing to fall back on: surface the no-evidence response, never
+            # the provider error string (a user must not see "đã xảy ra lỗi"
+            # when the real situation is that no metadata was retrieved).
+            from guardrails.validation import NO_EVIDENCE_RESPONSE
+            return NO_EVIDENCE_RESPONSE, citations, docs, context_xml, "low"
+        docs, context_xml = build_context(results)
+        log.info("generation_fallback_deterministic", intent=intent.value,
+                 question=question[:100], entities=len(results))
+        return fallback, [], docs, context_xml, "medium"
 
 
     async def answer(self, question: str, user: UserContext | None = None,
@@ -218,6 +637,20 @@ class ChatService:
                 trace_id=trace_id, conversation_id=cid,
             )
 
+        # Multi-hop chain ("từ report capacity → định nghĩa → cột → công thức →
+        # nguồn dữ liệu thô", "trong domain X tìm report về Y, term, dataset và
+        # lineage"): walk each hop from catalog metadata and mark missing hops
+        # UNKNOWN. Re-detect on the raw question — the resolver normalizes the
+        # new taxonomy intent down to FIND_ENTITY/SCHEMA_LOOKUP/LINEAGE.
+        if _MULTI_HOP_CHAIN_RE.search(question):
+            chain_resp = await self._ctx.flows.multi_hop_chain_flow(
+                uid, cid, question, trace_id)
+            if chain_resp is not None:
+                await self._ctx.memory.add_turn_db(
+                    self._ctx.session, uid, cid, question, chain_resp.answer)
+                await _emit("done")
+                return chain_resp
+
         # Retrieval / generation runs on the effective question: the raw message,
         # or the action-framed question when the action supplies the missing context.
         query = resolution.effective_question or question
@@ -226,16 +659,38 @@ class ChatService:
             entity_hint = concept_phrase
 
         # Query Understanding (opt-in): read the effective question + conversation
-        # history into a structured JSON contract — focus_field/property, thinking
-        # and decomposition needs, anaphora target. Every consumer below treats it
-        # as advice only (never an order); when disabled or failed None means the
+        # context (evidence, active entity, schema fields, catalog names) into a
+        # structured JSON contract — focus_field/property, thinking and
+        # decomposition needs, anaphora target. Every consumer below treats it as
+        # advice only (never an order); when disabled or failed None means the
         # keyword/regex + coreference heuristics run unchanged.
         understanding = None
-        if settings.QU_ENABLED:
+        validation = None
+        qu_apply = settings.QU_ENABLED and not settings.QU_SHADOW_MODE
+        if settings.QU_ENABLED or settings.QU_SHADOW_MODE:
+            from retrieval.validator import (
+                apply_validation,
+                build_grounding_context,
+                validate_understanding,
+            )
+            _ground = await build_grounding_context(
+                self._ctx.memory, self._ctx.entity_repo, uid, cid,
+                active_entities, trace_id,
+            )
             understanding = await understand_query(
                 query, llm=self._ctx.llm, history=history,
+                evidence=_ground.evidence, active_entity=_ground.active_entity,
+                field_names=_ground.field_names, catalog_names=_ground.catalog_names,
             )
             if understanding is not None:
+                validation = validate_understanding(
+                    understanding,
+                    schema_fields=_ground.field_names,
+                    catalog_names=_ground.catalog_names,
+                    active_entity=_ground.active_entity,
+                    has_evidence_for_active=_ground.has_evidence_for_active,
+                    trace_id=trace_id,
+                )
                 log.info(
                     "query_understanding",
                     trace_id=trace_id,
@@ -248,8 +703,19 @@ class ChatService:
                     sub_questions=len(understanding.sub_questions),
                     anaphora_target=understanding.anaphora_target,
                     confidence=understanding.confidence,
+                    parse_confidence=understanding.parse_confidence,
                     source=understanding.source,
+                    complexity_reason=understanding.complexity_reason,
+                    validator=validation.to_dict() if validation else None,
                 )
+            if understanding is not None and qu_apply:
+                # Merge the guardrail verdict into the contract the router reads:
+                # drop ungrounded fields / entities, embargo unsafe sub-questions.
+                understanding = apply_validation(understanding, validation)
+            elif understanding is not None and not qu_apply:
+                # Shadow mode: measure the contract + validator without applying
+                # any routing decision, so regex behaviour is preserved exactly.
+                understanding = None
 
         log.info("chat_request", trace_id=trace_id, intent=intent.value,
                  question=question[:100], conversation_id=cid)
@@ -336,6 +802,28 @@ class ChatService:
             elif _is_datahub_relevant(query):
                 log.info("route_ai_keyword_rescued", trace_id=trace_id, question=query[:100])
                 relevance = DataHubRelevance.DATAHUB
+            elif not re.search(
+                    r"\b(dataset|bảng|bang|dashboard|report|báo cáo|bao cao)\b",
+                    query, re.IGNORECASE):
+                # Glossary-alias rescue: the question references a catalog term
+                # by its English parenthetical alias ("Demand là gì?", "so sánh
+                # Demand giữa SẢN XUẤT và KINH DOANH"). The alias word alone
+                # carries no DataHub vocabulary, so neither the LLM relevance
+                # gate nor the keyword heuristic sees it — but the catalog
+                # lookup is deterministically resolvable. Keep it in scope so
+                # the alias guard below can route it to TERM_DEFINITION instead
+                # of a clarification.
+                try:
+                    _rel_alias = await self._entities.resolve_glossary_by_alias(
+                        query, question=query, trace_id=trace_id)
+                except Exception:  # noqa: BLE001
+                    log.exception("relevance_alias_rescue_failed",
+                                  trace_id=trace_id, question=query[:100])
+                    _rel_alias = []
+                if _rel_alias:
+                    log.info("route_ai_alias_rescued", trace_id=trace_id,
+                             question=query[:100])
+                    relevance = DataHubRelevance.DATAHUB
         if relevance == DataHubRelevance.NON_DATAHUB:
             log.info("route_ai_non_datahub", trace_id=trace_id, question=query[:100])
             await _emit("generate")
@@ -516,10 +1004,19 @@ class ChatService:
                 uid, cid, query, _evidence_resolution, trace_id,
             )
             if _evidence_response is not None:
+                # Unify the intent label to the standard taxonomy: keep the
+                # answer path (evidence_context) separate from what the
+                # question actually asks. QU's read wins; otherwise map the
+                # legacy path label deterministically.
+                _evidence_response.intent = _unify_intent_label(
+                    _evidence_response.intent, understanding,
+                )
+                _evidence_response.answer_path = "evidence_context"
                 log.info("route_evidence_context", trace_id=trace_id,
                          question=query[:100],
                          evidence=_evidence_resolution.referenced_evidence_ids,
-                         intent=_evidence_response.intent)
+                         intent=_evidence_response.intent,
+                         answer_path=_evidence_response.answer_path)
                 await _emit("generate")
                 if on_token:
                     await on_token(_evidence_response.answer)
@@ -535,9 +1032,14 @@ class ChatService:
             query, uid, cid, trace_id, understanding=understanding,
         )
         if _field_property_response is not None:
+            _field_property_response.intent = _unify_intent_label(
+                _field_property_response.intent, understanding,
+            )
+            _field_property_response.answer_path = "field_property"
             log.info("route_field_property", trace_id=trace_id,
                      question=query[:100],
-                     intent=_field_property_response.intent)
+                     intent=_field_property_response.intent,
+                     answer_path=_field_property_response.answer_path)
             await _emit("generate")
             if on_token:
                 await on_token(_field_property_response.answer)
@@ -558,6 +1060,236 @@ class ChatService:
         _ctx_followup = bool(
             _is_contextual_followup(query) and (history or active_entities)
         )
+
+        # R1 — LLM-first intent & request understanding. The semantic classifier
+        # is the PRIMARY intent analyzer: it runs BEFORE the Thinking gate so a
+        # confident LLM intent (e.g. TERM_TO_DATASETS for "dataset chứa thông tin
+        # khách hàng (PII) nào...", FIND_ENTITY for description-based discovery
+        # "có báo cáo nào về X?") is never swallowed into a THINKING_OVERVIEW or
+        # misrouted by the regex first-match-wins router. The keyword router
+        # remains as a deterministic fast-path / validation layer: strong
+        # structural intents (term linkage, count, lineage, owner, domain lists)
+        # are preserved, and the LLM plan only overrides weak/ambiguous regex
+        # intents (guarded by ``llm_intent_override``).
+        llm_plan = None
+        if (not resolution.framed
+                and settings.INTENT_CLASSIFIER_ENABLED
+                and not settings.USE_MOCK_LLM
+                and intent_classifier.needs_semantic(query, intent.value)):
+            llm_plan = await intent_classifier.classify(query, self._ctx.llm)
+            if llm_plan is not None:
+                override = intent_classifier.llm_intent_override(
+                    intent.value, llm_plan, query,
+                    has_field_identifier=_extract_field_identifier(query) is not None,
+                )
+                if override is not None and override != intent.value:
+                    log.info("route_llm_intent_override", trace_id=trace_id,
+                             question=query[:100], regex_intent=intent.value,
+                             llm_intent=override, confidence=llm_plan.confidence)
+                    intent = QueryIntent(override)
+                # R1: the LLM plan is the primary request understanding. Keep it
+                # as the active plan so downstream impact detection, planner and
+                # response relabeling run on the LLM's contract, never on the
+                # regex first-match-wins fallback.
+                plan = llm_plan
+
+        # R2b — Field-location reroute. "warehouse_id nằm trong những dataset
+        # nào?", "X liên kết với bảng nào qua trường Y?" ask WHERE a column
+        # lives. A FIND_ENTITY/GENERAL intent would answer with one unrelated
+        # entity ("Báo cáo số tồn kho") instead of the listing of every dataset
+        # carrying the field. Force SCHEMA_LOOKUP so the deterministic
+        # field-location branch runs (resolve_field_lookup + listing render).
+        if (not _ctx_followup
+                and intent in (QueryIntent.FIND_ENTITY, QueryIntent.GENERAL,
+                               QueryIntent.ENTITY_EXISTS, QueryIntent.SCHEMA_LOOKUP,
+                               QueryIntent.TERM_DEFINITION, QueryIntent.TERM_TO_DATASETS)
+                and _is_field_location_question(query)):
+            intent = QueryIntent.SCHEMA_LOOKUP
+            log.info("route_field_location", trace_id=trace_id,
+                     question=query[:100], intent=QueryIntent.SCHEMA_LOOKUP.value)
+
+        # R2c — Term-to-datasets reroute. "tìm dataset tính/chứa/lưu <term>?"
+        # asks which datasets carry a business concept (a glossary term). The
+        # SCHEMA_LOOKUP/FIND_ENTITY flow would canonicalize the sentence into an
+        # unrelated entity ("SA-Term" + field "ch"). When the concept after the
+        # ask resolves to a glossary term, route TERM_TO_DATASETS so the
+        # linked-datasets flow answers deterministically. Field-location asks
+        # are excluded (their fields, not terms). Column-meaning asks are safe:
+        # "trường X nghĩa là gì" never carries a dataset-ask verb so the pattern
+        # below cannot match them.
+        if (not _ctx_followup
+                and intent in (QueryIntent.FIND_ENTITY, QueryIntent.GENERAL,
+                               QueryIntent.ENTITY_EXISTS, QueryIntent.SCHEMA_LOOKUP,
+                               QueryIntent.TERM_DEFINITION)
+                and not _is_field_location_question(query)
+                and _TERM_TO_DATASETS_ASK_RE.search(query)):
+            _concept = _TERM_TO_DATASETS_ASK_RE.sub("", query).strip().rstrip("?")
+            _concept = re.sub(
+                r"^(?:tìm|tim|cho|hãy|hay)\s*", "", _concept
+            ).strip()
+            _concept = re.split(
+                r",|\bcho biết\b|\bcho biet\b|\bvà term\b|\bva term\b|\b"
+                r"liên quan\b|\blien quan\b",
+                _concept,
+            )[0].strip()
+            _concept = re.sub(
+                r"\s+(?:và|va|nào|nao|định nghĩa|dinh nghia)$",
+                "", _concept,
+            ).strip()
+            # R2c is about "which datasets carry term X?" ("dataset nào
+            # tính/chứa/lưu doanh thu?"). An identify-by-description ask
+            # ("bảng tính dự báo cung cấp hàng tuần theo từng part là dataset
+            # nào?") names a report/table the user wants matched to a dataset -
+            # the leftover is sentence description ("dự báo cung cấp hàng
+            # tuần theo từng part") that would falsely resolve to an unrelated
+            # glossary term ("CUNG ỨNG"). Those asks end in "X là dataset
+            # nào/bảng nào" and must fall through to description discovery.
+            if re.search(
+                r"(?:là|la)\s+(?:dataset|bảng|bang|báo cáo|bao cao|report)"
+                r"(?:\s+(?:nào|nao|gì|gi))?\s*[?!.]?$",
+                _concept, re.I,
+            ):
+                _concept = ""
+            if _concept:
+                # R2c applies only to discovery asks that do NOT name a
+                # concrete dataset ("dataset FCT_DMS_VEHICLE_INVENTORY lưu
+                # trữ..."). A named dataset is a dataset-facts ask; the
+                # "concept" leftover after stripping would be sentence noise
+                # ("trữ dữ liệu gì? Cho biết các trường chính"). Only a token
+                # that looks like an identifier (contains "_" or ".") counts -
+                # "dataset tính nhu cầu..." has a verb, not a name.
+                if not re.search(
+                    r"\b(?:dataset|bảng|bang|báo cáo|bao cao)\s+"
+                    r"[\"“”'`]?[A-Za-zÀ-ỹ_][\wÀ-ỹ_.-]*[_.][\wÀ-ỹ_.-]*",
+                    query, re.I,
+                ):
+                    try:
+                        _t_hits = await self._entities.resolve_glossary_by_concept(
+                            _concept, question=query, trace_id=trace_id)
+                        if not _t_hits:
+                            _t_hits = await self._entities.resolve_glossary_by_alias(
+                                _concept, question=query, trace_id=trace_id)
+                    except Exception:  # noqa: BLE001
+                        _t_hits = []
+                    if _t_hits:
+                        log.info("route_term_to_datasets_ask", trace_id=trace_id,
+                                 question=query[:100], concept=_concept,
+                                 term=_t_hits[0].name)
+                        intent = QueryIntent.TERM_TO_DATASETS
+                        if plan:
+                            plan.intent = QueryIntent.TERM_TO_DATASETS
+
+        # R2d — Discovery-phrasing reroute. "có báo cáo nào về chi phí bảo hành do
+        # lỗi nhà cung cấp...?" is a description-based discovery ask (what
+        # exists in the catalog). The LLM classifier is unstable here: it can
+        # pick SCHEMA_LOOKUP (which then abstains "I couldn't find"). Force
+        # FIND_ENTITY so the deterministic discovery listing answers from the
+        # retrieved candidates. Field-location and column-meaning asks are
+        # excluded - they are schema questions, not existence listings.
+        if (intent == QueryIntent.SCHEMA_LOOKUP and not _ctx_followup
+                and not _is_field_location_question(query)
+                and not _is_column_meaning_question(query)
+                and re.search(
+                    r"\b(?:có|co)\s+(?:báo cáo|bao cao|report|dataset|bảng|bang|"
+                    r"dashboard)\s+nào\s+về\b|"
+                    r"\bnào\s+liên quan đến\b",
+                    query, re.I,
+                )):
+            intent = QueryIntent.FIND_ENTITY
+            log.info("route_discovery_phrasing", trace_id=trace_id,
+                     question=query[:100], intent=QueryIntent.FIND_ENTITY.value)
+
+        # R3 — Glossary-alias guard. Users reference catalog terms by their
+        # English parenthetical alias ("Demand là gì?", "so sánh Demand giữa
+        # SẢN XUẤT và KINH DOANH"). Such questions often land on GENERAL (they
+        # carry comparison / selection phrasing) and would be swallowed by the
+        # thinking layer, which returns a THINKING_OVERVIEW with no term entity.
+        # When the question resolves to a glossary term by alias and names no
+        # dataset / dashboard / report, force the TERM_DEFINITION flow so the
+        # structured glossary path returns the term.
+        if intent == QueryIntent.GENERAL and not _ctx_followup \
+                and not re.search(
+                    r"\b(dataset|bảng|bang|dashboard|report|báo cáo|bao cao)\b",
+                    query, re.IGNORECASE):
+            try:
+                _alias_hits = await self._entities.resolve_glossary_by_alias(
+                    query, question=query, trace_id=trace_id)
+            except Exception:  # noqa: BLE001
+                log.exception("glossary_alias_guard_failed", trace_id=trace_id,
+                              question=query[:100])
+                _alias_hits = []
+            if _alias_hits:
+                log.info("route_glossary_alias", trace_id=trace_id,
+                         question=query[:100],
+                         intent=QueryIntent.TERM_DEFINITION.value)
+                intent = QueryIntent.TERM_DEFINITION
+
+        # R3 — Formula-of-column guard. "công thức tính của column X?" asks for
+        # the business formula of a column / metric. The formula (and KPI
+        # definition) lives in the glossary TERM named X ("Coverage Date" ->
+        # "Coverage Date = (Số ngày làm việc từ Stock Date → Last Day Cover) - 2").
+        # SCHEMA_LOOKUP canonicalizes "column Coverage Date" into an unrelated
+        # dataset and answers "no formula". When the question names a column with
+        # a formula/definition ask and the column name resolves to a glossary
+        # term, force TERM_DEFINITION so the deterministic term answer returns
+        # the grounded formula instead of a schema-lookup miss.
+        if intent == QueryIntent.SCHEMA_LOOKUP and not _ctx_followup:
+            # A field-location question ("dataset nào chứa trường X?") asks WHERE
+            # the column lives - the SCHEMA_LOOKUP listing answers it. The column
+            # token must not be hijacked into a glossary-term formula resolution.
+            if _is_field_location_question(query):
+                pass
+            # A column-MEANING question ("trường X nghĩa là gì?") asks the
+            # field's meaning inside its dataset - answered by SCHEMA_LOOKUP's
+            # column-definition branch, not by the glossary formula resolver.
+            if _is_column_meaning_question(query):
+                pass
+            # Only actual formula asks ("công thức/cách tính/formula của X")
+            # route the column to the glossary-term formula resolution.
+            elif not re.search(
+                r"công thức|cong thuc|formula|cách tính|cach tinh|cách",
+                query, re.I,
+            ):
+                pass
+            else:
+                _col = None
+                _cm = re.search(
+                    r"\b(?:column|trường|truong|cột|cot|field|metric)\b[^\n]{0,10}?"
+                    r"[\"“”'`]?(?P<col>[A-Za-zÀ-ỹ][A-Za-z0-9À-ỹ _\.\-]{1,50})[\"“”'`]?",
+                    query, re.IGNORECASE,
+                )
+                if _cm:
+                    _col = _cm.group("col").strip()
+                else:
+                    # Connector path: "công thức tính của X" / "formula của X" names the
+                    # metric right after the connector. Cap the capture at sentence end
+                    # and trim trailing filler so "của column Coverage Date." is not
+                    # swallowed into the name.
+                    _fm = re.search(
+                        r"(?:công thức|cong thuc|formula|cách tính|cach tinh)[^\n]{0,25}?"
+                        r"(?:của|cua|cho|tính|tinh)\s*"
+                        r"(?:column|trường|truong|cột|cot|field|metric)?\s*"
+                        r"[\"“”'`]?(?P<col>[A-Za-zÀ-ỹ][A-Za-z0-9À-ỹ _\.\-]{1,50})[\"“”'`]?",
+                        query, re.IGNORECASE,
+                    )
+                    if _fm:
+                        _col = _fm.group("col").strip()
+                        _col = re.sub(r"\s+(?:của|cua|cho|trong|và|va|nào|nao)$", "", _col).strip()
+                if _col:
+                    try:
+                        _col_term = await self._entities.resolve_with_expansion(
+                            _col, query,
+                            entity_type="glossary_term", trace_id=trace_id)
+                    except Exception:  # noqa: BLE001
+                        log.exception("formula_column_guard_failed", trace_id=trace_id,
+                                      question=query[:100])
+                        _col_term = None
+                    if _col_term and _trusted_resolution(_col_term):
+                        log.info("route_formula_column", trace_id=trace_id,
+                                 question=query[:100], column=_col,
+                                 intent=QueryIntent.TERM_DEFINITION.value)
+                        intent = QueryIntent.TERM_DEFINITION
+
         if settings.THINKING_MODE_ENABLED and intent == QueryIntent.GENERAL \
                 and not _ctx_followup:
             _complex = bool(
@@ -733,15 +1465,29 @@ class ChatService:
         # that the keyword router would otherwise miscast as LINEAGE/GENERAL.
         # The intent resolver already produced a plan (locked when it was rebuilt
         # from a selected action). Cheap regex plan by default; the LLM upgrades
-        # only ambiguous cases.
+        # only ambiguous cases. The R1 LLM-first gate above already ran the
+        # classifier when eligible, so skip the duplicate LLM call.
         if plan is None:
             plan = intent_classifier.regex_plan(query)
-        if (not resolution.framed
+        if (llm_plan is None
+                and not resolution.framed
                 and intent_classifier.needs_semantic(query, intent.value)
                 and settings.INTENT_CLASSIFIER_ENABLED
                 and not settings.USE_MOCK_LLM):
             plan = await intent_classifier.classify(query, self._ctx.llm)
         impact_mode = plan.intent == "IMPACT"
+
+        # Domain-constrained discovery: "chỉ nêu ... domain TÀI CHÍNH về giá
+        # thành/ngân sách" asks for a filtered listing, not an ambiguous pick.
+        if not impact_mode:
+            _dcd = await self._listing.domain_constrained_discovery(
+                query, trace_id, cid,
+            )
+            if _dcd is not None:
+                await self._ctx.memory.add_turn_db(
+                    self._ctx.session, uid, cid, query, _dcd.answer,
+                )
+                return _dcd
 
         # Query-planner path: plans with explicit executable steps (composite /
         # LLM-planned multi-step questions) go through the DAG tool orchestrator
@@ -785,8 +1531,26 @@ class ChatService:
         import time
         _t0 = time.perf_counter()
         planner_results: list[SearchResult] = []
+        # Deterministic two-dataset schema analysis (join keys / common fields
+        # between X and Y, "field join với Z là gì") supersedes the generic DAG
+        # entity-resolution: it must report the REAL shared column names, not
+        # whatever single entity the planner happened to resolve first.
         if (settings.QUERY_PLANNER_ENABLED
-                and (plan.steps or plan.intent in ("COMPOSITE_QUERY", "MULTI_ENTITY_QUERY"))):
+                and (plan.steps or plan.intent in ("COMPOSITE_QUERY", "MULTI_ENTITY_QUERY"))
+                and _looks_like_join(query)):
+            join_results = await self._retrieval.schema_join_lookup(
+                query, trace_id=trace_id,
+            )
+            if join_results:
+                planner_results = join_results
+                intent = QueryIntent.SCHEMA_LOOKUP
+                log.info("route_planner_dag", trace_id=trace_id,
+                         question=query[:100], intent=plan.intent,
+                         steps=len(plan.steps), result_count=len(join_results),
+                         mode="schema_join")
+        if (settings.QUERY_PLANNER_ENABLED
+                and (plan.steps or plan.intent in ("COMPOSITE_QUERY", "MULTI_ENTITY_QUERY"))
+                and not planner_results):
             planner_results = await self._ctx.planner.execute(plan)
             log.info("route_planner_dag", trace_id=trace_id, question=query[:100],
                      intent=plan.intent, steps=len(plan.steps),
@@ -838,6 +1602,15 @@ class ChatService:
                     entity_from_q = re.sub(
                         r"\s+(?:thi|thì)?\s*(?:sao|thế\s+nào|the\s+nao|"
                         r"là\s+gì|la\s+gi|vậy|vay)\s*$",
+                        "", entity_from_q,
+                    ).strip()
+                    # Strip the entity-kind noun that precedes the name so
+                    # "còn bảng fact_part_movement thì sao?" / "còn trường
+                    # warehouse_id thì sao?" resolve "fact_part_movement" /
+                    # "warehouse_id" — never a literal "bang ..." identifier.
+                    entity_from_q = re.sub(
+                        r"^(?:bảng|bang|table|dataset|trường|truong|field|"
+                        r"cột|cot|các|cac|những|nhung)\s+",
                         "", entity_from_q,
                     ).strip()
                     inferred_entity = entity_from_q if entity_from_q else None
@@ -898,13 +1671,20 @@ class ChatService:
                                 await on_token(glossary_response.answer)
                             await _emit("done")
                             return glossary_response
+                    # Bare-ellipsis follow-ups ("còn X thì sao?") must NOT run
+                    # under the fresh intent the keyword router assigned to the
+                    # raw sentence ("còn bảng fact_part_movement thì sao" ->
+                    # LINEAGE). They inherit the PREVIOUS turn's tool instead
+                    # (the else branch below), so "thì sao" after a schema fetch
+                    # re-retrieves the new entity's schema, not its lineage.
                     if intent in (QueryIntent.TERM_DEFINITION, QueryIntent.OWNER_LOOKUP,
                                   QueryIntent.ENTITY_DOMAIN,
                                   QueryIntent.TERM_TO_DATASETS, QueryIntent.LINEAGE,
                                   QueryIntent.SCHEMA_LOOKUP, QueryIntent.DATAHUB_URL,
                                   QueryIntent.ENTITY_EXISTS, QueryIntent.DOMAIN_QUERY,
                                   QueryIntent.PLATFORM_QUERY, QueryIntent.TAG_QUERY,
-                                  QueryIntent.ENTITIES_BY_OWNER, QueryIntent.CERTIFIED_LIST):
+                                  QueryIntent.ENTITIES_BY_OWNER, QueryIntent.CERTIFIED_LIST) \
+                            and not is_ellipsis:
                         results = await self._retrieval.structured_retrieval(
                             intent, query, inferred_entity=inferred_entity,
                             inferred_type=inferred_type, trace_id=trace_id,
@@ -1181,12 +1961,75 @@ class ChatService:
                  conversation_id=cid)
 
         # Guardrail #9: when a single-entity question matches multiple entities,
-        # ask a clarification instead of randomly choosing one.
+        # ask a clarification instead of randomly choosing one. Multi-entity
+        # questions ("so sánh giữa A và B", schema-join analysis) legitimately
+        # produce several results with near-equal scores - those are the answer,
+        # not ambiguity, so they must skip the clarification.
+        #
+        # Decision-aware gate: several common multi-candidate cases are NOT real
+        # ambiguity and must resolve instead of clarify:
+        #  (1) every candidate carries the SAME display name ("Coverage Date"
+        #      resolving to two same-named terms, "fact_sale_orders" on several
+        #      platforms). Repeating one name three times in a clarify is noise -
+        #      the answer is to ground on every same-named candidate / the top one.
+        #  (2) description-based discovery (FIND_ENTITY: "có báo cáo nào về X?")
+        #      asks what exists; the top candidate + caveat IS the answer.
+        #  (3) field-location questions ("dataset nào chứa trường X?") ask for a
+        #      listing; the top-N datasets containing the field are the answer.
+        _multi_entity_join = any(
+            (r.payload or {}).get("join_analysis") for r in results
+        )
+        _distinct_names = {
+            (r.name or "").strip().lower() for r in results if (r.name or "").strip()
+        }
+        _same_name_tie = bool(
+            len(results) > 1
+            and len(_distinct_names) == 1
+            and all((r.name or "").strip() for r in results[:4])
+        )
+        _field_location_question = (
+            intent in (QueryIntent.SCHEMA_LOOKUP, QueryIntent.TERM_DEFINITION)
+            and _is_field_location_question(question_for_gen)
+        )
+        _term_in_dataset_question = (
+            intent == QueryIntent.TERM_DEFINITION
+            and _is_term_in_dataset_question(question_for_gen)
+        )
+        _concept_family_question = bool(
+            intent == QueryIntent.TERM_DEFINITION
+            and any(
+                k in _norm_vn(question_for_gen)
+                for kws in _GLOSSARY_CONCEPT_KEYWORDS.values()
+                for k in kws
+            )
+        )
         ambiguous = (
             len(results) > 1
+            and not _multi_entity_join
+            and not _same_name_tie
+            and not _field_location_question
+            and not _term_in_dataset_question
+            and not _concept_family_question
+            and intent != QueryIntent.FIND_ENTITY
             and abs(results[0].score - results[1].score) < 0.15
             and results[1].score > 0.5
         )
+        if _same_name_tie:
+            # Collapse same-named datasets to a single representative (they are
+            # the same table mirrored on several platforms). Same-named glossary
+            # terms are kept as-is: E-001/L-001 expect every definition.
+            _seen_names: set[str] = set()
+            _deduped: list[SearchResult] = []
+            for _r in results:
+                _key = ((_r.name or "").strip().lower(),
+                        (_r.payload or {}).get("entity_type") or _r.entity_type)
+                if _r.entity_type == "glossary_term" or _key not in _seen_names:
+                    _seen_names.add(_key)
+                    _deduped.append(_r)
+            results = _deduped
+            log.info("chat_same_name_tie_resolved", trace_id=trace_id,
+                     intent=intent.value, deduped=len(results),
+                     question=question_for_gen[:100], conversation_id=cid)
         if ambiguous and intent in _AMBIGUOUS_CLARIFY_INTENTS:
             options = " hoặc ".join(f"'{r.name}'" for r in results[:3])
             clarification = (
@@ -1240,7 +2083,147 @@ class ChatService:
             )
 
         await _emit("generate")
-        if intent == QueryIntent.LINEAGE and results and not impact_mode:
+        _discovery_phrasing = bool(re.search(
+            r"liệt kê|liet ke|danh sách|danh sach|list\b|\bgồm những|gom nhung|"
+            r"có những|co nhung|những .{0,20} nào|nhung .{0,20} nao|"
+            r"nào về|nao ve|nào là|nao la|có .{0,15} nào|co .{0,15} nao|"
+            r"liên quan đến|den ve|staging|thô\b|tho\b|raw\b|nguồn|nguon\b"
+            r"|(?:là|la)\s+(?:dataset|bảng|bang|báo cáo|bao cao|report)\s+"
+            r"(?:nào|nao|gì|gi)",
+            _norm_vn(question_for_gen), re.I,
+        ))
+        _asked_type = _detect_entity_type(question_for_gen)
+        if (intent in (QueryIntent.FIND_ENTITY, QueryIntent.GENERAL)
+                and (results or _asked_type) and not impact_mode
+                and _discovery_phrasing
+                and (intent == QueryIntent.FIND_ENTITY or _asked_type)):
+            # Staging/raw ask ("dataset thô (staging) nào chứa dữ liệu X?"):
+            # replace the report-view results with the raw stg_* datasets that
+            # actually carry the subject (deterministic schema scan).
+            if re.search(
+                r"\bthô\b|tho\b|staging|raw\b|nguồn|nguon\b",
+                _norm_vn(question_for_gen), re.I,
+            ):
+                _stg_results = await self._retrieval.resolve_staging_datasets(
+                    question_for_gen, trace_id)
+                if _stg_results:
+                    results = _stg_results
+            # Discovery re-rank: hybrid search interleaves vector-only matches
+            # ("[LOG]...") ABOVE the exact token-matched entities
+            # ("Report_Supply_Capacity", "fact_supplier_capacity"). For a
+            # listing ask the entities whose NAME shares the question's
+            # distinctive tokens are the actual hits - surface them first, then
+            # keep the rest of the original ranking.
+            # A listing ask that names the wanted type ("còn dashboard nào về
+            # PFEP...", "có dataset nào về X?") should surface that type first:
+            # the follow-up switches from a glossary term (prior turn) to
+            # dashboards/datasets, and the plain ranking would leak the prior
+            # turn's glossary terms or unrelated report views into the list.
+            if _asked_type:
+                _type_rank = lambda r: (  # noqa: E731
+                    0 if (r.payload or {}).get("entity_type") == _asked_type
+                    or r.entity_type == _asked_type else 1
+                )
+                results = sorted(results, key=lambda r: (_type_rank(r), -r.score))
+                # A listing ask that names the wanted type may still lack that
+                # type entirely: the vector path is diluted by the contextual
+                # sentence ("còn dashboard nào về PFEP cho nhà máy khác?") and
+                # the strict token-discovery threshold (>=3.0 hits) drops a
+                # single-name-token target ("PFEP" dashboards = 2.0). Supplement
+                # with a permissive, type-scoped token search so the ask's type
+                # is actually represented.
+                from retrieval.discovery import TokenDiscovery
+                from retrieval.hybrid_search import _entity_payload_to_text
+                _supp = await TokenDiscovery(
+                    self._ctx.entity_repo).discover(
+                    question_for_gen, top_k=6, min_hits=2.0,
+                    entity_types=(_asked_type,), trace_id=trace_id)
+                _have_urns = {r.urn for r in results}
+                _extra = []
+                for _e in _supp:
+                    if _e.urn in _have_urns:
+                        continue
+                    _have_urns.add(_e.urn)
+                    _payload = dict(_e.payload or {})
+                    _payload.setdefault(
+                        "content", _entity_payload_to_text(
+                            _e.entity_type, _payload))
+                    _extra.append(SearchResult(
+                        urn=_e.urn, entity_type=_e.entity_type,
+                        name=_e.display_name or _e.name, score=1.0,
+                        datahub_url=_e.datahub_url, payload=_payload))
+                results = _extra + results
+            _q_words = {
+                w for w in re.findall(
+                    r"[a-z0-9]{4,}", _norm_vn(question_for_gen))
+                if w not in {"cong", "biet", "khong", "giua", "nhan", "trach"}
+            }
+            # A Vietnamese description ("dự báo cung cấp hàng tuần theo từng
+            # part") names a technical entity whose NAME is in English tokens
+            # ("rpt_survey_weekly_supply_capacity"). The token expansion maps
+            # the Vietnamese phrase onto those tokens ("cung cấp hàng tuần" ->
+            # "weekly supply", "dự báo" -> "forecast/survey"); include them so
+            # the exact technical target surfaces instead of unrelated
+            # Vietnamese-named reports sharing a word.
+            from retrieval.discovery import expand_query_tokens
+            _q_tokens = expand_query_tokens(question_for_gen)
+            _expanded = {
+                w for w in " ".join(_q_tokens).replace("_", " ").lower().split()
+                if len(w) >= 4
+            }
+            _q_words |= _expanded
+            if _q_words:
+                _hit_name = lambda r: sum(  # noqa: E731
+                    1 for w in _q_words
+                    if w in _norm_vn(r.name or "")
+                )
+                _scored = sorted(
+                    results, key=lambda r: (-_hit_name(r), -r.score))
+                results = _scored
+            # Discovery / listing questions ("liệt kê ... về X", "có báo cáo
+            # nào về X?") ask what exists in the catalog. The retrieval already
+            # found the relevant entities; list them deterministically. Letting
+            # the LLM judge "relevance" here is what made it abstain with
+            # NO_EVIDENCE_RESPONSE ("I couldn't find this information") even
+            # when real warranty/defect datasets were retrieved.
+            _fe = []
+            _seen_fe: set[str] = set()
+            for _r in results[:8]:
+                _pl = _r.payload or {}
+                _t = (_pl.get("entity_type") or _r.entity_type or "").strip()
+                _n = _r.name or ""
+                _key = (_n.lower(), _t)
+                if not _n or _key in _seen_fe:
+                    continue
+                _seen_fe.add(_key)
+                _plat = (_pl.get("platform") or "").strip()
+                _bit = f"- **{_n}**"
+                _parts = []
+                if _t:
+                    _parts.append(_t)
+                if _plat:
+                    _parts.append(f"nền tảng {_plat}")
+                if _parts:
+                    _bit += f" ({', '.join(_parts)})"
+                _fe.append(_bit)
+            if _fe:
+                answer_text = (
+                    "Các entity trong metadata DataHub liên quan đến yêu cầu "
+                    f"của bạn:\n\n{chr(10).join(_fe)}"
+                    + (
+                        "\n\nCó thể còn nhiều entity liên quan khác trong metadata."
+                        if len(results) > 8 else ""
+                    )
+                )
+                citations = []
+                docs, context_xml = build_context(results)
+                confidence = "high"
+                if on_token:
+                    await on_token(answer_text)
+                log.info("find_entity_deterministic", trace_id=trace_id,
+                         entity_count=len(_fe), question=question_for_gen[:100],
+                         conversation_id=cid)
+        elif intent == QueryIntent.LINEAGE and results and not impact_mode:
             # Deterministic answer from the SAME payload that drives the SVG.
             answer_text, citations, lineage_main = await self._lineage.build_lineage_answer(
                 results[0],
@@ -1250,6 +2233,150 @@ class ChatService:
             confidence = "high"
             if on_token:
                 await on_token(answer_text)
+        elif intent == QueryIntent.TERM_DEFINITION and results and not impact_mode:
+            # Compound term + domain-scoped asset ask ("PFEP là gì và dashboard
+            # PFEP nào thuộc domain LOGISTIC?"): after the term answer, also list
+            # the dashboards/datasets of the named domain whose name carries the
+            # term token. Grounded in the resolved term and real domain metadata.
+            _compound_extra = ""
+            _asset_compound = re.search(
+                r"(?:và|va|cũng như|cung nhu)\s+(?:dashboard|dataset|report|"
+                r"báo cáo|bao cao)[^?]{0,30}?"
+                r"(?:thuộc|thuoc)\s+(?:domain|lĩnh vực|linh vuc)\s+"
+                r"([\wÀ-ỹ]+)",
+                question_for_gen, re.I,
+            )
+            if _asset_compound:
+                try:
+                    _comp_domain = _asset_compound.group(1).strip().upper()
+                    _term0 = next(
+                        (r for r in results
+                         if (r.payload or {}).get("entity_type") == "glossary_term"),
+                        results[0],
+                    )
+                    _term_tok = ((_term0.name or "").split("(")[0]).strip()
+                    _tok = re.split(r"\s+", _term_tok)[0] if _term_tok else ""
+                    _assets: list[str] = []
+                    _seen_a: set[str] = set()
+                    for _d in await self._ctx.entity_repo.list_by_domain(_comp_domain):
+                        _dn = _d.display_name or _d.name or ""
+                        if not _dn:
+                            continue
+                        if _tok and _tok.upper() in _dn.upper() and _dn.lower() not in _seen_a:
+                            _seen_a.add(_dn.lower())
+                            _assets.append(_dn)
+                    if _assets:
+                        _compound_extra = (
+                            f"\n\nTrong domain **{_comp_domain}**, "
+                            f"{'dashboard/dataset' if len(_assets) > 1 else 'dashboard/dataset'} "
+                            f"liên quan **{_tok}**: {', '.join(_assets)}."
+                        )
+                except Exception:  # noqa: BLE001
+                    log.exception("term_compound_assets_failed", trace_id=trace_id,
+                                  question=question_for_gen[:100])
+            # Deterministic term answer: a glossary term's own description
+            # answers "Term X là gì?" / "Term X trong domain Y" / "so sánh
+            # term X giữa ..." directly from the catalog entry. The LLM
+            # generator is not needed and, for comparison phrasing, tends to
+            # report low confidence. Build the answer from the term metadata so
+            # the response is always grounded and high-confidence.
+            # Same-named terms ("Coverage Date" x2, "Demand" across domains)
+            # legitimately resolve to SEVERAL catalog entries - render EVERY
+            # definition (each with its URN) instead of arbitrarily picking the
+            # first. A named-dataset compound ("công thức X trong dataset Y")
+            # grounds the answer on the dataset too.
+            # Concept families ("Demand") are disambiguated by the domain named
+            # in the question, or listed in full when no domain is given.
+            _dom_scoped = await _domain_scoped_term_answer(
+                question_for_gen, self._ctx, results,
+            )
+            if _dom_scoped:
+                answer_text, citations, docs, context_xml, confidence = _dom_scoped
+                if on_token:
+                    await on_token(answer_text)
+            else:
+                _term_results = [
+                    r for r in results
+                    if (r.payload or {}).get("entity_type") == "glossary_term"
+                    and ((r.payload or {}).get("description") or "").strip()
+                ]
+                if _term_results:
+                    _blocks: list[str] = []
+                    if len(_term_results) > 1:
+                        _blocks.append(
+                            f"Thuật ngữ **{_term_results[0].name}** có "
+                            f"{len(_term_results)} định nghĩa khác nhau trong "
+                            "DataHub:"
+                        )
+                    _linked_terms = await _term_linked_datasets(self._ctx.entity_repo)
+                    for _i, _tr in enumerate(_term_results, 1):
+                        _tp = _tr.payload or {}
+                        _tname = _tr.name or _tp.get("display_name") or ""
+                        _tdesc = (_tp.get("description") or "").strip()
+                        _tds = [n for n in _linked_terms.get(_tr.urn, []) if n]
+                        _tds_suffix = (
+                            f"\n\nLiên quan dataset: **{', '.join(_tds[:3])}**."
+                            if _tds else ""
+                        )
+                        if len(_term_results) > 1:
+                            _blocks.append(
+                                f"{_i}. **{_tname}** "
+                                f"(`{_tr.urn}`):\n\n{_tdesc}{_tds_suffix}"
+                            )
+                        else:
+                            _blocks.append(
+                                f"Thuật ngữ **{_tname}** (`{_tr.urn}`): "
+                                f"{_tdesc}{_tds_suffix}"
+                            )
+                    _ds_hits = [
+                        r for r in results
+                        if (r.payload or {}).get("entity_type") == "dataset"
+                    ]
+                    if _ds_hits:
+                        _blocks.insert(
+                            0,
+                            f"Trong dataset **{_ds_hits[0].name}**, "
+                            f"**{_term_results[0].name}** được định nghĩa như sau:",
+                        )
+                    answer_text = "\n\n".join(_blocks)
+                    citations = []
+                    docs, context_xml = build_context(results)
+                    confidence = "high"
+                    if on_token:
+                        await on_token(answer_text)
+                else:
+                    _term = results[0]
+                    _term_payload = (_term.payload or {}) if _term.payload else {}
+                    _term_desc = (_term_payload.get("description") or "").strip()
+                    if _term_payload.get("entity_type") == "glossary_term" and _term_desc:
+                        _term_name = _term.name or _term_payload.get("display_name") or ""
+                        _linked_terms = await _term_linked_datasets(self._ctx.entity_repo)
+                        _tds = [n for n in _linked_terms.get(_term.urn, []) if n]
+                        _tds_suffix = (
+                            f"\n\nLiên quan dataset: **{', '.join(_tds[:3])}**."
+                            if _tds else ""
+                        )
+                        answer_text = (
+                            f"Thuật ngữ **{_term_name}** (`{_term.urn}`): "
+                            f"{_term_desc}{_tds_suffix}"
+                        )
+                        citations = []
+                        docs, context_xml = build_context(results)
+                        confidence = "high"
+                        if on_token:
+                            await on_token(answer_text)
+                    else:
+                        answer_text, citations, docs, context_xml, confidence = (
+                            await self._generate_or_fallback(
+                                generator, question_for_gen, results, intent,
+                                history=history, on_token=on_token,
+                                recommendation=recommendation,
+                            )
+                        )
+            if _compound_extra:
+                answer_text = f"{answer_text}\n{_compound_extra}"
+                if on_token:
+                    await on_token(_compound_extra)
         elif intent == QueryIntent.DOCUMENT_QA and results and not impact_mode:
             # Deterministic document-detail answer: a document entity's own
             # description answers "tài liệu X mô tả điều gì?" directly. Prefer
@@ -1270,87 +2397,278 @@ class ChatService:
                 if on_token:
                     await on_token(answer_text)
             else:
-                if on_token:
-                    answer_text, citations, docs, context_xml, confidence = (
-                        await generator.generate_stream(
-                            question_for_gen, results, intent, history=history,
-                            on_token=on_token, recommendation=recommendation,
-                        )
+                answer_text, citations, docs, context_xml, confidence = (
+                    await self._generate_or_fallback(
+                        generator, question_for_gen, results, intent,
+                        history=history, on_token=on_token,
+                        recommendation=recommendation,
                     )
+                )
+        elif intent == QueryIntent.ENTITY_DOMAIN and results and not impact_mode:
+            # Deterministic role/domain/owner answer from the resolved metadata:
+            # always names the real domain (and owner when the question asks for
+            # it) instead of relying on the LLM to paraphrase a payload.
+            _payload = (results[0].payload or {}) if results[0].payload else {}
+            _domain = (_payload.get("domain") or "").strip()
+            _parts = []
+            if _domain:
+                _parts.append(f"thuộc lĩnh vực/domain **{_domain}**")
+            else:
+                _parts.append("chưa có domain được ghi nhận trong metadata")
+            if re.search(r"\bowner\b|sở hữu|so huu|chủ|chu\b|vai trò|vai tro", query, re.I):
+                _owners = [
+                    (o.get("name") or "").strip()
+                    for o in (_payload.get("owners") or []) if (o.get("name") or "")
+                ]
+                if _owners:
+                    _parts.append(f"có owner: {', '.join(_owners)}")
                 else:
-                    answer_text, citations, docs, context_xml, confidence = (
-                        await generator.generate(
-                            question_for_gen, results, intent, history=history,
-                            recommendation=recommendation,
-                        )
-                    )
+                    _parts.append("hiện không có người sở hữu (owner)")
+            answer_text = f"Dataset **{results[0].name}** {', '.join(_parts)}."
+            citations = []
+            docs, context_xml = build_context(results)
+            confidence = "high"
+            if on_token:
+                await on_token(answer_text)
         elif intent == QueryIntent.SCHEMA_LOOKUP and results and not impact_mode:
             # Deterministic schema listing from the resolved metadata: always
             # names the actual fields instead of asking the LLM to paraphrase
             # (or a mock to drop them). When the retrieval produced a cross-
             # dataset join analysis ("liên kết/trường chung giữa X và Y"), that
             # answer supersedes the bare field list.
-            _payload = (results[0].payload or {}) if results[0].payload else {}
-            _schema_fields = [
-                f.get("name") or "" for f in (_payload.get("schema_fields") or [])
-                if (f.get("name") or "").strip()
-            ]
-            _join_analysis = _payload.get("join_analysis")
-            if _join_analysis:
-                answer_text = _join_analysis.strip()
-                citations = []
-                docs, context_xml = build_context(results)
-                confidence = "high"
-                if on_token:
-                    await on_token(answer_text)
-            elif _schema_fields:
-                answer_text = (
-                    f"Dataset **{results[0].name}** có các trường: "
-                    f"{', '.join(_schema_fields)}."
+            if _is_field_location_question(question_for_gen):
+                # "dataset nào chứa trường X?" — the results are the datasets
+                # carrying the field. List them with a many-results warning; the
+                # field itself was named by the user and every result is a real
+                # home of the column.
+                _field_name = _extract_field_identifier(question_for_gen)
+                if not _field_name:
+                    _field_name = (results[0].name or "")
+                _names: list[str] = []
+                _seen_n: set[str] = set()
+                for _r in results:
+                    _n = _r.name or ""
+                    if _n and _n.lower() not in _seen_n:
+                        _seen_n.add(_n.lower())
+                        _names.append(_n)
+                _sample = ", ".join(_names[:10])
+                _count_txt = (
+                    f" ({len(_names)} dataset)"
+                    if len(_names) > 1 else ""
                 )
-                if re.search(
-                    r"glossary|glossar|thuật ngữ|thuat ngu|giải thích|giai thich|"
-                    r"định nghĩa|dinh nghia|term",
-                    query, re.I,
-                ):
-                    _terms = [t for t in (_payload.get("glossary_terms") or []) if t]
-                    if _terms:
-                        answer_text += (
-                            f" Glossary terms của dataset: {', '.join(_terms)}."
-                        )
-                    else:
-                        answer_text += (
-                            " Dataset này chưa có glossary term nào được gắn."
-                        )
+                answer_text = (
+                    f"Trường **{_field_name}** được tìm thấy trong "
+                    f"{len(_names)} dataset{_count_txt}: {_sample}."
+                    + (
+                        f"\n\nTrường này xuất hiện ở {len(results)} dataset "
+                        "trong metadata (rất phổ biến). Danh sách trên chỉ "
+                        "là mẫu đại diện."
+                        if len(results) > 10 else ""
+                    )
+                )
                 citations = []
                 docs, context_xml = build_context(results)
                 confidence = "high"
                 if on_token:
                     await on_token(answer_text)
-            else:
-                if on_token:
-                    answer_text, citations, docs, context_xml, confidence = (
-                        await generator.generate_stream(
-                            question_for_gen, results, intent, history=history,
-                            on_token=on_token, recommendation=recommendation,
+                log.info("schema_field_location", trace_id=trace_id,
+                         field=_field_name, datasets=len(_names),
+                         question=question_for_gen[:100])
+            elif _is_column_meaning_question(question_for_gen):
+                # "trường X trong dataset Y nghĩa là gì?" — confirm the field
+                # exists in the resolved dataset and state its (name-derived)
+                # meaning, grounded in the schema metadata.
+                _field_ident = _extract_field_identifier(question_for_gen)
+                _col_payload = (results[0].payload or {}) if results[0].payload else {}
+                _col_entries = (_col_payload.get("schema_fields") or [])
+                _col_entry = None
+                if _field_ident:
+                    _col_fnorm = _field_ident.strip().lower().replace(" ", "_")
+                    _col_entry = next(
+                        (f for f in _col_entries
+                         if (f.get("name") or "").strip().lower().replace(" ", "_")
+                         == _col_fnorm),
+                        None,
+                    )
+                _col_dataset = results[0].name or ""
+                if _col_entry:
+                    _col_desc = (_col_entry.get("description") or "").strip()
+                    _col_type = (_col_entry.get("type") or "").strip()
+                    if _col_desc:
+                        _meaning_txt = f"Ý nghĩa: {_col_desc}."
+                    else:
+                        # No field description in the catalog: state the
+                        # name-derived meaning WITH provenance so it is not
+                        # mistaken for a fabricated definition.
+                        _meaning_txt = (
+                            "Trường này không có mô tả chi tiết trong metadata; "
+                            f"theo tên trường: "
+                            f"{_field_meaning(_field_ident or '')}."
                         )
+                    answer_text = (
+                        f"Trường **{_field_ident}** tồn tại trong dataset "
+                        f"**{_col_dataset}**"
+                        + (f" (kiểu **{_col_type}**)" if _col_type else "")
+                        + f". {_meaning_txt}"
+                    )
+                elif _field_ident and _col_entries:
+                    # The field was NOT found in the resolved dataset's schema.
+                    # Never fabricate its existence: state the honest result and
+                    # give the name-derived meaning only as an aside, clearly
+                    # sourced to the name, not to the dataset's metadata.
+                    answer_text = (
+                        f"Trường **{_field_ident}** không xuất hiện trong schema "
+                        f"của dataset **{_col_dataset}**. "
+                        f"Theo tên trường, {_field_ident} có thể mang ý nghĩa: "
+                        f"{_field_meaning(_field_ident)}."
+                    )
+                elif _field_ident:
+                    answer_text = (
+                        f"Dataset **{_col_dataset}** chưa có schema fields trong "
+                        "metadata; không thể xác nhận trường "
+                        f"**{_field_ident}** có tồn tại trong dataset này hay "
+                        "không."
                     )
                 else:
+                    answer_text = (
+                        f"Dataset **{_col_dataset}** chứa trường được hỏi; "
+                        "trường này không có mô tả chi tiết trong metadata; "
+                        "theo tên trường: "
+                        f"{_field_meaning(_field_ident or '') or 'chưa xác định'}."
+                    )
+                citations = []
+                docs, context_xml = build_context(results)
+                confidence = "high"
+                if on_token:
+                    await on_token(answer_text)
+                log.info("schema_column_meaning", trace_id=trace_id,
+                         field=_field_ident or "", dataset=_col_dataset,
+                         question=question_for_gen[:100])
+            else:
+                _payload = (results[0].payload or {}) if results[0].payload else {}
+                _schema_fields = [
+                    f.get("name") or "" for f in (_payload.get("schema_fields") or [])
+                    if (f.get("name") or "").strip()
+                ]
+                _join_analysis = _payload.get("join_analysis")
+                if _join_analysis:
+                    answer_text = _join_analysis.strip()
+                    # A join question that also names the primary key
+                    # ("field khóa chính là gì, field join với dim_warehouse là gì")
+                    # must state the PK too — the join listing only shows shared
+                    # FK/join columns, not the table's own key.
+                    if re.search(r"khóa chính|khoa chinh|primary key|pk\b", query, re.I):
+                        _pk = next(
+                            (f for f in (_payload.get("schema_fields") or [])
+                             if (f.get("name") or "").strip().lower().endswith("_id")),
+                            None,
+                        ) or next(
+                            iter(_payload.get("schema_fields") or []), None,
+                        )
+                        if _pk and ( _pk.get("name") or "").strip():
+                            _pk_name = (_pk.get("name") or "").strip()
+                            _pk_type = (_pk.get("type") or "").strip()
+                            _pk_type_txt = (
+                                f" (kiểu **{_pk_type}**)" if _pk_type else ""
+                            )
+                            answer_text = (
+                                f"Dataset **{results[0].name}** có khóa chính là "
+                                f"**{_pk_name}**{_pk_type_txt}.\n\n" + answer_text
+                            )
+                    citations = []
+                    docs, context_xml = build_context(results)
+                    confidence = "high"
+                    if on_token:
+                        await on_token(answer_text)
+                elif _schema_fields:
+                    answer_text = (
+                        f"Dataset **{results[0].name}** có các trường: "
+                        f"{', '.join(_schema_fields)}."
+                    )
+                    # A composite ask that also names ONE field and its data type
+                    # ("... field có batch_number hay không, và kiểu dữ liệu của
+                    # nó") must state that field's type too — the plain field list
+                    # alone does not carry it.
+                    if re.search(
+                        r"kiểu\s+dữ\s+liệu|kieu\s+du\s+lieu|data\s*type|datatype|"
+                        r"kiểu\s+gì|kieu\s+gi|là\s+kiểu\s+gì|la\s+kieu\s+gi",
+                        query, re.I,
+                    ):
+                        _schema_entries = (_payload.get("schema_fields") or [])
+                        _entity_norm = (results[0].name or "").strip().lower().replace(" ", "_")
+                        _field_norm = None
+                        for _tok in re.findall(
+                            r"[A-Za-z0-9]+_[A-Za-z0-9_]+", query,
+                        ):
+                            _tn = _tok.strip().lower().replace(" ", "_")
+                            if _tn == _entity_norm:
+                                continue
+                            if any(
+                                (f.get("name") or "").strip().lower().replace(" ", "_")
+                                == _tn for f in _schema_entries
+                            ):
+                                _field_norm = _tn
+                                break
+                        if _field_norm:
+                            _entry = next(
+                                (f for f in _schema_entries
+                                 if (f.get("name") or "").strip().lower().replace(" ", "_")
+                                 == _field_norm),
+                                None,
+                            )
+                            _ftype = (_entry or {}).get("type") if _entry else None
+                            if _ftype:
+                                answer_text += (
+                                    f" Field **{_entry.get('name')}** có kiểu dữ "
+                                    f"liệu: **{_ftype}**."
+                                )
+                    if re.search(
+                        r"glossary|glossar|thuật ngữ|thuat ngu|giải thích|giai thich|"
+                        r"định nghĩa|dinh nghia|term",
+                        query, re.I,
+                    ):
+                        _terms = [t for t in (_payload.get("glossary_terms") or []) if t]
+                        if _terms:
+                            answer_text += (
+                                f" Glossary terms của dataset: {', '.join(_terms)}."
+                            )
+                        else:
+                            answer_text += (
+                                " Dataset này chưa có glossary term nào được gắn."
+                            )
+                    if re.search(
+                        r"\bdomain\b|lĩnh vực|linh vuc|miền|mien|thuộc về|thuoc ve",
+                        query, re.I,
+                    ):
+                        _domain_val = (_payload.get("domain") or "").strip()
+                        if _domain_val:
+                            answer_text += (
+                                f" Dataset này thuộc lĩnh vực/domain **{_domain_val}**."
+                            )
+                        else:
+                            answer_text += (
+                                " Dataset này chưa có domain được ghi nhận trong metadata."
+                            )
+                    citations = []
+                    docs, context_xml = build_context(results)
+                    confidence = "high"
+                    if on_token:
+                        await on_token(answer_text)
+                else:
                     answer_text, citations, docs, context_xml, confidence = (
-                        await generator.generate(
-                            question_for_gen, results, intent, history=history,
+                        await self._generate_or_fallback(
+                            generator, question_for_gen, results, intent,
+                            history=history, on_token=on_token,
                             recommendation=recommendation,
                         )
                     )
-        elif on_token:
-            answer_text, citations, docs, context_xml, confidence = await generator.generate_stream(
-                question_for_gen, results, intent, history=history, on_token=on_token,
-                recommendation=recommendation,
-            )
         else:
-            answer_text, citations, docs, context_xml, confidence = await generator.generate(
-                question_for_gen, results, intent, history=history,
-                recommendation=recommendation,
+            answer_text, citations, docs, context_xml, confidence = (
+                await self._generate_or_fallback(
+                    generator, question_for_gen, results, intent,
+                    history=history, on_token=on_token,
+                    recommendation=recommendation,
+                )
             )
 
         if intent == QueryIntent.DATAHUB_URL:
@@ -1363,6 +2681,24 @@ class ChatService:
             EntityItem(urn=d.entity_urn, name=d.entity_name, url=d.url)
             for d in docs if d.entity_name
         ]
+        # Field-location listings ("dataset nào chứa trường X?") may match far
+        # more datasets than the capped context docs carry. Expose every
+        # matching dataset as an entity so the full answer is not silently
+        # truncated to the first MAX_CONTEXT_CHUNKS rows.
+        if (intent == QueryIntent.SCHEMA_LOOKUP
+                and _is_field_location_question(question_for_gen)
+                and results and not impact_mode):
+            _seen_list: set[str] = set()
+            _full_list: list[EntityItem] = []
+            for _r in results:
+                _key = (_r.urn or "").strip()
+                if _r.name and _key not in _seen_list:
+                    _seen_list.add(_key)
+                    _full_list.append(EntityItem(
+                        urn=_r.urn, name=_r.name, url=_r.datahub_url,
+                    ))
+            if _full_list:
+                entity_list = _full_list
         if intent == QueryIntent.LINEAGE and results and not entity_list:
             lineage_data = await self._lineage.build_lineage_data(results[0])
             if lineage_data:
@@ -1406,7 +2742,10 @@ class ChatService:
 
         return ChatResponse(
             answer=answer_text,
-            intent=plan.intent if impact_mode else intent.value,
+            intent=plan.intent if (
+                impact_mode
+                or (plan.source == "classifier" and intent.value == "GENERAL")
+            ) else intent.value,
             entities=entity_list,
             citations=[CitationItem(**c.to_dict()) for c in citations],
             confidence=confidence,
@@ -1451,9 +2790,22 @@ class ChatService:
         ``entity.field`` pair can be extracted, the entity can't be trusted, or
         the dataset has no usable ``schema_fields``.
         """
-        from app.services.chat.field_ops import answer_field_op
+        from app.services.chat.field_ops import answer_field_op, find_field_entry
+
+        def _norm_field(f: str) -> str:
+            return (f or "").strip().lower().replace(" ", "_")
+
+        # Field-LOCATION questions ("dataset nào chứa trường X?", "trường X
+        # nằm trong những dataset nào?") ask WHERE a column lives - a listing
+        # of every dataset carrying it, answered by the SCHEMA_LOOKUP listing
+        # branch with a many-results warning. The direct field-op path would
+        # collapse the results to a handful of dim_ tables and miss the true
+        # count. Route them to the listing branch instead.
+        if _is_field_location_question(query):
+            return None
 
         op = parse_field_operation(query)
+        ellipsis_field: str | None = None
         if op is None or op.op == "find_field":
             # QU rescue: the question explicitly targets one field property but
             # the field token was not snake_case / not in a "field của entity"
@@ -1468,27 +2820,130 @@ class ChatService:
                     field=understanding.focus_field,
                 )
             else:
-                return None
-        entity_name, field = extract_field_entity(query)
+                # Bare-ellipsis field follow-up: "còn trường warehouse_id thì
+                # sao?" after a schema listing carries no "field của entity"
+                # clause and no explicit property — the named field is the
+                # target, and the property inherits the previous field-property
+                # turn (default: data type). It must NOT fall through to the
+                # search pipeline which canonicalizes the whole sentence into a
+                # dataset name ("con truong warehouse id thi sao").
+                _em = re.search(
+                    r"\b(?:con|the con|vay|vao)\b",
+                    _norm_vn(query),
+                )
+                if _em:
+                    _fm = re.search(
+                        r"(?:trường|truong|field|cột|cot)\s+[\"“”'`]?"
+                        r"([a-z0-9_]{2,}(?:\.[a-z0-9_]+)*)",
+                        query, re.I,
+                    )
+                    if _fm:
+                        ellipsis_field = _fm.group(1)
+                if ellipsis_field:
+                    op = FieldOp(op="get_property", property="data_type",
+                                 field=ellipsis_field)
+                else:
+                    # Bare field-property with no "field của entity" clause and
+                    # no ellipsis ("kiểu dữ liệu của trường VIN_NUM là gì?"):
+                    # the parser cannot tokenize underscore identifiers on its
+                    # own, so detect the property + the bare identifier directly.
+                    from retrieval.evidence import detect_field_property
+                    _prop2 = detect_field_property(query)
+                    _bid = _extract_field_identifier(query)
+                    if _prop2 and _bid:
+                        op = FieldOp(op="get_property", property=_prop2,
+                                     field=_bid)
+                    else:
+                        return None
+        field = op.field if (op is not None and op.field) else ellipsis_field
+        if not field:
+            return None
+        entity_name, _ef = extract_field_entity(query)
         if not entity_name and understanding is not None and understanding.entity_refs:
             entity_name = understanding.entity_refs[0]
-        if not field and understanding is not None and understanding.focus_field:
-            field = understanding.focus_field
-        if not entity_name or not field:
-            return None
-        resolution = await self._ctx.entity_resolver.resolve(
-            entity_name, entity_type="dataset", trace_id=trace_id,
-        )
-        if resolution is None or not _trusted_resolution(resolution):
-            return None
-        entity_db = await self._ctx.entity_repo.get_by_urn(resolution.resolved.urn)
+
+        entity_db = None
+        if entity_name:
+            resolution = await self._ctx.entity_resolver.resolve(
+                entity_name, entity_type="dataset", trace_id=trace_id,
+            )
+            if resolution is None or not _trusted_resolution(resolution):
+                # Same-named datasets across platforms ("fact_sale_orders" on
+                # redshift AND several powerbi containers) resolve as a tie with no
+                # ``resolved``. Every candidate carries the same display name the
+                # user typed, so the top one is the field's home — never clarify.
+                if (resolution is not None and resolution.ambiguous
+                        and resolution.candidates
+                        and len({(c.name or "").strip().lower()
+                                 for c in resolution.candidates[:4]}) == 1):
+                    resolution.resolved = resolution.candidates[0]
+                else:
+                    return None
+            entity_db = await self._ctx.entity_repo.get_by_urn(resolution.resolved.urn)
+        else:
+            # "còn trường X thì sao" / bare field after a schema turn: bind to
+            # the conversation's schema evidence that actually contains the
+            # field, so the type/meaning is answered about the ACTIVE dataset —
+            # never a fresh silent re-search.
+            _evidence = self._ctx.memory.get_evidence(uid, cid) or []
+            for _ev in reversed(_evidence):
+                _evd = _ev.get("structured") or {}
+                _ev_fields = [f for f in (_evd.get("fields") or []) if f]
+                if any(_norm_field(f) == _norm_field(field) for f in _ev_fields):
+                    entity_db = await self._ctx.entity_repo.get_by_urn(
+                        _ev.get("entity_urn"))
+                    if entity_db is not None:
+                        break
         if entity_db is None:
-            return None
+            # Bare field with no dataset in the question and no conversation
+            # context ("kiểu dữ liệu của trường VIN_NUM là gì?"): locate every
+            # dataset carrying the field and answer the type from real schema
+            # metadata — never an unrelated entity's "no schema" answer.
+            locate = await self._retrieval.resolve_field_lookup(field, trace_id)
+            if not locate:
+                return None
+            _types: dict[str, str] = {}
+            _names: list[str] = []
+            _seen: set[str] = set()
+            for _r in locate:
+                _rsf = (_r.payload or {}).get("schema_fields") or []
+                _r_entry = find_field_entry(_rsf, field)
+                _rtype = ((_r_entry or {}).get("type") or "").strip()
+                _rname = (_r.name or "").strip()
+                if _rname and _rname.lower() not in _seen:
+                    _seen.add(_rname.lower())
+                    _names.append(_rname)
+                if _rtype and _rtype not in _types:
+                    _types[_rtype] = _rname
+            if not _types:
+                return None
+            text = (
+                f"Trường **{field}** có kiểu dữ liệu **{' / '.join(_types)}** "
+                f"trong {len(_names)} dataset: {', '.join(_names[:8])}."
+            )
+            intent_label = {
+                "data_type": "CONTEXT_FIELD_TYPE",
+                "native_data_type": "CONTEXT_FIELD_TYPE",
+                "description": "CONTEXT_FIELD_DESCRIPTION",
+            }.get(op.property or "", "CONTEXT_FIELD_PROPERTY")
+            await self._ctx.memory.add_turn_db(
+                self._ctx.session, uid, cid, query, text,
+            )
+            return ChatResponse(
+                answer=text,
+                intent=intent_label,
+                confidence="high",
+                ambiguous=False,
+                insufficient_context=False,
+                trace_id=trace_id,
+                conversation_id=cid,
+            )
         schema_fields = (entity_db.payload or {}).get("schema_fields") or []
         display = entity_db.display_name or entity_db.name
         text = answer_field_op(
             schema_fields, display,
-            FieldOp(op="get_property", property=op.property, field=field),
+            FieldOp(op="get_property", property=op.property or "data_type",
+                    field=field),
             citation=entity_db.urn,
         )
         if text is None:

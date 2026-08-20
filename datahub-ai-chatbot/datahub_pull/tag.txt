@@ -1,0 +1,5 @@
+{"urn": "urn:li:tag:DIST_KEY", "type": "TAG", "name": "DIST_KEY", "properties": null}
+{"urn": "urn:li:tag:SORT_KEY", "type": "TAG", "name": "SORT_KEY", "properties": null}
+{"urn": "urn:li:tag:market:CA", "type": "TAG", "name": "market:CA", "properties": {"name": "market:CA", "description": "Thị trường Canada"}}
+{"urn": "urn:li:tag:market:EU", "type": "TAG", "name": "market:EU", "properties": {"name": "market:EU", "description": "Thị trường EU"}}
+{"urn": "urn:li:tag:market:VN", "type": "TAG", "name": "market:VN", "properties": {"name": "market:VN", "description": "Thị trường Việt Nam"}}

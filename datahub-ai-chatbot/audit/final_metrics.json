@@ -1,0 +1,261 @@
+{
+  "total_tests": 48,
+  "pass": 31,
+  "fail": 17,
+  "pass_rate": 0.6458,
+  "exact_entity_accuracy": 0.75,
+  "intent_accuracy": 0.9792,
+  "evidence_grounding": 0.7292,
+  "citation_accuracy": 0.7917,
+  "abstention_accuracy": 0.9583,
+  "hallucination_rate": 0.0,
+  "domain_resolution_accuracy": 0.9792,
+  "forbidden_exclusion": 1.0,
+  "retrieval_precision": 0.6754,
+  "retrieval_recall": 0.7812,
+  "entity_recall_avg": 0.7604,
+  "entity_precision_avg": 0.658,
+  "glossary_resolution_accuracy": 0.2292,
+  "report_discovery_recall": 4,
+  "report_discovery_precision": 0.0,
+  "metric_formula_resolution": {
+    "tests": 3,
+    "pass": 3,
+    "fail": 0
+  },
+  "lineage_accuracy": {
+    "tests": 5,
+    "pass": 4,
+    "fail": 1
+  },
+  "raw_source_resolution": {
+    "tests": 2,
+    "pass": 0,
+    "fail": 2
+  },
+  "multi_hop_success": {
+    "tests": 7,
+    "pass": 3,
+    "fail": 4
+  },
+  "multi_turn_success": {
+    "tests": 3,
+    "pass": 1,
+    "fail": 2
+  },
+  "hard_negative_success": {
+    "tests": 7,
+    "pass": 6,
+    "fail": 1
+  },
+  "abstention_unknown_success": {
+    "tests": 24,
+    "pass": 19,
+    "fail": 5
+  },
+  "special_same_term_different_domain": {
+    "tests": 6,
+    "pass": 6,
+    "fail": 0
+  },
+  "special_report_discovery": {
+    "tests": 8,
+    "pass": 3,
+    "fail": 5
+  },
+  "special_metric_formula": {
+    "tests": 3,
+    "pass": 3,
+    "fail": 0
+  },
+  "special_lineage_raw_source": {
+    "tests": 7,
+    "pass": 4,
+    "fail": 3
+  },
+  "special_multi_hop_multi_turn": {
+    "tests": 7,
+    "pass": 1,
+    "fail": 6
+  },
+  "by_category": {
+    "A": {
+      "tests": 3,
+      "pass": 3,
+      "fail": 0
+    },
+    "B": {
+      "tests": 3,
+      "pass": 0,
+      "fail": 3
+    },
+    "C": {
+      "tests": 3,
+      "pass": 3,
+      "fail": 0
+    },
+    "CASE1": {
+      "tests": 3,
+      "pass": 3,
+      "fail": 0
+    },
+    "CASE2": {
+      "tests": 2,
+      "pass": 0,
+      "fail": 2
+    },
+    "CASE3": {
+      "tests": 1,
+      "pass": 1,
+      "fail": 0
+    },
+    "CASE4": {
+      "tests": 1,
+      "pass": 1,
+      "fail": 0
+    },
+    "CASE5": {
+      "tests": 1,
+      "pass": 0,
+      "fail": 1
+    },
+    "CASE6": {
+      "tests": 1,
+      "pass": 0,
+      "fail": 1
+    },
+    "D": {
+      "tests": 2,
+      "pass": 2,
+      "fail": 0
+    },
+    "E": {
+      "tests": 1,
+      "pass": 1,
+      "fail": 0
+    },
+    "F": {
+      "tests": 3,
+      "pass": 2,
+      "fail": 1
+    },
+    "G": {
+      "tests": 3,
+      "pass": 2,
+      "fail": 1
+    },
+    "H": {
+      "tests": 3,
+      "pass": 3,
+      "fail": 0
+    },
+    "I": {
+      "tests": 1,
+      "pass": 0,
+      "fail": 1
+    },
+    "J": {
+      "tests": 1,
+      "pass": 1,
+      "fail": 0
+    },
+    "K": {
+      "tests": 1,
+      "pass": 1,
+      "fail": 0
+    },
+    "L": {
+      "tests": 1,
+      "pass": 1,
+      "fail": 0
+    },
+    "M": {
+      "tests": 1,
+      "pass": 1,
+      "fail": 0
+    },
+    "N": {
+      "tests": 1,
+      "pass": 1,
+      "fail": 0
+    },
+    "O": {
+      "tests": 2,
+      "pass": 0,
+      "fail": 2
+    },
+    "P": {
+      "tests": 1,
+      "pass": 1,
+      "fail": 0
+    },
+    "Q": {
+      "tests": 1,
+      "pass": 0,
+      "fail": 1
+    },
+    "R": {
+      "tests": 1,
+      "pass": 0,
+      "fail": 1
+    },
+    "S": {
+      "tests": 1,
+      "pass": 0,
+      "fail": 1
+    },
+    "T": {
+      "tests": 1,
+      "pass": 0,
+      "fail": 1
+    },
+    "U": {
+      "tests": 1,
+      "pass": 1,
+      "fail": 0
+    },
+    "V": {
+      "tests": 1,
+      "pass": 1,
+      "fail": 0
+    },
+    "W": {
+      "tests": 1,
+      "pass": 1,
+      "fail": 0
+    },
+    "X": {
+      "tests": 1,
+      "pass": 0,
+      "fail": 1
+    },
+    "Y": {
+      "tests": 1,
+      "pass": 1,
+      "fail": 0
+    }
+  },
+  "by_difficulty": {
+    "easy": {
+      "tests": 11,
+      "pass": 8,
+      "fail": 3
+    },
+    "hard": {
+      "tests": 21,
+      "pass": 15,
+      "fail": 6
+    },
+    "medium": {
+      "tests": 16,
+      "pass": 8,
+      "fail": 8
+    }
+  },
+  "failure_breakdown": {
+    "intent": 1,
+    "entity": 12,
+    "evidence": 13,
+    "abstention": 2
+  }
+}

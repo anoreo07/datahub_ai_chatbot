@@ -1,0 +1,101 @@
+{
+ "dataset_to_dataset_upstream": [],
+ "dataset_to_dataset_downstream": [],
+ "dashboard_to_dataset_input": [],
+ "dataset_to_glossary_term": [
+  {
+   "dataset_urn": "urn:li:dataset:(urn:li:dataPlatform:powerbi,VF_VN_DEX_PLANNING.ea15_2023,PROD)",
+   "glossary_term_urn": "urn:li:glossaryTerm:7137e03e-59d5-485c-b0ba-82957e0b6b23"
+  },
+  {
+   "dataset_urn": "urn:li:dataset:(urn:li:dataPlatform:powerbi,VF_VN_DEX_PLANNING.ex1s_2024,PROD)",
+   "glossary_term_urn": "urn:li:glossaryTerm:7137e03e-59d5-485c-b0ba-82957e0b6b23"
+  },
+  {
+   "dataset_urn": "urn:li:dataset:(urn:li:dataPlatform:powerbi,VF_VN_DEX_PLANNING.v_ec1v_2025,PROD)",
+   "glossary_term_urn": "urn:li:glossaryTerm:7137e03e-59d5-485c-b0ba-82957e0b6b23"
+  },
+  {
+   "dataset_urn": "urn:li:dataset:(urn:li:dataPlatform:powerbi,VF_VN_DEX_PLANNING.v_ee1u_2025,PROD)",
+   "glossary_term_urn": "urn:li:glossaryTerm:7137e03e-59d5-485c-b0ba-82957e0b6b23"
+  },
+  {
+   "dataset_urn": "urn:li:dataset:(urn:li:dataPlatform:powerbi,VF_VN_DEX_PLANNING.v_ei23_2025,PROD)",
+   "glossary_term_urn": "urn:li:glossaryTerm:7137e03e-59d5-485c-b0ba-82957e0b6b23"
+  },
+  {
+   "dataset_urn": "urn:li:dataset:(urn:li:dataPlatform:powerbi,VF_VN_DEX_PLANNING.eb15_2020,PROD)",
+   "glossary_term_urn": "urn:li:glossaryTerm:7137e03e-59d5-485c-b0ba-82957e0b6b23"
+  },
+  {
+   "dataset_urn": "urn:li:dataset:(urn:li:dataPlatform:powerbi,VF_VN_DEX_PLANNING.eb15_2023,PROD)",
+   "glossary_term_urn": "urn:li:glossaryTerm:7137e03e-59d5-485c-b0ba-82957e0b6b23"
+  },
+  {
+   "dataset_urn": "urn:li:dataset:(urn:li:dataPlatform:powerbi,VF_VN_DEX_PLANNING.ec15_2023,PROD)",
+   "glossary_term_urn": "urn:li:glossaryTerm:7137e03e-59d5-485c-b0ba-82957e0b6b23"
+  },
+  {
+   "dataset_urn": "urn:li:dataset:(urn:li:dataPlatform:powerbi,VF_VN_DEX_PLANNING.ei13_2024,PROD)",
+   "glossary_term_urn": "urn:li:glossaryTerm:7137e03e-59d5-485c-b0ba-82957e0b6b23"
+  },
+  {
+   "dataset_urn": "urn:li:dataset:(urn:li:dataPlatform:powerbi,VF_VN_DEX_PLANNING.ey1l_2025,PROD)",
+   "glossary_term_urn": "urn:li:glossaryTerm:7137e03e-59d5-485c-b0ba-82957e0b6b23"
+  },
+  {
+   "dataset_urn": "urn:li:dataset:(urn:li:dataPlatform:powerbi,VF_VN_DEX_PLANNING.mrp_stock_req,PROD)",
+   "glossary_term_urn": "urn:li:glossaryTerm:90343e1f-15de-4625-adc8-a247318d7cbc"
+  },
+  {
+   "dataset_urn": "urn:li:dataset:(urn:li:dataPlatform:powerbi,VF_VN_DEX_PLANNING.mrp_stock_req,PROD)",
+   "glossary_term_urn": "urn:li:glossaryTerm:72c69954-8944-4e58-9af2-328502dc9390"
+  },
+  {
+   "dataset_urn": "urn:li:dataset:(urn:li:dataPlatform:powerbi,VF_VN_DEX_PLANNING.mrp_stock_req_checking,PROD)",
+   "glossary_term_urn": "urn:li:glossaryTerm:90343e1f-15de-4625-adc8-a247318d7cbc"
+  },
+  {
+   "dataset_urn": "urn:li:dataset:(urn:li:dataPlatform:powerbi,VF_VN_DEX_PLANNING.mrp_stock_req_checking,PROD)",
+   "glossary_term_urn": "urn:li:glossaryTerm:72c69954-8944-4e58-9af2-328502dc9390"
+  },
+  {
+   "dataset_urn": "urn:li:dataset:(urn:li:dataPlatform:powerbi,VF_VN_DEX_PLANNING.pd1u_2023,PROD)",
+   "glossary_term_urn": "urn:li:glossaryTerm:7137e03e-59d5-485c-b0ba-82957e0b6b23"
+  },
+  {
+   "dataset_urn": "urn:li:dataset:(urn:li:dataPlatform:powerbi,VF_VN_DEX_PLANNING.pe1u_2023,PROD)",
+   "glossary_term_urn": "urn:li:glossaryTerm:7137e03e-59d5-485c-b0ba-82957e0b6b23"
+  },
+  {
+   "dataset_urn": "urn:li:dataset:(urn:li:dataPlatform:powerbi,VF_VN_DEX_PLANNING.v_ei13_1024,PROD)",
+   "glossary_term_urn": "urn:li:glossaryTerm:7137e03e-59d5-485c-b0ba-82957e0b6b23"
+  },
+  {
+   "dataset_urn": "urn:li:dataset:(urn:li:dataPlatform:powerbi,VF_VN_DEX_PLANNING.v_ez1l_2020,PROD)",
+   "glossary_term_urn": "urn:li:glossaryTerm:7137e03e-59d5-485c-b0ba-82957e0b6b23"
+  },
+  {
+   "dataset_urn": "urn:li:dataset:(urn:li:dataPlatform:powerbi,VF_VN_DEX_PLANNING.v_ez1l_2023,PROD)",
+   "glossary_term_urn": "urn:li:glossaryTerm:7137e03e-59d5-485c-b0ba-82957e0b6b23"
+  },
+  {
+   "dataset_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dms.stg.stg_contact,PROD)",
+   "glossary_term_urn": "urn:li:glossaryTerm:PII"
+  },
+  {
+   "dataset_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dms.stg.stg_contact,PROD)",
+   "glossary_term_urn": "urn:li:glossaryTerm:AES-256"
+  },
+  {
+   "dataset_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,domain.inventory.v_fact_monthly_inventory_hsd_summarize,PROD)",
+   "glossary_term_urn": "urn:li:glossaryTerm:e5148b86-d3fb-4af8-860e-cd075c0a1527"
+  },
+  {
+   "dataset_urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,sap.stg.stg_pbed,PROD)",
+   "glossary_term_urn": "urn:li:glossaryTerm:PII"
+  }
+ ],
+ "glossary_term_to_parent": [],
+ "glossary_node_to_term": []
+}

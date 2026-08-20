@@ -22,7 +22,10 @@ async def bootstrap() -> None:
 
     log.info("checking_opensearch")
     vs = OpenSearchVectorStore()
-    await vs.ensure_index()
+    try:
+        await vs.ensure_index()
+    finally:
+        await vs.close()
     log.info("opensearch_index_ensured")
 
     if settings.USE_MOCK_DATAHUB:

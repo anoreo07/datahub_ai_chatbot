@@ -449,7 +449,7 @@ class ChatFlowsService:
         term = resolution.resolved
         display = term.name or term_name
         term_urn = term.urn
-        all_datasets = await self._ctx.entity_repo.list_by_type("dataset")
+        all_datasets = await self._ctx.entity_repo.list_all("dataset", limit=100000)
         linked = [
             e for e in all_datasets
             if e.payload and term_urn in (e.payload.get("glossary_terms") or [])
@@ -486,4 +486,131 @@ class ChatFlowsService:
             answer=answer, intent="TERM_TO_DATASETS", confidence="high",
             ambiguous=False, insufficient_context=False,
             trace_id=trace_id, conversation_id=cid,
+        )
+
+    async def multi_hop_chain_flow(
+        self, uid: str, cid: str, question: str, trace_id: str | None,
+    ) -> ChatResponse | None:
+        """Answer a multi-hop chain ("report → term → columns → formula →
+        nguồn thô" or "trong domain X tìm report về Y, term, dataset, lineage").
+
+        Each hop is answered from catalog metadata; a hop with no data is marked
+        UNKNOWN instead of being fabricated. The chain's own entities (the
+        report dashboard and the dataset that carries the concept) are returned
+        as the response entities so follow-ups can reference them.
+        """
+        from retrieval.discovery import TokenDiscovery, expand_query_tokens
+
+        # The trailing "nguồn dữ liệu thô / raw source" hop names the SOURCE,
+        # not the concept — it would inject {raw, stg} tokens into the dataset
+        # discovery and rank stg_raw_* tables above the dataset that actually
+        # carries the concept ("rpt_survey_weekly_supply_capacity"). Discover
+        # the dataset on the concept side of the chain only.
+        concept_q = re.sub(
+            r"(?:nguồn dữ liệu thô|nguon du lieu tho|nguồn thô|nguon tho|"
+            r"raw\s+source|source\s+data|staging|nguồn dữ liệu|nguon du lieu)"
+            r"[^\n]*",
+            "", question, flags=re.I,
+        )
+        tokens = expand_query_tokens(concept_q)
+        if not tokens:
+            return None
+        disc = TokenDiscovery(self._ctx.entity_repo)
+        # Report hop: the strongest token-matched dashboard/report.
+        reports = await disc.discover(
+            question, top_k=5, min_hits=2.0,
+            entity_types=("dashboard",), trace_id=trace_id)
+        # Dataset hop: the strongest token-matched dataset carrying the concept.
+        datasets = await disc.discover(
+            concept_q, top_k=5, min_hits=2.0,
+            entity_types=("dataset",), trace_id=trace_id)
+        if not reports and not datasets:
+            return None
+
+        report = reports[0] if reports else None
+        dataset = datasets[0] if datasets else None
+        report_name = (report.display_name or report.name) if report else None
+        dataset_name = (dataset.display_name or dataset.name) if dataset else None
+
+        subject = next(
+            (t for t in sorted(tokens, key=len, reverse=True) if len(t) >= 3),
+            "", )
+        subject = subject or (concept_q or question or "").strip()
+
+        # Hop 2 — term definition for the subject. No glossary term with the
+        # concept's name (or a linked term on the dataset) -> UNKNOWN.
+        term_name: str | None = None
+        linked_term_names: set[str] = set()
+        if dataset is not None:
+            for u in ((dataset.payload or {}).get("glossary_terms") or []):
+                _t = await self._ctx.entity_repo.get_by_urn(u)
+                if _t is not None:
+                    linked_term_names.add(str(_t.display_name or _t.name))
+        if subject:
+            _gterms = await self._ctx.entity_repo.list_by_type("glossary_term")
+            for _g in _gterms:
+                if subject.lower() in str(_g.display_name or _g.name).lower():
+                    term_name = str(_g.display_name or _g.name)
+                    break
+        if not term_name and linked_term_names:
+            term_name = sorted(linked_term_names)[0]
+
+        # Hop 3 — columns of the carrying dataset.
+        fields = []
+        if dataset is not None:
+            fields = (dataset.payload or {}).get("schema_fields") or []
+        col_names = [str(f.get("name") or "") for f in fields if f.get("name")]
+
+        # Hop 4 — formula. No formula metadata is stored -> UNKNOWN.
+        formula = None
+        if dataset is not None:
+            formula = (dataset.payload or {}).get("formula")
+
+        # Hop 5 — raw source / lineage.
+        upstream = []
+        if dataset is not None:
+            upstream = (dataset.payload or {}).get("upstreams") or []
+        lineage_known = bool(upstream)
+
+        lines: list[str] = []
+        lines.append(
+            f"**Hop 1 – Report:** {report_name if report_name else 'UNKNOWN'}")
+        lines.append(
+            f"**Hop 2 – Định nghĩa term '{subject}':** "
+            f"{term_name if term_name else 'UNKNOWN (không có term chuyên biệt trong catalog)'}"
+        )
+        lines.append(
+            f"**Hop 3 – Cột của {dataset_name or 'dataset'}:** "
+            + (", ".join(col_names[:20]) if col_names else "UNKNOWN")
+        )
+        lines.append(
+            f"**Hop 4 – Công thức:** "
+            f"{str(formula)[:200] if formula else 'UNKNOWN (không có trong metadata)'}"
+        )
+        lines.append(
+            "**Hop 5 – Nguồn dữ liệu thô:** "
+            + (", ".join(upstream[:10]) if lineage_known else "UNKNOWN (không có lineage)")
+        )
+        answer_text = mask_secrets("\n".join(lines))
+
+        entity_list = []
+        seen: set[str] = set()
+        for _e in (report, dataset):
+            if _e is None:
+                continue
+            _u = _e.urn
+            if _u in seen:
+                continue
+            seen.add(_u)
+            entity_list.append(EntityItem(
+                urn=_u, name=_e.display_name or _e.name, url=_e.datahub_url))
+
+        log.info("multi_hop_chain_flow", trace_id=trace_id,
+                 question=question[:100], report=report_name,
+                 dataset=dataset_name, fields=len(col_names),
+                 term=term_name, lineage=lineage_known)
+        return ChatResponse(
+            answer=answer_text, intent="MULTI_HOP_CHAIN", confidence="high",
+            ambiguous=False, insufficient_context=False,
+            trace_id=trace_id, conversation_id=cid, entities=entity_list,
         )

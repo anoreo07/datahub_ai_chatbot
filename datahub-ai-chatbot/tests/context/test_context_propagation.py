@@ -178,7 +178,7 @@ async def test_schema_join_answer_from_evidence(db_session) -> None:
         "dim_warehouse.warehouse_id?",
         conversation_id=cid,
     )
-    assert r2.intent == "CONTEXT_JOIN", r2.answer
+    assert r2.intent == "JOIN", r2.answer
     assert "warehouse_id" in r2.answer
     assert "dim_warehouse" in r2.answer
 
@@ -201,7 +201,7 @@ async def test_field_glossary_followup_from_context(db_session) -> None:
 
     # "field đó" -> the previously-discussed field (warehouse_id).
     r = await service.answer("field đó có glossary term nào không?", conversation_id=cid)
-    assert r.intent == "CONTEXT_FIELD_GLOSSARY", r.answer
+    assert r.intent == "GLOSSARY", r.answer
     assert "warehouse_id" in r.answer
     assert "glossary" in r.answer.lower()
 
@@ -218,7 +218,7 @@ async def test_field_named_glossary_followup(db_session) -> None:
     r = await service.answer(
         "field warehouse_id đó có glossary term nào không?", conversation_id=cid,
     )
-    assert r.intent == "CONTEXT_FIELD_GLOSSARY", r.answer
+    assert r.intent == "GLOSSARY", r.answer
     assert "warehouse_id" in r.answer
 
     # "cold chain" is NOT a field in that schema -> resolved as a glossary term
@@ -226,7 +226,7 @@ async def test_field_named_glossary_followup(db_session) -> None:
     r2 = await service.answer(
         "cold chain đó có glossary term nào không?", conversation_id=cid,
     )
-    assert r2.intent == "CONTEXT_FIELD_GLOSSARY", r2.answer
+    assert r2.intent == "GLOSSARY", r2.answer
     assert "glossary term" in r2.answer.lower()
 
 
@@ -263,7 +263,7 @@ async def test_lineage_downstream_filter_in_evidence(db_session) -> None:
         "đến tồn kho?",
         conversation_id=cid,
     )
-    assert r2.intent == "CONTEXT_LINEAGE", r2.answer
+    assert r2.intent == "LINEAGE", r2.answer
     assert "fact_inventory_movement" in r2.answer
     assert "fact_goods_receipt" not in r2.answer
 
@@ -284,7 +284,7 @@ async def test_context_only_constraint_no_research(db_session) -> None:
         "dim_warehouse không?",
         conversation_id=cid,
     )
-    assert r.intent in ("CONTEXT_JOIN", "CONTEXT_LINEAGE", "CONTEXT_EVIDENCE"), r.answer
+    assert r.intent in ("JOIN", "LINEAGE", "GENERAL"), r.answer
     assert "dim_warehouse" in r.answer
 
 
@@ -364,7 +364,7 @@ async def test_image_context_flows_to_dataset_and_join(db_session) -> None:
         "fact_inventory_movement.warehouse_id?",
         conversation_id=cid,
     )
-    assert r2.intent in ("VISION_ANALYSIS", "CONTEXT_JOIN"), r2.answer
+    assert r2.intent in ("VISION_ANALYSIS", "JOIN"), r2.answer
     assert "warehouse_id" in r2.answer
 
 
@@ -442,5 +442,5 @@ async def test_thinking_emits_state_and_context_followup_wins(db_session) -> Non
         "chỉ dựa trên kết quả vừa rồi, còn downstream nào liên quan tồn kho?",
         conversation_id=cid, on_status=on_status,
     )
-    assert r1.intent == "CONTEXT_LINEAGE", r1.answer
+    assert r1.intent == "LINEAGE", r1.answer
     assert "fact_inventory_movement" in r1.answer

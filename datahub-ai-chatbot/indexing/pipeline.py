@@ -1,3 +1,4 @@
+import asyncio
 import datetime
 
 import structlog
@@ -14,6 +15,8 @@ from indexing.vector_store import OpenSearchVectorStore
 from ingestion.models import CanonicalEntity
 
 log = structlog.get_logger()
+
+MAX_CHUNKS_PER_ENTITY = 64
 
 
 class IndexingPipeline:
@@ -34,6 +37,11 @@ class IndexingPipeline:
             for i, sub in enumerate(sub_texts):
                 sub_item = item.model_copy(update={"chunk_index": item.chunk_index + i, "content": sub})
                 full_chunks.append(sub_item)
+        if len(full_chunks) > MAX_CHUNKS_PER_ENTITY:
+            log.warning("chunk_cap_exceeded",
+                        urn=canonical.urn, count=len(full_chunks),
+                        cap=MAX_CHUNKS_PER_ENTITY)
+            full_chunks = full_chunks[:MAX_CHUNKS_PER_ENTITY]
 
         texts = [c.content for c in full_chunks]
         if not texts:
@@ -77,11 +85,18 @@ class IndexingPipeline:
             })
 
         if os_docs:
-            await self._vector_store.delete_by_entity_urn(urn)
             await self._vector_store.ensure_index()
+            await self._vector_store.delete_by_entity_urn(urn)
             await self._vector_store.bulk_upsert(os_docs)
 
         await self._chunk_repo.replace_for_entity(urn, pg_chunks)
+
+    async def close(self) -> None:
+        await self._vector_store.close()
+        if hasattr(self._embedder, "close"):
+            close_method = getattr(self._embedder, "close")
+            if asyncio.iscoroutinefunction(close_method):
+                await close_method()
 
     async def process_pending_jobs(self, max_jobs: int = 20) -> int:
         jobs = await self._index_repo.get_pending(limit=max_jobs)
@@ -100,5 +115,6 @@ class IndexingPipeline:
                 processed += 1
             except Exception as e:
                 log.exception("index_job_failed", job_id=job.id, urn=job.entity_urn)
-                await self._index_repo.mark_failed(job.id, str(e)[:500])
+                from guardrails.sanitizer import mask_secrets
+                await self._index_repo.mark_failed(job.id, mask_secrets(str(e))[:500])
         return processed

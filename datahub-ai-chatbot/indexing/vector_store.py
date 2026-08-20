@@ -180,6 +180,14 @@ class OpenSearchVectorStore:
         except Exception:
             log.warning("opensearch_delete_failed", entity_urn=entity_urn)
 
+    async def close(self) -> None:
+        if settings.USE_FAKE_OPENSEARCH:
+            return
+        try:
+            await self._client.close()
+        except Exception:
+            log.warning("opensearch_close_failed")
+
     async def healthcheck(self) -> bool:
         if settings.USE_FAKE_OPENSEARCH:
             return True

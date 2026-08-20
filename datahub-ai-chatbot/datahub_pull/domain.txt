@@ -1,0 +1,9 @@
+{"urn": "urn:li:domain:76791c26-3ada-42de-b8f3-7cf56a321b6c", "type": "DOMAIN", "properties": {"name": "VGreen", "description": null}, "parentDomains": {"domains": []}}
+{"urn": "urn:li:domain:CUNG ỨNG (NĐH)", "type": "DOMAIN", "properties": {"name": "CUNG ỨNG (NĐH)", "description": "CUNG ỨNG (NĐH)"}, "parentDomains": {"domains": []}}
+{"urn": "urn:li:domain:CUNG ỨNG (TT)", "type": "DOMAIN", "properties": {"name": "CUNG ỨNG (TT)", "description": "CUNG ỨNG (TT)"}, "parentDomains": {"domains": []}}
+{"urn": "urn:li:domain:HẬU MÃI", "type": "DOMAIN", "properties": {"name": "HẬU MÃI", "description": "HẬU MÃI"}, "parentDomains": {"domains": []}}
+{"urn": "urn:li:domain:KINH DOANH", "type": "DOMAIN", "properties": {"name": "KINH DOANH", "description": "KINH DOANH"}, "parentDomains": {"domains": []}}
+{"urn": "urn:li:domain:LOGISTIC", "type": "DOMAIN", "properties": {"name": "LOGISTIC", "description": "LOGISTIC"}, "parentDomains": {"domains": []}}
+{"urn": "urn:li:domain:PHÁT TRIỂN XE", "type": "DOMAIN", "properties": {"name": "PHÁT TRIỂN XE", "description": "PHÁT TRIỂN XE"}, "parentDomains": {"domains": []}}
+{"urn": "urn:li:domain:SẢN XUẤT", "type": "DOMAIN", "properties": {"name": "SẢN XUẤT", "description": "SẢN XUẤT"}, "parentDomains": {"domains": []}}
+{"urn": "urn:li:domain:TÀI CHÍNH", "type": "DOMAIN", "properties": {"name": "TÀI CHÍNH", "description": "TÀI CHÍNH"}, "parentDomains": {"domains": []}}

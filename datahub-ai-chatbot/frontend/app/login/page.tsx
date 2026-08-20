@@ -77,7 +77,7 @@ export default function LoginPage() {
       >
         <Image
           src="/login_hero.png"
-          alt="DataAtlas"
+          alt="V-DataAtlas"
           fill
           priority
           sizes="(max-width: 1024px) 100vw, 50vw"
@@ -99,7 +99,7 @@ export default function LoginPage() {
               </span>
               <div>
                 <h1 className="text-[28px] font-semibold leading-tight tracking-tight">
-                  DataAtlas
+                  V-DataAtlas
                 </h1>
                 <p className="text-sm font-medium text-muted-foreground">
                   AI Metadata Assistant for DataHub
@@ -197,7 +197,7 @@ export default function LoginPage() {
         </motion.div>
 
         <p className="pointer-events-none absolute bottom-6 left-1/2 w-full -translate-x-1/2 px-6 text-center text-xs text-muted-foreground/70">
-          Powered by DataHub • DataAtlas
+          Powered by DataHub • V-DataAtlas
         </p>
       </div>
     </div>

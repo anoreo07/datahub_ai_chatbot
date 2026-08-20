@@ -1,4 +1,5 @@
 import asyncio
+import os
 from contextlib import asynccontextmanager
 
 import structlog
@@ -39,8 +40,16 @@ async def lifespan(app: FastAPI):
     from ingestion.sync import SyncOrchestrator
     async with async_session_factory() as session:
         orchestrator = SyncOrchestrator(session)
-        results = await orchestrator.run_full_sync()
-        log.info("initial_sync_complete", results=results)
+        # DATAHUB_SKIP_STARTUP_SYNC=1 boots from the already-loaded local DB
+        # (the corporate DataHub is WAF-blocked; the sync would time out for
+        # minutes and fail anyway). Data loaded via scripts/load_pulled_data.py
+        # is still served normally.
+        if os.environ.get("DATAHUB_SKIP_STARTUP_SYNC") != "1":
+            try:
+                results = await orchestrator.run_full_sync()
+                log.info("initial_sync_complete", results=results)
+            except Exception:
+                log.exception("initial_sync_failed", msg="tiếp tục chạy với dữ liệu đã có trong DB")
 
         from app.api.dependencies.acl_seed import seed_acls, seed_rbac_roles
         await seed_acls(session)

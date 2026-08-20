@@ -58,7 +58,7 @@ export function Topbar({ title }: { title?: string }) {
         </Button>
       )}
 
-      <h1 className="min-w-0 truncate text-sm font-semibold sm:text-base">{title ?? "DataAtlas"}</h1>
+      <h1 className="min-w-0 truncate text-sm font-semibold sm:text-base">{title ?? "V-DataAtlas"}</h1>
 
       <div className="flex-1" />
 

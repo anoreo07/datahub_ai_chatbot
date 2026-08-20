@@ -39,7 +39,7 @@ export function ComplexQuestions() {
           <SectionHeading
             eyebrow="Reasoning"
             title="Built for complex questions"
-            description="A single question can span a dataset, its schema, glossary terms, owner, domain, and lineage. DataAtlas resolves them all and answers in one coherent response."
+            description="A single question can span a dataset, its schema, glossary terms, owner, domain, and lineage. V-DataAtlas resolves them all and answers in one coherent response."
           />
         </Reveal>
 

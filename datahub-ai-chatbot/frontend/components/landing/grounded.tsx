@@ -22,7 +22,7 @@ export function Grounded() {
               align="left"
               eyebrow="Grounded answers"
               title="Grounded in your metadata"
-              description="DataAtlas doesn't guess. Answers are built from the actual metadata in your DataHub — with source entities cited right in the response, so you can verify every claim."
+              description="V-DataAtlas doesn't guess. Answers are built from the actual metadata in your DataHub — with source entities cited right in the response, so you can verify every claim."
             />
             <div className="mt-6 flex flex-col gap-3">
               {[

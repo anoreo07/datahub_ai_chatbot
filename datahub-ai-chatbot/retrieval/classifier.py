@@ -265,15 +265,71 @@ def regex_plan(question: str) -> QueryPlan:
     return _regex_plan(question)
 
 
+# Regex intents the router decides deterministically and that must NOT be
+# downgraded by a weaker LLM label (e.g. term->datasets must never become a
+# generic FIND_ENTITY — the linkage signal is exact).
+_STRONG_REGEX_INTENTS = {
+    "TERM_TO_DATASETS", "COUNT_ENTITIES", "LINEAGE", "OWNER_LOOKUP",
+    "ENTITY_DOMAIN", "DOMAIN_QUERY", "PLATFORM_QUERY", "TAG_QUERY",
+    "CERTIFIED_LIST", "LISTING", "GREETING", "CHITCHAT", "DATAHUB_URL",
+    "ENTITIES_BY_OWNER", "IMPACT",
+}
+
+# LLM intents allowed to REPLACE a weak regex intent for routing. Kept to the
+# labels that resolve ambiguous discovery / linkage questions the regex router
+# first-match-wins mistakes (R1: the LLM, not the regex, is the primary intent
+# analyzer; regex stays as fast-path + validation).
+_LLM_OVERRIDE_CAPABLE = {"FIND_ENTITY", "TERM_TO_DATASETS"}
+
+_SCHEMA_ANCHOR_RE = re.compile(
+    r"(?:trường|cột|cột|field|column)\b[^\n]{0,30}?"
+    r"\b(?:của|cua|trong|trong|nào|nao|la gi|nghĩa|nghia)\b",
+    re.I,
+)
+
+
+def llm_intent_override(regex_intent: str, plan: QueryPlan, question: str,
+                        has_field_identifier: bool = False) -> str | None:
+    """Routing intent when the LLM plan should replace the regex ``regex_intent``.
+
+    Returns the canonical intent string, or None to keep the regex routing.
+    Guards (never let the LLM downgrade a precise signal):
+    - the plan must come from the LLM with high/medium confidence;
+    - strong structural regex intents (term linkage, count, lineage, owner,
+      domain/platform/tag lists, impact...) stay on regex;
+    - SCHEMA_LOOKUP with an explicit field/property anchor stays SCHEMA_LOOKUP
+      even when the LLM broadens it to FIND_ENTITY.
+    """
+    if plan is None or plan.source != "classifier":
+        return None
+    if plan.confidence not in ("high", "medium"):
+        return None
+    llm_intent = plan.intent
+    if llm_intent not in _LLM_OVERRIDE_CAPABLE:
+        return None
+    if regex_intent in _STRONG_REGEX_INTENTS:
+        return None
+    if regex_intent == "SCHEMA_LOOKUP":
+        if has_field_identifier or _SCHEMA_ANCHOR_RE.search(question):
+            return None
+    return llm_intent if llm_intent != regex_intent else None
+
+
 def needs_semantic(question: str, intent: str) -> bool:
     """Whether the LLM classifier is worth running for ``question``.
 
-    Only ambiguous / lineage / impact-shaped questions benefit from semantic
-    classification, so we avoid paying an extra LLM call on the common path.
+    Runs for ambiguous / lineage / impact / discovery-shaped questions where the
+    keyword router's first-match-wins can misfire (e.g. a description-based
+    "có báo cáo nào về X?" misread as SCHEMA_LOOKUP because of a stray word).
+    Deterministic fast-path intents (count, listing, term linkage...) skip the
+    LLM call to keep the common path cheap.
     """
     if question and _IMPACT_RE.search(question):
         return True
-    return intent in ("GENERAL", "LINEAGE", "FIND_ENTITY", "DOCUMENT_QA")
+    return intent in (
+        "GENERAL", "LINEAGE", "FIND_ENTITY", "DOCUMENT_QA",
+        "SCHEMA_LOOKUP", "ENTITY_EXISTS",
+    )
 
 
 async def classify(question: str, llm: BaseLLM) -> QueryPlan:

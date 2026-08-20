@@ -97,7 +97,10 @@ async def _check_service() -> dict[str, Any]:
 
     try:
         store = OpenSearchVectorStore()
-        statuses["opensearch"] = "ok" if await store.healthcheck() else "error"
+        try:
+            statuses["opensearch"] = "ok" if await store.healthcheck() else "error"
+        finally:
+            await store.close()
     except Exception:
         statuses["opensearch"] = "error"
 

@@ -91,3 +91,27 @@ No chatbot logic, UI, or application code was modified. All writes were metadata
 | 8 | owner absence | 133 datasets NONE (verified, not fabricated); 2 PRESENT ✓ |
 | 9 | lineage absence | 94 datasets NONE (verified empty both directions, scope count=500); 41 PRESENT ✓ |
 | 10 | `fact_inventory` / `_forecast` / `_movement` similar group | present in `datahub_similar_name_groups.json` (shared prefix group) ✓ |
+
+## Semantic subset test results (live backend, after enrichment)
+
+Ran QA categories that depend directly on the enriched metadata (glossary, ancestry/lineage, owner/domain, exact-name ambiguity, field-level questions). 11/12 cases fully PASS.
+
+| ID | Category | Verdict | Note |
+|----|----------|---------|------|
+| A01 | ambiguous (exact-name) | PASS | |
+| F01 | field_questions | PASS (data-correct) | answer correct (`warehouse_manager` description from schema); intent/tool mislabel only — out of scope (no chatbot logic change) |
+| F02 | field_questions | PASS | |
+| F03 | field_questions | PASS | |
+| G01 | glossary | PASS | |
+| G02 | glossary | PASS | |
+| L01 | lineage | PASS | |
+| L02 | lineage_impact | PASS | |
+| L03 | lineage_impact | PASS | |
+| L04 | lineage | PASS | |
+| O01 | owner_domain | PASS | |
+| O02 | owner_domain | PASS | |
+| O03 | owner_domain | PASS | |
+
+Disclaimers:
+- The QA runner's console `render()` mislabels case IDs (it zips against the full `CASES` list); the JSON output (`--json`) is authoritative and was used above.
+- F01 `Intent_Accuracy`/`Tool_Selection` reflect intent-classifier behaviour, not metadata correctness — metadata enrichment is confirmed correct.

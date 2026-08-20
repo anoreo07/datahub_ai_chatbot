@@ -173,10 +173,13 @@ _PROPERTY_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
     ("data_type", re.compile(
         r"kiểu\s+dữ\s+liệu|kieu\s+du\s+lieu|data\s*type|datatype|kiểu\s+type|"
         r"kieu\s+type|\btype\b|kiểu\s+gì|kieu\s+gi|kiểu\s+chi|kieu\s+chi|"
-        r"là\s+kiểu\s+gì|la\s+kieu\s+gi|là\s+kiểu\s+chi|la\s+kieu\s+chi",
+        r"là\s+kiểu\s+gì|la\s+kieu\s+gi|là\s+kiểu\s+chi|la\s+kieu\s+chi|"
+        r"thuộc\s+tính\s+gì|thuoc\s+tinh\s+gi|có\s+thuộc\s+tính|có\s+những\s+thuộc\s+tính|"
+        r"co\s+thuoc\s+tinh|co\s+nhung\s+thuoc\s+tinh|\battribute\b|\battributes\b",
         re.I)),
     ("description", re.compile(
         r"mô\s+tả|mo\s+ta|ý\s+nghĩa|y\s+nghia|có\s+nghĩa|co\s+nghia|"
+        r"nghĩa\s+là\s+gì|nghia\s+la\s+gi|nghĩa\s+gì|nghia\s+gi|"
         r"giải\s+thích|giai\s+thich|description|\bmeaning\b|"
         r"mô\s+tả\s+gì|mo\s+ta\s+gi",
         re.I)),
@@ -207,15 +210,27 @@ _FIND_FIELD_RE = re.compile(
 
 _ENTITY_DOT_REF = re.compile(r"([a-z0-9_]+(?:\.[a-z0-9_]+)+)\.([a-z0-9_]+)", re.I)
 _FIELD_OF_ENTITY = re.compile(
-    r"\b([a-z0-9_]+)\s+(?:của|cua|of|trong)\s+([a-z0-9_]+(?:\.[a-z0-9_]+)*)",
+    r"\b([a-z0-9_]+)\s+(?:của|cua|of|trong)\s+"
+    r"(?:dataset\s+)?[\"“”'`]?([a-z0-9_]+(?:\.[a-z0-9_]+)*)[\"“”'`]?",
     re.I,
 )
 # Looser spaced form: "<field> ... <...> ... trong <entity>" (e.g.
-# "warehouse_id có kiểu dữ liệu gì trong fact_inventory_movement"). The
-# separator must not cross sentence boundaries and must stay short to avoid
-# matching across unrelated clauses.
+# "warehouse_id có kiểu dữ liệu gì trong fact_inventory_movement",
+# 'trong dataset "fact_sale_orders" có trường "sod_total_amount" nghĩa là
+# gì?'). The separator must not cross sentence boundaries and must stay short
+# to avoid matching across unrelated clauses. The entity may be quoted.
 _FIELD_SPACED_IN_ENTITY = re.compile(
-    r"\b([a-z0-9_]+)[^.!?]{0,60}?\btrong\s+(?:dataset\s+)?([a-z0-9_]+(?:\.[a-z0-9_]+)*)",
+    r"\b([a-z0-9_]+)[^.!?]{0,60}?\btrong\s+(?:dataset\s+)?"
+    r"[\"“”'`]?([a-z0-9_]+(?:\.[a-z0-9_]+)*)[\"“”'`]?",
+    re.I,
+)
+# Entity-first ordering: 'trong dataset "X" có trường "Y" nghĩa là gì?'
+# (the entity precedes the field, so the spaced form above cannot match).
+_ENTITY_FIRST_FIELD = re.compile(
+    r"\btrong\s+(?:dataset\s+)?[\"“”'`]?"
+    r"([a-z0-9_]+(?:\.[a-z0-9_]+)*)[\"“”'`]?"
+    r"[^.!?]{0,60}?\b(?:trường|field|cột|cot)\s+"
+    r"[\"“”'`]?([a-z0-9_]+)[\"“”'`]?",
     re.I,
 )
 
@@ -293,6 +308,9 @@ def extract_field_entity(question: str) -> tuple[str | None, str | None]:
     m = _FIELD_SPACED_IN_ENTITY.search(q)
     if m:
         return m.group(2), m.group(1)
+    m = _ENTITY_FIRST_FIELD.search(q)
+    if m:
+        return m.group(1), m.group(2)
     return None, None
 
 

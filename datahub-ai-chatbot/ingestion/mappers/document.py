@@ -1,5 +1,6 @@
 from ingestion.mappers import BaseMapper
 from ingestion.models import CanonicalEntity, Owner
+from ingestion.normalizer import clean_name
 
 
 class DocumentMapper(BaseMapper):
@@ -9,7 +10,7 @@ class DocumentMapper(BaseMapper):
         platform_info = raw.get("platform") or {}
 
         urn = raw.get("urn", "")
-        name = info.get("title") or raw.get("name", "")
+        name = clean_name(info.get("title") or raw.get("name", "")) or ""
         contents_obj = info.get("contents") or {}
         contents_text = contents_obj.get("text") if isinstance(contents_obj, dict) else contents_obj
         description = contents_text or raw.get("description") or raw.get("documentation")
@@ -29,9 +30,9 @@ class DocumentMapper(BaseMapper):
             urn=urn,
             entity_type="document",
             name=name,
-            display_name=raw.get("displayName") or name,
+            display_name=clean_name(raw.get("displayName") or name) or name,
             description=description,
-            platform=platform_info.get("name"),
+            platform=clean_name(platform_info.get("name")),
             owners=owners,
             source_url=self._build_url(url_builder, urn) if url_builder else None,
             deleted=False,

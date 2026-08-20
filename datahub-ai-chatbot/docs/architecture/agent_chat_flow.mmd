@@ -1,0 +1,240 @@
+graph TD
+    subgraph input["INPUT"]
+        Q["User question (question, conversation_id,
+selected_action, model, images)
+POST /api/v1/chat or /api/v1/chat/stream (SSE)"]
+        AUTH["UserContext — get_current_user
+(auth/identity, JWT)"]
+        HIST["ConversationMemory.load_history_from_db
++ get_active_entities (coreference)"]
+    end
+
+    subgraph intent["INTENT RESOLUTION (classify)"]
+        IR["IntentResolver.resolve()
+intent + QueryPlan + decision + chosen_tool"]
+        CONCEPT["Concept-to-datasets reroute
+TERM_TO_DATASETS (regex)"]
+        DECIDE{"decision?"}
+        CLARIFY["Clarification answer
+(ambiguous intent combination)"]
+        QU["Query Understanding (opt-in)
+understand_query + validate_understanding
+QU_ENABLED / QU_SHADOW_MODE"]
+    end
+
+    subgraph guards["GUARDRAILS & GATES"]
+        GREET["GREETING / CHITCHAT — deterministic reply"]
+        SCOPE["GuardrailService.enforce_scope (out-of-scope)"]
+        INJ["GuardrailService.check_prompt_injection"]
+        RBAC["Domain RBAC gate
+access.gate_domain_access"]
+        REL["AI DataHub-relevance gate
+classify_datahub_relevance (LLM)
++ keyword / QU / glossary-alias rescue"]
+        NON{"relevance?"}
+        REFUSE["Polite refusal (NON_DATAHUB)"]
+        UNCERT{"UNCERTAIN + no keyword hit?"}
+        UNCERTQ["Clarification (ambiguous)"]
+    end
+
+    subgraph vision["VISION GATE (VISION_ENABLED)"]
+        VING["ImageUploadService.ingest / ConversationContextManager.load
+image persistence + VisionService analysis"]
+        VACT["resolve_active → image entity identity
+bind image-derived entity as entity_hint"]
+        VANS["answer_from_image_context
+(only when question is about the image's own content)"]
+        VCLAR["Vision clarify (multiple images)"]
+    end
+
+    subgraph ctxgates["CONTEXT GATES (reuse evidence)"]
+        EVG["Evidence-context gate
+resolve_context + answer_from_evidence
+(follow-up reusing E1..En / active entity)"]
+        FPG["Field-property gate
+_answer_direct_field_op
+(entity.field property from schema metadata)"]
+        THINKG["Thinking Mode gate
+ThinkingModeOrchestrator.maybe_answer
+(complex GENERAL questions) → THINKING_OVERVIEW"]
+    end
+
+    subgraph flows["DEDICATED FLOWS"]
+        FLOW_SQL["ChatFlowsService.sql_generation_flow
+(tool sql_generator / SQL_GENERATION)"]
+        FLOW_SYNC["sync_relation_flow
+(column sync / data-mapping regex)"]
+        FLOW_Q["quality_check_flow
+(tool quality_check)"]
+        FLOW_TD["term_datasets_flow
+(term → linked datasets)"]
+        FLOW_DT["dataset_terms_flow
+(dataset → bound glossary terms)"]
+    end
+
+    subgraph genconv["CONVERSATIONAL"]
+        CONVGEN["GENERAL + no DataHub relevance
+generator.generate_conversational"]
+    end
+
+    subgraph listing["LISTING"]
+        LIST["_detect_listing → entity_repo.list_by_type
+count + platform grouping
+(auth-filtered)"]
+        DLIST["deterministic_listing
+(DETERMINISTIC_LISTING_INTENTS)"]
+        DCD["domain_constrained_discovery
+(domain-scoped filtered listing)"]
+    end
+
+    subgraph retrieval["RETRIEVAL"]
+        PLAN["Semantic plan (regex_plan / classifier)
+impact_mode detection"]
+        QUJOIN["schema_join_lookup
+(two-dataset join analysis)"]
+        DAG["PlannerExecutor.execute (DAG tool orchestrator)
+COMPOSITE_QUERY / MULTI_ENTITY_QUERY"]
+        IMPACT["recursive_impact_retrieval
+(impact_mode)"]
+        ANAPH["resolve_followup_entity
+anaphora / ellipsis (coreference + QU rescue)
++ inherited tool re-retrieval"]
+        STRUC["structured_retrieval
+(TERM_DEFINITION, OWNER_LOOKUP, LINEAGE,
+SCHEMA_LOOKUP, ENTITY_DOMAIN, TERM_TO_DATASETS...)"]
+        EXPL["try_explicit_entity_lookup
+(exact-name fast path)"]
+        HYBRID["hybrid_search
+(keyword + vector, HybridSearch)"]
+        EVIDREC["record_active_entities +
+record_evidence_from_results
+(evidence store E1..En)"]
+        NOTFOUND["suggestion / term-not-found /
+not-found (grounded, deterministic)"]
+        ACLF["AuthorizationService filter by domain +
+filter_accessible_urns (entity ACL)"]
+        RERANK["Reranker.rerank"]
+        AMB{"ambiguity? (score gap + confidence)"}
+        AMBQ["Clarification: choose entity"]
+        SHORT["_short_negative_answer (deterministic)"]
+        DENIED["Access-denied answer
+(0 results + denied count)"]
+    end
+
+    subgraph answer["ANSWER"]
+        DET_LINEAGE["Deterministic LINEAGE answer
+build_lineage_answer + build_lineage_data (SVG data)"]
+        DET_TERM["Deterministic TERM_DEFINITION
+_domain_scoped_term_answer / full term listing"]
+        DET_DOC["Deterministic DOCUMENT_QA
+document description"]
+        DET_DOMAIN["Deterministic ENTITY_DOMAIN
+domain + owner"]
+        DET_SCHEMA["Deterministic SCHEMA_LOOKUP
+field-location / column-meaning / field list /
+join analysis / glossary + domain"]
+        GEN["_generate_or_fallback → AnswerGenerator
+RAG prompt (context E1..En XML) + citations"]
+        RESP["ChatResponse
+answer, intent, confidence, citations,
+entities, lineage, ambiguous,
+insufficient_context, trace_id"]
+        MEM["ConversationMemory.add_turn_db"]
+    end
+
+    Q --> IR
+    AUTH --> IR
+    HIST --> IR
+    IR --> CONCEPT
+    CONCEPT --> DECIDE
+    IR --> DECIDE
+    DECIDE -- clarify --> CLARIFY
+    DECIDE -- proceed --> QU
+    IR --> QU
+
+    QU --> GREET
+    QU --> SCOPE
+    GREET --> RESP
+    SCOPE --> RESP
+    SCOPE --> INJ
+    INJ --> RBAC
+    INJ --> RESP
+    RBAC --> REL
+    RBAC --> RESP
+    REL --> NON
+    NON -- NON_DATAHUB --> REFUSE
+    REFUSE --> RESP
+    NON -- UNCERTAIN --> UNCERT
+    UNCERT -- yes --> UNCERTQ
+    UNCERTQ --> RESP
+    UNCERT -- no (keyword hit) --> VING
+    NON -- DATAHUB --> VING
+
+    VING --> VACT
+    VACT --> VANS
+    VANS -- handled --> RESP
+    VACT --> VCLAR
+    VCLAR --> RESP
+    VACT --> EVG
+
+    EVG -- answered from evidence --> RESP
+    EVG --> FPG
+    FPG -- answered from schema --> RESP
+    FPG --> THINKG
+    THINKG -- THINKING_OVERVIEW --> RESP
+    THINKG --> FLOW_SQL
+
+    FLOW_SQL -- response --> RESP
+    FLOW_SQL --> FLOW_SYNC
+    FLOW_SYNC -- response --> RESP
+    FLOW_SYNC --> FLOW_Q
+    FLOW_Q -- response --> RESP
+    FLOW_Q --> CONVGEN
+    CONVGEN --> RESP
+    CONVGEN --> LIST
+
+    LIST --> RESP
+    LIST --> DLIST
+    DLIST --> RESP
+    DLIST --> DCD
+    DCD --> RESP
+    DCD --> PLAN
+
+    PLAN --> QUJOIN
+    QUJOIN --> DAG
+    DAG --> IMPACT
+    IMPACT --> ANAPH
+    ANAPH --> FLOW_TD
+    FLOW_TD --> RESP
+    ANAPH --> FLOW_DT
+    FLOW_DT --> RESP
+    ANAPH --> STRUC
+    STRUC --> EXPL
+    EXPL -- no hit --> HYBRID
+    EXPL --> EVIDREC
+    HYBRID --> EVIDREC
+    EVIDREC --> NOTFOUND
+    NOTFOUND --> RESP
+    EVIDREC --> ACLF
+    ACLF --> RERANK
+    RERANK --> AMB
+    AMB -- yes --> AMBQ
+    AMBQ --> RESP
+    AMB -- no --> SHORT
+    SHORT --> RESP
+    SHORT --> DENIED
+    DENIED --> RESP
+    DENIED --> DET_LINEAGE
+    DET_LINEAGE --> RESP
+    DET_LINEAGE --> DET_TERM
+    DET_TERM --> RESP
+    DET_TERM --> DET_DOC
+    DET_DOC --> RESP
+    DET_DOC --> DET_DOMAIN
+    DET_DOMAIN --> RESP
+    DET_DOMAIN --> DET_SCHEMA
+    DET_SCHEMA --> RESP
+    DET_SCHEMA --> GEN
+    GEN --> RESP
+    RESP --> MEM
+    MEM --> Q

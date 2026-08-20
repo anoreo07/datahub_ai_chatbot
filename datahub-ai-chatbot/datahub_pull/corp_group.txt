@@ -1,0 +1,5 @@
+{"urn": "urn:li:corpGroup:319e3eec-1e01-49bc-9253-686d0de84d2c", "type": "CORP_GROUP", "name": "319e3eec-1e01-49bc-9253-686d0de84d2c", "properties": {"displayName": "kehoach_editor_group", "description": ""}}
+{"urn": "urn:li:corpGroup:4d1b9a03-01c4-4d32-9e55-e3d8a055c881", "type": "CORP_GROUP", "name": "4d1b9a03-01c4-4d32-9e55-e3d8a055c881", "properties": {"displayName": "toiuu_tonkho_viewer_group", "description": ""}}
+{"urn": "urn:li:corpGroup:74850b99-cf56-4316-83b1-286650f77c2e", "type": "CORP_GROUP", "name": "74850b99-cf56-4316-83b1-286650f77c2e", "properties": {"displayName": "kehoach_viewer_group", "description": ""}}
+{"urn": "urn:li:corpGroup:9f0efbda-0378-4bce-89ff-64daaf5fad60", "type": "CORP_GROUP", "name": "9f0efbda-0378-4bce-89ff-64daaf5fad60", "properties": {"displayName": "kinhdoanh_viewer_group", "description": ""}}
+{"urn": "urn:li:corpGroup:da370d1b-1d4e-4137-969e-5631f44edb52", "type": "CORP_GROUP", "name": "da370d1b-1d4e-4137-969e-5631f44edb52", "properties": {"displayName": "kinhdoanh_editor_group", "description": ""}}

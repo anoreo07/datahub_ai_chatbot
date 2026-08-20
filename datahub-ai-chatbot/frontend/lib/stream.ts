@@ -84,6 +84,7 @@ export async function streamChat(
   const reader = res.body.getReader();
   const decoder = new TextDecoder();
   let buffer = "";
+  let completed = false;
 
   try {
     while (true) {
@@ -100,15 +101,27 @@ export async function streamChat(
           callbacks.onStatus?.(ev.data.step);
         else if (ev.event === "token" && isRecord(ev.data) && typeof ev.data.text === "string")
           callbacks.onToken?.(ev.data.text);
-        else if (ev.event === "done" && isRecord(ev.data))
+        else if (ev.event === "done" && isRecord(ev.data)) {
+          completed = true;
           callbacks.onDone?.(ev.data as unknown as ChatResponse);
-        else if (ev.event === "error")
+        } else if (ev.event === "error") {
+          completed = true;
           callbacks.onError?.(
             isRecord(ev.data) && typeof ev.data.detail === "string" ? ev.data.detail : "Streaming error"
           );
+        }
       }
     }
+  } catch (e) {
+    // Connection reset mid-stream (e.g. the browser's "Error in input
+    // stream") — still notify the caller so the UI never stays stuck on the
+    // typing indicator.
+    completed = true;
+    callbacks.onError?.(
+      e instanceof Error && e.message ? e.message : "Đã mất kết nối khi đang tải câu trả lời."
+    );
   } finally {
     reader.releaseLock();
+    if (!completed) callbacks.onError?.("Stream ended unexpectedly");
   }
 }

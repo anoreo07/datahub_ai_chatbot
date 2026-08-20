@@ -108,7 +108,7 @@ async def test_a_field_data_type_after_schema(db_session) -> None:
     assert r1.intent == "SCHEMA_LOOKUP", r1.answer
 
     r2 = await service.answer("warehouse_id có kiểu dữ liệu gì?", conversation_id=cid)
-    assert r2.intent in ("CONTEXT_FIELD_PROPERTY", "CONTEXT_FIELD_TYPE"), r2.answer
+    assert r2.intent == "FIELD_PROPERTY", r2.answer
     assert "warehouse_id" in r2.answer
     assert "varchar" in r2.answer.lower(), r2.answer
     # Must NOT re-render the whole schema.
@@ -125,7 +125,7 @@ async def test_b_find_field_in_schema(db_session) -> None:
     assert r1.intent == "SCHEMA_LOOKUP", r1.answer
 
     r2 = await service.answer("Field nào liên quan đến warehouse?", conversation_id=cid)
-    assert r2.intent in ("CONTEXT_FIELD_FIND", "CONTEXT_FIELD_PROPERTY"), r2.answer
+    assert r2.intent == "FIELD_PROPERTY", r2.answer
     assert "warehouse_id" in r2.answer
     assert "movement_type" not in r2.answer
 
@@ -140,7 +140,7 @@ async def test_c_field_description_after_schema(db_session) -> None:
     assert r1.intent == "SCHEMA_LOOKUP", r1.answer
 
     r2 = await service.answer("warehouse_id có mô tả gì?", conversation_id=cid)
-    assert r2.intent == "CONTEXT_FIELD_DESCRIPTION", r2.answer
+    assert r2.intent == "FIELD_PROPERTY", r2.answer
     assert "warehouse_id" in r2.answer
     assert "Mã kho" in r2.answer
     assert "movement_id" not in r2.answer
@@ -156,7 +156,7 @@ async def test_d_field_glossary_after_schema(db_session) -> None:
     assert r1.intent == "SCHEMA_LOOKUP", r1.answer
 
     r2 = await service.answer("warehouse_id có glossary term nào không?", conversation_id=cid)
-    assert r2.intent == "CONTEXT_FIELD_GLOSSARY", r2.answer
+    assert r2.intent == "GLOSSARY", r2.answer
     assert "warehouse_id" in r2.answer
 
 
@@ -175,7 +175,7 @@ async def test_e_unrelated_query_does_not_break_schema_evidence(db_session) -> N
         "Field warehouse_id trong schema vừa lấy có kiểu dữ liệu gì?",
         conversation_id=cid,
     )
-    assert r3.intent in ("CONTEXT_FIELD_PROPERTY", "CONTEXT_FIELD_TYPE"), r3.answer
+    assert r3.intent == "FIELD_PROPERTY", r3.answer
     assert "varchar" in r3.answer.lower(), r3.answer
     assert "warehouse_id" in r3.answer
     # Must NOT answer from the Revenue evidence.
@@ -210,7 +210,7 @@ async def test_g_constraint_no_new_retrieval(db_session) -> None:
         "Chỉ dựa trên schema vừa lấy, warehouse_id có kiểu dữ liệu gì?",
         conversation_id=cid,
     )
-    assert r2.intent in ("CONTEXT_FIELD_PROPERTY", "CONTEXT_FIELD_TYPE"), r2.answer
+    assert r2.intent == "FIELD_PROPERTY", r2.answer
     assert "varchar" in r2.answer.lower(), r2.answer
 
 

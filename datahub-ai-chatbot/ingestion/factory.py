@@ -15,7 +15,9 @@ class DataHubSourceFactory:
             source = MockDataHubSource()
             return source
 
-        log.info("datahub_source_factory", mode="graphql", gms_url=settings.DATAHUB_GMS_URL)
+        from urllib.parse import urlparse
+        host = urlparse(settings.DATAHUB_GMS_URL).netloc or settings.DATAHUB_GMS_URL
+        log.info("datahub_source_factory", mode="graphql", gms_host=host)
         from ingestion.graphql_source import GraphQLDataHubSource
         source = GraphQLDataHubSource(
             gms_url=settings.DATAHUB_GMS_URL,

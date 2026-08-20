@@ -49,6 +49,6 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
   if (!user) return null;
 
-  const title = TITLES[pathname] || "DataAtlas";
+  const title = TITLES[pathname] || "V-DataAtlas";
   return <AppLayout title={title}>{children}</AppLayout>;
 }

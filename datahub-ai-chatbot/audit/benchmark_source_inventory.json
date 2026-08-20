@@ -1,0 +1,3050 @@
+{
+ "inventory": [
+  {
+   "domain": "CUNG ỨNG (NĐH)",
+   "name": "Display Down Payment",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Kế toán.Display Down Payment,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Kế toán.Display Down Payment,PROD)"
+  },
+  {
+   "domain": "CUNG ỨNG (NĐH)",
+   "name": "General Ledger Voucher ",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Kế toán.General Ledger Voucher ,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Kế toán.General Ledger Voucher ,PROD)"
+  },
+  {
+   "domain": "CUNG ỨNG (NĐH)",
+   "name": "List of Vendor Master Data ",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Kế toán.List of Vendor Master Data ,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Kế toán.List of Vendor Master Data ,PROD)"
+  },
+  {
+   "domain": "CUNG ỨNG (NĐH)",
+   "name": "Materials List ",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Cung ứng.Materials List ,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Cung ứng.Materials List ,PROD)"
+  },
+  {
+   "domain": "CUNG ỨNG (NĐH)",
+   "name": "[BC]_Báo cáo danh sách PO đã tạo theo mã linh kiện",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Cung ứng.[BC]_Báo cáo danh sách PO đã tạo theo mã linh kiện,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Cung ứng.[BC]_Báo cáo danh sách PO đã tạo theo mã linh kiện,PROD)"
+  },
+  {
+   "domain": "CUNG ỨNG (NĐH)",
+   "name": "[KT]_Báo cáo thanh toán",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Kế toán.[KT]_Báo cáo thanh toán,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Kế toán.[KT]_Báo cáo thanh toán,PROD)"
+  },
+  {
+   "domain": "CUNG ỨNG (NĐH)",
+   "name": "[PMH]_Báo cáo PR-PO link",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Cung ứng.[PMH]_Báo cáo PR-PO link,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Cung ứng.[PMH]_Báo cáo PR-PO link,PROD)"
+  },
+  {
+   "domain": "CUNG ỨNG (NĐH)",
+   "name": "[PMH]_Báo cáo danh sách PO đã tạo",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Cung ứng.[PMH]_Báo cáo danh sách PO đã tạo,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Cung ứng.[PMH]_Báo cáo danh sách PO đã tạo,PROD)"
+  },
+  {
+   "domain": "CUNG ỨNG (NĐH)",
+   "name": "[PMH]_Báo cáo danh sách PR đã tạo",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Cung ứng.[PMH]_Báo cáo danh sách PR đã tạo,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Cung ứng.[PMH]_Báo cáo danh sách PR đã tạo,PROD)"
+  },
+  {
+   "domain": "CUNG ỨNG (NĐH)",
+   "name": "denorm_inventory_vehicles",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dms.stg.denorm_inventory_vehicles,PROD)",
+   "platform": "redshift",
+   "has_description": false,
+   "schema_field_count": 28,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dms.stg.denorm_inventory_vehicles,PROD)"
+  },
+  {
+   "domain": "CUNG ỨNG (NĐH)",
+   "name": "denorm_warrantyclaimdetails",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dms.stg.denorm_warrantyclaimdetails,PROD)",
+   "platform": "redshift",
+   "has_description": false,
+   "schema_field_count": 52,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dms.stg.denorm_warrantyclaimdetails,PROD)"
+  },
+  {
+   "domain": "CUNG ỨNG (NĐH)",
+   "name": "fact_ff_plan_forecast",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dms.dwh.fact_ff_plan_forecast,PROD)",
+   "platform": "redshift",
+   "has_description": false,
+   "schema_field_count": 9,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dms.dwh.fact_ff_plan_forecast,PROD)"
+  },
+  {
+   "domain": "CUNG ỨNG (NĐH)",
+   "name": "fact_inventory_business",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dms.dwh.fact_inventory_business,PROD)",
+   "platform": "redshift",
+   "has_description": false,
+   "schema_field_count": 14,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dms.dwh.fact_inventory_business,PROD)"
+  },
+  {
+   "domain": "CUNG ỨNG (NĐH)",
+   "name": "fact_inventory_business_xmd",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dms.dwh.fact_inventory_business_xmd,PROD)",
+   "platform": "redshift",
+   "has_description": false,
+   "schema_field_count": 9,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dms.dwh.fact_inventory_business_xmd,PROD)"
+  },
+  {
+   "domain": "CUNG ỨNG (NĐH)",
+   "name": "fact_inventorytransfer",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dms.dwh.fact_inventorytransfer,PROD)",
+   "platform": "redshift",
+   "has_description": false,
+   "schema_field_count": 27,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dms.dwh.fact_inventorytransfer,PROD)"
+  },
+  {
+   "domain": "CUNG ỨNG (NĐH)",
+   "name": "fact_material_min_max",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dms.dwh.fact_material_min_max,PROD)",
+   "platform": "redshift",
+   "has_description": false,
+   "schema_field_count": 9,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dms.dwh.fact_material_min_max,PROD)"
+  },
+  {
+   "domain": "CUNG ỨNG (NĐH)",
+   "name": "fact_plan_quantity",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dms.dwh.fact_plan_quantity,PROD)",
+   "platform": "redshift",
+   "has_description": false,
+   "schema_field_count": 12,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dms.dwh.fact_plan_quantity,PROD)"
+  },
+  {
+   "domain": "CUNG ỨNG (NĐH)",
+   "name": "fact_plan_quantity_xmd",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dms.dwh.fact_plan_quantity_xmd,PROD)",
+   "platform": "redshift",
+   "has_description": false,
+   "schema_field_count": 12,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dms.dwh.fact_plan_quantity_xmd,PROD)"
+  },
+  {
+   "domain": "CUNG ỨNG (NĐH)",
+   "name": "fact_request_stocks",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dms.dwh.fact_request_stocks,PROD)",
+   "platform": "redshift",
+   "has_description": false,
+   "schema_field_count": 12,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dms.dwh.fact_request_stocks,PROD)"
+  },
+  {
+   "domain": "CUNG ỨNG (NĐH)",
+   "name": "fact_tonkho_dms",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dms.dwh.fact_tonkho_dms,PROD)",
+   "platform": "redshift",
+   "has_description": false,
+   "schema_field_count": 24,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dms.dwh.fact_tonkho_dms,PROD)"
+  },
+  {
+   "domain": "CUNG ỨNG (TT)",
+   "name": "BBD/Prod. Date",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.BBD/Prod. Date,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.BBD/Prod. Date,PROD)"
+  },
+  {
+   "domain": "CUNG ỨNG (TT)",
+   "name": "Displ. Material Docs. by Mvt. Reason",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.Displ. Material Docs. by Mvt. Reason,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.Displ. Material Docs. by Mvt. Reason,PROD)"
+  },
+  {
+   "domain": "CUNG ỨNG (TT)",
+   "name": "Display List of GR/IR Balances",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.Display List of GR/IR Balances,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.Display List of GR/IR Balances,PROD)"
+  },
+  {
+   "domain": "CUNG ỨNG (TT)",
+   "name": "Display Stock/Requirements Situation",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.Display Stock/Requirements Situation,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.Display Stock/Requirements Situation,PROD)"
+  },
+  {
+   "domain": "CUNG ỨNG (TT)",
+   "name": "Display Valuated Special Stock",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.Display Valuated Special Stock,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.Display Valuated Special Stock,PROD)"
+  },
+  {
+   "domain": "CUNG ỨNG (TT)",
+   "name": "Display vendor (Purchasing)",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.Display vendor (Purchasing),PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.Display vendor (Purchasing),PROD)"
+  },
+  {
+   "domain": "CUNG ỨNG (TT)",
+   "name": "Expiration Report",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.Expiration Report,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.Expiration Report,PROD)"
+  },
+  {
+   "domain": "CUNG ỨNG (TT)",
+   "name": "Flow of Cost center",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.Flow of Cost center,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.Flow of Cost center,PROD)"
+  },
+  {
+   "domain": "CUNG ỨNG (TT)",
+   "name": "General delivery list - Outb.deliv.",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.General delivery list - Outb.deliv.,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.General delivery list - Outb.deliv.,PROD)"
+  },
+  {
+   "domain": "CUNG ỨNG (TT)",
+   "name": "INVCO: Analysis of Dead Stock",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.INVCO: Analysis of Dead Stock,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.INVCO: Analysis of Dead Stock,PROD)"
+  },
+  {
+   "domain": "CUNG ỨNG (TT)",
+   "name": "INVCO: Analysis of Slow-Moving Items",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.INVCO: Analysis of Slow-Moving Items,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.INVCO: Analysis of Slow-Moving Items,PROD)"
+  },
+  {
+   "domain": "CUNG ỨNG (TT)",
+   "name": "Inbound Delivery Monitor",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.Inbound Delivery Monitor,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.Inbound Delivery Monitor,PROD)"
+  },
+  {
+   "domain": "CUNG ỨNG (TT)",
+   "name": "Inbound Subcontract Report",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.Inbound Subcontract Report,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.Inbound Subcontract Report,PROD)"
+  },
+  {
+   "domain": "CUNG ỨNG (TT)",
+   "name": "Inbound deliveries for goods receipt",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.Inbound deliveries for goods receipt,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.Inbound deliveries for goods receipt,PROD)"
+  },
+  {
+   "domain": "CUNG ỨNG (TT)",
+   "name": "Kiểm tra PR-PO Link",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.Kiểm tra PR-PO Link,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.Kiểm tra PR-PO Link,PROD)"
+  },
+  {
+   "domain": "CUNG ỨNG (TT)",
+   "name": "Leadtime",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.Leadtime,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.Leadtime,PROD)"
+  },
+  {
+   "domain": "CUNG ỨNG (TT)",
+   "name": "Line of Balance Report",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.Line of Balance Report,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.Line of Balance Report,PROD)"
+  },
+  {
+   "domain": "CUNG ỨNG (TT)",
+   "name": "List of Warehouse Stocks on Hand",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.List of Warehouse Stocks on Hand,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.List of Warehouse Stocks on Hand,PROD)"
+  },
+  {
+   "domain": "CUNG ỨNG (TT)",
+   "name": "MB51-SUMMARY",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.MB51-SUMMARY,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.MB51-SUMMARY,PROD)"
+  },
+  {
+   "domain": "CUNG ỨNG (TT)",
+   "name": "Material Doc. List",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.Material Doc. List,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.Material Doc. List,PROD)"
+  },
+  {
+   "domain": "HẬU MÃI",
+   "name": "[CSKH]_Daily Report_ Báo cáo các vấn đề phát sinh liên quan tới ô tô điện",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:Saleforce,Chăm sóc khách hàng.[CSKH]_Daily Report_ Báo cáo các vấn đề phát sinh liên quan tới ô tô điện,PROD)",
+   "platform": "Saleforce",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:Saleforce,Chăm sóc khách hàng.[CSKH]_Daily Report_ Báo cáo các vấn đề phát sinh liên quan tới ô tô điện,PROD)"
+  },
+  {
+   "domain": "HẬU MÃI",
+   "name": "[CSKH]_Daily Report_ Báo cáo lưu lượng cuộc gọi hàng ngày (nội bộ)",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:Cisco,Chăm sóc khách hàng.[CSKH]_Daily Report_ Báo cáo lưu lượng cuộc gọi hàng ngày (nội bộ),PROD)",
+   "platform": "Cisco",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:Cisco,Chăm sóc khách hàng.[CSKH]_Daily Report_ Báo cáo lưu lượng cuộc gọi hàng ngày (nội bộ),PROD)"
+  },
+  {
+   "domain": "HẬU MÃI",
+   "name": "[CSKH]_Daily Report_ Báo cáo trích lục cộng đồng",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:Excel,Chăm sóc khách hàng.[CSKH]_Daily Report_ Báo cáo trích lục cộng đồng,PROD)",
+   "platform": "Excel",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:Excel,Chăm sóc khách hàng.[CSKH]_Daily Report_ Báo cáo trích lục cộng đồng,PROD)"
+  },
+  {
+   "domain": "HẬU MÃI",
+   "name": "[CSKH]_Daily Report_Báo cáo khiếu nại KH về chất lượng phục vụ tại các SR/XDV",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:Saleforce,Chăm sóc khách hàng.[CSKH]_Daily Report_Báo cáo khiếu nại KH về chất lượng phục vụ tại các SR/XDV,PROD)",
+   "platform": "Saleforce",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:Saleforce,Chăm sóc khách hàng.[CSKH]_Daily Report_Báo cáo khiếu nại KH về chất lượng phục vụ tại các SR/XDV,PROD)"
+  },
+  {
+   "domain": "HẬU MÃI",
+   "name": "[CSKH]_Daily Report_Báo cáo sự vụ pending trên 15 ngày",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:Saleforce,Chăm sóc khách hàng.[CSKH]_Daily Report_Báo cáo sự vụ pending trên 15 ngày,PROD)",
+   "platform": "Saleforce",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:Saleforce,Chăm sóc khách hàng.[CSKH]_Daily Report_Báo cáo sự vụ pending trên 15 ngày,PROD)"
+  },
+  {
+   "domain": "HẬU MÃI",
+   "name": "[CSKH]_Monthly Report_Báo cáo KPI CSKH",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:Salesforce,Chăm sóc khách hàng.[CSKH]_Monthly Report_Báo cáo KPI CSKH,PROD)",
+   "platform": "Salesforce",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:Salesforce,Chăm sóc khách hàng.[CSKH]_Monthly Report_Báo cáo KPI CSKH,PROD)"
+  },
+  {
+   "domain": "HẬU MÃI",
+   "name": "[CSKH]_Monthly Report_Báo cáo chỉ số hài lòng KH 1801 (nội bộ)",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:Cisco,Chăm sóc khách hàng.[CSKH]_Monthly Report_Báo cáo chỉ số hài lòng KH 1801 (nội bộ),PROD)",
+   "platform": "Cisco",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:Cisco,Chăm sóc khách hàng.[CSKH]_Monthly Report_Báo cáo chỉ số hài lòng KH 1801 (nội bộ),PROD)"
+  },
+  {
+   "domain": "HẬU MÃI",
+   "name": "[CSKH]_Monthly Report_Báo cáo các chỉ số CSKH tháng",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:Qualrics,Chăm sóc khách hàng.[CSKH]_Monthly Report_Báo cáo các chỉ số CSKH tháng,PROD)",
+   "platform": "Qualrics",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:Qualrics,Chăm sóc khách hàng.[CSKH]_Monthly Report_Báo cáo các chỉ số CSKH tháng,PROD)"
+  },
+  {
+   "domain": "HẬU MÃI",
+   "name": "[CSKH]_Monthly Report_Báo cáo hoạt động CSKH tháng (nội bộ)",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:Salesforce,Chăm sóc khách hàng.[CSKH]_Monthly Report_Báo cáo hoạt động CSKH tháng (nội bộ),PROD)",
+   "platform": "Salesforce",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:Salesforce,Chăm sóc khách hàng.[CSKH]_Monthly Report_Báo cáo hoạt động CSKH tháng (nội bộ),PROD)"
+  },
+  {
+   "domain": "HẬU MÃI",
+   "name": "[CSKH]_Monthly Report_Báo cáo kiểm soát chất lượng CSKH của NPP",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:Qualtrics,Chăm sóc khách hàng.[CSKH]_Monthly Report_Báo cáo kiểm soát chất lượng CSKH của NPP,PROD)",
+   "platform": "Qualtrics",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:Qualtrics,Chăm sóc khách hàng.[CSKH]_Monthly Report_Báo cáo kiểm soát chất lượng CSKH của NPP,PROD)"
+  },
+  {
+   "domain": "HẬU MÃI",
+   "name": "[CSKH]_Monthly Report_Báo cáo thời gian trung bình đóng case CSKH",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:Salesforce,Chăm sóc khách hàng.[CSKH]_Monthly Report_Báo cáo thời gian trung bình đóng case CSKH,PROD)",
+   "platform": "Salesforce",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:Salesforce,Chăm sóc khách hàng.[CSKH]_Monthly Report_Báo cáo thời gian trung bình đóng case CSKH,PROD)"
+  },
+  {
+   "domain": "HẬU MÃI",
+   "name": "[CSKH]_Monthly Report_Báo cáo tỷ lệ khiếu nại trên UIO",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:Salesforce,Chăm sóc khách hàng.[CSKH]_Monthly Report_Báo cáo tỷ lệ khiếu nại trên UIO,PROD)",
+   "platform": "Salesforce",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:Salesforce,Chăm sóc khách hàng.[CSKH]_Monthly Report_Báo cáo tỷ lệ khiếu nại trên UIO,PROD)"
+  },
+  {
+   "domain": "HẬU MÃI",
+   "name": "[CSKH]_Monthly Report_Báo cáo tỷ lệ sự vụ tự xử lý tại CSKH",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:Salesforce,Chăm sóc khách hàng.[CSKH]_Monthly Report_Báo cáo tỷ lệ sự vụ tự xử lý tại CSKH,PROD)",
+   "platform": "Salesforce",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:Salesforce,Chăm sóc khách hàng.[CSKH]_Monthly Report_Báo cáo tỷ lệ sự vụ tự xử lý tại CSKH,PROD)"
+  },
+  {
+   "domain": "HẬU MÃI",
+   "name": "[CSKH]_Monthly Report_Báo cáo tỷ lệ đặt hẹn DVHM",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:Salesforce,Chăm sóc khách hàng.[CSKH]_Monthly Report_Báo cáo tỷ lệ đặt hẹn DVHM,PROD)",
+   "platform": "Salesforce",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:Salesforce,Chăm sóc khách hàng.[CSKH]_Monthly Report_Báo cáo tỷ lệ đặt hẹn DVHM,PROD)"
+  },
+  {
+   "domain": "HẬU MÃI",
+   "name": "[CSKH]_Weekly Report_Báo cáo hoạt động CSKH tuần",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:Salesforce,Chăm sóc khách hàng.[CSKH]_Weekly Report_Báo cáo hoạt động CSKH tuần,PROD)",
+   "platform": "Salesforce",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:Salesforce,Chăm sóc khách hàng.[CSKH]_Weekly Report_Báo cáo hoạt động CSKH tuần,PROD)"
+  },
+  {
+   "domain": "HẬU MÃI",
+   "name": "[CSKH]_Weekly Report_Báo cáo khiếu nại liên quan tới RSA - MBS - MBC",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:Salesforce,Chăm sóc khách hàng.[CSKH]_Weekly Report_Báo cáo khiếu nại liên quan tới RSA - MBS - MBC,PROD)",
+   "platform": "Salesforce",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:Salesforce,Chăm sóc khách hàng.[CSKH]_Weekly Report_Báo cáo khiếu nại liên quan tới RSA - MBS - MBC,PROD)"
+  },
+  {
+   "domain": "HẬU MÃI",
+   "name": "[CSKH]_Weekly Report_Báo cáo lỗi lặp lại theo CCC code",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:Qualrics,Chăm sóc khách hàng.[CSKH]_Weekly Report_Báo cáo lỗi lặp lại theo CCC code,PROD)",
+   "platform": "Qualrics",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:Qualrics,Chăm sóc khách hàng.[CSKH]_Weekly Report_Báo cáo lỗi lặp lại theo CCC code,PROD)"
+  },
+  {
+   "domain": "HẬU MÃI",
+   "name": "[CSKH]_Weekly Report_Báo cáo tuân thủ chế độ làm việc (nội bộ)",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:Cisco,Chăm sóc khách hàng.[CSKH]_Weekly Report_Báo cáo tuân thủ chế độ làm việc (nội bộ),PROD)",
+   "platform": "Cisco",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:Cisco,Chăm sóc khách hàng.[CSKH]_Weekly Report_Báo cáo tuân thủ chế độ làm việc (nội bộ),PROD)"
+  },
+  {
+   "domain": "HẬU MÃI",
+   "name": "[CSKH]_Weekly Report_Báo cáo tổng hợp sự vụ tiếp nhận trong tuần",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:Salesforce,Chăm sóc khách hàng.[CSKH]_Weekly Report_Báo cáo tổng hợp sự vụ tiếp nhận trong tuần,PROD)",
+   "platform": "Salesforce",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:Salesforce,Chăm sóc khách hàng.[CSKH]_Weekly Report_Báo cáo tổng hợp sự vụ tiếp nhận trong tuần,PROD)"
+  },
+  {
+   "domain": "HẬU MÃI",
+   "name": "[CSKH]_Weekly Report_Báo cáo tỷ lệ khiếu nại trên UIO",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:Salesforce,Chăm sóc khách hàng.[CSKH]_Weekly Report_Báo cáo tỷ lệ khiếu nại trên UIO,PROD)",
+   "platform": "Salesforce",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:Salesforce,Chăm sóc khách hàng.[CSKH]_Weekly Report_Báo cáo tỷ lệ khiếu nại trên UIO,PROD)"
+  },
+  {
+   "domain": "KINH DOANH",
+   "name": "Báo cáo chi tiết chuyển phát nhanh",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:Excel,nan.Báo cáo chi tiết chuyển phát nhanh,PROD)",
+   "platform": "Excel",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:Excel,nan.Báo cáo chi tiết chuyển phát nhanh,PROD)"
+  },
+  {
+   "domain": "KINH DOANH",
+   "name": "Báo cáo chi tiết cấu hình xe ",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,PTX.Báo cáo chi tiết cấu hình xe ,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,PTX.Báo cáo chi tiết cấu hình xe ,PROD)"
+  },
+  {
+   "domain": "KINH DOANH",
+   "name": "Báo cáo hóa đơn  SCT",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:DMS,Kế toán.Báo cáo hóa đơn  SCT,PROD)",
+   "platform": "DMS",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:DMS,Kế toán.Báo cáo hóa đơn  SCT,PROD)"
+  },
+  {
+   "domain": "KINH DOANH",
+   "name": "Báo cáo hóa đơn SZCT1",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Kế toán.Báo cáo hóa đơn SZCT1,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Kế toán.Báo cáo hóa đơn SZCT1,PROD)"
+  },
+  {
+   "domain": "KINH DOANH",
+   "name": "Báo cáo mapping thông tin cấu hình xe",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,PTX/Sản xuất.Báo cáo mapping thông tin cấu hình xe,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,PTX/Sản xuất.Báo cáo mapping thông tin cấu hình xe,PROD)"
+  },
+  {
+   "domain": "KINH DOANH",
+   "name": "Báo cáo mapping thông tin giữa số batch sang VIN",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Sản xuất.Báo cáo mapping thông tin giữa số batch sang VIN,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Sản xuất.Báo cáo mapping thông tin giữa số batch sang VIN,PROD)"
+  },
+  {
+   "domain": "KINH DOANH",
+   "name": "Báo cáo thông tin chi tiết SO/DO",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Kinh doanh.Báo cáo thông tin chi tiết SO/DO,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Kinh doanh.Báo cáo thông tin chi tiết SO/DO,PROD)"
+  },
+  {
+   "domain": "KINH DOANH",
+   "name": "Báo cáo thông tin về xe từ Sản xuất đến khi bán",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Sản xuất.Báo cáo thông tin về xe từ Sản xuất đến khi bán,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Sản xuất.Báo cáo thông tin về xe từ Sản xuất đến khi bán,PROD)"
+  },
+  {
+   "domain": "KINH DOANH",
+   "name": "Báo cáo thông tin xe đủ điều kiện Pass Tp80",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:MES,nan.Báo cáo thông tin xe đủ điều kiện Pass Tp80,PROD)",
+   "platform": "MES",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:MES,nan.Báo cáo thông tin xe đủ điều kiện Pass Tp80,PROD)"
+  },
+  {
+   "domain": "KINH DOANH",
+   "name": "Báo cáo tồn kho và số lượng xe mới xuống chuyền hàng ngày",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Logistic.Báo cáo tồn kho và số lượng xe mới xuống chuyền hàng ngày,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Logistic.Báo cáo tồn kho và số lượng xe mới xuống chuyền hàng ngày,PROD)"
+  },
+  {
+   "domain": "KINH DOANH",
+   "name": "Báo cáo tồn kho ĐLPP",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:DMS,KDVH.Báo cáo tồn kho ĐLPP,PROD)",
+   "platform": "DMS",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:DMS,KDVH.Báo cáo tồn kho ĐLPP,PROD)"
+  },
+  {
+   "domain": "KINH DOANH",
+   "name": "Báo cáo đơn hàng",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:DMS,KD VH + O2O.Báo cáo đơn hàng,PROD)",
+   "platform": "DMS",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:DMS,KD VH + O2O.Báo cáo đơn hàng,PROD)"
+  },
+  {
+   "domain": "KINH DOANH",
+   "name": "[KD]_Báo cáo tồn kho_Ghép xe_tiến độ sản xuất",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Kinh doanh.[KD]_Báo cáo tồn kho_Ghép xe_tiến độ sản xuất,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Kinh doanh.[KD]_Báo cáo tồn kho_Ghép xe_tiến độ sản xuất,PROD)"
+  },
+  {
+   "domain": "KINH DOANH",
+   "name": "[KD]_Báo cáo đặt hàng sản xuất nhà máy",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Kinh doanh.[KD]_Báo cáo đặt hàng sản xuất nhà máy,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Kinh doanh.[KD]_Báo cáo đặt hàng sản xuất nhà máy,PROD)"
+  },
+  {
+   "domain": "KINH DOANH",
+   "name": "denorm_vehicle_information",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dms.stg.denorm_vehicle_information,PROD)",
+   "platform": "redshift",
+   "has_description": false,
+   "schema_field_count": 29,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dms.stg.denorm_vehicle_information,PROD)"
+  },
+  {
+   "domain": "KINH DOANH",
+   "name": "denorm_vehiclecharacteristicvalues",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dms.stg.denorm_vehiclecharacteristicvalues,PROD)",
+   "platform": "redshift",
+   "has_description": false,
+   "schema_field_count": 17,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dms.stg.denorm_vehiclecharacteristicvalues,PROD)"
+  },
+  {
+   "domain": "KINH DOANH",
+   "name": "denorm_vehicleinformations",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dms.stg.denorm_vehicleinformations,PROD)",
+   "platform": "redshift",
+   "has_description": false,
+   "schema_field_count": 49,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dms.stg.denorm_vehicleinformations,PROD)"
+  },
+  {
+   "domain": "KINH DOANH",
+   "name": "denorm_vehiclemodels",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dms.stg.denorm_vehiclemodels,PROD)",
+   "platform": "redshift",
+   "has_description": false,
+   "schema_field_count": 18,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dms.stg.denorm_vehiclemodels,PROD)"
+  },
+  {
+   "domain": "KINH DOANH",
+   "name": "dim_area",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dms.dwh.dim_area,PROD)",
+   "platform": "redshift",
+   "has_description": false,
+   "schema_field_count": 6,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dms.dwh.dim_area,PROD)"
+  },
+  {
+   "domain": "KINH DOANH",
+   "name": "dim_businessunit",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dms.dwh.dim_businessunit,PROD)",
+   "platform": "redshift",
+   "has_description": false,
+   "schema_field_count": 25,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dms.dwh.dim_businessunit,PROD)"
+  },
+  {
+   "domain": "LOGISTIC",
+   "name": "[BC]_Báo cáo chi tiết chi phí mua hàng",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,LOG.[BC]_Báo cáo chi tiết chi phí mua hàng,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,LOG.[BC]_Báo cáo chi tiết chi phí mua hàng,PROD)"
+  },
+  {
+   "domain": "LOGISTIC",
+   "name": "[LOG]_5 điểm kiểm soát",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Hàng Nhập.[LOG]_5 điểm kiểm soát,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Hàng Nhập.[LOG]_5 điểm kiểm soát,PROD)"
+  },
+  {
+   "domain": "LOGISTIC",
+   "name": "[LOG]_Báo Cáo CO",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:ECUS,Tuân thủ Thương mại.[LOG]_Báo Cáo CO,PROD)",
+   "platform": "ECUS",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:ECUS,Tuân thủ Thương mại.[LOG]_Báo Cáo CO,PROD)"
+  },
+  {
+   "domain": "LOGISTIC",
+   "name": "[LOG]_Báo Cáo Chi Tiết Hàng Hóa Xuất Nhập Khẩu",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:ECUS,Tuân thủ Thương mại.[LOG]_Báo Cáo Chi Tiết Hàng Hóa Xuất Nhập Khẩu,PROD)",
+   "platform": "ECUS",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:ECUS,Tuân thủ Thương mại.[LOG]_Báo Cáo Chi Tiết Hàng Hóa Xuất Nhập Khẩu,PROD)"
+  },
+  {
+   "domain": "LOGISTIC",
+   "name": "[LOG]_Báo Cáo Chi Tiết Hàng Hóa Xuất Nhập Khẩu Ủy Thác",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:ECUS,Tuân thủ Thương mại.[LOG]_Báo Cáo Chi Tiết Hàng Hóa Xuất Nhập Khẩu Ủy Thác,PROD)",
+   "platform": "ECUS",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:ECUS,Tuân thủ Thương mại.[LOG]_Báo Cáo Chi Tiết Hàng Hóa Xuất Nhập Khẩu Ủy Thác,PROD)"
+  },
+  {
+   "domain": "LOGISTIC",
+   "name": "[LOG]_Báo Cáo Kế hoạch chi thuế nhập khẩu",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:ECUS,Tuân thủ Thương mại.[LOG]_Báo Cáo Kế hoạch chi thuế nhập khẩu,PROD)",
+   "platform": "ECUS",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:ECUS,Tuân thủ Thương mại.[LOG]_Báo Cáo Kế hoạch chi thuế nhập khẩu,PROD)"
+  },
+  {
+   "domain": "LOGISTIC",
+   "name": "[LOG]_Báo Cáo Phân Bổ Thuế Chip",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:ECUS,Tuân thủ Thương mại.[LOG]_Báo Cáo Phân Bổ Thuế Chip,PROD)",
+   "platform": "ECUS",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:ECUS,Tuân thủ Thương mại.[LOG]_Báo Cáo Phân Bổ Thuế Chip,PROD)"
+  },
+  {
+   "domain": "LOGISTIC",
+   "name": "[LOG]_Báo Cáo Tình Hình Nộp Thuế Nhập Khẩu",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:ECUS,Tuân thủ Thương mại.[LOG]_Báo Cáo Tình Hình Nộp Thuế Nhập Khẩu,PROD)",
+   "platform": "ECUS",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:ECUS,Tuân thủ Thương mại.[LOG]_Báo Cáo Tình Hình Nộp Thuế Nhập Khẩu,PROD)"
+  },
+  {
+   "domain": "LOGISTIC",
+   "name": "[LOG]_Báo Cáo hoạt động xuất nhập khẩu gửi Sở Công Thương",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:ECUS,Tuân thủ Thương mại.[LOG]_Báo Cáo hoạt động xuất nhập khẩu gửi Sở Công Thương,PROD)",
+   "platform": "ECUS",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:ECUS,Tuân thủ Thương mại.[LOG]_Báo Cáo hoạt động xuất nhập khẩu gửi Sở Công Thương,PROD)"
+  },
+  {
+   "domain": "LOGISTIC",
+   "name": "[LOG]_Báo Cáo tờ khai xuất nhập khẩu",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:ECUS,Tuân thủ Thương mại.[LOG]_Báo Cáo tờ khai xuất nhập khẩu,PROD)",
+   "platform": "ECUS",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:ECUS,Tuân thủ Thương mại.[LOG]_Báo Cáo tờ khai xuất nhập khẩu,PROD)"
+  },
+  {
+   "domain": "LOGISTIC",
+   "name": "[LOG]_Báo cáo  tiến độ xuất hàng phụ tùng AFS",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Hàng xuất.[LOG]_Báo cáo  tiến độ xuất hàng phụ tùng AFS,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Hàng xuất.[LOG]_Báo cáo  tiến độ xuất hàng phụ tùng AFS,PROD)"
+  },
+  {
+   "domain": "LOGISTIC",
+   "name": "[LOG]_Báo cáo 24h phụ tùng AFS",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:DMS,Hàng xuất.[LOG]_Báo cáo 24h phụ tùng AFS,PROD)",
+   "platform": "DMS",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:DMS,Hàng xuất.[LOG]_Báo cáo 24h phụ tùng AFS,PROD)"
+  },
+  {
+   "domain": "LOGISTIC",
+   "name": "[LOG]_Báo cáo Khiếu nại hàng phụ tùng AFS",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:DMS,Hàng xuất.[LOG]_Báo cáo Khiếu nại hàng phụ tùng AFS,PROD)",
+   "platform": "DMS",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:DMS,Hàng xuất.[LOG]_Báo cáo Khiếu nại hàng phụ tùng AFS,PROD)"
+  },
+  {
+   "domain": "LOGISTIC",
+   "name": "[LOG]_Báo cáo chi phí vận hành kho hậu mãi.",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Kho hậu mãi Việt Nam.[LOG]_Báo cáo chi phí vận hành kho hậu mãi.,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Kho hậu mãi Việt Nam.[LOG]_Báo cáo chi phí vận hành kho hậu mãi.,PROD)"
+  },
+  {
+   "domain": "LOGISTIC",
+   "name": "[LOG]_Báo cáo giao nhận hàng phụ tùng AFS của từng nhà vận tải",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:DMS,Hàng xuất.[LOG]_Báo cáo giao nhận hàng phụ tùng AFS của từng nhà vận tải,PROD)",
+   "platform": "DMS",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:DMS,Hàng xuất.[LOG]_Báo cáo giao nhận hàng phụ tùng AFS của từng nhà vận tải,PROD)"
+  },
+  {
+   "domain": "LOGISTIC",
+   "name": "[LOG]_Báo cáo hoàn thuế nhập khẩu",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:ECUS,Tuân thủ Thương mại.[LOG]_Báo cáo hoàn thuế nhập khẩu,PROD)",
+   "platform": "ECUS",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:ECUS,Tuân thủ Thương mại.[LOG]_Báo cáo hoàn thuế nhập khẩu,PROD)"
+  },
+  {
+   "domain": "LOGISTIC",
+   "name": "[LOG]_Báo cáo quản lý kho vùng lưu xe ô tô dự án O2O giao khách hàng trên toàn quốc",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Hàng xuất.[LOG]_Báo cáo quản lý kho vùng lưu xe ô tô dự án O2O giao khách hàng trên toàn quốc,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Hàng xuất.[LOG]_Báo cáo quản lý kho vùng lưu xe ô tô dự án O2O giao khách hàng trên toàn quốc,PROD)"
+  },
+  {
+   "domain": "LOGISTIC",
+   "name": "[LOG]_Báo cáo quản lý kho xe máy điện HCM",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:DMS,Hàng xuất.[LOG]_Báo cáo quản lý kho xe máy điện HCM,PROD)",
+   "platform": "DMS",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:DMS,Hàng xuất.[LOG]_Báo cáo quản lý kho xe máy điện HCM,PROD)"
+  },
+  {
+   "domain": "LOGISTIC",
+   "name": "[LOG]_Báo cáo theo dõi hàng nhập khẩu",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Tuân thủ Thương mại.[LOG]_Báo cáo theo dõi hàng nhập khẩu,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Tuân thủ Thương mại.[LOG]_Báo cáo theo dõi hàng nhập khẩu,PROD)"
+  },
+  {
+   "domain": "LOGISTIC",
+   "name": "[LOG]_Báo cáo theo dõi hàng xuất khẩu",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Tuân thủ Thương mại.[LOG]_Báo cáo theo dõi hàng xuất khẩu,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Tuân thủ Thương mại.[LOG]_Báo cáo theo dõi hàng xuất khẩu,PROD)"
+  },
+  {
+   "domain": "PHÁT TRIỂN XE",
+   "name": "[PTX] Báo cáo BCO xe hiện tại và Kiểm soát tồn kho (Stock control)",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:TFS,Phát triển xe.[PTX] Báo cáo BCO xe hiện tại và Kiểm soát tồn kho (Stock control),PROD)",
+   "platform": "TFS",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:TFS,Phát triển xe.[PTX] Báo cáo BCO xe hiện tại và Kiểm soát tồn kho (Stock control),PROD)"
+  },
+  {
+   "domain": "PHÁT TRIỂN XE",
+   "name": "[PTX] Báo cáo Cổng (Gate) Phát triển xe ",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:PHC,Phát triển xe.[PTX] Báo cáo Cổng (Gate) Phát triển xe ,PROD)",
+   "platform": "PHC",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:PHC,Phát triển xe.[PTX] Báo cáo Cổng (Gate) Phát triển xe ,PROD)"
+  },
+  {
+   "domain": "PHÁT TRIỂN XE",
+   "name": "[PTX] Báo cáo Kế hoạch Phát triển xe",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:PLAN,Phát triển xe.[PTX] Báo cáo Kế hoạch Phát triển xe,PROD)",
+   "platform": "PLAN",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:PLAN,Phát triển xe.[PTX] Báo cáo Kế hoạch Phát triển xe,PROD)"
+  },
+  {
+   "domain": "PHÁT TRIỂN XE",
+   "name": "[PTX] Báo cáo lỗi Phát triển xe (JIRA Ticket)",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:IMS,Phát triển xe.[PTX] Báo cáo lỗi Phát triển xe (JIRA Ticket),PROD)",
+   "platform": "IMS",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:IMS,Phát triển xe.[PTX] Báo cáo lỗi Phát triển xe (JIRA Ticket),PROD)"
+  },
+  {
+   "domain": "PHÁT TRIỂN XE",
+   "name": "bom_line_map_variants",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dataanalyticsprd.azure_external.bom_line_map_variants,PROD)",
+   "platform": "redshift",
+   "has_description": false,
+   "schema_field_count": 7,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dataanalyticsprd.azure_external.bom_line_map_variants,PROD)"
+  },
+  {
+   "domain": "PHÁT TRIỂN XE",
+   "name": "dim_build_option",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dataanalyticsprd.azure_external.dim_build_option,PROD)",
+   "platform": "redshift",
+   "has_description": false,
+   "schema_field_count": 7,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dataanalyticsprd.azure_external.dim_build_option,PROD)"
+  },
+  {
+   "domain": "PHÁT TRIỂN XE",
+   "name": "dim_color_exterior",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dataanalyticsprd.azure_external.dim_color_exterior,PROD)",
+   "platform": "redshift",
+   "has_description": false,
+   "schema_field_count": 5,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dataanalyticsprd.azure_external.dim_color_exterior,PROD)"
+  },
+  {
+   "domain": "PHÁT TRIỂN XE",
+   "name": "dim_color_interior",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dataanalyticsprd.azure_external.dim_color_interior,PROD)",
+   "platform": "redshift",
+   "has_description": false,
+   "schema_field_count": 5,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dataanalyticsprd.azure_external.dim_color_interior,PROD)"
+  },
+  {
+   "domain": "PHÁT TRIỂN XE",
+   "name": "dim_market",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dataanalyticsprd.azure_external.dim_market,PROD)",
+   "platform": "redshift",
+   "has_description": false,
+   "schema_field_count": 5,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dataanalyticsprd.azure_external.dim_market,PROD)"
+  },
+  {
+   "domain": "PHÁT TRIỂN XE",
+   "name": "dim_material",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dataanalyticsprd.azure_external.dim_material,PROD)",
+   "platform": "redshift",
+   "has_description": false,
+   "schema_field_count": 30,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dataanalyticsprd.azure_external.dim_material,PROD)"
+  },
+  {
+   "domain": "PHÁT TRIỂN XE",
+   "name": "dim_mldoc_extract",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dataanalyticsprd.azure_external.dim_mldoc_extract,PROD)",
+   "platform": "redshift",
+   "has_description": false,
+   "schema_field_count": 11,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dataanalyticsprd.azure_external.dim_mldoc_extract,PROD)"
+  },
+  {
+   "domain": "PHÁT TRIỂN XE",
+   "name": "dim_model",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:redshift,dataanalyticsprd.azure_external.dim_model,PROD)",
+   "platform": "redshift",
+   "has_description": false,
+   "schema_field_count": 5,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:redshift,dataanalyticsprd.azure_external.dim_model,PROD)"
+  },
+  {
+   "domain": "SẢN XUẤT",
+   "name": " EV VIN Battery Report",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Kế hoạch sản xuất. EV VIN Battery Report,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Kế hoạch sản xuất. EV VIN Battery Report,PROD)"
+  },
+  {
+   "domain": "SẢN XUẤT",
+   "name": " FTQ Welding - Ultrasonic",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:Ignition,Chất lượng. FTQ Welding - Ultrasonic,PROD)",
+   "platform": "Ignition",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:Ignition,Chất lượng. FTQ Welding - Ultrasonic,PROD)"
+  },
+  {
+   "domain": "SẢN XUẤT",
+   "name": " MA - PIST Dimension Check",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:Ignition,Chất lượng. MA - PIST Dimension Check,PROD)",
+   "platform": "Ignition",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:Ignition,Chất lượng. MA - PIST Dimension Check,PROD)"
+  },
+  {
+   "domain": "SẢN XUẤT",
+   "name": "'[LOG- PPHT]-Báo cáo hạn sử dụng còn lại của các mã NVL có quản lý HSD",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Global MFG LOG.'[LOG- PPHT]-Báo cáo hạn sử dụng còn lại của các mã NVL có quản lý HSD,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Global MFG LOG.'[LOG- PPHT]-Báo cáo hạn sử dụng còn lại của các mã NVL có quản lý HSD,PROD)"
+  },
+  {
+   "domain": "SẢN XUẤT",
+   "name": "01.02 Production Result",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:MES,Kế hoạch sản xuất.01.02 Production Result,PROD)",
+   "platform": "MES",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:MES,Kế hoạch sản xuất.01.02 Production Result,PROD)"
+  },
+  {
+   "domain": "SẢN XUẤT",
+   "name": "01.03 MCN",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:MES,Kế hoạch sản xuất.01.03 MCN,PROD)",
+   "platform": "MES",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:MES,Kế hoạch sản xuất.01.03 MCN,PROD)"
+  },
+  {
+   "domain": "SẢN XUẤT",
+   "name": "250101_Bao cao YCMH_SX",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Sản xuất.250101_Bao cao YCMH_SX,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Sản xuất.250101_Bao cao YCMH_SX,PROD)"
+  },
+  {
+   "domain": "SẢN XUẤT",
+   "name": "250102_Bao cao chi phi SX",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Sản xuất.250102_Bao cao chi phi SX,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Sản xuất.250102_Bao cao chi phi SX,PROD)"
+  },
+  {
+   "domain": "SẢN XUẤT",
+   "name": "250401_Bao cao san xuat",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:MES,Sản xuất.250401_Bao cao san xuat,PROD)",
+   "platform": "MES",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:MES,Sản xuất.250401_Bao cao san xuat,PROD)"
+  },
+  {
+   "domain": "SẢN XUẤT",
+   "name": "Auto-Sales reconcile report",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Kinh doanh.Auto-Sales reconcile report,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Kinh doanh.Auto-Sales reconcile report,PROD)"
+  },
+  {
+   "domain": "SẢN XUẤT",
+   "name": "BOM Structure",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Quản Lý Dữ Liệu.BOM Structure,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Quản Lý Dữ Liệu.BOM Structure,PROD)"
+  },
+  {
+   "domain": "SẢN XUẤT",
+   "name": "Backflush MES SAP-SP Report",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Global MFG LOG.Backflush MES SAP-SP Report,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Global MFG LOG.Backflush MES SAP-SP Report,PROD)"
+  },
+  {
+   "domain": "SẢN XUẤT",
+   "name": "Báo cáo kiểm tra ngoại quan của sản phẩm",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SQ,Chất lượng.Báo cáo kiểm tra ngoại quan của sản phẩm,PROD)",
+   "platform": "SQ",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SQ,Chất lượng.Báo cáo kiểm tra ngoại quan của sản phẩm,PROD)"
+  },
+  {
+   "domain": "SẢN XUẤT",
+   "name": "Biểu đồ báo cáo chất lượng tổng thể - Các xưởng chính",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:MES,Chất lượng.Biểu đồ báo cáo chất lượng tổng thể - Các xưởng chính,PROD)",
+   "platform": "MES",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:MES,Chất lượng.Biểu đồ báo cáo chất lượng tổng thể - Các xưởng chính,PROD)"
+  },
+  {
+   "domain": "SẢN XUẤT",
+   "name": "Biểu đồ báo cáo chất lượng tổng thể - tất cả các xưởng",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:MES,Chất lượng.Biểu đồ báo cáo chất lượng tổng thể - tất cả các xưởng,PROD)",
+   "platform": "MES",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:MES,Chất lượng.Biểu đồ báo cáo chất lượng tổng thể - tất cả các xưởng,PROD)"
+  },
+  {
+   "domain": "SẢN XUẤT",
+   "name": "BÁO CÁO HÀNG HỦY THEO BỘ PHẬN",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.BÁO CÁO HÀNG HỦY THEO BỘ PHẬN,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.BÁO CÁO HÀNG HỦY THEO BỘ PHẬN,PROD)"
+  },
+  {
+   "domain": "SẢN XUẤT",
+   "name": "BÁO CÁO HÀNG HỦY THEO LỖI",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.BÁO CÁO HÀNG HỦY THEO LỖI,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.BÁO CÁO HÀNG HỦY THEO LỖI,PROD)"
+  },
+  {
+   "domain": "SẢN XUẤT",
+   "name": "Báo Cáo kiểm soát Opex/Capex - PR/PO.",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Tài chính SX.Báo Cáo kiểm soát Opex/Capex - PR/PO.,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Tài chính SX.Báo Cáo kiểm soát Opex/Capex - PR/PO.,PROD)"
+  },
+  {
+   "domain": "SẢN XUẤT",
+   "name": "Báo cáo  độ dày sơn ED",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:MES,Chất lượng.Báo cáo  độ dày sơn ED,PROD)",
+   "platform": "MES",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:MES,Chất lượng.Báo cáo  độ dày sơn ED,PROD)"
+  },
+  {
+   "domain": "SẢN XUẤT",
+   "name": "Báo cáo BOM Assembly",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.Báo cáo BOM Assembly,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.Báo cáo BOM Assembly,PROD)"
+  },
+  {
+   "domain": "TÀI CHÍNH",
+   "name": "AR Receipts",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:DMS,Kế toán bán hàng.AR Receipts,PROD)",
+   "platform": "DMS",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:DMS,Kế toán bán hàng.AR Receipts,PROD)"
+  },
+  {
+   "domain": "TÀI CHÍNH",
+   "name": "Activity type Price Report",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Kế toán.Activity type Price Report,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Kế toán.Activity type Price Report,PROD)"
+  },
+  {
+   "domain": "TÀI CHÍNH",
+   "name": "All Postings",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Tối ưu Sản xuất và Cung ứng.All Postings,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Tối ưu Sản xuất và Cung ứng.All Postings,PROD)"
+  },
+  {
+   "domain": "TÀI CHÍNH",
+   "name": "Analyse Product cost collector: Target/Actual Comparison",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Kế toán.Analyse Product cost collector: Target/Actual Comparison,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Kế toán.Analyse Product cost collector: Target/Actual Comparison,PROD)"
+  },
+  {
+   "domain": "TÀI CHÍNH",
+   "name": "BC PR PO",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Tối ưu Sản xuất và Cung ứng.BC PR PO,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Tối ưu Sản xuất và Cung ứng.BC PR PO,PROD)"
+  },
+  {
+   "domain": "TÀI CHÍNH",
+   "name": "BC giá thành xe",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Tối ưu Sản xuất và Cung ứng.BC giá thành xe,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Tối ưu Sản xuất và Cung ứng.BC giá thành xe,PROD)"
+  },
+  {
+   "domain": "TÀI CHÍNH",
+   "name": "BC đổ NS",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Tối ưu Sản xuất và Cung ứng.BC đổ NS,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Tối ưu Sản xuất và Cung ứng.BC đổ NS,PROD)"
+  },
+  {
+   "domain": "TÀI CHÍNH",
+   "name": "Bank Guarantee for tooling",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.Bank Guarantee for tooling,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.Bank Guarantee for tooling,PROD)"
+  },
+  {
+   "domain": "TÀI CHÍNH",
+   "name": "Bao cáo thành phẩm",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Tối ưu Sản xuất và Cung ứng.Bao cáo thành phẩm,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Tối ưu Sản xuất và Cung ứng.Bao cáo thành phẩm,PROD)"
+  },
+  {
+   "domain": "TÀI CHÍNH",
+   "name": "Baáo cáo biến động tồn kho",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Tối ưu Sản xuất và Cung ứng.Baáo cáo biến động tồn kho,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Tối ưu Sản xuất và Cung ứng.Baáo cáo biến động tồn kho,PROD)"
+  },
+  {
+   "domain": "TÀI CHÍNH",
+   "name": "Baáo cáo giờ công sản xuất",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Tối ưu Sản xuất và Cung ứng.Baáo cáo giờ công sản xuất,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Tối ưu Sản xuất và Cung ứng.Baáo cáo giờ công sản xuất,PROD)"
+  },
+  {
+   "domain": "TÀI CHÍNH",
+   "name": "Bom Assembly",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Kế toán.Bom Assembly,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Kế toán.Bom Assembly,PROD)"
+  },
+  {
+   "domain": "TÀI CHÍNH",
+   "name": "Budget Consumption Report",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.Budget Consumption Report,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Mua hàng.Budget Consumption Report,PROD)"
+  },
+  {
+   "domain": "TÀI CHÍNH",
+   "name": "Báo cáo 3387 (báo cáo bán hàng trả góp)",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Kế toán bán hàng.Báo cáo 3387 (báo cáo bán hàng trả góp),PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Kế toán bán hàng.Báo cáo 3387 (báo cáo bán hàng trả góp),PROD)"
+  },
+  {
+   "domain": "TÀI CHÍNH",
+   "name": "Báo cáo BOM",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:PLM,Tối ưu Phát triển xe.Báo cáo BOM,PROD)",
+   "platform": "PLM",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:PLM,Tối ưu Phát triển xe.Báo cáo BOM,PROD)"
+  },
+  {
+   "domain": "TÀI CHÍNH",
+   "name": "Báo cáo BOM Assembly",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Tối ưu Sản xuất và Cung ứng.Báo cáo BOM Assembly,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Tối ưu Sản xuất và Cung ứng.Báo cáo BOM Assembly,PROD)"
+  },
+  {
+   "domain": "TÀI CHÍNH",
+   "name": "Báo cáo CCP by STD",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Kế toán.Báo cáo CCP by STD,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Kế toán.Báo cáo CCP by STD,PROD)"
+  },
+  {
+   "domain": "TÀI CHÍNH",
+   "name": "Báo cáo CF",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Công nợ phải trả.Báo cáo CF,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Công nợ phải trả.Báo cáo CF,PROD)"
+  },
+  {
+   "domain": "TÀI CHÍNH",
+   "name": "Báo cáo Capex",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Kế toán tổng hợp.Báo cáo Capex,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Kế toán tổng hợp.Báo cáo Capex,PROD)"
+  },
+  {
+   "domain": "TÀI CHÍNH",
+   "name": "Báo cáo Capex - theo NM",
+   "urn": "urn:li:dataset:(urn:li:dataPlatform:SAP,Tối ưu Sản xuất và Cung ứng.Báo cáo Capex - theo NM,PROD)",
+   "platform": "SAP",
+   "has_description": true,
+   "schema_field_count": 0,
+   "datahub_url": "https://datahub.vinfastauto.com/dataset/urn:li:dataset:(urn:li:dataPlatform:SAP,Tối ưu Sản xuất và Cung ứng.Báo cáo Capex - theo NM,PROD)"
+  },
+  {
+   "type": "glossary_term",
+   "name": "BOM (Bill of Materials)",
+   "urn": "urn:li:glossaryTerm:7137e03e-59d5-485c-b0ba-82957e0b6b23",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "% vs Target​ - Tỉ lệ hoàn thành chỉ tiêu",
+   "urn": "urn:li:glossaryTerm:01b39061-a341-4862-b041-a08b91e5e0b5",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "[VN] Sell Out - Retail",
+   "urn": "urn:li:glossaryTerm:028df638-7947-411d-b7cf-ed8529e5cbe8",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "CP sản xuất bình quân/xe SOP",
+   "urn": "urn:li:glossaryTerm:05ca6a81-08dc-4743-9323-44aa09a78345",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Premium Shipment Car- Plan",
+   "urn": "urn:li:glossaryTerm:08a72308-dd7c-438b-bd5b-938c44b9d3e3",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "[VN] Đơn hàng GF",
+   "urn": "urn:li:glossaryTerm:098c96ca-6b59-4834-bfe0-fe0f0d0ddc63",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "MRD (Material Readiness Date)",
+   "urn": "urn:li:glossaryTerm:0a239243-b4da-42ae-98b9-748f7cca62ab",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "BCO - BOM COST OPTIMIZATION",
+   "urn": "urn:li:glossaryTerm:0a622e0c-5206-4fc7-b956-732d6b0bef0b",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Phát thải GHG",
+   "urn": "urn:li:glossaryTerm:0ae35b70-0bba-464f-ba15-ed686bf43b4d",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Tồn kho min max",
+   "urn": "urn:li:glossaryTerm:0b7a021e-0d16-4e47-b294-1399946cfb59",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Tỉ trọng tham gia khảo sát theo kênh",
+   "urn": "urn:li:glossaryTerm:0f9a5651-d47e-4acb-a4c3-1345c5c57c14",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Doanh thu",
+   "urn": "urn:li:glossaryTerm:12ab9399-bc7b-4890-8ee4-2c4979c469bf",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Giá xe niêm yết",
+   "urn": "urn:li:glossaryTerm:12e72777-cf38-427d-a16d-f3b4897a6696",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "[VN] Lead SR",
+   "urn": "urn:li:glossaryTerm:1625507a-1054-4289-85e9-1b237c414dbc",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Chỉ số trọn bộ theo KHSX",
+   "urn": "urn:li:glossaryTerm:16be55ff-de44-4d51-acab-137d562e1aaa",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "SO (Sales Order) ",
+   "urn": "urn:li:glossaryTerm:3c0e3817-3e34-483e-8955-306c8819ae2b",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "EBOM (Engineering Bill of Materials)",
+   "urn": "urn:li:glossaryTerm:198941d2-d781-4d5e-a54e-bc53e4cfd315",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Constrained Item ",
+   "urn": "urn:li:glossaryTerm:19f4d95d-0910-4a2d-a5f2-11a9a1fe0e55",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Giá Net tính thưởng",
+   "urn": "urn:li:glossaryTerm:1b1cd4af-70bf-4dcf-9f3d-8df4fc644556",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "[Tồn kho] Amount",
+   "urn": "urn:li:glossaryTerm:1dfca894-1c87-431e-b2f0-b97f61d7c649",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "VF Direct to Customer - VF bán trực tiếp",
+   "urn": "urn:li:glossaryTerm:3c5fb01b-a9ce-480d-8d71-0e4acc7be046",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "OKTS JPH",
+   "urn": "urn:li:glossaryTerm:1f6cada9-7f0d-4a4e-84b5-f2a0b6aee341",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Business Unit",
+   "urn": "urn:li:glossaryTerm:2113bb28-9df3-4679-94ba-8927e7f6c8ac",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Cost Component",
+   "urn": "urn:li:glossaryTerm:2298718c-7a59-47bb-9a65-ce42a268d04c",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "KPIs Logic Sales CA",
+   "urn": "urn:li:glossaryTerm:25dec5c4-ea94-44b2-9859-918c5af83589",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "MBOM (Manufacturing Bill of Materials)",
+   "urn": "urn:li:glossaryTerm:26ad6f58-ec9f-4deb-b08f-e9735cc3b38e",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "US Reservation",
+   "urn": "urn:li:glossaryTerm:4bf6a5e5-76f4-4949-82ad-7b21ed3379dd",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "PLM (Product Lifecycle Management)",
+   "urn": "urn:li:glossaryTerm:28020035-8c99-459a-9909-fe008f3c7f23",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "[Tồn kho] MBOM status",
+   "urn": "urn:li:glossaryTerm:2975ae20-a916-4d1f-b806-7ce926add466",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Tính toán “Quantity per variant”",
+   "urn": "urn:li:glossaryTerm:299637f7-d463-4700-bed8-d315d1c1e858",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Safety Time",
+   "urn": "urn:li:glossaryTerm:29e3b7a7-7cf3-4820-b4d5-00e113653a14",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Reservation - Đơn đặt cọc",
+   "urn": "urn:li:glossaryTerm:2ca09a01-063a-4298-b483-b8ee18a62426",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "CPU (Chi phí sản xuất/xe)",
+   "urn": "urn:li:glossaryTerm:2ee75bfb-df5e-43b4-99b4-ebc78c6ddc9c",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Test Drive",
+   "urn": "urn:li:glossaryTerm:5af50acf-d7fc-4b68-b328-471dbbc791d4",
+   "has_description": false
+  },
+  {
+   "type": "glossary_term",
+   "name": "Sunk Cost - Chi Phí Chìm",
+   "urn": "urn:li:glossaryTerm:30a91ecc-e902-4533-a07c-4706190919dc",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "GIT - Goods In Transit",
+   "urn": "urn:li:glossaryTerm:3391d264-061a-4bd8-901a-78dc0460ac20",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "New Order - Đơn hàng ký mới",
+   "urn": "urn:li:glossaryTerm:33c3fffb-6f6c-405e-af57-777b15156447",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Số ngày tồn kho phụ tùng hậu mãi",
+   "urn": "urn:li:glossaryTerm:3448a2ed-7a62-4181-912a-455c975f5872",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "[VN] Đơn hàng O2O",
+   "urn": "urn:li:glossaryTerm:38a56670-41a9-4482-9841-083825173bf3",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Xử lý dữ liệu MBOM",
+   "urn": "urn:li:glossaryTerm:3e0ecaa0-d649-4804-bcfd-812d32649579",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "[Tồn kho] Quantity",
+   "urn": "urn:li:glossaryTerm:3ed43ad1-52c5-407a-8282-91816910dc31",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "[Tồn kho] Phân loại nguyên vật liệu",
+   "urn": "urn:li:glossaryTerm:3f0dc6f3-49fc-40ac-80c1-b068dbf899dd",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "US Daily Sales",
+   "urn": "urn:li:glossaryTerm:40461cfe-e4a4-4715-a481-bd3d60bbe947",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "PFEP",
+   "urn": "urn:li:glossaryTerm:42a141ef-0723-4615-b3e4-64c8f1560b18",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Tính toán “Demand of all build phases per variant”",
+   "urn": "urn:li:glossaryTerm:42dae407-ae65-4d6b-a9c9-6e4925d0c70c",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Logic SBOM ",
+   "urn": "urn:li:glossaryTerm:44d457df-29b6-48a5-876e-b49c843df710",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Dealer OUT - ĐL/NPP bán ra cho Khách hàng",
+   "urn": "urn:li:glossaryTerm:460d1648-5dc6-4587-b656-59a7b8a03d6e",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Aging ",
+   "urn": "urn:li:glossaryTerm:46370043-7af4-40ad-a041-4a5877dc6e34",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "BOM GAP",
+   "urn": "urn:li:glossaryTerm:485ec08b-59f2-4fb2-9782-933cb2519773",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Rolling Up Lower",
+   "urn": "urn:li:glossaryTerm:4a0fb8ae-bbb2-4338-a27a-5edeacdb4b0a",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "P&E  (Plant & Equipment Cost) - Chi Phí Đầu Tư Nhà Xưởng & Thiết Bị",
+   "urn": "urn:li:glossaryTerm:4b5f61e4-7a2e-4ddf-9132-a3587ed3be8f",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "[VN] Đơn hàng CBNV",
+   "urn": "urn:li:glossaryTerm:4cd9c9fc-273d-459c-9f7b-d1522d891369",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "[VN] Dealer OUT - NPP/ĐL bán cho khách hàng cuối",
+   "urn": "urn:li:glossaryTerm:4f432fe0-c6e7-4fd4-b34c-ac594d46d2db",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "PPAP (Production Part Approval Process)",
+   "urn": "urn:li:glossaryTerm:4f8dcc3f-38b5-44b9-b9d3-808617d47d72",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Số lượng xe tồn kho và số ngày tồn kho thành phẩm (Ô tô và XMĐ)",
+   "urn": "urn:li:glossaryTerm:4fff34a7-056d-476b-97e7-5f6ab17e746e",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Safety Stock",
+   "urn": "urn:li:glossaryTerm:5b298ef5-7331-4fd0-86b8-2f69349c1761",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "HPU % so với chuẩn",
+   "urn": "urn:li:glossaryTerm:511c32cd-5e36-4de2-b2bf-5b6f5242a6e0",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Lấy thông tin cột vận chuyển (Shipment Columns)",
+   "urn": "urn:li:glossaryTerm:5123a6c4-e9bd-49bf-8a37-e4284d60d399",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Lost Time Injury Incident Rate",
+   "urn": "urn:li:glossaryTerm:51f20948-6819-4709-9c18-83a8ac726f3e",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "PPAP",
+   "urn": "urn:li:glossaryTerm:5463380c-09e9-48eb-9dc1-83ba5351c423",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "US Delivery",
+   "urn": "urn:li:glossaryTerm:54ac7cce-dbec-46ef-8e4d-87921338a63a",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Trim Level",
+   "urn": "urn:li:glossaryTerm:54f56594-6c8b-4901-ac66-ae360b04fec6",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "TCO (Total Cost of Ownership) - Tổng Chi Phí Sở Hữu",
+   "urn": "urn:li:glossaryTerm:565da00b-4ae8-4c08-a5a7-f32b732489c4",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Tỷ lệ trọn bộ",
+   "urn": "urn:li:glossaryTerm:56e509c1-ad70-4c61-bb56-5b3d1d3e862f",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "POP (Perception of Performance)",
+   "urn": "urn:li:glossaryTerm:57a84b37-9d9d-462e-88aa-2803110b5965",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Part Cost - Chi Phí Linh Kiện",
+   "urn": "urn:li:glossaryTerm:59465557-5c71-4d37-80f9-b00db545fa41",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "SOH - Stock On Hand",
+   "urn": "urn:li:glossaryTerm:5c2b9c77-8e14-43cb-803e-5b6177c43a24",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "US Vehicle",
+   "urn": "urn:li:glossaryTerm:5c848467-2a4e-48fa-8639-9ba2695f1028",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Sell In - Wholesales",
+   "urn": "urn:li:glossaryTerm:5cccd5dc-c0bf-40d6-98e0-c19f98ca3ef9",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "LOB",
+   "urn": "urn:li:glossaryTerm:5de5205e-dc8c-405f-806d-02a61c79be94",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "SBOM - Service Bill of Materials",
+   "urn": "urn:li:glossaryTerm:611ec6ec-f67f-4519-86f5-38f1cb72aeb2",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Phân loại các nhóm ",
+   "urn": "urn:li:glossaryTerm:66a81ddf-0dec-463c-9061-0bfb36949c07",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Quantity, Amount",
+   "urn": "urn:li:glossaryTerm:670cc4c6-ff7b-466b-9736-5c087749e6b4",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Giá trị tối ưu chi phí BOM",
+   "urn": "urn:li:glossaryTerm:6a9148bf-8ffb-457a-a728-bd193cc6e726",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "NES (Net Emotional Score)",
+   "urn": "urn:li:glossaryTerm:6a95a184-0fcf-4c89-a077-1b7d62400e78",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Target - Chỉ tiêu số bán",
+   "urn": "urn:li:glossaryTerm:6fbb0f9e-6b4d-424b-989e-a57d4c3c03b9",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Coverage Date",
+   "urn": "urn:li:glossaryTerm:7081e281-2d7b-4f66-9b1b-c31cdb66cc1b",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": " Premium Shipment Car- Actual",
+   "urn": "urn:li:glossaryTerm:70b2d727-80da-4365-bae0-b958f2c89d40",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "[VN] Đơn hàng SR",
+   "urn": "urn:li:glossaryTerm:7215ebb2-54bf-4282-ba43-390444b73165",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "MRQ (Material Readiness Quality)",
+   "urn": "urn:li:glossaryTerm:7279d9d5-e213-4191-98ee-29a044de1700",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Nhu cầu linh kiện ",
+   "urn": "urn:li:glossaryTerm:72c69954-8944-4e58-9af2-328502dc9390",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Tính toán “H part MRD date - Planned” (chưa xác nhận bởi ME)",
+   "urn": "urn:li:glossaryTerm:75b50df0-9850-47d9-92fe-f1654673c518",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "COGS (Cost of Goods Sold)",
+   "urn": "urn:li:glossaryTerm:78b14999-6a7a-4d56-adb1-57fb2ae3c4df",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "[VN] Đơn hàng B2B",
+   "urn": "urn:li:glossaryTerm:79cc0785-bc6e-4a8c-a9f1-96388301ae2d",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "[VN] Đơn hàng GF Platform",
+   "urn": "urn:li:glossaryTerm:79dfae2d-0da4-473d-a337-118a308ae8f5",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "ERP (Enterprise Resource Planning)",
+   "urn": "urn:li:glossaryTerm:7acc13c9-67a5-4e6e-a6bb-3b53a1586e5d",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "PFEP (Plan for Every Part) ",
+   "urn": "urn:li:glossaryTerm:7f04e765-927e-4272-a16c-843a06110280",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Chi phí tồn kho vật tư trực tiếp",
+   "urn": "urn:li:glossaryTerm:816db4fd-f984-47a6-9d23-dbfd490e527f",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "US Summary",
+   "urn": "urn:li:glossaryTerm:82cdc097-d902-4abe-b3db-ef6657e62ff8",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "[Tồn kho] Aging ",
+   "urn": "urn:li:glossaryTerm:82ef7343-95e3-4126-ab3e-c7ec4a131c4e",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "[VN] Dealer IN - VFT bán buôn cho ĐL/NPP",
+   "urn": "urn:li:glossaryTerm:85e52ba5-0638-4812-ab62-3abe35acbe0b",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Giá trị đầu tư và tỷ lệ vượt NS phát triển xe",
+   "urn": "urn:li:glossaryTerm:88043165-fa50-45b8-aa91-6124c7e054c2",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "ROI (Return on Investment) - Tỷ  suất hoàn vốn đầu tư",
+   "urn": "urn:li:glossaryTerm:88344dc3-c74c-4bdb-a179-ff1257db86ac",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "ECR (Engineering Change Request)",
+   "urn": "urn:li:glossaryTerm:8aba5782-b517-43bc-961b-85bbeeaf8259",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "CAPEX (Capital Expenditure)",
+   "urn": "urn:li:glossaryTerm:8b43418e-999b-48f2-9030-db7fa08c714f",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Mức tiêu thụ điện",
+   "urn": "urn:li:glossaryTerm:8bb412cd-a641-4bfa-8f48-265e899e2895",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Giá trị sunk cost ECR theo dòng xe",
+   "urn": "urn:li:glossaryTerm:8c191072-1184-47c9-8b4d-1fcae744fee0",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "MOQ (Minimum Order Quantity)",
+   "urn": "urn:li:glossaryTerm:8e3dc020-bc89-449b-88da-4d3bbb1abe74",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Lead (SR)",
+   "urn": "urn:li:glossaryTerm:8ecb9730-687e-42ec-9b5f-67ed5a25d6e5",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Tính hạn sử dụng (Exp Date)",
+   "urn": "urn:li:glossaryTerm:9ad8e5ca-a6b4-4ce0-b975-436a561e7152",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "[Tồn kho] Hạn sử dụng",
+   "urn": "urn:li:glossaryTerm:8f225813-e62d-4322-bf40-e9eb6de5bc42",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "[VN] Đơn hàng tồn",
+   "urn": "urn:li:glossaryTerm:8fdab597-8b98-445a-870a-c8782068b5b8",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "MRP (Material Requirements Planning)",
+   "urn": "urn:li:glossaryTerm:90343e1f-15de-4625-adc8-a247318d7cbc",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Sell Out - Retail",
+   "urn": "urn:li:glossaryTerm:9040023b-8fd5-4b16-b775-bb647588bb42",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Shelf Life",
+   "urn": "urn:li:glossaryTerm:90d78ebd-3b8f-4a54-abae-787712b98288",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Giá xe xuất hóa đơn",
+   "urn": "urn:li:glossaryTerm:941c832a-ccfa-4b42-b53f-edf3b7f0bca0",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Scrap Cost - Chi Phí Phế Phẩm",
+   "urn": "urn:li:glossaryTerm:948bf4e4-5269-43bc-8719-cd2f59a47368",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "[VN] Đơn hàng GSM",
+   "urn": "urn:li:glossaryTerm:95c6c275-851c-4172-aa29-b72890a975ef",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Lot Size",
+   "urn": "urn:li:glossaryTerm:97ba0f5b-a0ab-4d03-aac8-4fc44d4fc8ef",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Schedule Line",
+   "urn": "urn:li:glossaryTerm:98ab30a0-c8f9-4d19-b1b0-48a55e2a7b84",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Pending Order​ - Đơn hàng tồn",
+   "urn": "urn:li:glossaryTerm:9ce5e5bd-d5bf-4952-9aac-53edcc655708",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Thời gian dừng GA",
+   "urn": "urn:li:glossaryTerm:9d86c96f-a1c3-4747-8874-b1dd2adff561",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Min Carset",
+   "urn": "urn:li:glossaryTerm:9e2db4c3-d385-4b75-bb49-cac763ece72a",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "AES-256",
+   "urn": "urn:li:glossaryTerm:AES-256",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Hashing (SHA-256)",
+   "urn": "urn:li:glossaryTerm:HashingSHA-256",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "PII",
+   "urn": "urn:li:glossaryTerm:PII",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Số lượng ECR theo dòng xe",
+   "urn": "urn:li:glossaryTerm:d63ddf2d-0cf4-4ea4-b274-c13b64830a85",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Số lượt xe và tỷ lệ xe sửa chữa nằm tại XDV trên 3 ngày (SR và Đại lý)",
+   "urn": "urn:li:glossaryTerm:a373da86-d5d3-496f-9501-9968ff8cb652",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Tính toán “MRD FORECAST DATE”",
+   "urn": "urn:li:glossaryTerm:a46c0ac1-403e-4a0b-b038-9278dd156013",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Xác định In BOM/Not In BOM ",
+   "urn": "urn:li:glossaryTerm:a4a1cc87-9bbb-426c-8504-2b3595b1b113",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "[VN] Đơn hàng Vinhomes",
+   "urn": "urn:li:glossaryTerm:a700292c-0145-4b11-9446-431aa71fb3b8",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Schedule Agreement",
+   "urn": "urn:li:glossaryTerm:a7b4b6e0-7229-4436-a3ef-451ce1ccd0c4",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Tính toán “$Deliver Lead time” từ ZMME147B",
+   "urn": "urn:li:glossaryTerm:a84252ea-12b7-4a94-a1d8-3cc4432f4dcc",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Last Date Cover",
+   "urn": "urn:li:glossaryTerm:a8bfa3c9-de0c-4349-8172-05ee83ca6c49",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "EDD - Engineering, Design & Development Cost",
+   "urn": "urn:li:glossaryTerm:a949898a-111f-4264-b1eb-2f3888941d20",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "[VN] Sell In - Wholesales",
+   "urn": "urn:li:glossaryTerm:a970117b-e735-46ac-9949-b7e930906c21",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Tỷ lệ tham gia khảo sát",
+   "urn": "urn:li:glossaryTerm:a9f1ac41-f6bc-4888-bb69-5e6be1beaddf",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "OPEX (Operational Expenditure) - Chi Phí Hoạt Động",
+   "urn": "urn:li:glossaryTerm:ab0a1b9a-eda2-43a4-83d2-41f781189644",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "DO (Delivery Order) ",
+   "urn": "urn:li:glossaryTerm:b988d93d-2e79-4390-a4bf-eafc17b5cd7a",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "MIS (Months In Service)",
+   "urn": "urn:li:glossaryTerm:abc0d5c9-dada-461f-9927-db92e333a79d",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Tính toán “Production Orders”",
+   "urn": "urn:li:glossaryTerm:acbf8399-1007-448e-b6f3-e52a3b8153da",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "KPIs Logic Sales EU",
+   "urn": "urn:li:glossaryTerm:b1031a10-df4a-4ee2-a7ab-66eede35caae",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Tính toán “In Transit Material”",
+   "urn": "urn:li:glossaryTerm:b372b287-25ac-4632-8692-c40d4062c8db",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "WIP",
+   "urn": "urn:li:glossaryTerm:b3b325e0-61a5-451f-a419-8e0dae31712a",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "US Test Drive",
+   "urn": "urn:li:glossaryTerm:b435ec92-bd5f-42da-9a51-5278ec7d6665",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Standard Cost",
+   "urn": "urn:li:glossaryTerm:b748a0e0-951e-4143-b471-f9388b933e94",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "LOB - Line of Balance",
+   "urn": "urn:li:glossaryTerm:b8f3470d-af75-46af-8c14-f50d6bc75d27",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "EBITDA",
+   "urn": "urn:li:glossaryTerm:ba211771-30ff-4f12-8d3a-38c389285854",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Chương trình KM giảm giá bán xe",
+   "urn": "urn:li:glossaryTerm:ba6249c3-d107-461c-96d3-004e08a9e688",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Tooling Cost (Chi phí thiết kế)",
+   "urn": "urn:li:glossaryTerm:bef18d21-9800-43f8-a113-d65ac589181f",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "[VN] Đơn hàng GSM Platform",
+   "urn": "urn:li:glossaryTerm:c111a5db-f10f-42cf-b673-1cc422c73ed2",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "[Tồn kho] SBOM status",
+   "urn": "urn:li:glossaryTerm:c54546d7-700c-41d1-96af-9251bbce3859",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Tồn kho theo BOM ",
+   "urn": "urn:li:glossaryTerm:c904749a-199a-4e3c-8a5a-5b274c9f7408",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Tính toán “Required Demand”",
+   "urn": "urn:li:glossaryTerm:c98bd5bf-1941-4ae0-8a35-1475409e46aa",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Merge EBOM và MBOM",
+   "urn": "urn:li:glossaryTerm:c9abb1a4-dabb-4125-8a49-fa1454e0b0a6",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Order Invoiced​ - Số bán",
+   "urn": "urn:li:glossaryTerm:cd10b0e3-3974-4c75-b5ec-68a08c58332f",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Dealer IN - VF bán buôn cho ĐL/NPP",
+   "urn": "urn:li:glossaryTerm:cdc9d650-97ff-49b7-833a-2f28f85355ed",
+   "has_description": false
+  },
+  {
+   "type": "glossary_term",
+   "name": "Total Recordable Incidents Rate",
+   "urn": "urn:li:glossaryTerm:ce68fbd3-afed-442e-bdad-ce5be27e78b2",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Good Issue",
+   "urn": "urn:li:glossaryTerm:d2ade224-e1bf-4688-9096-b9b66f151e2c",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "IPTV (Issues Per Thousand Vehicles) ",
+   "urn": "urn:li:glossaryTerm:d41f5ba2-7c84-4318-8e6b-1bb7b07dfb0f",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "CPV (Claims Per Vehicle)",
+   "urn": "urn:li:glossaryTerm:d53b2d99-8e9c-4fa5-bc0d-e30a90acbd51",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Tồn kho Đại lý/Nhà Phân phối",
+   "urn": "urn:li:glossaryTerm:d5bf0aba-6bf5-4de8-85f0-d5482686955b",
+   "has_description": false
+  },
+  {
+   "type": "glossary_term",
+   "name": "[VN] Đơn hàng HO & khác",
+   "urn": "urn:li:glossaryTerm:d849fbce-2083-494d-b8e2-7de94131885b",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "SG&A (Selling, General & Administrative Expenses) - Chi Phí Bán Hàng & Quản Lý Doanh Nghiệp",
+   "urn": "urn:li:glossaryTerm:da05cd6c-1ce2-4abc-b85d-88d6d65e70e3",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Số lượng xe xuất xưởng ",
+   "urn": "urn:li:glossaryTerm:ddc1f4af-702f-4b25-bde5-3f6beb640b8f",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Sales Channel - Kênh bán hàng",
+   "urn": "urn:li:glossaryTerm:e0322fc8-52ea-4584-b021-a85cacf2eeee",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "FMEA (Failure Mode and Effects Analysis)",
+   "urn": "urn:li:glossaryTerm:e20c2417-5b1f-4d42-b8de-b2672da9354d",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Coverage Date",
+   "urn": "urn:li:glossaryTerm:e26f9aeb-b1f9-4553-9eac-f9137f915e4a",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Số lượng linh kiện hết hạn ",
+   "urn": "urn:li:glossaryTerm:e5148b86-d3fb-4af8-860e-cd075c0a1527",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Purchase level ",
+   "urn": "urn:li:glossaryTerm:e89f0cca-92b2-4c00-b0a5-f57c087bdd8b",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Xử lý dữ liệu EBOM",
+   "urn": "urn:li:glossaryTerm:e94b321f-6c69-4e88-9123-53962ef53667",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Tính toán “FINAL MRD STATUS”",
+   "urn": "urn:li:glossaryTerm:eb2f24cf-bf1d-456a-a9d2-d3202bcd34f2",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Giá trị phụ tùng hậu mãi quá hạn sử dụng",
+   "urn": "urn:li:glossaryTerm:eccf30cc-fa4a-473b-8f99-52b8a73942ef",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Tính toán “H part MRD date - Actual”",
+   "urn": "urn:li:glossaryTerm:ef0feab1-a7a0-4e67-b075-4fc03212160f",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Delivery - Giao xe",
+   "urn": "urn:li:glossaryTerm:ef4c4aa1-7bf4-4a63-b626-9a84dbe7f05c",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Inventory - Tồn kho xe",
+   "urn": "urn:li:glossaryTerm:f099e2ed-9a22-44c4-8873-0ba35f9a3cd4",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "US Leads Management",
+   "urn": "urn:li:glossaryTerm:f0eeb36e-e279-4b5b-8d10-e69d7a12899e",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "PBT (Profit Before Tax) - Lợi Nhuận Trước Thuế",
+   "urn": "urn:li:glossaryTerm:f2619b13-c162-487e-aeb0-11f87b0c76c4",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "VIN/ Serial Number",
+   "urn": "urn:li:glossaryTerm:f4e7a530-70ce-46c2-aef2-1aa863e36e44",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "US Order",
+   "urn": "urn:li:glossaryTerm:f5f0c681-49bb-4b35-a9f0-593d8d6c98a2",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Tính toán “FINAL MRQ”",
+   "urn": "urn:li:glossaryTerm:f7a043a7-5042-4017-9bf7-59d643953ae1",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "TTR (Time To Repair)",
+   "urn": "urn:li:glossaryTerm:fb95f047-0b2c-41bb-9da0-1d2aa64799ab",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "[VN] Đơn hàng ký mới",
+   "urn": "urn:li:glossaryTerm:fc2e0673-4db5-48cc-b421-eef50464f26b",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Balance",
+   "urn": "urn:li:glossaryTerm:fca03804-ad25-43bb-a0ef-aa8e311a065a",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "CSAT (Customer Satisfaction Score)",
+   "urn": "urn:li:glossaryTerm:fd38bba6-cc1c-4246-b17f-3dc85e5bccd6",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Số lượng linh kiện rủi ro (đáp ứng nhu cầu sản xuất)",
+   "urn": "urn:li:glossaryTerm:fda2b41b-b84a-46cf-9b38-75d12743fa52",
+   "has_description": true
+  },
+  {
+   "type": "glossary_term",
+   "name": "Mức tiêu thụ nước ",
+   "urn": "urn:li:glossaryTerm:fe2a4f23-6887-4e73-9d4c-9fc58dddea4f",
+   "has_description": true
+  },
+  {
+   "type": "dashboard",
+   "name": "Ước HTK 12 Tháng",
+   "urn": "urn:li:dashboard:(powerbi,reports.02bb67e2-1949-4fb9-b8ed-d2691dfa2ec7)",
+   "platform": "powerbi",
+   "domain": "SẢN XUẤT",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "Master Data Report (Indonesia)",
+   "urn": "urn:li:dashboard:(powerbi,reports.0516b56e-10a7-4b65-a5c8-6d4cc8f70f94)",
+   "platform": "powerbi",
+   "domain": "LOGISTIC",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "CRM Campaign",
+   "urn": "urn:li:dashboard:(powerbi,reports.05c014a2-5376-4c3f-a689-0dbd403e7fee)",
+   "platform": "powerbi",
+   "domain": "KINH DOANH",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "R_Báo cáo đối soát DSM - SAP_Summary 7 Days",
+   "urn": "urn:li:dashboard:(powerbi,reports.07e1c7b6-ff41-44f9-ba7a-30a264e30661)",
+   "platform": "powerbi",
+   "domain": null,
+   "has_description": true
+  },
+  {
+   "type": "dashboard",
+   "name": "Báo cáo check WIP MES_SAP",
+   "urn": "urn:li:dashboard:(powerbi,reports.082bd437-991d-4469-8efc-ee953b27362e)",
+   "platform": "powerbi",
+   "domain": "SẢN XUẤT",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "Report_Supply_Capacity",
+   "urn": "urn:li:dashboard:(powerbi,reports.08875c53-cbd5-4435-aafd-b31e4e6940a8)",
+   "platform": "powerbi",
+   "domain": "LOGISTIC",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "PLANNING_ONELAKE",
+   "urn": "urn:li:dashboard:(powerbi,reports.0cd9f9cc-a55f-4646-9bb0-3c5849aba9b6)",
+   "platform": "powerbi",
+   "domain": "SẢN XUẤT",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "PFEP Report - Indonesia Factory",
+   "urn": "urn:li:dashboard:(powerbi,reports.0f01f803-f2c1-4fea-9f1d-4452b12287f9)",
+   "platform": "powerbi",
+   "domain": "LOGISTIC",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "Global_Bom_Data",
+   "urn": "urn:li:dashboard:(powerbi,reports.135362ad-43cb-4e43-99dd-bce4f3eb2122)",
+   "platform": "powerbi",
+   "domain": "LOGISTIC",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "VFVN2_DG_R Cảnh báo tồn kho min max INDO",
+   "urn": "urn:li:dashboard:(powerbi,reports.18ad5ace-f64e-4696-948c-9bd6a03cf7bb)",
+   "platform": "powerbi",
+   "domain": "SẢN XUẤT",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "VFVN01_Báo cáo giá thành",
+   "urn": "urn:li:dashboard:(powerbi,reports.1aaab375-4934-44a7-b022-264b55cba524)",
+   "platform": "powerbi",
+   "domain": "SẢN XUẤT",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "BOM all model - all BPD - market",
+   "urn": "urn:li:dashboard:(powerbi,reports.1afbfc55-3ef8-4ea0-ad51-778696364286)",
+   "platform": "powerbi",
+   "domain": "SẢN XUẤT",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "VFVN2_DG_R Ước HTK và LK Thừa",
+   "urn": "urn:li:dashboard:(powerbi,reports.1b03d1fe-b240-40d1-a042-5c30336e88a2)",
+   "platform": "powerbi",
+   "domain": "SẢN XUẤT",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "Bao cao xe xuat xuong theo DO",
+   "urn": "urn:li:dashboard:(powerbi,reports.1e1c8b0d-fddf-4fea-a726-f544fa7633a5)",
+   "platform": "powerbi",
+   "domain": "LOGISTIC",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "PFEP Report - Hai Phong Factory",
+   "urn": "urn:li:dashboard:(powerbi,reports.1e74bc9a-cf99-49cf-9e44-6f25f4b4ee6a)",
+   "platform": "powerbi",
+   "domain": "LOGISTIC",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "VINFAST_Report5 v3.0_prd",
+   "urn": "urn:li:dashboard:(powerbi,reports.1e8f034b-4d15-44af-9527-be151eb1abd1)",
+   "platform": "powerbi",
+   "domain": "PHÁT TRIỂN XE",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "VFVN02_Phân bổ trọn bộ theo thứ tự ưu tiên xe bé đến lớn_Safety Time",
+   "urn": "urn:li:dashboard:(powerbi,reports.1efb7fcf-218e-46d2-9d8b-eea3ad07670d)",
+   "platform": "powerbi",
+   "domain": "SẢN XUẤT",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "Global_Production_Plan",
+   "urn": "urn:li:dashboard:(powerbi,reports.1f69df33-17de-4181-ad70-7360c25f4089)",
+   "platform": "powerbi",
+   "domain": "LOGISTIC",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "VFVN2_DG_R Cảnh báo tồn kho min max INDIA",
+   "urn": "urn:li:dashboard:(powerbi,reports.25e0ca6f-f329-42d2-a1de-168c10cf3bed)",
+   "platform": "powerbi",
+   "domain": "SẢN XUẤT",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "R_Báo cáo đối soát VDO DMS - SAP",
+   "urn": "urn:li:dashboard:(powerbi,reports.2c5c446f-f88f-4520-89d6-a981d1a234ca)",
+   "platform": "powerbi",
+   "domain": null,
+   "has_description": true
+  },
+  {
+   "type": "dashboard",
+   "name": "6. RoadSide Assistance",
+   "urn": "urn:li:dashboard:(powerbi,reports.3141399a-636b-407b-a4ac-ab8ed0e0ce4b)",
+   "platform": "powerbi",
+   "domain": "HẬU MÃI",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "Bc tồn kho theo glaccount",
+   "urn": "urn:li:dashboard:(powerbi,reports.332c94f1-6c9a-4cf9-9d32-4869080cb51e)",
+   "platform": "powerbi",
+   "domain": "SẢN XUẤT",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "VINFAST_BOM_Ingestion_Log v1.0_prd",
+   "urn": "urn:li:dashboard:(powerbi,reports.348f3fa9-4be0-43eb-a957-bcfe39b2ff5b)",
+   "platform": "powerbi",
+   "domain": "PHÁT TRIỂN XE",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "Bc Hàng tồn kho theo kỳ VF India",
+   "urn": "urn:li:dashboard:(powerbi,reports.3b6c4261-0ec2-45f7-94d6-fb7c3f80bd2c)",
+   "platform": "powerbi",
+   "domain": "LOGISTIC",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "Báo cáo check WIP MES_SAP Escooter",
+   "urn": "urn:li:dashboard:(powerbi,reports.3c95cd73-ec27-42f7-a707-70853813c6a7)",
+   "platform": "powerbi",
+   "domain": "SẢN XUẤT",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "VFVN2_DG_R Cảnh báo nguy cơ ngừng sản xuất",
+   "urn": "urn:li:dashboard:(powerbi,reports.437d67e3-3ed2-4baa-afcc-66de97e82a7a)",
+   "platform": "powerbi",
+   "domain": "SẢN XUẤT",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "0. Tổng Quan",
+   "urn": "urn:li:dashboard:(powerbi,reports.44483b9b-726b-4166-a7ef-2580164c121c)",
+   "platform": "powerbi",
+   "domain": "HẬU MÃI",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "VFVN2_DG_R Báo cáo Cảnh báo LK chưa đáp ứng sản xuất 12 ngày",
+   "urn": "urn:li:dashboard:(powerbi,reports.46389b54-3346-42a9-b06f-a416e05ba47f)",
+   "platform": "powerbi",
+   "domain": "SẢN XUẤT",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "PFEP Report - India Factory",
+   "urn": "urn:li:dashboard:(powerbi,reports.47a1acc7-bbe5-4796-ba0e-e0105b19d61d)",
+   "platform": "powerbi",
+   "domain": "LOGISTIC",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "Qualtric DataRaw",
+   "urn": "urn:li:dashboard:(powerbi,reports.49befca5-c039-4475-8ff2-880fb1e4b63c)",
+   "platform": "powerbi",
+   "domain": "HẬU MÃI",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "Vinfast - Plan Payment MRP Report",
+   "urn": "urn:li:dashboard:(powerbi,reports.4d8b7c1d-5308-4489-8445-7a51dc948f22)",
+   "platform": "powerbi",
+   "domain": "TÀI CHÍNH",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "VINFAST_Report12 PFEP",
+   "urn": "urn:li:dashboard:(powerbi,reports.5346a967-c65e-4c9c-b470-3921f3f735db)",
+   "platform": "powerbi",
+   "domain": "SẢN XUẤT",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "Báo cáo check WIP Khuôn",
+   "urn": "urn:li:dashboard:(powerbi,reports.5355e884-4735-4361-b3a0-0c5d623c8222)",
+   "platform": "powerbi",
+   "domain": "SẢN XUẤT",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "4. Charging",
+   "urn": "urn:li:dashboard:(powerbi,reports.54b09e2c-1860-492c-85fa-cf4bc61276f7)",
+   "platform": "powerbi",
+   "domain": "HẬU MÃI",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "VFVN2_DG_R Cảnh báo tồn kho min max",
+   "urn": "urn:li:dashboard:(powerbi,reports.581f6c50-a69e-4a3b-bd5d-a22d509506d2)",
+   "platform": "powerbi",
+   "domain": "SẢN XUẤT",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "Báo cáo check WIP MES_SAP Charger",
+   "urn": "urn:li:dashboard:(powerbi,reports.584b7963-f455-4942-9ea7-b18ec63fe67c)",
+   "platform": "powerbi",
+   "domain": "SẢN XUẤT",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "Bc Hiệu quả MFG",
+   "urn": "urn:li:dashboard:(powerbi,reports.5ac4a339-dff7-4609-9a6c-5d5fe10ebf4f)",
+   "platform": "powerbi",
+   "domain": "SẢN XUẤT",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "R_Báo cáo đối soát DMS - Vfscan",
+   "urn": "urn:li:dashboard:(powerbi,reports.5d9107c7-0fc8-4827-8a2f-f468ca4d93d5)",
+   "platform": "powerbi",
+   "domain": null,
+   "has_description": true
+  },
+  {
+   "type": "dashboard",
+   "name": "5. Mobile Service",
+   "urn": "urn:li:dashboard:(powerbi,reports.5ff2307c-2b4a-43e1-93aa-06051dcc7d92)",
+   "platform": "powerbi",
+   "domain": "HẬU MÃI",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "1. Báo cáo so sánh EBOM - MBOM Cost",
+   "urn": "urn:li:dashboard:(powerbi,reports.6424a754-06b0-4c16-adbd-06e3be1ac3f6)",
+   "platform": "powerbi",
+   "domain": "TÀI CHÍNH",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "VFVN2_DG_R Cảnh báo tồn kho min max",
+   "urn": "urn:li:dashboard:(powerbi,reports.64af4072-8f35-4c76-8412-0c7fd9ff1997)",
+   "platform": "powerbi",
+   "domain": "SẢN XUẤT",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "PFEP",
+   "urn": "urn:li:dashboard:(powerbi,reports.675d1b63-79e2-4e43-b8e2-0b8e9897ca6c)",
+   "platform": "powerbi",
+   "domain": "LOGISTIC",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "VFVN05_DG_R PurchasingControl",
+   "urn": "urn:li:dashboard:(powerbi,reports.6920a3aa-65c4-4b46-ac5a-38b14c72a545)",
+   "platform": "powerbi",
+   "domain": "CUNG ỨNG (TT)",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "Plan_order",
+   "urn": "urn:li:dashboard:(powerbi,reports.7336f0aa-147b-4190-9ded-5ceb70b25d01)",
+   "platform": "powerbi",
+   "domain": "SẢN XUẤT",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "R_Báo cáo đối soát hoá đơn DMS - SAP",
+   "urn": "urn:li:dashboard:(powerbi,reports.784b19a7-6d1a-4dad-ad9a-d2a3e7cbfff1)",
+   "platform": "powerbi",
+   "domain": null,
+   "has_description": true
+  },
+  {
+   "type": "dashboard",
+   "name": "VFVN01_Phân bổ trọn bộ theo KHSX",
+   "urn": "urn:li:dashboard:(powerbi,reports.7b7ebbaf-ef84-443c-b177-06068c6ef6d6)",
+   "platform": "powerbi",
+   "domain": "TÀI CHÍNH",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "VFVN02_Phân bổ trọn bộ theo thứ tự ưu tiên xe bé đến lớn",
+   "urn": "urn:li:dashboard:(powerbi,reports.7c006864-f9a1-41d7-bec3-45c1445ebc47)",
+   "platform": "powerbi",
+   "domain": "TÀI CHÍNH",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "VFGLO11_DG_RB KPIControl_All",
+   "urn": "urn:li:dashboard:(powerbi,reports.7dce28aa-aac8-4f3d-8c7c-af2490ae2f59)",
+   "platform": "powerbi",
+   "domain": "TÀI CHÍNH",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "VFVN2_DG_R Supplier Capacity",
+   "urn": "urn:li:dashboard:(powerbi,reports.809b7230-223f-43ac-9b4d-a1f59b4f17c8)",
+   "platform": "powerbi",
+   "domain": "CUNG ỨNG (TT)",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "VFVN02_Báo cáo nhập hàng nguyên vật liệu",
+   "urn": "urn:li:dashboard:(powerbi,reports.815c11e8-795d-43ff-b042-7dd801264013)",
+   "platform": "powerbi",
+   "domain": "SẢN XUẤT",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "3. Báo cáo so sánh EBOM Cost",
+   "urn": "urn:li:dashboard:(powerbi,reports.83013115-bf28-4c4f-9486-750a41c9a31b)",
+   "platform": "powerbi",
+   "domain": "TÀI CHÍNH",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "VINFAST_Report9 v1.0_prd_EBOM_MBOM",
+   "urn": "urn:li:dashboard:(powerbi,reports.883a4bf2-f9dc-4f8a-b7d1-387455894863)",
+   "platform": "powerbi",
+   "domain": "SẢN XUẤT",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "Báo cáo check WIP MES_SAP_HTCAR",
+   "urn": "urn:li:dashboard:(powerbi,reports.8fff2557-3b7e-464f-ad08-d4e920b24dc7)",
+   "platform": "powerbi",
+   "domain": "SẢN XUẤT",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "Mater Data Report (India)",
+   "urn": "urn:li:dashboard:(powerbi,reports.98f809bf-f930-4ff2-8e11-43d6f7313f63)",
+   "platform": "powerbi",
+   "domain": "LOGISTIC",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "Inventory All Market Report",
+   "urn": "urn:li:dashboard:(powerbi,reports.9ad57509-bbb3-4178-b8d0-601beb36b1a7)",
+   "platform": "powerbi",
+   "domain": "LOGISTIC",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "Vinfast INDO - Plan Payment MRP Report",
+   "urn": "urn:li:dashboard:(powerbi,reports.9b27cbad-0c91-48c5-bc11-f3142ce44850)",
+   "platform": "powerbi",
+   "domain": "TÀI CHÍNH",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "HP side - Control Max stock + Inbound",
+   "urn": "urn:li:dashboard:(powerbi,reports.a4330d63-acba-4ae4-bf1b-6d281c9523c5)",
+   "platform": "powerbi",
+   "domain": "LOGISTIC",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "VFVN10_Tối ưu KHSX 2025",
+   "urn": "urn:li:dashboard:(powerbi,reports.b0325041-ba4d-44da-b0a8-0ed2ce784658)",
+   "platform": "powerbi",
+   "domain": "TÀI CHÍNH",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "Mater Data Report (All Market)",
+   "urn": "urn:li:dashboard:(powerbi,reports.b18b630e-729b-4b07-94dc-7355500089aa)",
+   "platform": "powerbi",
+   "domain": "LOGISTIC",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "Report_Inventory accuracy",
+   "urn": "urn:li:dashboard:(powerbi,reports.bbf58191-6d6f-4ded-a908-a17ce34687d5)",
+   "platform": "powerbi",
+   "domain": "LOGISTIC",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "2. Repair/Maintenance",
+   "urn": "urn:li:dashboard:(powerbi,reports.bc48aafe-b62b-4104-a59a-cb77e8f01c79)",
+   "platform": "powerbi",
+   "domain": "HẬU MÃI",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "VFVN2_DG_R Cảnh báo nhận hàng vượt tồn kho tối đa",
+   "urn": "urn:li:dashboard:(powerbi,reports.c43cd13e-c9bc-441e-bd30-6e590f542f97)",
+   "platform": "powerbi",
+   "domain": "SẢN XUẤT",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "Bc Hàng tồn kho theo kỳ",
+   "urn": "urn:li:dashboard:(powerbi,reports.c4cd2d44-fd26-49b9-881a-6c71ee682f71)",
+   "platform": "powerbi",
+   "domain": "SẢN XUẤT",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "7. Online Reservation",
+   "urn": "urn:li:dashboard:(powerbi,reports.c4d5ae05-ae41-4f46-a1ed-8ce3acbeacf3)",
+   "platform": "powerbi",
+   "domain": "HẬU MÃI",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "VINFAST_Report10 v1.0_prd_Aftersales BOM",
+   "urn": "urn:li:dashboard:(powerbi,reports.c57f840d-bace-4326-8ac3-a454b9e575d7)",
+   "platform": "powerbi",
+   "domain": "SẢN XUẤT",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "Safety_time Dashboard",
+   "urn": "urn:li:dashboard:(powerbi,reports.c893113f-c77e-4b34-9980-c16539c34d83)",
+   "platform": "powerbi",
+   "domain": "SẢN XUẤT",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "VFVN2_DG_R Cảnh báo tồn kho an toàn",
+   "urn": "urn:li:dashboard:(powerbi,reports.c9aaee29-3432-4cb8-80d1-3160a6d2b708)",
+   "platform": "powerbi",
+   "domain": "SẢN XUẤT",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "Bc Hàng tồn kho theo kỳ VF Indonesia",
+   "urn": "urn:li:dashboard:(powerbi,reports.ca38a488-5ffd-4133-bfe8-043edd34ea7d)",
+   "platform": "powerbi",
+   "domain": "LOGISTIC",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "ECR-ECN Report",
+   "urn": "urn:li:dashboard:(powerbi,reports.d2f3a724-fd02-4bc0-9f33-3bcdb1c18d6c)",
+   "platform": "powerbi",
+   "domain": "LOGISTIC",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "BOM Recursive Tree",
+   "urn": "urn:li:dashboard:(powerbi,reports.d678e408-d35a-4c94-bc6b-d08d889f1179)",
+   "platform": "powerbi",
+   "domain": "SẢN XUẤT",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "VGREEN_MIS_FINANCE",
+   "urn": "urn:li:dashboard:(powerbi,reports.dc6397f6-d0e6-42dd-8016-07e67924e843)",
+   "platform": "powerbi",
+   "domain": "VGreen",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "VN Factory Report",
+   "urn": "urn:li:dashboard:(powerbi,reports.df7e2018-29ef-468c-a363-08a4c10a61a4)",
+   "platform": "powerbi",
+   "domain": "LOGISTIC",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "1. Test Drive",
+   "urn": "urn:li:dashboard:(powerbi,reports.e393d87c-221a-4fbf-9024-25ae641fe0d4)",
+   "platform": "powerbi",
+   "domain": "HẬU MÃI",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "Báo cáo check WIP MES_SAP HTEscooter",
+   "urn": "urn:li:dashboard:(powerbi,reports.e96b38b8-4f4d-4146-b130-7854192e0e2b)",
+   "platform": "powerbi",
+   "domain": "SẢN XUẤT",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "Expired Forecast (Du Bao LK Het Han)",
+   "urn": "urn:li:dashboard:(powerbi,reports.eae4c90a-2a25-4b88-8995-1abb7954841c)",
+   "platform": "powerbi",
+   "domain": "LOGISTIC",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "Virtual_Demand.Inbound",
+   "urn": "urn:li:dashboard:(powerbi,reports.efb11633-4460-47ac-a3c0-c3e6d49e2222)",
+   "platform": "powerbi",
+   "domain": "LOGISTIC",
+   "has_description": false
+  },
+  {
+   "type": "dashboard",
+   "name": "3. Vehicle Delivery",
+   "urn": "urn:li:dashboard:(powerbi,reports.efc8b285-6520-4a97-a839-7337513c2e49)",
+   "platform": "powerbi",
+   "domain": "HẬU MÃI",
+   "has_description": false
+  }
+ ]
+}

@@ -57,6 +57,10 @@ class LineageData(BaseModel):
 class ChatResponse(BaseModel):
     answer: str = ""
     intent: str = "GENERAL"
+    # Which pipeline produced the answer ("evidence_context", "field_property",
+    # "thinking", "hybrid_search", "structured", ...) — orthogonal to `intent`,
+    # which is the standard taxonomy label of what the question ASKS.
+    answer_path: str | None = None
     entities: list[EntityItem] = []
     citations: list[CitationItem] = []
     confidence: str = "low"

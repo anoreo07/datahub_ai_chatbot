@@ -11,7 +11,7 @@ from ingestion.graphql.queries import (
     GET_DATASET_QUERY,
     GET_DOCUMENT_QUERY,
     GET_GLOSSARY_TERM_QUERY,
-    SCROLL_ACROSS_ENTITIES_QUERY,
+    build_search_query,
 )
 from ingestion.mappers.dashboard import DashboardMapper
 from ingestion.mappers.dataset import DatasetMapper
@@ -64,54 +64,73 @@ class GraphQLDataHubSource(DataHubSource):
             "mlFeatureTable": "ML_FEATURE_TABLE",
         }
         graphql_type = type_map.get(entity_type, entity_type.upper())
-        try:
-            data = await self._client.execute(
-                SCROLL_ACROSS_ENTITIES_QUERY,
-                {
-                    "input": {
-                        "types": [graphql_type],
+        start = int(cursor) if cursor else 0
+        count = page_size
+        n_bad = 0
+        total: int | None = None
+        while True:
+            try:
+                data = await self._client.execute(
+                    build_search_query(graphql_type),
+                    {
                         "query": "*",
-                        "count": page_size,
-                        "scrollId": cursor,
-                        "orFilters": [],
-                    }
-                },
+                        "start": start,
+                        "count": count,
+                    },
+                )
+            except DataHubConnectionError:
+                if count > 1:
+                    count = max(1, count // 2)
+                    continue
+                # count=1 vẫn lỗi -> index hỏng, skip offset này (giống pull script)
+                n_bad += 1
+                log.warning("graphql_search_bad_offset", entity_type=entity_type,
+                            gql_type=graphql_type, start=start)
+                start += 1
+                count = page_size
+                import asyncio
+                await asyncio.sleep(0.8)
+                if n_bad > 200:
+                    log.error("graphql_list_entities_failed", entity_type=entity_type,
+                              gql_type=graphql_type, reason="quá nhiều bad offset")
+                    return EntityPage(items=[])
+                continue
+
+            search = data.get("search") or {}
+            if total is None:
+                total = search.get("total")
+            items = []
+            for hit in (search.get("searchResults") or []):
+                entity = hit.get("entity") or {}
+                items.append(entity)
+
+            fetched = len(items)
+            next_offset = start + fetched
+            has_more = bool(items) and (total is None or next_offset < total)
+            return EntityPage(
+                items=items,
+                next_cursor=str(next_offset) if has_more else None,
+                has_more=has_more,
+                total=total,
             )
-        except DataHubConnectionError:
-            log.exception("graphql_list_entities_failed", entity_type=entity_type)
-            return EntityPage(items=[])
-
-        scroll = data.get("scrollAcrossEntities") or {}
-        items = []
-        for hit in (scroll.get("searchResults") or []):
-            entity = hit.get("entity") or {}
-            items.append(entity)
-
-        next_cursor = scroll.get("nextScrollId")
-        has_more = bool(next_cursor)
-        total = scroll.get("total")
-        return EntityPage(items=items, next_cursor=next_cursor, has_more=has_more, total=total)
 
     async def search_entities(self, entity_type: str, query: str = "*") -> Sequence[CanonicalEntity]:
         try:
             data = await self._client.execute(
-                SCROLL_ACROSS_ENTITIES_QUERY,
+                build_search_query(entity_type.upper()),
                 {
-                    "input": {
-                        "types": [entity_type.upper()],
-                        "query": query,
-                        "count": 50,
-                        "orFilters": [],
-                    }
+                    "query": query,
+                    "start": 0,
+                    "count": 50,
                 },
             )
         except DataHubConnectionError:
             log.exception("graphql_search_failed", entity_type=entity_type)
             return []
 
-        scroll = data.get("scrollAcrossEntities") or {}
+        search = data.get("search") or {}
         entities: list[CanonicalEntity] = []
-        for hit in (scroll.get("searchResults") or []):
+        for hit in (search.get("searchResults") or []):
             entity = hit.get("entity") or {}
             canonical = self._search_hit_to_canonical(entity)
             if canonical:
@@ -185,11 +204,11 @@ class GraphQLDataHubSource(DataHubSource):
     async def _search_fallback_entity(self, urn: str, etype: str) -> CanonicalEntity | None:
         try:
             data = await self._client.execute(
-                SCROLL_ACROSS_ENTITIES_QUERY,
-                {"input": {"types": [etype.upper()], "query": urn, "count": 1, "orFilters": []}},
+                build_search_query(etype.upper()),
+                {"query": urn, "start": 0, "count": 1},
             )
-            scroll = data.get("scrollAcrossEntities") or {}
-            for hit in (scroll.get("searchResults") or []):
+            search = data.get("search") or {}
+            for hit in (search.get("searchResults") or []):
                 entity = hit.get("entity") or {}
                 if entity.get("urn") == urn:
                     return self._search_hit_to_canonical(entity)
@@ -492,6 +511,9 @@ class GraphQLDataHubSource(DataHubSource):
             if not page.has_more:
                 break
             cursor = page.next_cursor
+            # Pace scroll pages: corporate WAF throttles bursts of requests.
+            import asyncio
+            await asyncio.sleep(0.8)
         return entities
 
     async def close(self) -> None:

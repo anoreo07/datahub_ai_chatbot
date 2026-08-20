@@ -3,7 +3,7 @@ from typing import Any
 
 import structlog
 
-from app.schemas.chat import ChatResponse
+from app.schemas.chat import ChatResponse, EntityItem
 from app.services.chat.context import ChatContext
 from app.services.chat.field_ops import answer_field_op
 from app.services.chat.question_analysis import (
@@ -263,6 +263,32 @@ class EvidenceService:
                  evidence=res.referenced_evidence_ids, hint=hint,
                  entity=entity[:80], context_only=res.context_only)
 
+        # A field-property / field-focus follow-up that resolves to evidence but
+        # carries no explicit field ("Còn kiểu dữ liệu của nó?", "field đó là
+        # gì?") still names a field: the column this dataset shares with a
+        # directly-linked table (the natural join key) is the field being
+        # discussed. Falling back to it keeps the focus durable instead of
+        # over-answering with the whole schema or dropping to "no info".
+        if res.focus_field is None and (
+            res.property_name or res.operation
+            or re.search(
+                r"field\s+(?:đó|do|này|nay|đó|kia)\s+là\s+gì|trường\s+(?:đó|do|này|nay|kia)"
+                r"\s+là\s+gì|truong\s+(?:do|nay|kia)\s+la\s+gi|field\s+(?:do|nay|kia)"
+                r"\s+la\s+gi",
+                question, re.I,
+            )
+        ):
+            inferred = (
+                structured.get("focus_field")
+                or structured.get("join_field")
+                or await self._infer_join_field(structured)
+            )
+            if inferred:
+                res.focus_field = inferred
+                log.info("evidence_focus_inferred", trace_id=trace_id,
+                         question=question[:120], focus=inferred,
+                         evidence=res.referenced_evidence_ids)
+
         # ---------------- field-level operation ---------------- #
         # "warehouse_id có kiểu dữ liệu gì?", "field đó có mô tả gì?",
         # "field nào liên quan đến warehouse?" -> answer exactly that field /
@@ -405,6 +431,51 @@ class EvidenceService:
                 trace_id=trace_id,
             )
 
+        return None
+
+
+    async def _infer_join_field(self, structured: dict) -> str | None:
+        """The column this dataset shares with a directly-linked dataset.
+
+        A dataset's natural join key is the field duplicated in the schema of an
+        upstream/downstream table (e.g. ``warehouse_id`` appears both in
+        ``dim_warehouse`` and ``fact_inventory_movement``). Used as the durable
+        discussion-field fallback for anaphoric field follow-ups.
+        """
+        own_entries = [
+            f for f in (structured.get("schema_fields") or [])
+            if (f.get("name") or "").strip()
+        ]
+        if not own_entries:
+            return None
+        own = {_normalize_field(f.get("name")) for f in own_entries}
+        linked = list(dict.fromkeys(
+            list((structured.get("upstreams") or [])[:3])
+            + list((structured.get("downstreams") or [])[:3])
+        ))
+        for urn in linked:
+            if not urn:
+                continue
+            try:
+                other = await self._ctx.entity_repo.get_by_urn(urn)
+            except Exception:  # noqa: BLE001
+                other = None
+            if other is None:
+                continue
+            other_sf = ((other.payload or {}).get("schema_fields") or [])
+            if not other_sf:
+                continue
+            shared = own & {
+                _normalize_field(f.get("name")) for f in other_sf
+                if (f.get("name") or "").strip()
+            }
+            if not shared:
+                continue
+            preferred = next(
+                (f for f in shared if re.search(r"(?:_id|_code|_key)$", f)),
+                None,
+            )
+            return preferred or sorted(shared)[0]
         return None
 
 
@@ -833,10 +904,34 @@ class EvidenceService:
         await self.record_active_entities(uid, cid, [], extra=[{
             "name": entity_name,
         }], question=question)
+        # Attach the canonical entity (URN + URL) so follow-up answers that are
+        # grounded purely in evidence still carry the entity for grounding /
+        # evaluation, not just free text.
+        entity = await self._resolve_evidence_entity(entity_name, trace_id)
         return ChatResponse(
             answer=text, intent=intent_label, confidence="high",
             ambiguous=False, insufficient_context=False,
             trace_id=trace_id, conversation_id=cid,
+            entities=[entity] if entity else [],
+        )
+
+    async def _resolve_evidence_entity(
+        self, entity_name: str, trace_id: str | None = None,
+    ) -> "EntityItem | None":
+        if not entity_name:
+            return None
+        try:
+            resolution = await self._ctx.entity_resolver.resolve(
+                entity_name, trace_id=trace_id)
+        except Exception:  # noqa: BLE001
+            return None
+        if not resolution.resolved:
+            return None
+        return EntityItem(
+            urn=resolution.resolved.urn,
+            name=getattr(resolution.resolved, "display_name", None)
+            or resolution.resolved.name,
+            url=getattr(resolution.resolved, "datahub_url", None),
         )
 
 

@@ -373,10 +373,12 @@ def _log_parse(
     error: str | None,
     extracted: str | None = None,
 ) -> None:
+    # Raw vision output is OCR of user-uploaded images and may contain
+    # credentials/PII pasted by the user. Never log the content - only shape.
     log.info(
         "vision_json_parse",
-        raw_response=raw_response[:2000],
-        extracted_json=(extracted[:2000] if extracted else None),
+        raw_size=len(raw_response),
+        extracted_size=len(extracted) if extracted else None,
         parse_method=method,
         parse_success=result.get("parse_error") is False,
         parse_error=result.get("parse_error"),

@@ -4,6 +4,20 @@ import json
 from ingestion.models import CanonicalEntity
 
 
+def clean_name(value: str | None) -> str | None:
+    """Collapse stray whitespace in a stored name/display_name/platform.
+
+    Source metadata occasionally carries leading/trailing spaces or double
+    spaces ("  EV VIN Battery Report", "Báo cáo ... tế xe "). They are not
+    part of the name and silently break exact display / exact-ish matching,
+    so every mapper trims + collapses whitespace before the value is stored.
+    """
+    if value is None:
+        return None
+    cleaned = " ".join(value.split())
+    return cleaned or None
+
+
 def compute_content_hash(entity: CanonicalEntity) -> str:
     normalized = {
         "urn": entity.urn,

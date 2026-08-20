@@ -56,7 +56,7 @@ function AnswerBubble({ turn }: { turn: Turn }) {
     <div className="flex flex-col items-start gap-2">
       <div className="flex items-center gap-1.5 text-xs font-medium text-primary">
         <Bot className="h-3.5 w-3.5" aria-hidden="true" />
-        DataAtlas
+        V-DataAtlas
       </div>
       <div className="max-w-[85%] rounded-2xl rounded-bl-sm border border-border bg-accent/60 px-4 py-3 text-sm leading-relaxed text-foreground sm:max-w-[78%]">
         <p>{turn.answer}</p>
@@ -84,7 +84,7 @@ export function Conversation() {
           <SectionHeading
             eyebrow="Conversational"
             title="Ask naturally. Get connected answers."
-            description="Follow-up questions stay in the same conversation — DataAtlas keeps the context and connects each answer back to the entities it referenced before."
+            description="Follow-up questions stay in the same conversation — V-DataAtlas keeps the context and connects each answer back to the entities it referenced before."
           />
         </Reveal>
 
