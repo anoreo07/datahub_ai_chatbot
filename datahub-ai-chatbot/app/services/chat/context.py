@@ -74,6 +74,13 @@ class ChatContext:
                 session, vision_service=self.conversation_vision,
             )
         )
+        from app.services.chat.anchor_builder import AnchorBuilder
+        from app.services.chat.anchor_validator import AnchorValidator
+        from app.services.chat.data_fidelity_checker import DataFidelityChecker
+        self.anchor_builder = AnchorBuilder()
+        self.anchor_validator = AnchorValidator()
+        self.fidelity_checker = DataFidelityChecker(entity_repository=self.entity_repo)
+
         # Domain service refs, assigned by ChatService after construction.
         self.entities: EntityResolutionService = None  # type: ignore[assignment]
         self.retrieval: StructuredRetrievalService = None  # type: ignore[assignment]

@@ -28,8 +28,34 @@ def normalize(text: str) -> str:
     return re.sub(r"\s+", " ", s).strip()
 
 
+def split_identifier_segments(text: str) -> list[str]:
+    """Split identifier by camelCase, PascalCase, snake_case, and kebab-case."""
+    s = re.sub(r'([a-z0-9])([A-Z])', r'\1 \2', text or "")
+    s = re.sub(r'([A-Z]+)([A-Z][a-z])', r'\1 \2', s)
+    s = ascii_fold(s)
+    parts = re.split(r'[^a-z0-9]+', s)
+    return [p for p in parts if p]
+
+
+def adaptive_fuzzy_threshold(query: str) -> float:
+    """Return length-adaptive threshold for matching confidence.
+
+    - Length <= 5: 0.85
+    - Length 6-12: 0.80
+    - Length > 12: 0.75
+    """
+    length = len(query.strip())
+    if length <= 5:
+        return 0.85
+    elif length <= 12:
+        return 0.80
+    else:
+        return 0.75
+
+
 def tokenize(text: str, min_len: int = 3) -> list[str]:
-    return [t for t in normalize(text).split() if len(t) >= max(1, min_len)]
+    return [s for s in split_identifier_segments(text) if len(s) >= max(1, min_len)]
+
 
 
 def _ratio(a: str, b: str) -> float:
@@ -51,8 +77,8 @@ def _token_alignment_score(q_tokens: list[str], n_tokens: list[str]) -> float:
 def fuzzy_score(query: str, name: str, name_tokens: list[str] | None = None) -> float:
     """Return a fuzzy similarity score in [0, 1] between a query and a name.
 
-    Combines a full-string ratio (handles pure typos) with a token-alignment
-    ratio (handles swapped/missing words and differently-separated identifiers).
+    Combines a full-string ratio (handles pure typos) with segment/token-alignment
+    ratio (handles swapped/missing words and camelCase/snake_case identifiers).
     """
     q = normalize(query)
     n = normalize(name)
@@ -61,12 +87,13 @@ def fuzzy_score(query: str, name: str, name_tokens: list[str] | None = None) -> 
     if q == n:
         return 1.0
 
-    qt = tokenize(q)
-    nt = name_tokens if name_tokens is not None else tokenize(n)
+    qt = tokenize(query, min_len=1)
+    nt = name_tokens if name_tokens is not None else tokenize(name, min_len=1)
 
     full = _ratio(q, n)
+    raw_full = _ratio(query.strip().lower(), name.strip().lower())
 
-    # Token-level: typo / word-order tolerant.
+    # Token / segment level: typo and camelCase / snake_case tolerant.
     tok = _token_alignment_score(qt, nt)
 
     # Sub-word/prefix bonus: case where query is a real substring after folding.
@@ -74,7 +101,7 @@ def fuzzy_score(query: str, name: str, name_tokens: list[str] | None = None) -> 
     if q in n or n in q:
         substring_bonus = 0.1
 
-    return min(1.0, max(full, tok) + substring_bonus)
+    return min(1.0, max(full, raw_full, tok) + substring_bonus)
 
 
 def best_candidate(query: str, candidates: list[str]) -> tuple[str, float] | None:
@@ -89,3 +116,4 @@ def best_candidate(query: str, candidates: list[str]) -> tuple[str, float] | Non
     if best_name is None:
         return None
     return best_name, best_score
+

@@ -124,12 +124,13 @@ _ACTIONS: dict[str, ActionSpec] = {
         canonical_intent="IMPACT",
         expected_intents=frozenset({
             "IMPACT", "RECURSIVE_IMPACT", "IMPACT_ANALYSIS", "LINEAGE",
-            "GENERAL", "TERM_DEFINITION", "FIND_ENTITY", "DATASET_LOOKUP", "SCHEMA_LOOKUP",
+            "GENERAL", "TERM_DEFINITION",
         }),
         entity_type="dataset",
         tool="recursive_impact",
         clarification="Bạn muốn đánh giá ảnh hưởng hạ nguồn (impact analysis) cho dataset nào?",
     ),
+
     "lineage": ActionSpec(
         kind="lineage",
         title="Data Lineage",
@@ -606,16 +607,17 @@ class IntentResolver:
                 QueryIntent.GENERAL,
                 QueryIntent.FIND_ENTITY,
                 QueryIntent.DATASET_LOOKUP,
-                QueryIntent.SCHEMA_LOOKUP,
             )
+            and (extracted_ent or anaphor_entity or _has_entity(message))
         ):
             decision, confidence = "override", "high"
             intent = msg_intent
-            entity_hint = extracted_ent
+            entity_hint = extracted_ent or anaphor_entity
             override_reason = (
                 f"message expresses explicit intent {msg_intent.value}, which conflicts with "
                 f"the selected action '{selected_action}'; prioritizing the user's explicit request"
             )
+
         # --- 3. Anaphoric follow-up ("nó", "this", "dataset này") -> resolve from history ---
         elif anaphor_entity:
             entity_hint = anaphor_entity
@@ -630,21 +632,27 @@ class IntentResolver:
             framed = True
         # --- 5. Message has no explicit entity but is under an active action context ---
         else:
-            hist_entity = _resolve_anaphora_from_history(history)
-            if hist_entity:
-                entity_hint = hist_entity
-                decision, confidence, intent = "agree", "high", _intent_enum(action.canonical_intent)
-                eff_question = f"{action.prompt.strip()} {hist_entity}: {message}".strip()
-                framed = True
-            elif selected_action == "search":
-                # General semantic discovery search
-                decision, confidence, intent = "agree", "high", QueryIntent.FIND_ENTITY
+            if selected_action == "search":
+                # General semantic discovery search / listing
+                decision, confidence = "agree", "high"
+                intent = QueryIntent.LISTING if msg_intent == QueryIntent.LISTING else QueryIntent.FIND_ENTITY
                 eff_question = message
                 entity_hint = message
                 framed = False
+            elif _anon_is_anaphora(message):
+                hist_entity = _resolve_anaphora_from_history(history)
+                if hist_entity:
+                    entity_hint = hist_entity
+                    decision, confidence, intent = "agree", "high", _intent_enum(action.canonical_intent)
+                    eff_question = f"{action.prompt.strip()} {hist_entity}: {message}".strip()
+                    framed = True
+                else:
+                    decision, confidence, intent = "clarify", "low", _intent_enum(action.canonical_intent)
+                    clarification = action.clarification
             else:
                 decision, confidence, intent = "clarify", "low", _intent_enum(action.canonical_intent)
                 clarification = action.clarification
+
 
         if entity_hint and _anon_is_anaphora(entity_hint):
             ref_entity = _resolve_anaphora_from_history(history)

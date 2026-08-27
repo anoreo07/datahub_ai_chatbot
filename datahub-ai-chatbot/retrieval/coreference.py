@@ -48,23 +48,36 @@ _IDENT_RE = re.compile(
     r"|[A-Za-z0-9]+-[A-Za-z0-9]+(?:\s+[A-Za-z0-9][A-Za-z0-9.-]*)*"
 )
 
+import unicodedata
+
+def _norm_vn(s: str | None) -> str:
+    if not s:
+        return ""
+    s = s.lower()
+    s = s.replace("đ", "d").replace("Đ", "d")
+    s = unicodedata.normalize("NFKD", s)
+    return s.encode("ascii", "ignore").decode("ascii")
+
+
 # Stopwords that never refer to a metadata entity.
 _STOP = {
     "dataset", "dashboard", "table", "schema", "field", "column", "owner",
     "domain", "lineage", "linage", "impact", "glossary", "term", "datahub",
-    "report", "list", "link", "url", "sql", "query", "report", "metadata",
-    "report", "the", "to", "a", "an", "and", "or", "of", "for", "in", "on",
+    "report", "list", "link", "url", "sql", "query", "metadata",
+    "the", "to", "a", "an", "and", "or", "of", "for", "in", "on",
     "this", "that", "these", "those", "with", "from", "upstream", "downstream",
     # Vietnamese noise
     "cho", "toi", "cua", "va", "co", "la", "gi", "nao", "cac", "duoc", "ban",
     "khong", "nhung", "nay", "do", "no", "ay", "kia", "thong", "tin", "ve",
-    "voi", "tu", "con", "cua", "mot", "hoac", "hay", "lai", "len", "xuong",
-    "vua", "ra", "em", "anh", "chi", "bai",
+    "voi", "tu", "con", "mot", "hoac", "hay", "lai", "len", "xuong",
+    "vua", "ra", "em", "anh", "chi", "bai", "sao", "the", "chi", "thi",
+    "bao", "nhieu", "may", "moi", "het", "tat", "ca", "o", "trong", "tren",
+    "duoi", "chua", "thieu", "thuoc", "bien", "bang", "tai", "lieu",
 }
 
 
 def _clean(token: str) -> bool:
-    t = token.lower()
+    t = _norm_vn(token)
     return len(t) > 2 and t not in _STOP and not t.isdigit()
 
 
@@ -77,25 +90,7 @@ def _candidates_in(question: str) -> list[tuple[str, bool]]:
     """
     out: list[tuple[str, bool]] = []
 
-    # Priority 1: Multi-word phrase directly after subject marker
-    m_subject = re.search(
-        r"(?:của|cho|cua|of|for|dataset|bang|bảng|dashboard|table)\s+"
-        r"(?:dataset\s+)?"
-        r"([A-Za-z0-9][A-Za-z0-9 _\-.'&]{1,80})",
-        question, re.I,
-    )
-    if m_subject:
-        cand = m_subject.group(1).strip().rstrip("?.!,;:")
-        words = cand.split()
-        clean = []
-        for w in words:
-            if w.lower() in _STOP:
-                break
-            clean.append(w)
-        cand_str = " ".join(clean) if clean else cand
-        if _clean(cand_str):
-            out.append((cand_str, True))
-
+    # Priority 1: Concrete identifier tokens
     for m in _IDENT_RE.finditer(question):
         token = m.group(0)
         if not _clean(token):
@@ -107,7 +102,30 @@ def _candidates_in(question: str) -> list[tuple[str, bool]]:
         )
         if not any(token.lower() == existing[0].lower() for existing in out):
             out.append((token, is_subject))
+
+    # Priority 2: Multi-word phrase directly after subject marker
+    m_subject = re.search(
+        r"(?:của|cho|cua|of|for|dataset|bang|bảng|dashboard|table)\s+"
+        r"(?:dataset\s+)?"
+        r"([^\n?!,;:]+)",
+        question, re.I | re.UNICODE,
+    )
+    if m_subject:
+        cand = m_subject.group(1).strip().rstrip("?.!,;:")
+        words = cand.split()
+        clean = []
+        for w in words:
+            w_clean = w.strip("?.!,;:")
+            if _norm_vn(w_clean) in _STOP:
+                break
+            clean.append(w)
+        cand_str = " ".join(clean).strip()
+        if cand_str and _clean(cand_str) and not any(cand_str.lower() == existing[0].lower() for existing in out):
+            out.insert(0, (cand_str, True))
+
+
     return out
+
 
 
 def extract_candidates(history: Sequence[tuple[str, str]] | None) -> list[tuple[str, str]]:

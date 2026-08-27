@@ -51,7 +51,24 @@ async def postprocess_response(
     if res.response_time_ms is None:
         res.response_time_ms = int((time.perf_counter() - t_start) * 1000)
 
+    # Data fidelity verification (E-CONTRA auto-correction)
     try:
+        if hasattr(ctx, "fidelity_checker") and hasattr(ctx, "anchor_builder"):
+            anchor = ctx.anchor_builder.build(question, [])
+            fidelity_report = await ctx.fidelity_checker.check(
+                anchor=anchor,
+                intent=res.intent or "GENERAL",
+                answer=res.answer,
+                resolved_entities=res.entities or [],
+            )
+            if not fidelity_report.passed and fidelity_report.corrected_answer:
+                res.answer = fidelity_report.corrected_answer
+                log.info("fidelity_correction_applied", trace_id=res.trace_id, violations=len(fidelity_report.violations))
+    except Exception:  # noqa: BLE001
+        log.warning("fidelity_check_in_postprocess_failed", exc_info=True)
+
+    try:
+
         from database.models import ConversationHistory
         from sqlalchemy import select
 

@@ -97,6 +97,15 @@ class SearchResult:
         self.datahub_url = datahub_url
         self.payload = payload or {}
 
+    @property
+    def entity_urn(self) -> str:
+        return self.urn
+
+    @property
+    def entity_name(self) -> str:
+        return self.name
+
+
 
 class HybridSearch:
     def __init__(self, session: AsyncSession) -> None:
@@ -276,3 +285,65 @@ class HybridSearch:
 
     async def search_by_entity_type(self, query: str, entity_type: str, top_k: int = 10) -> list[SearchResult]:
         return await self.search(query, top_k=top_k, entity_type=entity_type)
+
+    async def search_with_anchor(
+        self,
+        query: str,
+        anchor: Any,
+        filters: dict[str, Any] | None = None,
+        top_k: int = 10,
+    ) -> list[SearchResult]:
+        """Anchor-aware search: ensures context contains the anchor entity when present."""
+        # 1. Normal search pass
+        results = await self.search(query, top_k=top_k, **(filters or {}))
+
+        if anchor is None or getattr(anchor, "is_free_query", lambda: True)():
+            return results
+
+        anchor_urns = getattr(anchor, "anchor_urns", set())
+        if not anchor_urns:
+            return results
+
+        retrieved_urns = {r.urn for r in results if getattr(r, "urn", None)}
+        coverage = retrieved_urns & anchor_urns
+
+        if coverage:
+            # Anchor entity present in results -> boost to front
+            return self._boost_anchor_results(results, anchor_urns)
+
+        # 2. Anchor entity missing from free search results -> inject direct from DB
+        log.warning(
+            "hybrid_search_anchor_miss_injecting",
+            anchor_urns=list(anchor_urns),
+            retrieved_urns=list(retrieved_urns)[:3],
+        )
+        direct_entities = await self._entity_repo.list_by_urns(list(anchor_urns))
+        if direct_entities:
+            direct_results = [
+                SearchResult(
+                    urn=e.urn,
+                    entity_type=e.entity_type,
+                    name=e.display_name or e.name,
+                    score=1.0,
+                    datahub_url=e.datahub_url,
+                    payload={
+                        **dict(e.payload or {}),
+                        "content": _entity_payload_to_text(e.entity_type, e.payload or {}),
+                    },
+                )
+                for e in direct_entities
+            ]
+            return direct_results + [r for r in results if r.urn not in anchor_urns][: top_k - len(direct_results)]
+
+        return results
+
+    def _boost_anchor_results(
+        self,
+        results: list[SearchResult],
+        anchor_urns: set[str],
+    ) -> list[SearchResult]:
+        """Sort anchor results to front while preserving relative order."""
+        anchor_results = [r for r in results if r.urn in anchor_urns]
+        other_results = [r for r in results if r.urn not in anchor_urns]
+        return anchor_results + other_results
+

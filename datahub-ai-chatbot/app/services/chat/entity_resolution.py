@@ -6,7 +6,19 @@ import structlog
 from app.auth.models import UserContext
 from app.schemas.chat import Suggestion
 from app.services.chat.context import ChatContext
+from app.services.chat.entity_suggestion import (
+    EntityCorrection,
+    EntityResolutionResult,
+    EntitySuggestionService,
+)
+from app.services.chat.query_anchor import (
+    AnchorConfidence,
+    AnchorSource,
+    EntityAnchor,
+    QueryAnchor,
+)
 from app.services.chat.question_analysis import (
+
     _entity_payload_to_text,
     _extract_name,
     _infer_entity_from_history,
@@ -15,9 +27,10 @@ from app.services.chat.question_analysis import (
 )
 from config.settings import settings
 from retrieval.entity_resolver import QueryScope, ResolutionResult
-from retrieval.fuzzy import fuzzy_score
+from retrieval.fuzzy import adaptive_fuzzy_threshold, fuzzy_score
 from retrieval.hybrid_search import SearchResult
 from retrieval.intent import _norm_vn
+
 
 log = structlog.get_logger()
 
@@ -597,3 +610,172 @@ class EntityResolutionService:
                 payload=entity.payload,
             )
         return None
+
+    async def resolve_with_fuzzy_correction(
+        self,
+        raw_name: str,
+        user_ctx: UserContext | None = None,
+        entity_type: str | None = None,
+        trace_id: str | None = None,
+    ) -> EntityResolutionResult:
+        """Resolve entity with automatic adaptive fuzzy matching and correction note."""
+        if not raw_name or not raw_name.strip():
+            return EntityResolutionResult()
+
+        clean_raw = raw_name.strip()
+        # 1. Try exact match first
+        if user_ctx:
+            exact = await self.try_explicit_entity_lookup(clean_raw, user_ctx=user_ctx, trace_id=trace_id)
+            if exact:
+                return EntityResolutionResult(
+                    entities=exact,
+                    corrections=[],
+                    confidence=1.0,
+                    resolved_via="exact",
+                )
+
+        # 2. List candidate entities
+        target_types = [entity_type] if entity_type else ["dataset", "glossary_term", "dashboard"]
+        candidates = []
+        for et in target_types:
+            ents = await self._ctx.entity_repo.list_all(entity_type=et, limit=2000)
+            candidates.extend(ents)
+
+        if not candidates:
+            return EntityResolutionResult()
+
+        # 3. Score candidates with adaptive fuzzy threshold
+        threshold = adaptive_fuzzy_threshold(clean_raw)
+        scored: list[tuple[float, Any]] = []
+        for ent in candidates:
+            name = ent.display_name or ent.name or ""
+            score = fuzzy_score(clean_raw, name)
+            if score >= 0.40:
+                scored.append((score, ent))
+
+        if not scored:
+            return EntityResolutionResult()
+
+        scored.sort(key=lambda t: -t[0])
+        top_score, top_entity = scored[0]
+        top_name = top_entity.display_name or top_entity.name or ""
+
+        # 4. Check if top score meets adaptive threshold
+        if top_score >= threshold:
+            payload = top_entity.payload or {}
+            content = _entity_payload_to_text(top_entity.entity_type, payload)
+            res = SearchResult(
+                urn=top_entity.urn,
+                entity_type=top_entity.entity_type,
+                name=top_name,
+                score=top_score,
+                datahub_url=top_entity.datahub_url,
+                payload={**payload, "content": content},
+            )
+
+            is_typo = (top_name.lower() != clean_raw.lower())
+            corrections: list[EntityCorrection] = []
+            if is_typo:
+                corrections.append(EntityCorrection(
+                    original_name=clean_raw,
+                    corrected_name=top_name,
+                    confidence=top_score,
+                    entity_type=top_entity.entity_type,
+                    correction_type="fuzzy",
+                ))
+            correction_note = EntitySuggestionService.build_correction_note(corrections) if corrections else None
+
+            log.info("resolve_fuzzy_corrected", trace_id=trace_id,
+                     raw=clean_raw, corrected=top_name, score=round(top_score, 4),
+                     has_correction=bool(corrections))
+
+            return EntityResolutionResult(
+                entities=[res],
+                corrections=corrections,
+                confidence=top_score,
+                resolved_via="fuzzy",
+                correction_note=correction_note,
+            )
+
+        # 5. Below threshold
+        return EntityResolutionResult(
+            entities=[],
+            corrections=[],
+            confidence=top_score,
+            resolved_via="none",
+        )
+
+    async def resolve_with_anchor(
+        self,
+        query: str,
+        anchor: QueryAnchor,
+        user_id: str = "anonymous",
+        trace_id: str | None = None,
+    ) -> EntityResolutionResult:
+        """Resolve entities from query and populate QueryAnchor with resolved URNs and names."""
+        result_entities: list[SearchResult] = []
+        corrections: list[EntityCorrection] = []
+        miss_count = 0
+
+        user_ctx = UserContext(user_id=user_id, is_admin=False) if user_id else None
+
+        for anchor_item in anchor.anchors:
+            mention = anchor_item.raw_mention
+            if not mention or not mention.strip():
+                continue
+
+            # 1. Exact match
+            if user_ctx:
+                exact = await self.try_explicit_entity_lookup(mention, user_ctx=user_ctx, trace_id=trace_id)
+                if exact:
+                    top_exact = exact[0]
+                    anchor_item.resolved_urn = top_exact.urn
+                    anchor_item.resolved_name = top_exact.name
+                    anchor_item.entity_type = top_exact.entity_type
+                    anchor_item.confidence = AnchorConfidence.HIGH
+                    result_entities.append(top_exact)
+                    log.info("resolve_with_anchor_exact", trace_id=trace_id, mention=mention, resolved=top_exact.name)
+                    continue
+
+            # 2. Fuzzy with adaptive threshold
+            fuzzy_res = await self.resolve_with_fuzzy_correction(mention, user_ctx=user_ctx, trace_id=trace_id)
+            if fuzzy_res.entities:
+                top_fuzzy = fuzzy_res.entities[0]
+                anchor_item.resolved_urn = top_fuzzy.urn
+                anchor_item.resolved_name = top_fuzzy.name
+                anchor_item.entity_type = top_fuzzy.entity_type
+                anchor_item.confidence = AnchorConfidence.MEDIUM
+                anchor_item.is_fuzzy_match = (top_fuzzy.name.lower() != mention.lower())
+                result_entities.append(top_fuzzy)
+                if fuzzy_res.corrections:
+                    corrections.extend(fuzzy_res.corrections)
+                log.info("resolve_with_anchor_fuzzy", trace_id=trace_id, mention=mention, resolved=top_fuzzy.name)
+                continue
+
+            # 3. Glossary alias
+            alias_res = await self.resolve_glossary_by_alias(mention, question=query, trace_id=trace_id)
+            if alias_res:
+                top_alias = alias_res[0]
+                anchor_item.resolved_urn = top_alias.urn
+                anchor_item.resolved_name = top_alias.name
+                anchor_item.entity_type = top_alias.entity_type
+                anchor_item.confidence = AnchorConfidence.MEDIUM
+                result_entities.append(top_alias)
+                log.info("resolve_with_anchor_alias", trace_id=trace_id, mention=mention, resolved=top_alias.name)
+                continue
+
+            # 4. Miss count
+            miss_count += 1
+            log.warning("resolve_with_anchor_miss", trace_id=trace_id, mention=mention)
+
+        correction_note = EntitySuggestionService.build_correction_note(corrections) if corrections else None
+
+        return EntityResolutionResult(
+            entities=result_entities,
+            corrections=corrections,
+            confidence=1.0 if result_entities else 0.0,
+            resolved_via="anchor",
+            correction_note=correction_note,
+        )
+
+

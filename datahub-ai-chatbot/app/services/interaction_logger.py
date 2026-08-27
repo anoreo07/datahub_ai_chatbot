@@ -9,13 +9,37 @@ import structlog
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from dataclasses import dataclass, field
 from database.models import InteractionLog
 
 log = structlog.get_logger(__name__)
 
 
+@dataclass
+class HallucinationAuditRecord:
+    """Ghi nhận mọi potential hallucination event để review sau."""
+
+    trace_id: str
+    timestamp: str
+    query: str
+    anchor_mentions: list[str] = field(default_factory=list)
+    resolved_entities: list[str] = field(default_factory=list)
+    context_entities: list[str] = field(default_factory=list)
+    answer_entities: list[str] = field(default_factory=list)
+    has_entity_drift: bool = False
+    has_entity_miss: bool = False
+    has_ghost_entity: bool = False
+    has_contradiction: bool = False
+    has_confabulation: bool = False
+    correction_applied: bool = False
+    correction_type: str = ""
+    fidelity_score: float = 1.0
+    anchor_coverage: float = 1.0
+
+
 class InteractionLogger:
     """Logs chat interactions to the database for admin review and RAGAS evaluation."""
+
 
     def __init__(self, session: AsyncSession) -> None:
         self._session = session

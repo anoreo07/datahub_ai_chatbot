@@ -955,3 +955,43 @@ def _trusted_resolution(resolution: ResolutionResult) -> bool:
         resolution.resolved
         and resolution.resolved.score >= settings.ENTITY_RESOLVER_TRUST_THRESHOLD
     )
+
+
+class QuestionAnalysisService:
+    """Service providing unified question analysis, semantic normalization, and anaphora resolution."""
+
+    @staticmethod
+    def semantic_normalize(question: str) -> str:
+        """Strip polite fillers, punctuation, and normalize whitespace."""
+        q = re.sub(r"^(?:cho tôi hỏi|cho toi hoi|làm ơn cho tôi biết|lam on cho toi biet|vui lòng cho biết|vui long cho biet|hãy cho biết|hay cho biet)\s+", "", question, flags=re.I)
+        q = re.sub(r"[?!.,;:\"']+", " ", q)
+        return re.sub(r"\s+", " ", q).strip()
+
+    @staticmethod
+    def resolve_anaphora_with_context(question: str, history: list[tuple[str, str]]) -> str:
+        """Replace pronouns (nó/đó/bảng này) with the active entity from conversation history."""
+        if not _is_contextual_followup(question):
+            return question
+
+        entity = _infer_entity_from_history(history)
+        if not entity:
+            return question
+
+        # Replace pronouns with entity
+        q = re.sub(r"\b(?:nó|đó|ấy|này|kia|no|do|ay|nay|kia)\b", entity, question, flags=re.I)
+        q = re.sub(r"\b(?:bảng này|bang nay|dataset này|dataset nay|bảng đó|bang do)\b", f"bảng {entity}", q, flags=re.I)
+        return q
+
+    @staticmethod
+    def extract_target_entity(question: str) -> str | None:
+        """Extract primary target entity name or snake/dotted identifier."""
+        return _extract_field_identifier(question) or _extract_entity_like(question)
+
+    @staticmethod
+    def is_contextual_followup(question: str) -> bool:
+        return _is_contextual_followup(question)
+
+    @staticmethod
+    def is_datahub_relevant(question: str) -> bool:
+        return _is_datahub_relevant(question)
+

@@ -16,8 +16,10 @@ from app.services.chat.flows.domain_glossary import (
     term_linked_datasets,
 )
 from app.services.chat.flows.listing_flow import try_metadata_listing
+from app.services.chat.flows.service import ChatFlowsService
 
 __all__ = [
+    "ChatFlowsService",
     "comparison_flow",
     "deterministic_comparison",
     "answer_direct_field_op",
@@ -30,3 +32,4 @@ __all__ = [
     "term_linked_datasets",
     "try_metadata_listing",
 ]
+
