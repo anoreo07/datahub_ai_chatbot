@@ -307,7 +307,7 @@ class ChatService:
         concept_phrase: str | None = None
         if _CONCEPT_TO_DATASETS_RE.search(question):
             from app.services.chat.question_analysis import extract_concept_phrase
-            concept_phrase = extract_concept_phrase(question)
+            concept_phrase, platform_filter, domain_filter = extract_concept_phrase(question)
             if not concept_phrase:
                 _cm = _CONCEPT_PHRASE_RE.search(question)
                 if _cm:
@@ -320,9 +320,11 @@ class ChatService:
             intent = QueryIntent.TERM_TO_DATASETS
             decision = "proceed"
             log.info("route_concept_to_datasets", trace_id=trace_id,
-                     question=question[:100], concept=concept_phrase)
+                     question=question[:100], concept=concept_phrase,
+                     platform=platform_filter, domain=domain_filter)
         else:
             decision = resolution.decision
+
 
 
         log.info(

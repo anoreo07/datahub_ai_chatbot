@@ -220,7 +220,7 @@ _SYNC_RE = re.compile(
 _CONCEPT_TO_DATASETS_RE = re.compile(
     r"(?:^(?:cho tôi biết\s+)?[A-Za-zÀ-ỹ0-9 \(\)\-_\.\/]+?\s+(?:được|duoc)\s+(?:sử dụng|su dung|dùng|dung|chứa|chua|lưu|luu|ghi nhận|ghi nhan)\s+(?:trong|ở|tai)\s+(?:các\s+|những\s+)?(?:dataset|bảng|bang|table|dữ liệu|du lieu|báo cáo|bao cao))"
     r"|(?:(?:có\s+|những\s+|tìm\s+|các\s+|danh sách\s+)?(?:dataset|bảng|bang|table|dữ liệu|du lieu|báo cáo|bao cao)[^?]{0,50}?(?:liên quan|lien quan|relat(?:e|ed)?)\s*(?:đến|den|to)?\s*(?:khái niệm|khai niem|thuật ngữ|thuat ngu|concept|term)?)"
-    r"|(?:(?:có\s+|những\s+|tìm\s+|các\s+)?(?:dataset|bảng|bang|table|dữ liệu|du lieu|báo cáo|bao cao)[^?]{0,50}?(?:phục vụ|phuc vu|dùng để|dung de|có thể dùng để|co the dung de|dùng cho|dung cho|phân tích|phan tich|theo dõi|theo doi)\s+)"
+    r"|(?:(?:có\s+|những\s+|tìm\s+|các\s+)?(?:dataset|bảng|bang|table|dữ liệu|du lieu|báo cáo|bao cao)[^?]{0,50}?(?:phục vụ|phuc vu|dùng để|dung de|thực hiện|thuc hien|có thể dùng để|co the dung de|dùng cho|dung cho|phân tích|phan tich|theo dõi|theo doi|so sánh|so sanh|kiểm tra|kiem tra|đo lường|do luong)\s+)"
     r"|(?:(?:có\s+|những\s+|tìm\s+|các\s+)?(?:dataset|bảng|bang|table|dữ liệu|du lieu|báo cáo|bao cao)[^?]{0,50}?(?:chứa thông tin|chua thong tin|lưu thông tin|luu thong tin|có thông tin|co thong tin)\s+(?:về|ve)\s+)"
     r"|(?:(?:khái niệm|khai niem|thuật ngữ|thuat ngu|concept|term)\s+[A-Za-zÀ-ỹ0-9 \(\)\-_\.\/]+?\s+(?:được|duoc|nằm|nam|có|co|liên quan|lien quan))",
     re.IGNORECASE,
@@ -247,54 +247,113 @@ _CONCEPT_PHRASE_RE = re.compile(
 )
 
 
-def extract_concept_phrase(question: str) -> str | None:
-    """Extract concept name from concept-to-dataset discovery questions."""
+_PLATFORMS_MAP: dict[str, str] = {
+    "sap": "SAP", "mes": "MES", "powerbi": "powerbi", "power bi": "powerbi",
+    "redshift": "redshift", "glue": "glue", "tfs": "TFS", "excel": "Excel",
+    "ignition": "Ignition", "kafka": "kafka", "oracle": "oracle",
+    "postgres": "postgres", "postgresql": "postgres", "mysql": "mysql", "s3": "s3",
+}
+
+_DOMAINS_MAP: dict[str, str] = {
+    "san xuat": "SẢN XUẤT", "mfg": "SẢN XUẤT", "manufacturing": "SẢN XUẤT",
+    "tai chinh": "TÀI CHÍNH", "finance": "TÀI CHÍNH",
+    "hau mai": "HẬU MÃI", "after sales": "HẬU MÃI", "aftersales": "HẬU MÃI",
+    "cung ung": "CUNG ỨNG (TT)", "supply chain": "CUNG ỨNG (TT)", "supply": "CUNG ỨNG (TT)",
+    "kinh doanh": "KINH DOANH", "sales": "KINH DOANH",
+}
+
+
+def extract_concept_phrase(
+    question: str,
+) -> tuple[str | None, str | None, str | None]:
+    """Extract concept name, platform filter, and domain filter from concept discovery questions.
+
+    Returns: (clean_concept, platform_filter, domain_filter)
+    """
     q = question.strip()
+    raw_concept: str | None = None
     m1 = re.search(
-        r"^(?:cho tôi biết\s+)?([A-Za-zÀ-ỹ0-9 \(\)\-_\.\/]+?)\s+(?:được|duoc)\s+(?:sử dụng|su dung|dùng|dung|chứa|chua|lưu|luu|ghi nhận|ghi nhan)\s+(?:trong|ở|tai)\s+(?:các\s+|những\s+)?(?:dataset|bảng|bang|table|dữ liệu|du lieu|báo cáo|bao cao)",
+        r"^(?:cho tôi biết\s+)?([A-Za-zÀ-ỹ0-9 \(\)\-_\.\/]+?)\s+(?:được|duoc)\s+"
+        r"(?:sử dụng|su dung|dùng|dung|chứa|chua|lưu|luu|ghi nhận|ghi nhan)\s+"
+        r"(?:trong|ở|tai)\s+(?:các\s+|những\s+)?(?:dataset|bảng|bang|table|dữ liệu|du lieu|báo cáo|bao cao)",
         q, re.I,
     )
     if m1:
-        return m1.group(1).strip()
+        raw_concept = m1.group(1).strip()
+    if not raw_concept:
+        m2 = re.search(
+            r"(?:có\s+|những\s+|tìm\s+|các\s+|danh sách\s+)?(?:dataset|bảng|bang|table|dữ liệu|du lieu|báo cáo|bao cao)[^?]{0,50}?"
+            r"(?:liên quan|lien quan|relat(?:e|ed)?)\s*(?:đến|den|to)\s*(?:khái niệm|khai niem|thuật ngữ|thuat ngu|concept|term)?\s*"
+            r"([A-Za-zÀ-ỹ0-9 \(\)\-_\.\/]+?)(?:\s+không|\s+khong|\?|$)",
+            q, re.I,
+        )
+        if m2:
+            raw_concept = m2.group(1).strip()
+    if not raw_concept:
+        m3 = re.search(
+            r"(?:có\s+|những\s+|tìm\s+|các\s+)?(?:dataset|bảng|bang|table|dữ liệu|du lieu|báo cáo|bao cao)[^?]{0,50}?"
+            r"(?:phục vụ|phuc vu|dùng để|dung de|thực hiện|thuc hien|có thể dùng để|co the dung de|dùng cho|dung cho|phân tích|phan tich|theo dõi|theo doi|so sánh|so sanh|kiểm tra|kiem tra|đo lường|do luong)\s+"
+            r"([A-Za-zÀ-ỹ0-9 \(\)\-_\.\/]+?)(?:\s+không|\s+khong|\?|$)",
+            q, re.I,
+        )
+        if m3:
+            raw_concept = m3.group(1).strip()
 
-    m2 = re.search(
-        r"(?:có\s+|những\s+|tìm\s+|các\s+|danh sách\s+)?(?:dataset|bảng|bang|table|dữ liệu|du lieu|báo cáo|bao cao)[^?]{0,50}?(?:liên quan|lien quan|relat(?:e|ed)?)\s*(?:đến|den|to)\s*(?:khái niệm|khai niem|thuật ngữ|thuat ngu|concept|term)?\s*([A-Za-zÀ-ỹ0-9 \(\)\-_\.\/]+?)(?:\s+không|\s+khong|\?|$)",
-        q, re.I,
-    )
-    if m2:
-        res = m2.group(1).strip()
-        res = re.sub(r"\s+(?:không|khong|\?)$", "", res, flags=re.I).strip()
-        if res:
-            return res
+    if not raw_concept:
+        m4 = re.search(
+            r"(?:có\s+|những\s+|tìm\s+|các\s+)?(?:dataset|bảng|bang|table|dữ liệu|du lieu|báo cáo|bao cao)[^?]{0,50}?"
+            r"(?:chứa thông tin|chua thong tin|lưu thông tin|luu thong tin|có thông tin|co thong tin)\s+(?:về|ve)\s+"
+            r"([A-Za-zÀ-ỹ0-9 \(\)\-_\.\/]+?)(?:\s+không|\s+khong|\?|$)",
+            q, re.I,
+        )
+        if m4:
+            raw_concept = m4.group(1).strip()
+    if not raw_concept:
+        m5 = re.search(
+            r"(?:khái niệm|khai niem|thuật ngữ|thuat ngu|concept|term)\s+([A-Za-zÀ-ỹ0-9 \(\)\-_\.\/]+?)"
+            r"(?=\s+(?:được|duoc|nằm|nam|có|co|liên quan|lien quan)|\?|$)",
+            q, re.I,
+        )
+        if m5:
+            raw_concept = m5.group(1).strip()
 
-    m3 = re.search(
-        r"(?:có\s+|những\s+|tìm\s+|các\s+)?(?:dataset|bảng|bang|table|dữ liệu|du lieu|báo cáo|bao cao)[^?]{0,50}?(?:phục vụ|phuc vu|dùng để|dung de|có thể dùng để|co the dung de|dùng cho|dung cho|phân tích|phan tich|theo dõi|theo doi)\s+(?:phân tích\s+|theo dõi\s+)?([A-Za-zÀ-ỹ0-9 \(\)\-_\.\/]+?)(?:\s+không|\s+khong|\?|$)",
-        q, re.I,
-    )
-    if m3:
-        res = m3.group(1).strip()
-        res = re.sub(r"\s+(?:không|khong|\?)$", "", res, flags=re.I).strip()
-        if res:
-            return res
+    if not raw_concept:
+        return None, None, None
 
-    m4 = re.search(
-        r"(?:có\s+|những\s+|tìm\s+|các\s+)?(?:dataset|bảng|bang|table|dữ liệu|du lieu|báo cáo|bao cao)[^?]{0,50}?(?:chứa thông tin|chua thong tin|lưu thông tin|luu thong tin|có thông tin|co thong tin)\s+(?:về|ve)\s+([A-Za-zÀ-ỹ0-9 \(\)\-_\.\/]+?)(?:\s+không|\s+khong|\?|$)",
-        q, re.I,
-    )
-    if m4:
-        res = m4.group(1).strip()
-        res = re.sub(r"\s+(?:không|khong|\?)$", "", res, flags=re.I).strip()
-        if res:
-            return res
+    raw_concept = re.sub(r"\s+(?:không|khong|\?)$", "", raw_concept, flags=re.I).strip()
+    clean = raw_concept
+    platform_filter = None
+    domain_filter = None
 
-    m5 = re.search(
-        r"(?:khái niệm|khai niem|thuật ngữ|thuat ngu|concept|term)\s+([A-Za-zÀ-ỹ0-9 \(\)\-_\.\/]+?)(?=\s+(?:được|duoc|nằm|nam|có|co|liên quan|lien quan)|\?|$)",
-        q, re.I,
-    )
-    if m5:
-        return m5.group(1).strip()
+    # Extract platform
+    for p_norm, p_val in _PLATFORMS_MAP.items():
+        pattern = rf"\b(?:trong|tren|o|tren he thong|he thong|in|on|cua)\s+{p_norm}\b|\b{p_norm}\b"
+        norm_c = _norm_vn(clean)
+        if re.search(pattern, norm_c, re.I):
+            platform_filter = p_val
+            clean = re.sub(rf"\b(?:trong|tren|o|tren hệ thống|hệ thống|in|on|của)?\s*{p_val}\b", "", clean, flags=re.I).strip()
+            clean = re.sub(r"\b(?:trong|trên|ở|của)\s*$", "", clean, flags=re.I).strip()
+            break
 
-    return None
+    # Extract domain
+    for d_norm, d_val in _DOMAINS_MAP.items():
+        pattern = rf"\b(?:thuoc|trong|cua|khoi|domain|linh vuc|mien|in|belonging to)\s+(?:domain\s+|linh vuc\s+|khoi\s+)?{d_norm}\b"
+        norm_c = _norm_vn(clean)
+        if re.search(pattern, norm_c, re.I):
+            domain_filter = d_val
+            clean = re.sub(rf"\b(?:thuộc|trong|của|khối|domain|lĩnh vực|miền)?\s*(?:domain\s+|lĩnh vực\s+|khối\s+)?{d_val}\b", "", clean, flags=re.I).strip()
+            clean = re.sub(r"\b(?:thuộc|trong|của|khối)\s*$", "", clean, flags=re.I).strip()
+            break
+
+    # Strip action verb prefix if left over
+    clean = re.sub(
+        r"^(?:phân tích|phan tich|theo dõi|theo doi|thực hiện|thuc hien|tính toán|tinh toan|quản lý|quan ly|so sánh|so sanh|kiểm tra|kiem tra|đo lường|do luong)\s+",
+        "", clean, flags=re.I,
+    ).strip()
+
+    return clean or raw_concept, platform_filter, domain_filter
+
+
 
 
 # --------------------------------------------------------------------------- #

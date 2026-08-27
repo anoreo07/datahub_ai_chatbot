@@ -32,6 +32,7 @@ def test_parse_metadata_query_excludes_concept_queries():
         "Tìm dataset liên quan đến BOM cost",
         "Dataset nào có thể dùng để phân tích chi phí BOM?",
         "BOM COST OPTIMIZATION (BCO) được sử dụng trong dataset nào?",
+        "Dataset nào thực hiện theo dõi chi phí sản xuất trong SAP?",
     ]
     for q in concept_queries:
         res = parse_metadata_query(q)
@@ -51,31 +52,65 @@ def test_parse_metadata_query_preserves_legitimate_listings():
 
 
 def test_extract_concept_phrase():
-    """Test accurate concept extraction across various phrasing formats."""
+    """Test accurate concept and filter extraction across various phrasing formats."""
     cases = [
         (
             "Có dataset nào liên quan đến khái niệm BOM COST OPTIMIZATION (BCO) không?",
             "BOM COST OPTIMIZATION (BCO)",
+            None,
+            None,
         ),
-        ("Những dataset nào liên quan đến EBOM?", "EBOM"),
-        ("Dataset nào phục vụ nhu cầu linh kiện?", "nhu cầu linh kiện"),
-        ("Có bảng nào chứa thông tin về product cost không?", "product cost"),
-        ("Tìm dataset liên quan đến BOM cost", "BOM cost"),
-        ("Dataset nào có thể dùng để phân tích chi phí BOM?", "chi phí BOM"),
+        ("Những dataset nào liên quan đến EBOM?", "EBOM", None, None),
+        ("Dataset nào phục vụ nhu cầu linh kiện?", "nhu cầu linh kiện", None, None),
+        (
+            "Có bảng nào chứa thông tin về product cost không?",
+            "product cost",
+            None,
+            None,
+        ),
+        ("Tìm dataset liên quan đến BOM cost", "BOM cost", None, None),
+        (
+            "Dataset nào có thể dùng để phân tích chi phí BOM?",
+            "chi phí BOM",
+            None,
+            None,
+        ),
         (
             "BOM COST OPTIMIZATION (BCO) được sử dụng trong dataset nào?",
             "BOM COST OPTIMIZATION (BCO)",
+            None,
+            None,
         ),
         (
             "Những dataset nào liên quan đến BOM COST OPTIMIZATION?",
             "BOM COST OPTIMIZATION",
+            None,
+            None,
         ),
-        ("Có dataset nào liên quan đến khái niệm doanh thu không?", "doanh thu"),
+        ("Có dataset nào liên quan đến khái niệm doanh thu không?", "doanh thu", None, None),
+        (
+            "Dataset nào thực hiện theo dõi chi phí sản xuất trong SAP?",
+            "chi phí sản xuất",
+            "SAP",
+            None,
+        ),
+        (
+            "Có báo cáo nào so sánh chi phí EBOM trên PowerBI không?",
+            "chi phí EBOM",
+            "powerbi",
+            None,
+        ),
     ]
-    for question, expected in cases:
-        extracted = extract_concept_phrase(question)
-        assert extracted == expected, (
-            f"Failed for '{question}': expected '{expected}', got '{extracted}'"
+    for question, exp_concept, exp_plat, exp_dom in cases:
+        concept, plat, dom = extract_concept_phrase(question)
+        assert concept == exp_concept, (
+            f"Concept mismatch for '{question}': expected '{exp_concept}', got '{concept}'"
+        )
+        assert plat == exp_plat, (
+            f"Platform mismatch for '{question}': expected '{exp_plat}', got '{plat}'"
+        )
+        assert dom == exp_dom, (
+            f"Domain mismatch for '{question}': expected '{exp_dom}', got '{dom}'"
         )
 
 
@@ -90,7 +125,7 @@ def test_concept_regex_negative_cases():
         "Ai là owner của bảng dim_sales?",
     ]
     for q in negatives:
-        extracted = extract_concept_phrase(q)
-        assert extracted is None, (
-            f"Query '{q}' should NOT extract concept but got '{extracted}'"
+        concept, _, _ = extract_concept_phrase(q)
+        assert concept is None, (
+            f"Query '{q}' should NOT extract concept but got '{concept}'"
         )

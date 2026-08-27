@@ -754,30 +754,53 @@ class StructuredRetrievalService:
         trace_id: str | None = None,
     ) -> list[SearchResult]:
         """Resolve a TERM_TO_DATASETS concept query (e.g. "BOM COST OPTIMIZATION (BCO)",
-        "doanh thu", "nhu cầu linh kiện") into matching glossary terms + datasets
+        "chi phí sản xuất trong SAP", "nhu cầu linh kiện") into matching glossary terms + datasets
         that carry or mention them.
         """
         import re
+        from app.services.chat.question_analysis import extract_concept_phrase
         from retrieval.discovery import SYNONYMS
         from retrieval.hybrid_search import SearchResult
 
-        # 1. Token extraction
-        norm_c = _norm_vn(concept)
-        raw_parts = re.split(r"[\(\)\[\]/,\-_]+", concept)
-        parts = [p.strip() for p in raw_parts if p.strip()]
+        # 1. Platform & Domain Filter Extraction
+        clean_c, platform_filter, domain_filter = extract_concept_phrase(question)
+        if not clean_c:
+            clean_c, platform_filter, domain_filter = extract_concept_phrase(concept)
+        concept_target = clean_c or concept
+
+        VI_SINGLE_SYLLABLES = {
+            "chi", "phi", "san", "xuat", "nguyen", "vat", "lieu", "han", "dung",
+            "theo", "doi", "cac", "nhung", "kiem", "tra", "don", "hang", "bao",
+            "cao", "thong", "tin", "trong", "tren", "duoi", "khoi", "mien",
+            "nang", "tinh", "nang", "phan", "tich", "thuc", "hien", "quan",
+            "ly", "du", "lieu", "yeu", "cau", "mua", "ban", "tai", "chinh",
+        }
+
+        # 2. Token extraction
+        norm_c = _norm_vn(concept_target)
         tokens: set[str] = set()
-        if len(norm_c) >= 2:
+        if len(norm_c) >= 3:
             tokens.add(norm_c)
-        for p in parts:
-            np = _norm_vn(p)
-            if len(np) >= 2:
-                tokens.add(np)
-            for w in p.split():
-                nw = _norm_vn(w)
-                if len(nw) >= 2:
-                    tokens.add(nw)
-                    if nw in SYNONYMS:
-                        tokens.update(SYNONYMS[nw])
+            if norm_c in SYNONYMS:
+                tokens.update(SYNONYMS[norm_c])
+
+        for syn_key, syn_vals in sorted(SYNONYMS.items(), key=lambda x: -len(x[0])):
+            if syn_key in norm_c:
+                tokens.add(syn_key)
+                tokens.update(syn_vals)
+
+        for w in re.split(r"[\s\(\)\[\]/,\-_]+", concept_target):
+            if not w:
+                continue
+            nw = _norm_vn(w)
+            if w.isupper() and len(w) >= 2:
+                tokens.add(nw)
+                if nw in SYNONYMS:
+                    tokens.update(SYNONYMS[nw])
+            elif len(nw) >= 3 and nw not in VI_SINGLE_SYLLABLES:
+                tokens.add(nw)
+                if nw in SYNONYMS:
+                    tokens.update(SYNONYMS[nw])
 
         clean_tokens = [
             t for t in tokens
@@ -786,7 +809,7 @@ class StructuredRetrievalService:
         if not clean_tokens:
             return []
 
-        # 2. Score glossary terms
+        # 3. Score glossary terms
         terms = await self._ctx.entity_repo.list_by_type("glossary_term", limit=2000)
         scored_terms: list[tuple[float, Any]] = []
         for t in terms:
@@ -808,7 +831,8 @@ class StructuredRetrievalService:
         term_urns = {t.urn for t in top_terms}
         term_slugs = {t.urn.rsplit(":", 1)[-1].lower() for t in top_terms}
 
-        log.info("term_concept_matched", trace_id=trace_id, concept=concept[:80],
+        log.info("term_concept_matched", trace_id=trace_id, concept=concept_target[:80],
+                 platform=platform_filter, domain=domain_filter,
                  tokens=clean_tokens[:8], matched_terms=len(scored_terms))
 
         results: list[SearchResult] = []
@@ -825,7 +849,7 @@ class StructuredRetrievalService:
             ))
             seen.add(t.urn)
 
-        # 3. Score candidate datasets
+        # 4. Score candidate datasets
         datasets = await self._ctx.entity_repo.list_all("dataset", limit=100000)
         scored_ds: list[tuple[float, Any, str]] = []
         for ds in datasets:
@@ -834,8 +858,24 @@ class StructuredRetrievalService:
             payload = ds.payload or {}
             name_norm = _norm_vn(ds.name or ds.display_name or "")
             desc_norm = _norm_vn(payload.get("description") or "")
+            ds_plat = (ds.platform or payload.get("platform") or "").upper()
+            ds_dom = (ds.domain or payload.get("domain") or "")
             score = 0.0
             relevance_reasons: list[str] = []
+
+            # Platform filter bonus / penalty
+            if platform_filter:
+                if ds_plat == platform_filter.upper():
+                    score += 25.0
+                    relevance_reasons.append(f"Thuộc hệ thống {ds_plat}")
+                else:
+                    score -= 25.0
+
+            # Domain filter bonus / penalty
+            if domain_filter:
+                if ds_dom == domain_filter:
+                    score += 15.0
+                    relevance_reasons.append(f"Thuộc domain {ds_dom}")
 
             # Signal 1: Direct Glossary Linkage
             ds_terms = [str(x).lower() for x in (payload.get("glossary_terms") or [])]
@@ -849,10 +889,10 @@ class StructuredRetrievalService:
                     score += 15.0
                     relevance_reasons.append(f"Tên dataset khớp khái niệm '{k}'")
                 elif k in name_norm:
-                    score += 4.0
+                    score += 6.0
                     relevance_reasons.append(f"Tên dataset chứa từ khóa '{k}'")
                 elif k in desc_norm:
-                    score += 1.5
+                    score += 3.0
                     relevance_reasons.append(f"Mô tả dataset đề cập đến '{k}'")
 
             # Signal 3: Schema fields
@@ -866,7 +906,7 @@ class StructuredRetrievalService:
             if matched_fields:
                 relevance_reasons.append(f"Schema chứa các cột: {', '.join(matched_fields[:3])}")
 
-            if score >= 3.0:
+            if score >= 5.0:
                 reason_str = "; ".join(dict.fromkeys(relevance_reasons))
                 scored_ds.append((score, ds, reason_str))
 
@@ -895,9 +935,10 @@ class StructuredRetrievalService:
             ))
             seen.add(ds.urn)
 
-        log.info("term_concept_to_datasets", trace_id=trace_id, concept=concept[:80],
+        log.info("term_concept_to_datasets", trace_id=trace_id, concept=concept_target[:80],
                  terms=len(top_terms), datasets=sum(1 for r in results if r.entity_type == "dataset"))
         return results
+
 
 
 
