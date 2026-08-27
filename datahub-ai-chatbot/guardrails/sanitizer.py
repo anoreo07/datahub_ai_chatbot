@@ -99,6 +99,20 @@ _INJECTION_PATTERNS: list[re.Pattern[str]] = [
         r"\b(?:drop\s+table|delete\s+from|truncate\s+table|alter\s+table|insert\s+into|update\s+\w+\s+set)\b",
         re.I,
     ),
+    re.compile(
+        r"(?:bỏ qua|bo qua|ignore|bypass|override)\s+(?:tất cả\s+|toàn bộ\s+|all\s+)?"
+        r"(?:phân\s*quyền|quyền(?: của tôi)?|quy tắc|chính sách|bảo mật|permissions?|access\s*control|acl|security|rules)",
+        re.I,
+    ),
+    re.compile(
+        r"(?:cho tôi xem|xem|hiển thị|show|reveal)\s+(?:dữ liệu|thông tin|data)\s+"
+        r"(?:bảo mật|bí mật|restricted|confidential|bị cấm|bi cam|chưa được phép)",
+        re.I,
+    ),
+    re.compile(
+        r"(?:tôi là admin|toi la admin|i am admin|acting as admin)\s+(?:hãy|cho|trả|bỏ qua|ignore|reveal)",
+        re.I,
+    ),
 ]
 
 

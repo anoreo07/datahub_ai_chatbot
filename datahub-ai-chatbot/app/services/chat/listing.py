@@ -134,8 +134,14 @@ class ListingService:
             # dashboard ...") count the whole entity type, never a dimension
             # extracted from a trailing clause ("trên nền tảng của chúng ta",
             # "của chúng ta" would otherwise be misread as an owner filter).
+            has_explicit_filter = any(
+                bool(_extract_filter_value(question, ti))
+                for ti in (QueryIntent.DOMAIN_QUERY, QueryIntent.TAG_QUERY,
+                           QueryIntent.ENTITIES_BY_OWNER, QueryIntent.PLATFORM_QUERY)
+            )
             global_count = (
                 intent == QueryIntent.COUNT_ENTITIES
+                and not has_explicit_filter
                 and bool(re.search(
                     r"(tính tổng số|tinh tong so|tổng số|tong so|tổng cộng|tong cong)",
                     question, re.I,
@@ -181,6 +187,17 @@ class ListingService:
                         dimension = _DIMENSION_MAP[try_intent]
                         value = v
                         break
+            if dimension == "domain" and value:
+                from app.services.chat.question_analysis import _DOMAINS_MAP
+                norm_v = _norm_vn(value)
+                if norm_v in _DOMAINS_MAP:
+                    value = _DOMAINS_MAP[norm_v]
+                elif any(k in norm_v for k in _DOMAINS_MAP):
+                    for k, v_dom in _DOMAINS_MAP.items():
+                        if k in norm_v:
+                            value = v_dom
+                            break
+
             if suggested_name and dimension == "domain":
                 value = suggested_name
             if dimension == "domain" and value and self._ctx.auth_service:

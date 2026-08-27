@@ -62,9 +62,10 @@ _LISTING_TYPE_MAP: dict[str, str] = {
 
 _FILTER_VALUE_PATTERNS: dict[QueryIntent, list[str]] = {
     QueryIntent.DOMAIN_QUERY: [
-        r"(?:domain|mien|linh vuc)\s*[:=]?\s*([a-z0-9\.\-]+(?:\s+[a-z0-9\.\-]+)?)",
-        r"(?:trong|thuoc|in|belonging to|belong to)\s+(?:the\s+)?"
-        r"(?:domain|mien|linh vuc)\s+([a-z0-9\.\-]+(?:\s+[a-z0-9\.\-]+)?)",
+        r"(?:domain|mien|linh vuc|khoi)\s*[:=]?\s*([a-z0-9\.\-]+(?:\s+[a-z0-9\.\-]+)?)",
+        r"(?:trong|thuoc|in|belonging to|belong to|cua)\s+(?:the\s+)?"
+        r"(?:domain|mien|linh vuc|khoi)\s+([a-z0-9\.\-]+(?:\s+[a-z0-9\.\-]+)?)",
+        r"(?:linh vuc|khoi|domain|mien)\s+([a-z0-9\.\-]+(?:\s+[a-z0-9\.\-]+)?)",
     ],
     QueryIntent.PLATFORM_QUERY: [
         r"(?:platform|nen tang)\s*[:=]?\s*([a-z0-9\.\-]+(?:\s+[a-z0-9\.\-]+)?)",
@@ -178,6 +179,8 @@ log = structlog.get_logger()
 _MULTI_HOP_CHAIN_RE = re.compile(
     r"(?:→|->|➔|⇒|arrow|chuỗi|chained|hop\b)|"
     r"(?:từ|tu|from)\s+[\w\.\- ]{1,40}\s*(?:→|->)|"
+    r"(?:từ|tu|from)\s+(?:báo cáo|report|dataset|bảng|bang)\s+[\w\.\- ]{1,40}\s+(?:truy ngược|truy vết|truy|trace|ngược về|nguoc ve|truy xuất)\b|"
+    r"(?:truy\s+(?:ngược|vết|trace)\s+(?:về|sang|đến)?\s*(?:nguồn|downstream|upstream)\b)|"
     r"(?:tìm|tim|find)\s+(?:report|báo cáo|bao cao)\b[^\n]{0,120}\b"
     r"(?:term|thuật ngữ|thuat ngu|lineage|nguồn|nguon|dataset nguồn)",
     re.I,

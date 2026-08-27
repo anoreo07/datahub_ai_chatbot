@@ -176,7 +176,8 @@ def _extract_entity(message: str) -> str | None:
 
     _LOOKAHEAD_IGNORE = (
         r"co|khong|chua|thieu|thuoc|tren|nao|gi|lay|luu|dung|la|duoc|bao nhieu|tat ca|nhung|cac|moi|gii|lieu|"
-        r"mot|1|mot so|bat ky|bat cu|va|va kiem|kiem|kiem tra|he thong|datahub|chung|tong the"
+        r"mot|1|mot so|bat ky|bat cu|va|va kiem|kiem|kiem tra|he thong|datahub|chung|tong the|"
+        r"du lieu|khoi|linh vuc|domain|mien|platform|nen tang|cua|trong|ve|cho"
     )
 
     # Priority 3: Direct entity type keyword with optional platform

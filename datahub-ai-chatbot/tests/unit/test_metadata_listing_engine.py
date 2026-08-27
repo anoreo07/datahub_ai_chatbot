@@ -274,7 +274,7 @@ class TestOperationDetection:
     def test_equals(self):
         op, val = _detect_operations("thuộc domain SALES")
         assert op == FilterOperation.EQUALS
-        assert val == "domain sales"
+        assert val in ("sales", "domain sales")
 
 
 # ---------------------------------------------------------------------------

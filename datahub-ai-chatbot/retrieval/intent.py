@@ -136,13 +136,16 @@ _RULE_STRINGS: list[tuple[str, QueryIntent]] = [
     # Data Quality / Quality Check — must be checked early before general schema/dataset lookup
     (r"(?:chất lượng|chat luong|quality|độ chính xác|do chinh xac|reliability|tin cậy|tin cay|"
      r"freshness|mới chưa|moi chua|cập nhật chưa|cap nhat chua|dữ liệu cũ|du lieu cu|"
-     r"có tốt không|co tot khong|tốt không|tot khong|có ok không|co ok khong|"
+     r"có tốt không|co tot khong|tốt không|tot khong|có ok không|co ok khong|có ổn không|co on khong|"
      r"data có tốt không|data co tot khong|dữ liệu có đầy đủ không|du lieu co day du khong|"
      r"có đầy đủ không|co day du khong|bao nhiêu null|bao nhieu null|nhiều null|nhieu null|"
      r"thiếu dữ liệu|thieu du lieu|có lỗi không|co loi khong|tin cậy không|tin cay khong|"
      r"data quality|quality report|null rate|completeness)",
      QueryIntent.QUALITY_CHECK),
-
+    (r"(?:từ|tu|from)\s+(?:báo cáo|bao cao|report|dataset|bảng|bang)\s+[^\n]{1,60}?\b"
+     r"(?:truy ngược|truy nguoc|truy vết|truy vet|trace|cho tôi biết|cho toi biet|xem|tìm|tim|biết|biet|hướng dẫn)\s+[^\n]{1,80}?\b"
+     r"(?:công thức|cong thuc|lineage|nguồn|nguon|dữ liệu thô|du lieu tho|trường nào|truong nao|cột nào|cot nao)",
+     QueryIntent.MULTI_HOP_CHAIN),
 
     # Lineage / Upstream / Downstream — natural language expressions
     (r"(?:lấy dữ liệu từ đâu|lay du lieu tu dau|lấy data từ đâu|lay data tu dau|"
@@ -165,6 +168,16 @@ _RULE_STRINGS: list[tuple[str, QueryIntent]] = [
     (r"(?:tài liệu|tai lieu|documents?|reports?)\s+[\w\.\- ]{1,80}?\s+"
      r"(?:mô tả|mo ta|nói về|noi ve|nội dung|noi dung|describe|explain|giải thích|"
      r"nói gì|noi gi|bao gồm gì|about)", QueryIntent.DOCUMENT_QA),
+
+    # Field property queries with dataset context (must win before general term definition)
+    (r"(?:trường|truong|cột|cot|field|column)\s+[A-Za-z0-9_\.\-]+\s+(?:trong|của|cua|in|of)\s+[A-Za-z0-9_\.\- ]{1,60}?\s+"
+     r"(?:có ý nghĩa gì|co y nghia gi|lưu gì|luu gi|chứa gì|chua gi|nghĩa là gì|nghia la gi|dùng làm gì|dung lam gi|là gì|la gi)",
+     QueryIntent.FIELD_PROPERTY),
+
+    # Domain queries (must win before generic term definition)
+    (r"(?:các|những|danh sách)?\s*(?:bảng|bang|dataset|dữ liệu|du lieu|dashboard)\s+(?:trong|thuộc|ở|tai)\s+(?:domain|lĩnh vực|linh vuc|khối|khoi|miền|mien)\s+[\w\.\- ]{1,60}",
+     QueryIntent.DOMAIN_QUERY),
+
 
     # Explicit term definition / Glossary phrases — natural language expressions
     (r"(?:giải thích|giai thich|cho biết|cho biet|tìm hiểu|tim hieu)\s+(?:khái niệm|khai niem|thuật ngữ|thuat ngu|term)\b",
@@ -260,6 +273,16 @@ _RULE_STRINGS: list[tuple[str, QueryIntent]] = [
      QueryIntent.OWNER_LOOKUP),
     (r"(ai sở hữu|ai so huu|ai là chủ|ai la chu|\bowner\b\s+(of|la|is|của|cua|nào|nao|nà|na)|the\s+owner|của ai|cua ai|who (owns|is the owner)|của owner nào|cua owner nao|owner của ai|owner cua ai)",
      QueryIntent.OWNER_LOOKUP),
+
+    # SQL / query generation — must win before general schema field listing
+    (r"\b(sql|query)\b|viết\s+sql|viet\s+sql|tạo\s+sql|tao\s+sql|sinh\s+sql|"
+     r"truy vấn|truy van|câu lệnh truy vấn|cau lenh truy van|lệnh để truy cập|"
+     r"viết câu lệnh|viet cau lenh|trả về một câu sql|tra ve mot cau sql|"
+     r"ghi\s+sql|ghi lenh truy van|select\s+|from\s+", QueryIntent.SQL_GENERATION),
+    (r"(?:các\s+)?bản\s+ghi|ban\s+ghi|bản tin|ban tin|records?\b",
+     QueryIntent.SQL_GENERATION),
+    (r"(?:lấy|lay|cho tôi|cho toi|get|fetch|gắ|dieu).{0,25}\b(?:có|cot|co)\s+"
+     r"\w+[_]\w+(\s*[=<>]?\s*['\"]?[a-z0-9_]+['\"]?)?", QueryIntent.SQL_GENERATION),
 
     # Schema / field queries — natural language expressions
     (r"(?:có những cột nào|co nhung cot nao|gồm những trường nào|gom nhung truong nao|"

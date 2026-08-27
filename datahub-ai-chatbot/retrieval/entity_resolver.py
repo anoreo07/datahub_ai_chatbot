@@ -268,7 +268,7 @@ class EntityResolver:
         self, name: str, entity_type: str | None = None
     ) -> list[Candidate]:
         entities = await self._repo.list_all(
-            entity_type=entity_type, limit=2000
+            entity_type=entity_type, limit=10000
         )
         scored: list[tuple[float, Entity]] = []
         for e in entities:

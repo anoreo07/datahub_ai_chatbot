@@ -331,13 +331,36 @@ class ToolRegistry:
 
     async def count_entities(self, params: dict[str, Any]) -> list[SearchResult]:
         entity_type = params.get("entity_type")
-        total = await self._repo.count_by_type(entity_type)
+        domain = params.get("domain") or params.get("dimension_value")
+        platform = params.get("platform")
+        tag = params.get("tag")
+        owner = params.get("owner")
+
+        if domain:
+            entities = list(await self._repo.list_by_domain(domain, entity_type=entity_type, limit=5000))
+            total = len(entities)
+        elif platform:
+            entities = list(await self._repo.list_by_platform(platform, entity_type=entity_type, limit=5000))
+            total = len(entities)
+        elif tag:
+            entities = list(await self._repo.list_by_tag(tag, entity_type=entity_type, limit=5000))
+            total = len(entities)
+        elif owner:
+            entities = list(await self._repo.list_by_owner(owner, entity_type=entity_type, limit=5000))
+            total = len(entities)
+        else:
+            total = await self._repo.count_by_type(entity_type)
+            entities = list(await self._repo.list_by_type(entity_type or "dataset", limit=20))
+
         if total == 0:
             return []
-        entities = await self._repo.list_by_type(entity_type or "dataset", limit=20)
-        results = [r for e in entities if (r := await self._entity_to_result(e.urn, score=0.9))]
+        results = [r for e in entities[:20] if (r := await self._entity_to_result(e.urn, score=0.9))]
         if results:
             results[0].payload = {**results[0].payload, "count": total}
+            if domain:
+                results[0].payload["domain"] = domain
+            if platform:
+                results[0].payload["platform"] = platform
         return results
 
     async def document_qa(self, params: dict[str, Any]) -> list[SearchResult]:

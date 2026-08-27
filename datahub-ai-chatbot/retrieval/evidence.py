@@ -180,6 +180,8 @@ _PROPERTY_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
     ("description", re.compile(
         r"mô\s+tả|mo\s+ta|ý\s+nghĩa|y\s+nghia|có\s+nghĩa|co\s+nghia|"
         r"nghĩa\s+là\s+gì|nghia\s+la\s+gi|nghĩa\s+gì|nghia\s+gi|"
+        r"lưu\s+gì|luu\s+gi|chứa\s+gì|chua\s+gi|lưu\s+thông\s+tin|luu\s+thong\s+tin|"
+        r"lưu\s+trữ\s+gì|luu\s+tru\s+gi|dùng\s+để\s+làm\s+gì|dung\s+de\s+lam\s+gi|"
         r"giải\s+thích|giai\s+thich|description|\bmeaning\b|"
         r"mô\s+tả\s+gì|mo\s+ta\s+gi",
         re.I)),
@@ -210,24 +212,17 @@ _FIND_FIELD_RE = re.compile(
 
 _ENTITY_DOT_REF = re.compile(r"([a-z0-9_]+(?:\.[a-z0-9_]+)+)\.([a-z0-9_]+)", re.I)
 _FIELD_OF_ENTITY = re.compile(
-    r"\b([a-z0-9_]+)\s+(?:của|cua|of|trong)\s+"
-    r"(?:dataset\s+)?[\"“”'`]?([a-z0-9_]+(?:\.[a-z0-9_]+)*)[\"“”'`]?",
+    r"(?:trường|truong|cột|cot|field)?\s*\b([a-z0-9_]+)\s+(?:của|cua|of|trong)\s+"
+    r"(?:dataset\s+|bảng\s+|bang\s+)?[\"“”'`]?([a-z0-9_]+(?:\.[a-z0-9_]+)*)[\"“”'`]?",
     re.I,
 )
-# Looser spaced form: "<field> ... <...> ... trong <entity>" (e.g.
-# "warehouse_id có kiểu dữ liệu gì trong fact_inventory_movement",
-# 'trong dataset "fact_sale_orders" có trường "sod_total_amount" nghĩa là
-# gì?'). The separator must not cross sentence boundaries and must stay short
-# to avoid matching across unrelated clauses. The entity may be quoted.
 _FIELD_SPACED_IN_ENTITY = re.compile(
-    r"\b([a-z0-9_]+)[^.!?]{0,60}?\btrong\s+(?:dataset\s+)?"
+    r"(?:trường|truong|cột|cot|field)?\s*\b([a-z0-9_]+)[^.!?]{0,60}?\btrong\s+(?:dataset\s+|bảng\s+|bang\s+)?"
     r"[\"“”'`]?([a-z0-9_]+(?:\.[a-z0-9_]+)*)[\"“”'`]?",
     re.I,
 )
-# Entity-first ordering: 'trong dataset "X" có trường "Y" nghĩa là gì?'
-# (the entity precedes the field, so the spaced form above cannot match).
 _ENTITY_FIRST_FIELD = re.compile(
-    r"\btrong\s+(?:dataset\s+)?[\"“”'`]?"
+    r"\btrong\s+(?:dataset\s+|bảng\s+|bang\s+)?[\"“”'`]?"
     r"([a-z0-9_]+(?:\.[a-z0-9_]+)*)[\"“”'`]?"
     r"[^.!?]{0,60}?\b(?:trường|field|cột|cot)\s+"
     r"[\"“”'`]?([a-z0-9_]+)[\"“”'`]?",

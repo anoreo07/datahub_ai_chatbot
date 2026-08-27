@@ -1243,8 +1243,13 @@ class ChatService:
         # quality request, runs the deterministic quality report against DataHub
         # metadata and returns it as a rendered markdown answer plus the structured
         # report (carried on ChatResponse.quality_report) for the chat export UI.
-        if resolution.chosen_tool == "quality_check" or selected_action == "quality" or (
-            selected_action == "quality" and intent in _QUALITY_FAVORED_INTENTS
+        if (
+            resolution.chosen_tool == "quality_check"
+            or selected_action == "quality"
+            or intent in (QueryIntent.QUALITY_CHECK, QueryIntent.DATA_QUALITY)
+            or (
+                selected_action == "quality" and intent in _QUALITY_FAVORED_INTENTS
+            )
         ):
             quality_response = await self._flows.quality_check_flow(
                 query, user_ctx, trace_id, cid, entity_hint,
@@ -1272,7 +1277,7 @@ class ChatService:
             resolution.chosen_tool == "metadata_report"
             or selected_action == "report"
             or intent == QueryIntent.METADATA_REPORT
-            or (_METADATA_REPORT_RE.search(query) and not is_ellipsis)
+            or (_METADATA_REPORT_RE.search(query) and not _norm_vn(query).startswith(("con ", "the ", "the con")))
         ):
             report_response = await self._flows.metadata_report_flow(
                 query, user_ctx, trace_id, cid, entity_hint,

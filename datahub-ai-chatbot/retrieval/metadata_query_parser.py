@@ -73,19 +73,21 @@ def _extract_value_after_equals(message: str) -> str | None:
 
     'dataset thuộc domain SALES' → 'SALES'
     'dataset trên platform powerbi' → 'powerbi'
+    'dataset của khối tài chính là bao nhiêu' → 'tài chính'
     """
     n = _norm(message)
     # Pattern: "thuộc/above <value>" at end or before conjunction/stop
     m = re.search(
-        r"(?:thuoc|thuoc|la|of|on|in|tren)"
-        r"\s+"
+        r"\b(?:thuoc|la|of|on|in|tren|cua khoi|khoi|cua domain|domain|cua linh vuc|linh vuc|cua mien|mien|cua)\b\s+"
         r"([A-Za-z0-9][A-Za-z0-9 _\-.'&]{0,60})",
         n, re.I,
     )
     if m:
         val = m.group(1).strip()
+        # Strip leading connector / domain keywords if captured
+        val = re.sub(r"^(?:linh vuc|khoi|domain|mien)\s+", "", val, flags=re.I)
         # Trim trailing stop words
-        val = re.split(r"\s+(?:va|and|nhung|but|hoac|or|de|va co|va khong)", val)[0]
+        val = re.split(r"\s+(?:la bao nhieu|bao nhieu|la gi|la nhung|va|and|nhung|but|hoac|or|de|va co|va khong)", val)[0]
         val = val.strip().rstrip("?.!,;:")
         if val and len(val) >= 1:
             return val
@@ -120,17 +122,19 @@ def _detect_operations(message: str) -> tuple[FilterOperation, str | None]:
     if re.search(r"(?:khong co|chua co|thieu|bi thieu|chua duoc gan|missing)", n):
         return FilterOperation.MISSING, None
 
+    # EQUALS patterns (with value extraction)
+    if re.search(r"\b(?:thuoc|la|of|on|in|tren|cua khoi|khoi|cua domain|domain|cua linh vuc|linh vuc|cua mien|mien|cua)\b", n):
+        value = _extract_value_after_equals(message)
+        if value:
+            return FilterOperation.EQUALS, value
+
     # EXISTS patterns
     if re.search(r"(?:co |dang co|duoc gan|co thong tin|co metadata|chua|dang duoc)", n):
         return FilterOperation.EXISTS, None
 
-    # EQUALS patterns (with value extraction)
-    if re.search(r"(?:thuoc|thuoc|la |of |on |in |tren )", n):
-        value = _extract_value_after_equals(message)
-        return FilterOperation.EQUALS, value
-
     # Default: EXISTS (most common "có X?" pattern)
     return FilterOperation.EXISTS, None
+
 
 
 def _extract_attribute_from_message(message: str) -> str | None:
