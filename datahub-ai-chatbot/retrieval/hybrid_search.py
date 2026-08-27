@@ -194,32 +194,24 @@ class HybridSearch:
         disc_entities = await discovery.discover(query, top_k=top_k, trace_id=trace_id)
         if disc_entities:
             disc_urns = {e.urn for e in disc_entities}
-            existing = {r.urn for r in results}
-            merged = list(results)
             tokens = expand_query_tokens(query)
+            disc_results: list[SearchResult] = []
             for e in disc_entities:
-                if e.urn in existing:
-                    continue
                 payload = dict(e.payload or {})
                 payload.setdefault("content", _entity_payload_to_text(e.entity_type, payload))
-                # Score discovery hits by token-match strength so a candidate that
-                # matches EVERY expanded query token ("Báo cáo check WIP MES_SAP"
-                # for "WIP giữa MES và SAP") can compete with vector hits, while
-                # partial matches stay below them. Flat 0.9 made a full-token-match
-                # dashboard lose to weak vector datasets whose raw scores clamp to
-                # base 1.0 in the reranker (type-aware retrieval regression).
                 hits = score_entity(tokens, e)
                 max_hits = max(1.0, len(tokens) * 2.0)
                 score = round(min(1.0, 0.9 + 0.1 * hits / max_hits), 4)
-                merged.append(SearchResult(
+                disc_results.append(SearchResult(
                     urn=e.urn, entity_type=e.entity_type,
                     name=e.display_name or e.name, score=score,
                     datahub_url=e.datahub_url, payload=payload,
                 ))
-                existing.add(e.urn)
-            results = merged
+            other_results = [r for r in results if r.urn not in disc_urns]
+            results = disc_results + other_results
             log.info("hybrid_discovery_merge", trace_id=trace_id, query=query[:100],
                      discovery_urns=len(disc_urns), merged=len(results))
+
 
         if results:
             return results

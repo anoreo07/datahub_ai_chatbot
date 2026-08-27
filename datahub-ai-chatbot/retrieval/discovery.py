@@ -49,10 +49,26 @@ SYNONYMS: dict[str, tuple[str, ...]] = {
     "staging": ("stg",),
     "thô": ("raw", "stg"),
     "tho": ("raw", "stg"),
-    "nguyên vật liệu": ("material",),
-    "nguyen vat lieu": ("material",),
-    "vật tư": ("material",),
-    "vat tu": ("material",),
+    "hạn sử dụng": ("hsd", "han su dung", "expiry", "exp"),
+    "han su dung": ("hsd", "han su dung", "expiry", "exp"),
+    "hạn dùng": ("hsd", "exp", "expiry"),
+    "han dung": ("hsd", "exp", "expiry"),
+    "nguyên vật liệu": ("material", "nvl", "nguyen vat lieu"),
+    "nguyen vat lieu": ("material", "nvl", "nguyen vat lieu"),
+    "vật tư": ("material", "nvl", "vat tu"),
+    "vat tu": ("material", "nvl", "vat tu"),
+    "yêu cầu mua hàng": ("ycmh", "pr"),
+    "yeu cau mua hang": ("ycmh", "pr"),
+    "chi phí sản xuất": ("chi phi sx", "production cost"),
+    "chi phi san xuat": ("chi phi sx", "production cost"),
+    "kết quả sản xuất": ("production result", "ket qua san xuat"),
+    "ket qua san xuat": ("production result", "ket qua san xuat"),
+    "tồn kho": ("inventory", "stock", "ton kho"),
+    "ton kho": ("inventory", "stock", "ton kho"),
+    "sản xuất": ("sx", "production", "mfg"),
+    "san xuat": ("sx", "production", "mfg"),
+    "theo dõi": ("theo doi", "tracking", "monitor"),
+    "theo doi": ("theo doi", "tracking", "monitor"),
     "linh kiện": ("component", "part"),
     "linh kien": ("component", "part"),
     "nhu cầu": ("requirement", "demand", "req"),
@@ -73,15 +89,12 @@ SYNONYMS: dict[str, tuple[str, ...]] = {
     "ban": ("sale", "lead"),
     "dữ liệu bán": ("sales", "sale"),
     "du lieu ban": ("sales", "sale"),
-    # English technical tokens that users write verbatim in the question but
-    # carry no Vietnamese synonym. They match catalog names directly ("có báo
-    # cáo nào về capacity của nhà cung cấp (vendor) không?" -> the capacity
-    # dashboards). The keys are ASCII-folded so "Capacity" / "CAPACITY" hit.
     "capacity": ("capacity",),
     "supplier": ("supplier",),
     "vendor": ("vendor", "supplier"),
     "survey": ("survey",),
 }
+
 
 # Acronyms that never appear verbatim in the question are still meaningful
 # domain tokens; they are pulled from the synonym expansions above. Plain
@@ -163,9 +176,10 @@ class TokenDiscovery:
     async def discover(
         self, question: str, top_k: int = 8,
         entity_types: Sequence[str] = ("dataset", "dashboard"),
-        min_hits: float = 3.0,
+        min_hits: float = 2.0,
         trace_id: str | None = None,
     ) -> list[Entity]:
+
         """Return the strongest token-matched entities, or [] if no discovery
         signal is present."""
         if not _is_discovery_sentence(question):
