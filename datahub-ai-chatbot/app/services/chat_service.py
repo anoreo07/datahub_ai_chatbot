@@ -305,15 +305,16 @@ class ChatService:
         # flow answers deterministically. This must run BEFORE the clarify early
         # return below.
         concept_phrase: str | None = None
-        if (intent in (QueryIntent.FIND_ENTITY, QueryIntent.ENTITY_EXISTS,
-                       QueryIntent.GENERAL, QueryIntent.SCHEMA_LOOKUP)
-                and _CONCEPT_TO_DATASETS_RE.search(question)):
-            _cm = _CONCEPT_PHRASE_RE.search(question)
-            if _cm:
-                concept_phrase = next(
-                    (g for g in (_cm.group(1), _cm.group(2), _cm.group(3)) if g), None
-                )
-                concept_phrase = concept_phrase.strip() if concept_phrase else None
+        if _CONCEPT_TO_DATASETS_RE.search(question):
+            from app.services.chat.question_analysis import extract_concept_phrase
+            concept_phrase = extract_concept_phrase(question)
+            if not concept_phrase:
+                _cm = _CONCEPT_PHRASE_RE.search(question)
+                if _cm:
+                    concept_phrase = next(
+                        (g for g in (_cm.group(1), _cm.group(2), _cm.group(3)) if g), None
+                    )
+                    concept_phrase = concept_phrase.strip() if concept_phrase else None
             if plan:
                 plan.intent = QueryIntent.TERM_TO_DATASETS
             intent = QueryIntent.TERM_TO_DATASETS
@@ -322,6 +323,7 @@ class ChatService:
                      question=question[:100], concept=concept_phrase)
         else:
             decision = resolution.decision
+
 
         log.info(
             "intent_resolution",

@@ -221,27 +221,43 @@ for _spec in ATTRIBUTE_REGISTRY.values():
             _SYNONYM_TO_ATTR[_key_norm] = _spec.name
 
 
+_EXCLUDED_ATTR_WORDS = frozenset({
+    "lien", "quan", "lien quan", "khai", "niem", "khai niem",
+    "thuat", "ngu", "thuat ngu", "dung", "cho", "cua", "trong",
+    "ve", "de", "tu", "den", "theo", "nao", "co", "gi", "bang",
+    "table", "dataset", "dashboard", "khong", "chua", "tat", "ca",
+})
+
+
 def normalize_attribute(token: str) -> str | None:
     """Resolve a token (possibly typo) to a canonical attribute name.
 
-    Uses exact synonym match, then fuzzy prefix matching.
+    Uses exact synonym match, then fuzzy matching for longer tokens.
     Returns None if no attribute matches with sufficient confidence.
     """
     t = token.lower().strip()
+    if not t or t in _EXCLUDED_ATTR_WORDS:
+        return None
+
     # Exact synonym match
     if t in _SYNONYM_TO_ATTR:
         return _SYNONYM_TO_ATTR[t]
     # Try without diacritics
     import unicodedata
     t_norm = unicodedata.normalize("NFKD", t).encode("ascii", "ignore").decode("ascii")
+    if t_norm in _EXCLUDED_ATTR_WORDS:
+        return None
     if t_norm in _SYNONYM_TO_ATTR:
         return _SYNONYM_TO_ATTR[t_norm]
-    # Prefix match: "linage" -> "lineage" via edit distance.
-    # Only for tokens >= 4 chars to avoid false positives (e.g., "ton" → "tag").
-    if len(t) >= 4:
+
+    # Fuzzy match: e.g. "linage" -> "lineage"
+    # Never fuzzy-match tokens or synonyms <= 4 characters (e.g. "lien" -> "mien" is blocked).
+    if len(t_norm) >= 5:
         for syn, attr_name in _SYNONYM_TO_ATTR.items():
-            if len(syn) >= 4 and _edit_distance(t, syn) <= len(syn) // 4:
-                return attr_name
+            if len(syn) >= 5:
+                max_dist = 1 if len(syn) < 8 else 2
+                if _edit_distance(t_norm, syn) <= max_dist:
+                    return attr_name
     return None
 
 
@@ -256,3 +272,4 @@ def _edit_distance(a: str, b: str) -> int:
             new_costs.append(costs[j] if ac == bc else min(costs[j], costs[j + 1], new_costs[-1]) + 1)
         costs = new_costs
     return costs[-1]
+

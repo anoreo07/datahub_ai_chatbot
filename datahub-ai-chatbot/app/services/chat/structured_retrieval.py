@@ -753,100 +753,152 @@ class StructuredRetrievalService:
         self, concept: str, question: str,
         trace_id: str | None = None,
     ) -> list[SearchResult]:
-        """Resolve a TERM_TO_DATASETS concept query (e.g. "doanh thu", "tồn
-        kho") into matching glossary terms + datasets that mention them.
-
-        Runs when the extracted name is not an exact glossary term: the term is
-        expanded through the synonym table, glossary terms are scored by keyword
-        overlap with the expansion, and the top terms are returned together with
-        datasets whose name or description mentions the term keywords.
+        """Resolve a TERM_TO_DATASETS concept query (e.g. "BOM COST OPTIMIZATION (BCO)",
+        "doanh thu", "nhu cầu linh kiện") into matching glossary terms + datasets
+        that carry or mention them.
         """
+        import re
+        from retrieval.discovery import SYNONYMS
         from retrieval.hybrid_search import SearchResult
-        from retrieval.semantic_expansion import expand as _expand
 
-        expanded = _expand(concept)
-        keywords = [t for t in expanded.terms if len(t) > 2]
-        norm_keywords = [_norm_vn(t) for t in keywords]
-        if not norm_keywords:
+        # 1. Token extraction
+        norm_c = _norm_vn(concept)
+        raw_parts = re.split(r"[\(\)\[\]/,\-_]+", concept)
+        parts = [p.strip() for p in raw_parts if p.strip()]
+        tokens: set[str] = set()
+        if len(norm_c) >= 2:
+            tokens.add(norm_c)
+        for p in parts:
+            np = _norm_vn(p)
+            if len(np) >= 2:
+                tokens.add(np)
+            for w in p.split():
+                nw = _norm_vn(w)
+                if len(nw) >= 2:
+                    tokens.add(nw)
+                    if nw in SYNONYMS:
+                        tokens.update(SYNONYMS[nw])
+
+        clean_tokens = [
+            t for t in tokens
+            if len(t) >= 2 and t not in {"la", "gi", "cua", "cho", "va", "khong", "cac", "nhung"}
+        ]
+        if not clean_tokens:
             return []
 
+        # 2. Score glossary terms
         terms = await self._ctx.entity_repo.list_by_type("glossary_term", limit=2000)
-        scored: list[tuple[float, str]] = []
+        scored_terms: list[tuple[float, Any]] = []
         for t in terms:
             payload = t.payload or {}
-            blob = _norm_vn(t.name) + " " + _norm_vn(payload.get("description") or "")
-            score = sum(1 for k in norm_keywords if k and k in blob)
-            if score:
-                scored.append((score, t.urn))
-        scored.sort(key=lambda x: (-x[0], x[1]))
-        top_terms = [urn for _, urn in scored[:3]]
+            blob = _norm_vn(t.name or "") + " " + _norm_vn(payload.get("description") or "")
+            name_norm = _norm_vn(t.name or "")
+            score = 0.0
+            for k in clean_tokens:
+                if k == name_norm:
+                    score += 15.0
+                elif k in name_norm:
+                    score += 4.0
+                elif k in blob:
+                    score += 1.0
+            if score > 0:
+                scored_terms.append((score, t))
+        scored_terms.sort(key=lambda x: -x[0])
+        top_terms = [t for _, t in scored_terms[:3]]
+        term_urns = {t.urn for t in top_terms}
+        term_slugs = {t.urn.rsplit(":", 1)[-1].lower() for t in top_terms}
+
         log.info("term_concept_matched", trace_id=trace_id, concept=concept[:80],
-                 keywords=keywords[:8], matched_terms=len(scored))
+                 tokens=clean_tokens[:8], matched_terms=len(scored_terms))
 
         results: list[SearchResult] = []
         seen: set[str] = set()
-        term_keywords = [
-            _norm_vn(x)
-            for urn in top_terms
-            for x in [await self._ctx.entities.display_name(urn)] if x
-        ]
-        for urn in top_terms:
-            entity_db = await self._ctx.entity_repo.get_by_urn(urn)
-            if not entity_db:
-                continue
-            payload = entity_db.payload or {}
-            content = _entity_payload_to_text(entity_db.entity_type, payload)
+
+        for t in top_terms:
+            payload = t.payload or {}
+            content = _entity_payload_to_text(t.entity_type, payload)
             results.append(SearchResult(
-                urn=entity_db.urn, entity_type=entity_db.entity_type,
-                name=entity_db.display_name or entity_db.name,
-                score=0.95, datahub_url=entity_db.datahub_url,
+                urn=t.urn, entity_type=t.entity_type,
+                name=t.display_name or t.name,
+                score=0.98, datahub_url=t.datahub_url,
                 payload={**payload, "content": content},
             ))
-            seen.add(entity_db.urn)
+            seen.add(t.urn)
 
-        all_keys = norm_keywords + term_keywords
-        # Glossary-linking: datasets carry the term via their "glossary_terms"
-        # URNs (e.g. urn:li:glossaryTerm:doanh_thu). If a matched glossary term
-        # is actually LINKED to datasets, those are the authoritative matches —
-        # datasets whose name/description happen to mention a synonym are only a
-        # text-based supplement. Without this, "Term Revenue được gắn cho dataset
-        # nào?" would never surface sales.orders, whose description does not
-        # literally contain "revenue"/"doanh thu".
-        term_slugs = {u.rsplit(":", 1)[-1].lower() for u in top_terms}
+        # 3. Score candidate datasets
         datasets = await self._ctx.entity_repo.list_all("dataset", limit=100000)
-        dataset_hits: list[Any] = []
-        text_hits: list[Any] = []
+        scored_ds: list[tuple[float, Any, str]] = []
         for ds in datasets:
             if ds.urn in seen:
                 continue
             payload = ds.payload or {}
-            ds_terms = [
-                (str(t) or "").rsplit(":", 1)[-1].lower()
-                for t in (payload.get("glossary_terms") or [])
-            ]
-            if term_slugs and (set(ds_terms) & term_slugs):
-                dataset_hits.append(ds)
-                continue
-            blob = _norm_vn(ds.name) + " " + _norm_vn(payload.get("description") or "")
-            if any(k and k in blob for k in all_keys):
-                text_hits.append(ds)
-        for ds in dataset_hits + text_hits:
-            payload = ds.payload or {}
+            name_norm = _norm_vn(ds.name or ds.display_name or "")
+            desc_norm = _norm_vn(payload.get("description") or "")
+            score = 0.0
+            relevance_reasons: list[str] = []
+
+            # Signal 1: Direct Glossary Linkage
+            ds_terms = [str(x).lower() for x in (payload.get("glossary_terms") or [])]
+            if any(u.lower() in ds_terms for u in term_urns) or any(s in " ".join(ds_terms) for s in term_slugs):
+                score += 25.0
+                relevance_reasons.append("Được gán trực tiếp Glossary Term trong metadata")
+
+            # Signal 2: Exact Name / Token overlap
+            for k in clean_tokens:
+                if k == name_norm:
+                    score += 15.0
+                    relevance_reasons.append(f"Tên dataset khớp khái niệm '{k}'")
+                elif k in name_norm:
+                    score += 4.0
+                    relevance_reasons.append(f"Tên dataset chứa từ khóa '{k}'")
+                elif k in desc_norm:
+                    score += 1.5
+                    relevance_reasons.append(f"Mô tả dataset đề cập đến '{k}'")
+
+            # Signal 3: Schema fields
+            fields = payload.get("schema_fields") or []
+            matched_fields = []
+            for f in fields:
+                fname = _norm_vn(f.get("name") or "")
+                if any(k in fname for k in clean_tokens if len(k) >= 3):
+                    matched_fields.append(f.get("name"))
+                    score += 2.0
+            if matched_fields:
+                relevance_reasons.append(f"Schema chứa các cột: {', '.join(matched_fields[:3])}")
+
+            if score >= 3.0:
+                reason_str = "; ".join(dict.fromkeys(relevance_reasons))
+                scored_ds.append((score, ds, reason_str))
+
+        scored_ds.sort(key=lambda x: (-x[0], x[1].urn))
+
+        # Deduplicate datasets by display name / base name
+        seen_names: set[str] = set()
+        deduped_ds: list[tuple[float, Any, str]] = []
+        for s, ds, r in scored_ds:
+            dname = (ds.display_name or ds.name or "").strip().lower()
+            if dname and dname not in seen_names:
+                seen_names.add(dname)
+                deduped_ds.append((s, ds, r))
+
+        for score, ds, reason in deduped_ds[:6]:
+            payload = dict(ds.payload or {})
             content = _entity_payload_to_text(ds.entity_type, payload)
+            if reason:
+                content += f"\nRelevance Reason: {reason}"
             results.append(SearchResult(
                 urn=ds.urn, entity_type=ds.entity_type,
                 name=ds.display_name or ds.name,
-                score=0.85 if ds in dataset_hits else 0.7,
+                score=round(min(0.95, 0.70 + score * 0.01), 4),
                 datahub_url=ds.datahub_url,
-                payload={**payload, "content": content},
+                payload={**payload, "content": content, "relevance_reason": reason},
             ))
             seen.add(ds.urn)
-            if len([r for r in results if r.entity_type == "dataset"]) >= 8:
-                break
+
         log.info("term_concept_to_datasets", trace_id=trace_id, concept=concept[:80],
-                 terms=len(top_terms), datasets=sum(1 for r in results
-                                                    if r.entity_type == "dataset"))
+                 terms=len(top_terms), datasets=sum(1 for r in results if r.entity_type == "dataset"))
         return results
+
 
 
     async def _term_in_dataset_results(

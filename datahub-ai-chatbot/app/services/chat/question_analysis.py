@@ -218,12 +218,11 @@ _SYNC_RE = re.compile(
 # that carry it (glossary-linked). These must route to TERM_TO_DATASETS, never to
 # generic entity ambiguity or entity-existence checks.
 _CONCEPT_TO_DATASETS_RE = re.compile(
-    r"(?:dataset|bảng|bang|table|entity)[^?]{0,60}?"
-    r"(?:liên quan|lien quan|relat(?:e|ed)?)\s*(?:đến|den|to)\s*(?:khái niệm|"
-    r"khai niem|concept)|(?:khái niệm|khai niem|concept)\s+\S+"
-    r"|(?:term|thuật ngữ|thuat ngu)\s+(?:nào|nao)\s+liên quan\s*"
-    r"(?:đến|den|to)?\s+[\wÀ-ỹ][\wÀ-ỹ \-\._]*?\s+(?:và|va)\s+"
-    r"(?:những|nhung)?\s*(?:dataset|bảng|bang|table)\s+nào",
+    r"(?:^(?:cho tôi biết\s+)?[A-Za-zÀ-ỹ0-9 \(\)\-_\.\/]+?\s+(?:được|duoc)\s+(?:sử dụng|su dung|dùng|dung|chứa|chua|lưu|luu|ghi nhận|ghi nhan)\s+(?:trong|ở|tai)\s+(?:các\s+|những\s+)?(?:dataset|bảng|bang|table|dữ liệu|du lieu|báo cáo|bao cao))"
+    r"|(?:(?:có\s+|những\s+|tìm\s+|các\s+|danh sách\s+)?(?:dataset|bảng|bang|table|dữ liệu|du lieu|báo cáo|bao cao)[^?]{0,50}?(?:liên quan|lien quan|relat(?:e|ed)?)\s*(?:đến|den|to)?\s*(?:khái niệm|khai niem|thuật ngữ|thuat ngu|concept|term)?)"
+    r"|(?:(?:có\s+|những\s+|tìm\s+|các\s+)?(?:dataset|bảng|bang|table|dữ liệu|du lieu|báo cáo|bao cao)[^?]{0,50}?(?:phục vụ|phuc vu|dùng để|dung de|có thể dùng để|co the dung de|dùng cho|dung cho|phân tích|phan tich|theo dõi|theo doi)\s+)"
+    r"|(?:(?:có\s+|những\s+|tìm\s+|các\s+)?(?:dataset|bảng|bang|table|dữ liệu|du lieu|báo cáo|bao cao)[^?]{0,50}?(?:chứa thông tin|chua thong tin|lưu thông tin|luu thong tin|có thông tin|co thong tin)\s+(?:về|ve)\s+)"
+    r"|(?:(?:khái niệm|khai niem|thuật ngữ|thuat ngu|concept|term)\s+[A-Za-zÀ-ỹ0-9 \(\)\-_\.\/]+?\s+(?:được|duoc|nằm|nam|có|co|liên quan|lien quan))",
     re.IGNORECASE,
 )
 # Term->datasets ASK: "tìm dataset tính/chứa/lưu nhu cầu linh kiện", "dataset
@@ -235,19 +234,68 @@ _TERM_TO_DATASETS_ASK_RE = re.compile(
     r"\b(?:tính|tinh|chứa|chua|dựa|dua|lưu|luu|ghi|lấy|lay|nắm|nam)\b\s+",
     re.IGNORECASE,
 )
-# Extracts the concept phrase that follows "khái niệm / concept" so the
-# term->datasets flow resolves the right term ("...khái niệm doanh thu?" ->
-# "doanh thu"). The generic entity extractor would otherwise canonicalise the
-# whole prompt into an unrelated glossary term.
+# Extracts the concept phrase that follows concept-to-dataset patterns so the
+# term->datasets flow resolves the right term.
 _CONCEPT_PHRASE_RE = re.compile(
     r"(?:liên quan|lien quan|relat(?:e|ed)?)\s*(?:đến|den|to)?\s*"
-    r"(?:khái niệm|khai niem|concept)\s+([A-Za-zÀ-ỹ0-9 \-\._/]+?)"
-    r"(?:[.!?]|$)|(?:khái niệm|khai niem|concept)\s+"
-    r"([A-Za-zÀ-ỹ0-9 \-\._/]+?)(?:[.!?]|$)"
+    r"(?:khái niệm|khai niem|thuật ngữ|thuat ngu|concept|term)?\s*([A-Za-zÀ-ỹ0-9 \(\)\-_\.\/]+?)"
+    r"(?:\s+không|\s+khong|[.!?]|$)"
+    r"|(?:khái niệm|khai niem|concept)\s+([A-Za-zÀ-ỹ0-9 \(\)\-_\.\/]+?)(?:[.!?]|$)"
     r"|(?:term|thuật ngữ|thuat ngu)\s+(?:nào|nao)\s+liên quan\s*"
-    r"(?:đến|den|to)?\s+([A-Za-zÀ-ỹ0-9 \-\._/]+?)(?=\s+(?:và|va)\s+|\s*$)",
+    r"(?:đến|den|to)?\s+([A-Za-zÀ-ỹ0-9 \(\)\-_\.\/]+?)(?=\s+(?:và|va)\s+|\s*$)",
     re.IGNORECASE,
 )
+
+
+def extract_concept_phrase(question: str) -> str | None:
+    """Extract concept name from concept-to-dataset discovery questions."""
+    q = question.strip()
+    m1 = re.search(
+        r"^(?:cho tôi biết\s+)?([A-Za-zÀ-ỹ0-9 \(\)\-_\.\/]+?)\s+(?:được|duoc)\s+(?:sử dụng|su dung|dùng|dung|chứa|chua|lưu|luu|ghi nhận|ghi nhan)\s+(?:trong|ở|tai)\s+(?:các\s+|những\s+)?(?:dataset|bảng|bang|table|dữ liệu|du lieu|báo cáo|bao cao)",
+        q, re.I,
+    )
+    if m1:
+        return m1.group(1).strip()
+
+    m2 = re.search(
+        r"(?:có\s+|những\s+|tìm\s+|các\s+|danh sách\s+)?(?:dataset|bảng|bang|table|dữ liệu|du lieu|báo cáo|bao cao)[^?]{0,50}?(?:liên quan|lien quan|relat(?:e|ed)?)\s*(?:đến|den|to)\s*(?:khái niệm|khai niem|thuật ngữ|thuat ngu|concept|term)?\s*([A-Za-zÀ-ỹ0-9 \(\)\-_\.\/]+?)(?:\s+không|\s+khong|\?|$)",
+        q, re.I,
+    )
+    if m2:
+        res = m2.group(1).strip()
+        res = re.sub(r"\s+(?:không|khong|\?)$", "", res, flags=re.I).strip()
+        if res:
+            return res
+
+    m3 = re.search(
+        r"(?:có\s+|những\s+|tìm\s+|các\s+)?(?:dataset|bảng|bang|table|dữ liệu|du lieu|báo cáo|bao cao)[^?]{0,50}?(?:phục vụ|phuc vu|dùng để|dung de|có thể dùng để|co the dung de|dùng cho|dung cho|phân tích|phan tich|theo dõi|theo doi)\s+(?:phân tích\s+|theo dõi\s+)?([A-Za-zÀ-ỹ0-9 \(\)\-_\.\/]+?)(?:\s+không|\s+khong|\?|$)",
+        q, re.I,
+    )
+    if m3:
+        res = m3.group(1).strip()
+        res = re.sub(r"\s+(?:không|khong|\?)$", "", res, flags=re.I).strip()
+        if res:
+            return res
+
+    m4 = re.search(
+        r"(?:có\s+|những\s+|tìm\s+|các\s+)?(?:dataset|bảng|bang|table|dữ liệu|du lieu|báo cáo|bao cao)[^?]{0,50}?(?:chứa thông tin|chua thong tin|lưu thông tin|luu thong tin|có thông tin|co thong tin)\s+(?:về|ve)\s+([A-Za-zÀ-ỹ0-9 \(\)\-_\.\/]+?)(?:\s+không|\s+khong|\?|$)",
+        q, re.I,
+    )
+    if m4:
+        res = m4.group(1).strip()
+        res = re.sub(r"\s+(?:không|khong|\?)$", "", res, flags=re.I).strip()
+        if res:
+            return res
+
+    m5 = re.search(
+        r"(?:khái niệm|khai niem|thuật ngữ|thuat ngu|concept|term)\s+([A-Za-zÀ-ỹ0-9 \(\)\-_\.\/]+?)(?=\s+(?:được|duoc|nằm|nam|có|co|liên quan|lien quan)|\?|$)",
+        q, re.I,
+    )
+    if m5:
+        return m5.group(1).strip()
+
+    return None
+
 
 # --------------------------------------------------------------------------- #
 # Contextual follow-up detection (anaphora + ellipsis + demonstratives).

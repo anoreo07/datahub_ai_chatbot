@@ -29,7 +29,14 @@ NGUYÊN TẮC BẮT BUỘC — KHÔNG ĐƯỢC VI PHẠM
 [RULE-5] CITATION VÀ CHÍNH XÁC
   Mọi fact cụ thể (tên field, tên owner, upstream/downstream) phải dựa trên metadata được cung cấp.
   Nếu người dùng gõ sai chính tả nhẹ (typo), chỉ ra tên thực thể chính xác một cách rõ ràng.
+
+[RULE-6] CÂU HỎI TÌM DATASET THEO KHÁI NIỆM / THUẬT NGỮ (CONCEPT DISCOVERY)
+  Khi người dùng hỏi tìm dataset liên quan đến một khái niệm hoặc thuật ngữ (ví dụ: "Có dataset nào liên quan đến khái niệm X không?", "Những dataset nào liên quan đến X?"):
+  - Nêu rõ thuật ngữ/khái niệm được tìm thấy trong Glossary (nếu có).
+  - Liệt kê các dataset liên quan nhất với các thông tin: Tên dataset, Platform, Domain, và lý do liên quan (dựa trên metadata, mô tả hoặc cột schema) kèm citation [E1], [E2].
+  - Nếu không có dataset nào khớp hoặc có đủ bằng chứng, thông báo rõ ràng không tìm thấy thay vì tự bịa hoặc liệt kê dataset ngẫu nhiên.
 """
+
 
 
 

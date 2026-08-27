@@ -204,7 +204,18 @@ def parse_metadata_query(message: str) -> GenericMetadataQuery | None:
     ):
         return None
 
+    # --- Step 0b: Skip concept discovery / semantic search queries ---
+    # "Có dataset nào liên quan đến khái niệm X không?", "Dataset nào phục vụ X?"
+    # are CONCEPT_DISCOVERY, NOT metadata attribute listing.
+    if re.search(
+        r"(?:lien quan|relat(?:e|ed)?|khai niem|concept|phuc vu|chua thong tin|"
+        r"duoc su dung trong|dung de phan tich|phan tich chi phi|phuc vu nhu cau)",
+        n, re.I,
+    ) and not re.search(r"(?:lien ket document|lien ket tai lieu|gan term|gan glossary|co glossary|co term)", n, re.I):
+        return None
+
     # --- Step 1: Detect if this is a metadata listing query ---
+
     # Must contain entity type keyword
     has_entity_type = bool(re.search(
         r"(?:dataset|dashboard|glossary|document|bảng|bang|tai lieu|tài liệu)",
