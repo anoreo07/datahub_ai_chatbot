@@ -1,247 +1,242 @@
 # DataHub AI Chatbot
 
-AI-powered chatbot for querying DataHub metadata using natural language, with RAG (Retrieval-Augmented Generation) pipeline.
+AI-powered conversational assistant and grounded intelligence layer for DataHub metadata catalogs. Provides natural language search, lineage analysis, SQL generation, schema comparisons, data quality audits, and role-based access control.
 
-## Architecture
+---
+
+## Architecture Overview
 
 ```
-User Question → Intent Classifier → Entity Resolution → Hybrid Search → Reranker → Context Builder → LLM → Response
-                               ↕                          ↕
-                         Structured Lookup         OpenSearch/PostgreSQL
+User Query / Frontend
+         │
+         ▼
+[FastAPI Gateway / Auth Middleware]
+         │
+         ├── JWT Authentication & User Context
+         ├── RBAC & ACL Filters (Database / OpenSearch)
+         │
+         ▼
+[Chat Orchestration Service]
+         │
+         ├── Query Understanding & Intent Classification
+         ├── Entity Resolution & Disambiguation
+         ├── Hybrid Search (BM25 + Semantic Embeddings)
+         ├── Context Builder & Grounding Assembly
+         │
+         ├── Specialized Flows:
+         │     ├── Action Services (SQL Gen, Schema Diff, Quality, Impact, Report)
+         │     ├── Direct Field Operations & Glossary Resolvers
+         │     └── Multi-Entity Comparison Flow
+         │
+         ▼
+[LLM Generation Layer (Fireworks / Provider Fallback)]
+         │
+         ├── SSE Streaming / Token Dispatcher
+         ├── Secret Sanitization & Citation Attribution
+         ├── Conversation Memory & Render State Persistence
+         │
+         ▼
+[Background Evaluation & Monitoring (RAGAS / Interaction Logs)]
 ```
 
-1. **Ingestion** — Sync entities from DataHub (or mock) via GraphQL API to PostgreSQL
-2. **Indexing** — Build entity documents, chunk, embed (mock), index into OpenSearch
-3. **Retrieval** — Intent classification, entity resolution, hybrid search, reranking
-4. **Generation** — Context assembly, Fireworks LLM (or fallback), citation validation
+### Core Pipelines
+
+1. **Ingestion & Sync**: Pulls catalog entities (datasets, dashboards, glossary terms, containers, charts) via GraphQL API or mock fixtures into PostgreSQL.
+2. **Indexing**: Parses entity payloads, builds normalized documents, chunks text, generates embeddings, and indexes them into OpenSearch.
+3. **Retrieval**: Combines keyword search (BM25) and dense retrieval, applying user-specific ACL filters before ranking.
+4. **Generation & Verification**: Generates responses grounded strictly in metadata, citing URN sources and verifying citations against active catalog assets.
+5. **Evaluation**: Evaluates responses asynchronously using RAGAS (faithfulness, answer relevancy, context precision, context recall).
+
+---
+
+## Key Features
+
+- **Natural Language Metadata Q&A**: Ask questions about datasets, column definitions, owners, domains, and tags in Vietnamese or English.
+- **Server-Sent Events (SSE) Streaming**: Real-time response streaming with intermediate status indicators (retrieve, rerank, plan, generate).
+- **Multi-Turn Memory & Coreference Resolution**: Retains active entity context across conversation turns, resolving follow-up questions such as "còn trường này thì sao?".
+- **Grounded Action Menu**:
+  - **SQL Generation**: Generates dialect-aware SQL queries grounded in exact catalog schemas with automatic join discovery.
+  - **Schema Comparison**: Compares structural column definitions across multiple tables with type matching.
+  - **Impact Analysis**: Traverses upstream and downstream dependency graphs to measure blast radius.
+  - **Data Quality Check**: Audits documentation completeness, assertion runs, profiling status, and freshness.
+  - **Metadata Maturity Report**: Produces structured maturity assessments across discoverability, governance, and quality dimensions.
+- **Enterprise Security & RBAC**:
+  - Role-based entity access control supporting user, group, and domain-level authorization.
+  - Dual-layer ACL filtering on PostgreSQL queries and OpenSearch DSL queries.
+  - Secret masking and prompt injection guards on user inputs and outputs.
+- **Modern Next.js Frontend**:
+  - Interactive chat interface with syntax-highlighted code blocks, lineage graphs, suggestion chips, and quality report visualizations.
+
+---
+
+## Directory Structure
+
+```
+datahub-ai-chatbot/
+├── app/                          # FastAPI application
+│   ├── api/                      # REST & Streaming endpoints
+│   │   ├── actions.py            # SQL gen, schema diff, quality, impact
+│   │   ├── chat.py               # Chat & streaming Q&A endpoints
+│   │   ├── conversations.py      # Conversation session history
+│   │   ├── documents.py          # Document upload & management
+│   │   ├── health.py             # Health and readiness probes
+│   │   ├── search.py             # Hybrid search endpoint
+│   │   └── sync.py               # Ingestion sync triggers
+│   ├── auth/                     # Authentication & authorization
+│   │   ├── authorization.py      # Dual-layer ACL filtering
+│   │   ├── identity.py           # Identity providers
+│   │   ├── jwt.py                # Token verification
+│   │   └── models.py             # UserContext and ACL models
+│   ├── schemas/                  # Pydantic request/response schemas
+│   └── services/                 # Business logic and orchestrators
+│       ├── actions/              # Specialized domain action services
+│       ├── action_service.py     # Unified actions facade
+│       ├── chat/                 # Chat subservices and execution flows
+│       └── chat_service.py       # Core chat orchestrator
+├── config/                       # Settings, prompts, and log configurations
+├── database/                     # SQLAlchemy models, repositories, and migrations
+├── evaluation/                   # RAGAS offline & online evaluation pipeline
+├── frontend/                     # Next.js 15 TypeScript web application
+├── guardrails/                   # Input sanitization and safety filters
+├── indexing/                     # Vector indexing, chunking, and pipeline
+├── ingestion/                    # DataHub GraphQL client, mock sources, mappers
+├── llm/                          # LLM abstraction (Fireworks, Fallback)
+├── retrieval/                    # Hybrid search, intent routing, context builder
+├── workers/                      # Background task workers (sync, index)
+├── tests/                        # Comprehensive test suite (unit & integration)
+└── scripts/                      # Bootstrap and indexing utility scripts
+```
+
+---
 
 ## Prerequisites
 
-- Python 3.12+
-- Docker and Docker Compose
-- Fireworks API key (optional — fallback mode works without it)
+- **Python**: 3.12 or higher
+- **Node.js**: 20.x or higher (for frontend)
+- **Docker & Docker Compose**: For local PostgreSQL, Redis, and OpenSearch dependencies
+- **Fireworks API Key** (optional): For hosted LLM generation (fallback mode operates without external keys)
+
+---
 
 ## Quick Start
 
-```bash
-# Clone and enter the project
-cd datahub-ai-chatbot
+### 1. Backend Setup
 
-# Create virtual environment
+```bash
+# Clone the repository
+git clone git@github.com:anoreo07/datahub_ai_chatbot.git
+cd datahub_ai_chatbot/datahub-ai-chatbot
+
+# Create and activate virtual environment
 python3.12 -m venv .venv
 source .venv/bin/activate
 
-# Install
+# Install dependencies in editable mode
 pip install -e ".[dev]"
 
-# Copy environment file
+# Configure environment variables
 cp .env.example .env
 
-# Start dependencies
+# Start infrastructure dependencies
 docker compose up -d postgres redis opensearch
 
-# Run migrations
+# Run database migrations
 alembic upgrade head
 
-# Bootstrap (creates tables, OpenSearch index, seeds mock data, indexes)
+# Bootstrap metadata catalog and search indices
 python -m scripts.bootstrap
 
-# Start API
+# Start FastAPI development server
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-## Mock Mode (No DataHub Required)
-
-Set in `.env`:
-```
-USE_MOCK_DATAHUB=true
-```
-
-The system includes full mock data (`tests/fixtures/datahub/`) with:
-- 3 datasets, 1 dashboard, 5 glossary terms, 1 document, 2 glossary nodes
-- Lineage relationships
-- Document content with sections
-- Complete metadata (owners, terms, schema fields)
-
-## Example Requests
+### 2. Frontend Setup
 
 ```bash
-# Glossary term definition
-curl -X POST http://localhost:8000/api/v1/chat \
-  -H "Content-Type: application/json" \
-  -d '{"question": "Term Revenue nghĩa là gì?"}'
+cd frontend
 
-# Owner lookup
-curl -X POST http://localhost:8000/api/v1/chat \
-  -H "Content-Type: application/json" \
-  -d '{"question": "Ai sở hữu dataset sales.orders?"}'
+# Install Node dependencies
+npm install
 
-# Schema lookup
-curl -X POST http://localhost:8000/api/v1/chat \
-  -H "Content-Type: application/json" \
-  -d '{"question": "Dataset sales.orders có những field nào?"}'
-
-# Lineage
-curl -X POST http://localhost:8000/api/v1/chat \
-  -H "Content-Type: application/json" \
-  -d '{"question": "Dataset finance.monthly_revenue lấy dữ liệu từ đâu?"}'
-
-# Document QA
-curl -X POST http://localhost:8000/api/v1/chat \
-  -H "Content-Type: application/json" \
-  -d '{"question": "Theo tài liệu, Net Revenue được tính như thế nào?"}'
-
-# Search
-curl "http://localhost:8000/api/v1/search?q=sales.orders"
-
-# Sync
-curl -X POST http://localhost:8000/api/v1/sync/full
-
-# Health
-curl http://localhost:8000/health
-curl http://localhost:8000/ready
-
-# Metrics
-curl http://localhost:8000/metrics
+# Run frontend development server
+npm run dev
 ```
 
-## Supported Questions (MVP)
+The frontend will be available at `http://localhost:3000` and the backend API at `http://localhost:8000`.
 
-| # | Question | Intent |
-|---|----------|--------|
-| 1 | "Term Revenue nghĩa là gì?" | TERM_DEFINITION |
-| 2 | "Dataset nào gắn term Customer?" | TERM_TO_DATASETS |
-| 3 | "Ai sở hữu dataset sales.orders?" | OWNER_LOOKUP |
-| 4 | "Dataset sales.orders có những field nào?" | SCHEMA_LOOKUP |
-| 5 | "Dataset finance.monthly_revenue lấy dữ liệu từ đâu?" | LINEAGE |
-| 6 | "Report Monthly Revenue nằm ở đâu?" | FIND_ENTITY |
-| 7 | "Ai sở hữu report Monthly Revenue?" | OWNER_LOOKUP |
-| 8 | "Theo document, Net Revenue được tính như thế nào?" | DOCUMENT_QA |
-| 9 | "Cho tôi link DataHub của dataset sales.orders." | DATAHUB_URL |
-| 10 | "Dataset abc.xyz có tồn tại không?" | ENTITY_EXISTS |
+---
 
-## Responses
+## Environment Configuration
 
-All chat responses include:
-- `answer` — Natural language answer
-- `intent` — Classified intent
-- `entities` — Referenced entities (with URN and URL)
-- `citations` — Source citations with URN, URL, and source type
-- `confidence` — high/medium/low
-- `ambiguous` — Whether multiple entities matched
-- `insufficient_context` — Whether answer was limited
-- `trace_id` — Request tracing
+Key configuration parameters defined in `.env`:
 
-## Scripts
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| `APP_ENV` | `development` | Environment mode (`development`, `test`, `production`) |
+| `USE_MOCK_DATAHUB` | `true` | When true, uses embedded mock DataHub fixtures |
+| `DATABASE_URL` | `postgresql+asyncpg://...` | PostgreSQL connection string |
+| `REDIS_URL` | `redis://localhost:6380/0` | Redis instance for cache and job queues |
+| `OPENSEARCH_URL` | `http://localhost:9201` | OpenSearch endpoint |
+| `LLM_PROVIDER` | `fireworks` | Primary LLM provider |
+| `FIREWORKS_API_KEY` | - | API key for Fireworks.ai |
+| `JWT_SECRET_KEY` | - | Secret key for signing JWT tokens |
+| `RAGAS_ENABLED` | `false` | Enable automated background RAGAS evaluation |
+
+---
+
+## API Endpoints Overview
+
+### Chat & Streaming
+- `POST /api/v1/chat`: Synchronous chat response with citations and metadata.
+- `POST /api/v1/chat/stream`: SSE stream with real-time token delivery and step events.
+- `GET /api/v1/conversations`: List saved conversation sessions.
+- `GET /api/v1/conversations/{id}`: Retrieve turn history with render state.
+
+### Actions API
+- `POST /api/v1/actions/sql`: Generate grounded SQL queries from natural language.
+- `POST /api/v1/actions/schema-compare`: Compare schemas of two or more entities.
+- `POST /api/v1/actions/impact`: Perform upstream/downstream impact analysis.
+- `POST /api/v1/actions/quality`: Audit dataset quality, profiling, and completeness.
+- `POST /api/v1/actions/report`: Generate comprehensive metadata maturity reports.
+
+### Search & Management
+- `GET /api/v1/search`: Hybrid search across catalog entities.
+- `POST /api/v1/sync/full`: Trigger full metadata synchronization.
+- `GET /health`: Health and dependency status probe.
+
+---
+
+## Testing & Quality Assurance
+
+### Run Unit Tests
+```bash
+python -m pytest tests/unit -q
+```
+
+### Run Integration Tests
+```bash
+python -m pytest tests/integration -q
+```
+
+### Code Formatting and Linting
+```bash
+ruff check .
+ruff format . --check
+```
+
+---
+
+## Deployment with Docker
+
+To launch the complete application stack including backend, frontend, and services:
 
 ```bash
-# Bootstrap: initialize DB, OpenSearch, seed data, index
-python -m scripts.bootstrap
-
-# Full sync from DataHub (or mock)
-python -m scripts.full_sync
-
-# Rebuild OpenSearch index from PostgreSQL
-python -m scripts.rebuild_index
-
-# Same as bootstrap (legacy alias)
-python -m scripts.seed
+docker compose up --build -d
 ```
 
-## Workers
-
-```bash
-# Sync worker (periodic full sync)
-python -m workers.sync_worker
-
-# Indexing worker (process pending index jobs)
-python -m workers.indexing_worker
-```
-
-## Docker Compose
-
-```bash
-# Start all services
-docker compose up --build
-
-# Start only dependencies (for local dev)
-docker compose up -d postgres redis opensearch
-```
-
-Services:
-| Service | Port | Purpose |
-|---------|------|---------|
-| API | 8000 | FastAPI app |
-| PostgreSQL | 5433 | Metadata storage |
-| Redis | 6380 | Cache and queue |
-| OpenSearch | 9201 | Vector and keyword search |
-
-## Configuration
-
-See `.env.example` for all configuration options. Key variables:
-
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `USE_MOCK_DATAHUB` | `true` | Use mock data instead of real DataHub |
-| `EMBEDDING_PROVIDER` | `mock` | Embedding provider (mock only for MVP) |
-| `LLM_PROVIDER` | `fireworks` | LLM provider (Fireworks only) |
-| `FIREWORKS_API_KEY` | — | Fireworks API key (optional in MVP) |
-| `OPENSEARCH_INDEX` | `datahub-rag-chunks-v1` | OpenSearch index name |
-
-## Switching to Real DataHub
-
-1. Deploy DataHub (or point to existing instance)
-2. Set `USE_MOCK_DATAHUB=false` in `.env`
-3. Set `DATAHUB_GMS_URL` and `DATAHUB_TOKEN`
-4. Set `DATAHUB_FRONTEND_URL`
-5. Run `python -m scripts.full_sync`
-
-## Testing
-
-```bash
-# Run all tests
-pytest
-
-# Run with coverage
-pytest --cov=app --cov=ingestion --cov=indexing --cov=retrieval --cov=llm --cov=database
-
-# Run specific test
-pytest tests/test_intent.py -v
-```
-
-## Environment
-
-```bash
-cp .env.example .env
-# Edit .env with your settings
-```
-
-## Placeholder Modules
-
-The following modules remain placeholder for future implementation:
-- `llm/bedrock.py` — AWS Bedrock provider
-- `llm/cohere.py` — Cohere provider
-- `llm/openai.py` — OpenAI provider
-- `llm/prompt.py` — Prompt template manager
-- `ingestion/crawler.py` — Base crawler
-- `ingestion/fetch_*.py` — Entity-specific crawlers
-- `indexing/keyword_index.py` — Dedicated keyword index
-- `workers/scheduler.py` — Background scheduler
-- `workers/embedding_worker.py` — Dedicated embedding worker
-
-## Secrets
-
-- Never commit `.env` files
-- API keys and tokens are read from environment variables only
-- No secrets are logged (keys, tokens, Authorization headers)
-
-## MVP Limitations
-
-- Mock embedder only (deterministic hash-based, not semantic)
-- Fireworks is the only LLM provider with working implementation
-- No user authentication (local-developer only)
-- No DataHub ACL integration
-- No S3/MinIO storage (local filesystem only)
-- Single-node OpenSearch (no k-NN plugin required)
-- No streaming responses
-- No conversation memory
+Service mapping:
+- **FastAPI Backend**: `http://localhost:8000`
+- **Next.js Web UI**: `http://localhost:3000`
+- **OpenSearch**: `http://localhost:9201`
+- **PostgreSQL**: `localhost:5433`
+- **Redis**: `localhost:6380`
