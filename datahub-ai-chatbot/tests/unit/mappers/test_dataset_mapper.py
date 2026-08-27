@@ -174,3 +174,18 @@ def test_dataset_mapper_raw_properties():
     mapper = DatasetMapper()
     result = mapper.to_canonical(RAW_DATASET)
     assert result.raw_properties == {"key1": "value1"}
+
+
+def test_normalize_field_path():
+    from ingestion.mappers.dataset import _normalize_field_path
+    # V2 schema format
+    assert _normalize_field_path("[version=2.0].[type=string].bf_ext_order_id") == "bf_ext_order_id"
+    # Nested struct format
+    assert _normalize_field_path("[version=2.0].[type=struct].outer.[type=string].inner") == "inner"
+    # Normal field
+    assert _normalize_field_path("amount") == "amount"
+    # Empty
+    assert _normalize_field_path("") == ""
+    # Nested without bracket
+    assert _normalize_field_path("a.b.c") == "a.b.c"
+

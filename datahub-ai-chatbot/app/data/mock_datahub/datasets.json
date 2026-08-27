@@ -533,5 +533,70 @@
     "linked_documents": [],
     "certified": false,
     "datahub_url": "http://mock-datahub.local/dataset/raw.payments"
+  },
+  {
+    "urn": "urn:li:dataset:(urn:li:dataPlatform:powerbi,Bc_Hàng_tồn_kho_theo_kỳ.Dim_BaoCaoLayout,PROD)",
+    "entity_type": "dataset",
+    "name": "Bc_Hàng_tồn_kho_theo_kỳ.Dim_BaoCaoLayout",
+    "display_name": "Dim_BaoCaoLayout",
+    "description": "Bảng layout báo cáo tồn kho.",
+    "business_purpose": "Báo cáo layout",
+    "platform": "powerbi",
+    "environment": "PROD",
+    "domain_urn": "urn:li:domain:logistic",
+    "domain": "Logistic",
+    "owners": [
+      {
+        "name": "Nguyễn Văn An",
+        "email": "nguyenvan.an@company.example",
+        "type": "BUSINESS_OWNER"
+      }
+    ],
+    "glossary_terms": [],
+    "tags": [],
+    "schema_fields": [
+      {
+        "name": "ID",
+        "type": "String",
+        "description": "Mã ID layout",
+        "nullable": false
+      },
+      {
+        "name": "Name",
+        "type": "String",
+        "description": "Tên dòng layout",
+        "nullable": false
+      },
+      {
+        "name": "Sort",
+        "type": "Int64",
+        "description": "Thứ tự sắp xếp",
+        "nullable": false
+      },
+      {
+        "name": "level",
+        "type": "String",
+        "description": "Cấp bậc",
+        "nullable": false
+      }
+    ],
+    "upstreams": [],
+    "downstreams": [
+      "urn:li:dashboard:(powerbi,Bc_Hàng_tồn_kho_theo_kỳ.Visual_1)",
+      "urn:li:dashboard:(powerbi,Bc_Hàng_tồn_kho_theo_kỳ.Visual_2)",
+      "urn:li:dashboard:(powerbi,Bc_Hàng_tồn_kho_theo_kỳ.Visual_3)",
+      "urn:li:dashboard:(powerbi,Bc_Hàng_tồn_kho_theo_kỳ.Visual_4)",
+      "urn:li:dashboard:(powerbi,Bc_Hàng_tồn_kho_theo_kỳ.Visual_5)",
+      "urn:li:dashboard:(powerbi,Bc_Hàng_tồn_kho_theo_kỳ.Visual_6)",
+      "urn:li:dashboard:(powerbi,Bc_Hàng_tồn_kho_theo_kỳ.Visual_7)",
+      "urn:li:dashboard:(powerbi,Bc_Hàng_tồn_kho_theo_kỳ.Visual_8)",
+      "urn:li:dashboard:(powerbi,Bc_Hàng_tồn_kho_theo_kỳ.Visual_9)",
+      "urn:li:dashboard:(powerbi,Bc_Hàng_tồn_kho_theo_kỳ.Visual_10)",
+      "urn:li:dashboard:(powerbi,Bc_Hàng_tồn_kho_theo_kỳ.Visual_11)",
+      "urn:li:dashboard:(powerbi,Bc_Hàng_tồn_kho_theo_kỳ.Visual_12)"
+    ],
+    "linked_documents": [],
+    "certified": false,
+    "datahub_url": "http://mock-datahub.local/dataset/powerbi.dim_baocaolayout"
   }
 ]

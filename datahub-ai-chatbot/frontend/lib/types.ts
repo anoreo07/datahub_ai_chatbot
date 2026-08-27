@@ -17,6 +17,8 @@ export interface LoginResponse {
 export interface CitationItem {
   id: string;
   entity_name?: string;
+  entity_urn?: string;
+  entity_type?: string;
   url?: string;
 }
 
@@ -24,11 +26,47 @@ export interface EntityItem {
   urn: string;
   name: string;
   url?: string;
+  entity_type?: string;
+  platform?: string;
+  domain?: string;
+  description?: string;
+  environment?: string;
 }
 
 export interface Suggestion {
   original: string;
   suggested: string;
+}
+
+export type ErrorCode =
+  | "NOT_FOUND"
+  | "AMBIGUOUS"
+  | "OUT_OF_SCOPE"
+  | "INSUFFICIENT_METADATA"
+  | "PERMISSION_DENIED"
+  | "INTERNAL_ERROR"
+  | "VALIDATION_ERROR"
+  | "UNKNOWN";
+
+export interface RecoveryAction {
+  label: string;
+  action: "search_entity" | "search_dataset" | "search_glossary" | "search_report" | "retry" | "open_entity";
+  target?: string;
+}
+
+export interface ErrorInfo {
+  code: ErrorCode;
+  message: string;
+  recovery_actions?: RecoveryAction[];
+}
+
+export interface ClarificationCandidate {
+  name: string;
+  urn: string;
+  entity_type?: string;
+  url?: string;
+  description?: string;
+  confidence?: number;
 }
 
 export interface LineageNode {
@@ -59,7 +97,13 @@ export interface ChatResponse {
   lineage?: LineageData;
   suggestion?: Suggestion;
   quality_report?: QualityReport;
+  error_info?: ErrorInfo;
+  clarification_candidates?: ClarificationCandidate[];
+  active_context?: ActiveContext;
+  selected_action?: string;
+  response_time_ms?: number | null;
 }
+
 
 export interface ImageItem {
   image_id: string;
@@ -179,13 +223,18 @@ export type QualityStatusValue =
   | "passed"
   | "warning"
   | "failed"
-  | "not_evaluated";
+  | "not_evaluated"
+  | "not_applicable"
+  | "unknown"
+  | "source_error";
 
 export interface QualityFinding {
   name: string;
   status: QualityStatusValue;
   detail: string;
   value?: string;
+  applicable?: boolean;
+  source?: string;
 }
 
 export interface QualitySection {
@@ -203,6 +252,9 @@ export interface QualityRecommendation {
 
 export interface QualityReport {
   dataset: string;
+  entity_name?: string;
+  entity_type?: string;
+  platform?: string;
   urn: string;
   url?: string;
   generated_at: string;
@@ -213,6 +265,8 @@ export interface QualityReport {
   sections: QualitySection[];
   recommendations: QualityRecommendation[];
   not_evaluated_checks: string[];
+  missing_fields?: string[];
+  not_applicable_fields?: string[];
   valid: boolean;
 }
 
@@ -258,4 +312,15 @@ export interface HealthLog {
 export interface StreamEvent {
   event: "status" | "token" | "done" | "error";
   data: unknown;
+}
+
+export interface ActiveContextItem {
+  type: "dataset" | "domain" | "field" | "term" | "report" | "dashboard" | "entity";
+  name: string;
+  urn?: string;
+  url?: string;
+}
+
+export interface ActiveContext {
+  items: ActiveContextItem[];
 }

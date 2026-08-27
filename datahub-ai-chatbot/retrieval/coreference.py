@@ -76,6 +76,26 @@ def _candidates_in(question: str) -> list[tuple[str, bool]]:
     mention (a field/column).
     """
     out: list[tuple[str, bool]] = []
+
+    # Priority 1: Multi-word phrase directly after subject marker
+    m_subject = re.search(
+        r"(?:của|cho|cua|of|for|dataset|bang|bảng|dashboard|table)\s+"
+        r"(?:dataset\s+)?"
+        r"([A-Za-z0-9][A-Za-z0-9 _\-.'&]{1,80})",
+        question, re.I,
+    )
+    if m_subject:
+        cand = m_subject.group(1).strip().rstrip("?.!,;:")
+        words = cand.split()
+        clean = []
+        for w in words:
+            if w.lower() in _STOP:
+                break
+            clean.append(w)
+        cand_str = " ".join(clean) if clean else cand
+        if _clean(cand_str):
+            out.append((cand_str, True))
+
     for m in _IDENT_RE.finditer(question):
         token = m.group(0)
         if not _clean(token):
@@ -85,7 +105,8 @@ def _candidates_in(question: str) -> list[tuple[str, bool]]:
         is_subject = bool(
             _SUBJECT_POSSESSIVE.search(before) or _SUBJECT_DIRECT.search(before)
         )
-        out.append((token, is_subject))
+        if not any(token.lower() == existing[0].lower() for existing in out):
+            out.append((token, is_subject))
     return out
 
 

@@ -1,4 +1,5 @@
 import { auth } from "./auth";
+import { sanitizeErrorMessage } from "./use-chat";
 import type { ChatResponse, StreamEvent } from "./types";
 
 export interface StreamCallbacks {
@@ -15,6 +16,7 @@ export interface ChatPayload {
   model?: string;
   selected_action?: string;
   images?: string[];
+  ragas_enabled?: boolean;
 }
 
 function parseBlock(block: string): StreamEvent | null {
@@ -36,10 +38,12 @@ function isRecord(v: unknown): v is Record<string, unknown> {
   return typeof v === "object" && v !== null;
 }
 
-/** Stream a chat response from the SSE endpoint. */
+/** Stream a chat response from the SSE endpoint.
+ *  Pass an AbortSignal to allow the caller to cancel the request. */
 export async function streamChat(
   body: ChatPayload,
-  callbacks: StreamCallbacks
+  callbacks: StreamCallbacks,
+  signal?: AbortSignal,
 ): Promise<void> {
   const token = auth.getToken();
   const headers: Record<string, string> = { "Content-Type": "application/json" };
@@ -51,8 +55,12 @@ export async function streamChat(
       method: "POST",
       headers,
       body: JSON.stringify(body),
+      signal,
     });
   } catch (e) {
+    if (signal?.aborted || (e instanceof Error && e.name === "AbortError")) {
+      throw e;
+    }
     callbacks.onError?.((e as Error).message || "Network error");
     return;
   }
@@ -113,15 +121,15 @@ export async function streamChat(
       }
     }
   } catch (e) {
-    // Connection reset mid-stream (e.g. the browser's "Error in input
-    // stream") — still notify the caller so the UI never stays stuck on the
-    // typing indicator.
+    if (signal?.aborted || (e instanceof Error && e.name === "AbortError")) {
+      throw e;
+    }
     completed = true;
     callbacks.onError?.(
-      e instanceof Error && e.message ? e.message : "Đã mất kết nối khi đang tải câu trả lời."
+      sanitizeErrorMessage(e instanceof Error && e.message ? e.message : "Đã mất kết nối khi đang tải câu trả lời.")
     );
   } finally {
     reader.releaseLock();
-    if (!completed) callbacks.onError?.("Stream ended unexpectedly");
+    if (!completed && !signal?.aborted) callbacks.onError?.("Stream ended unexpectedly");
   }
 }

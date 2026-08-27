@@ -1,0 +1,425 @@
+================================================================================
+  V-DataAtlas — NỘI DUNG CHI TIẾT 10 SLIDES THUYẾT TRÌNH
+  AI Metadata Assistant for DataHub Enterprise
+  Nguyễn Hải An · v1.2.0 · 08/2026
+================================================================================
+
+
+────────────────────────────────────────────────────────────────────────────────
+SLIDE 1 — TRANG BÌA
+────────────────────────────────────────────────────────────────────────────────
+
+TIÊU ĐỀ CHÍNH:
+  V-DataAtlas
+
+PHỤ ĐỀ:
+  AI Metadata Assistant — Trợ lý tra cứu & quản trị dữ liệu doanh nghiệp
+  Tích hợp DataHub · Semantic Search · RAG Pipeline
+
+THÔNG TIN:
+  Sinh viên    : Nguyễn Hải An
+  Phiên bản    : v1.2.0-prod-rc
+  Ngày báo cáo : 26/08/2026
+
+GỢI Ý VISUAL:
+  - Nền tối (dark mode), logo/wordmark "V-DataAtlas" ở trung tâm
+  - Dòng chữ nhỏ bên dưới: "9,067 thực thể · 33 nền tảng · 459 automated tests"
+  - Hiệu ứng pulse/glow nhẹ quanh logo
+
+
+────────────────────────────────────────────────────────────────────────────────
+SLIDE 2 — BÀI TOÁN (PROBLEM STATEMENT)
+────────────────────────────────────────────────────────────────────────────────
+
+TIÊU ĐỀ:
+  "Tìm đúng dữ liệu trong hàng nghìn bảng — không phải chuyện đơn giản"
+
+3 VẤN ĐỀ CỐT LÕI:
+
+  VẤN ĐỀ 1 — Khó định vị dữ liệu
+    • Hạ tầng dữ liệu doanh nghiệp trải rộng trên 33 nền tảng phân tán:
+      Redshift, PowerBI, AWS Glue, SAP, MES, DMS...
+    • 9,067 bảng/báo cáo — người dùng không nhớ tên kỹ thuật
+    • Ví dụ thực tế: "Bảng theo dõi xe" → tên thật là
+      dms.external.account_use_vehicle (người dùng không biết)
+
+  VẤN ĐỀ 2 — LLM thuần túy "bịa" thông tin
+    • Khi không được neo ngữ cảnh vào catalog thật, LLM có thể:
+      - Tạo ra tên cột không tồn tại khi sinh SQL
+      - Mô tả sai cấu trúc bảng
+      - Trả lời tự tin nhưng hoàn toàn sai
+    • Rủi ro cao trong môi trường nghiệp vụ yêu cầu độ chính xác tuyệt đối
+
+  VẤN ĐỀ 3 — Nhập nhằng thuật ngữ giữa các phòng ban
+    • Cùng 1 thuật ngữ, nhiều định nghĩa khác nhau:
+      - "Coverage Date" trong Logistics ≠ "Coverage Date" trong Sản Xuất
+      - "Demand" trong Tài Chính ≠ "Demand" trong Chuỗi Cung Ứng
+    • Tra cứu không ngữ cảnh → kết quả sai hoặc gây hiểu lầm
+
+CÂU CHỐT:
+  "Người dùng không nói ngôn ngữ kỹ thuật.
+   Hệ thống cần phải hiểu ngôn ngữ của họ."
+
+
+────────────────────────────────────────────────────────────────────────────────
+SLIDE 3 — GIẢI PHÁP SẢN PHẨM (PRODUCT SOLUTION)
+────────────────────────────────────────────────────────────────────────────────
+
+TIÊU ĐỀ:
+  V-DataAtlas: Trợ lý AI được neo chặt vào Catalog dữ liệu thực
+
+SO SÁNH TRƯỚC / SAU:
+
+  CÁCH CŨ (Không có V-DataAtlas):
+    Người dùng hỏi LLM
+    → LLM suy đoán dựa trên dữ liệu huấn luyện
+    → Câu trả lời mơ hồ, có thể sai schema
+    → Người dùng không biết tin tưởng hay không
+    → Phải tự mở DataHub để kiểm tra lại
+
+  V-DATAATLAS:
+    Người dùng hỏi bằng ngôn ngữ tự nhiên (tiếng Việt/tiếng Anh)
+    → Hệ thống hiểu ý định (Intent Classification)
+    → Phân giải tên bảng ra URN chính xác (Entity Resolution)
+    → Đọc thẳng dữ liệu từ PostgreSQL Catalog (Structured Retrieval)
+    → Câu trả lời chính xác + trích dẫn nguồn rõ ràng
+    → Người dùng nhìn thấy bằng chứng cụ thể (Evidence Panel)
+
+ĐIỂM KHÁC BIỆT CỐT LÕI:
+  • Câu trả lời luôn có nguồn gốc từ catalog có cấu trúc
+    — không phải từ "trí tưởng tượng" của AI
+  • Hai nhánh xử lý:
+    [1] Structured Metadata Retrieval (PostgreSQL): deterministic, 8–15ms
+    [2] Semantic RAG (OpenSearch): tìm kiếm ngữ nghĩa, 35–70ms
+  • Hệ thống tự động chọn nhánh phù hợp với loại câu hỏi
+
+CÂU CHỐT:
+  "Câu trả lời có trích dẫn — bạn biết thông tin đến từ đâu."
+
+
+────────────────────────────────────────────────────────────────────────────────
+SLIDE 4 — QUY MÔ DỮ LIỆU THỰC TẾ (DATA AT SCALE)
+────────────────────────────────────────────────────────────────────────────────
+
+TIÊU ĐỀ:
+  Quy mô dữ liệu đang được quản trị
+
+SỐ LIỆU LỚN (Big Numbers — hiển thị nổi bật):
+
+  9,067   Thực thể catalog
+  21,196  Vector Chunks được index
+  33      Nền tảng kết nối
+  884     Entity ACLs phân quyền
+
+PHÂN BỔ THỰC THỂ THEO LOẠI:
+  • 8,542  Datasets       (94.21%) — Bảng, View, File dữ liệu
+  •   327  Dashboards     ( 3.61%) — Báo cáo PowerBI, DMS, SAP
+  •   177  Glossary Terms ( 1.95%) — Thuật ngữ nghiệp vụ chuẩn hóa
+  •    21  Glossary Nodes ( 0.23%) — Nhóm danh mục thuật ngữ
+
+PHÂN BỔ THEO NỀN TẢNG DỮ LIỆU:
+  PowerBI   41.06%  (3,723 thực thể)
+  Redshift  34.07%  (3,089 thực thể)
+  AWS Glue  14.73%  (1,336 thực thể)
+  SAP        4.74%  (  430 thực thể)
+  MES        1.55%  (  141 thực thể)
+  Khác       3.85%  (  348 thực thể)
+
+CÁC CHỈ SỐ VẬN HÀNH:
+  • 5 RBAC Domain Roles   : Logistics, Sản Xuất, Tài Chính, Sales, VGreen
+  • 1,037 Interaction Logs: lịch sử tương tác ghi nhận kèm đánh giá RAGAS
+  • 459 Automated Tests   : 100% passed (Unit + Thinking Test Suite)
+
+
+────────────────────────────────────────────────────────────────────────────────
+SLIDE 5 — KIẾN TRÚC TỔNG QUAN (HIGH-LEVEL ARCHITECTURE)
+────────────────────────────────────────────────────────────────────────────────
+
+TIÊU ĐỀ:
+  Kiến trúc 4 tầng — Từ câu hỏi đến câu trả lời
+
+4 TẦNG KIẾN TRÚC:
+
+  TẦNG 1 — FRONTEND (Next.js 16.3 / TypeScript / React 19)
+    • Chat UI + SSE Streaming (phản hồi từng token, không chờ đợi)
+    • Lineage Graph tương tác (React Flow — kéo thả, zoom)
+    • Evidence Panel hiển thị nguồn tài liệu
+    • 6 Action Buttons và Suggestion Chips
+
+  TẦNG 2 — BACKEND & AI ENGINE (FastAPI / Python / Async)
+    • ChatService — điều phối toàn bộ luồng xử lý
+    • Intent Classifier — phân loại ý định câu hỏi
+    • Entity Resolver — phân giải tên bảng ra URN
+    • Query Planner (DAG) — lập kế hoạch truy vấn phức hợp
+    • Thinking Mode — lập kế hoạch suy luận có cấu trúc
+    • Answer Generator — tổng hợp câu trả lời qua LLM
+
+  TẦNG 3 — SECURITY & GOVERNANCE
+    • JWT HS256 Authentication
+    • 5 RBAC Domain Roles
+    • 884 Entity ACLs (áp dụng tại mức SQL WHERE clause)
+    • Prompt Injection Detection + Guardrails
+
+  TẦNG 4 — DATA & PERSISTENCE
+    • PostgreSQL 16    — 9,067 thực thể catalog
+    • OpenSearch 2.15  — 21,196 vector chunks
+    • Redis 7          — Cache & Message Queue
+    • DataHub GMS      — GraphQL API (nguồn đồng bộ)
+    • Fireworks AI     — LLM + Vision (Qwen/Llama)
+    • Ollama           — Embedding nomic-embed-text (768 chiều)
+
+CƠ CHẾ ĐẶC BIỆT:
+  1. STREAMING REAL-TIME: Phản hồi theo từng token — TTFT: 450–850ms
+  2. DUAL RETRIEVAL: Structured (8–15ms) + Semantic (35–70ms)
+  3. FAILOVER: DataHub lỗi → tự chuyển sang PostgreSQL local
+  4. CONVERSATION MEMORY: Nhớ "bảng này", "nó" từ lượt hỏi trước
+
+
+────────────────────────────────────────────────────────────────────────────────
+SLIDE 6 — 6 CHỨC NĂNG CỐT LÕI (6 CORE ACTIONS)
+────────────────────────────────────────────────────────────────────────────────
+
+TIÊU ĐỀ:
+  Sáu điều người dùng có thể làm ngay hôm nay
+
+ACTION 1 — SEARCH DATASET (Tìm kiếm & Khám phá Metadata)
+  Người dùng nói: "Cho tôi xem schema bảng account_use_vehicle"
+  Hệ thống làm:
+    • Phân giải "account_use_vehicle" → URN chính xác trong catalog
+    • Đọc danh sách cột, kiểu dữ liệu, owner, domain, tags
+    • Trả về bảng schema có cấu trúc + thông tin liên quan
+  Kết quả: URN, 8 cột kiểu STRING, 1 upstream từ AWS Glue,
+           chủ sở hữu: data-team@company.vn
+
+ACTION 2 — GENERATE SQL (Sinh câu lệnh SQL theo schema thực)
+  Người dùng nói: "Viết SQL lấy danh sách xe theo loại hợp đồng"
+  Hệ thống làm:
+    • Resolve bảng → lấy danh sách cột THỰC TẾ từ PostgreSQL
+    • Bơm schema vào prompt → LLM sinh SQL với tên cột có thật
+    • Chỉ cho phép SELECT, cấm DDL/DML (an toàn)
+  Kết quả: SQL chuẩn dialect, tên cột đúng 100%, có giải thích
+
+ACTION 3 — IMPACT ANALYSIS (Phân tích tác động hạ nguồn)
+  Người dùng nói: "Nếu bảng account_use_vehicle đổi schema thì sao?"
+  Hệ thống làm:
+    • Duyệt đồ thị hạ nguồn (Downstream BFS, tối đa 3 hops)
+    • Xác định các bảng staging, DWH, báo cáo BI bị ảnh hưởng
+    • Phân loại mức rủi ro: HIGH / MEDIUM / LOW
+  Kết quả: "2 báo cáo PowerBI bị ảnh hưởng trực tiếp → Rủi ro: CAO"
+
+ACTION 4 — VISUALIZE LINEAGE (Trực quan hóa dòng chảy dữ liệu)
+  Người dùng nói: "Vẽ lineage của bảng account_use_vehicle"
+  Hệ thống làm:
+    • Lấy toàn bộ upstream + downstream
+    • Render đồ thị tương tác (React Flow): kéo thả, zoom, xem chi tiết
+    • Mặc định hiển thị văn bản — chỉ vẽ đồ thị khi yêu cầu rõ ràng
+  Kết quả: S3 → Glue → account_use_vehicle → Redshift → PowerBI
+
+ACTION 5 — DATA QUALITY CHECK (Kiểm tra chất lượng metadata)
+  Người dùng nói: "Kiểm tra chất lượng dữ liệu bảng sourcing_tracker"
+  Hệ thống làm:
+    • Đánh giá 8 tiêu chí: Schema, Description, Owner, Domain,
+      Lineage, Glossary Tags, Custom Tags, Freshness
+    • Phân định 6 trạng thái:
+      PASS / WARNING / FAILED / MISSING / NOT_AVAILABLE / NOT_EVALUATED
+    • Xuất báo cáo PDF hoặc TXT
+  Kết quả: "Schema: PASS | Owner: WARNING | Lineage: FAILED"
+
+ACTION 6 — METADATA REPORT (Xuất đặc tả kỹ thuật đầy đủ)
+  Người dùng nói: "Xuất đặc tả kỹ thuật của bảng dim_vehicle_account"
+  Hệ thống làm:
+    • Thu thập toàn bộ: URN, Platform, Domain, Owner,
+      danh sách cột (tên + kiểu + mô tả), báo cáo liên quan, lịch sử
+    • Định dạng Markdown chuyên nghiệp
+    • Xuất PDF/TXT sẵn sàng chia sẻ
+  Kết quả: Tài liệu Data Dictionary hoàn chỉnh
+
+
+────────────────────────────────────────────────────────────────────────────────
+SLIDE 7 — CÁCH HỆ THỐNG HIỂU CÂU HỎI
+────────────────────────────────────────────────────────────────────────────────
+
+TIÊU ĐỀ:
+  Từ "câu hỏi tự nhiên" đến "câu trả lời có căn cứ"
+
+FLOW XỬ LÝ 8 BƯỚC:
+
+  [1] TIỀN XỬ LÝ
+      Làm sạch chuỗi, giữ nguyên URN và dot-notation
+      "schema bảng   account_use_vehicle!!!" → "schema bảng account_use_vehicle"
+
+  [2] PHÂN LOẠI INTENT
+      Regex fast-path + LLM Semantic Classifier
+      "schema" → SCHEMA_LOOKUP | "lineage" → LINEAGE | "sql" → GENERATE_SQL
+
+  [3] PHÂN GIẢI THỰC THỂ (Entity Resolution — 4 tầng)
+      Tầng 1: Khớp chính xác trong Database
+      Tầng 2: Fuzzy Levenshtein (gần đúng, gợi ý nếu nhiều ứng viên)
+      Tầng 3: OpenSearch KNN Dense Vector (tìm kiếm ngữ nghĩa)
+      Tầng 4: Nhận diện chuỗi URN DataHub hợp lệ
+      → "bảng xe" → urn:li:dataset:(...,dms.external.account_use_vehicle,PROD)
+
+  [4] KIỂM SOÁT TRUY CẬP
+      Đối chiếu user với entity_acls + rbac_roles
+      → Nếu không có quyền: 403 Forbidden
+
+  [5] TRUY XUẤT DỮ LIỆU KÉP
+      Structured: Đọc schema/lineage từ PostgreSQL (8–15ms)
+      Semantic: Tìm kiếm context bổ trợ từ OpenSearch (35–70ms)
+
+  [6] TỔNG HỢP NGỮ CẢNH
+      Đóng gói dữ liệu → Context XML → gửi vào LLM
+      LLM chỉ tổng hợp từ context — không suy đoán ngoài phạm vi
+
+  [7] ĐỐI SOÁT DẪN CHỨNG (Citation Grounding)
+      Kiểm tra chéo citations với context thực tế
+      → Loại bỏ URN không có căn cứ trước khi trả về UI
+
+  [8] GHI VẾT & ĐÁNH GIÁ
+      Lưu vào interaction_logs → RAGAS đánh giá → Human Review
+
+VÍ DỤ PHIÊN HỘI THOẠI 4 LƯỢT (thực tế):
+  Lượt 1: "Cho tôi xem schema bảng account_use_vehicle"
+          → Lưu active_entity = account_use_vehicle
+  Lượt 2: "Ai là người sở hữu bảng này?"
+          → "bảng này" = active_entity → trả owner
+  Lượt 3: "Nó lấy dữ liệu từ đâu?"
+          → "Nó" = active_entity → 1 upstream: AWS Glue
+  Lượt 4: "Còn bảng sourcing_tracker thì sao?"
+          → Chuyển active_entity sang sourcing_tracker
+
+
+────────────────────────────────────────────────────────────────────────────────
+SLIDE 8 — BẢO MẬT & PHÂN QUYỀN (SECURITY & GOVERNANCE)
+────────────────────────────────────────────────────────────────────────────────
+
+TIÊU ĐỀ:
+  Mỗi người chỉ thấy dữ liệu họ được phép — Kiểm soát tại từng lớp
+
+LỚP 1 — XÁC THỰC DANH TÍNH (Authentication)
+  • JWT HS256 — Token-based authentication
+  • Mỗi request phải kèm Bearer Token hợp lệ
+
+LỚP 2 — PHÂN QUYỀN THEO MIỀN (RBAC Domain Roles)
+  Role         Nhóm                 Miền được phép truy cập
+  Logistics    logistics-team       Logistics, Supply Chain, CUNG ỨNG (NĐH/TT)
+  Sản Xuất     manufacturing        Sản Xuất, Manufacturing
+  Tài Chính    finance-team         Finance, TÀI CHÍNH
+  Sales        sales-team           Sales, After Sales, Data Governance
+  VGreen       engineering-team     VGreen, Vehicle Development
+  Admin        data-administrators  Toàn bộ 33 nền tảng & 9,067 thực thể
+
+LỚP 3 — KIỂM SOÁT CHI TIẾT (Entity ACL — 884 quy tắc)
+  • Bộ lọc ACL áp dụng TRỰC TIẾP tại mức SQL WHERE clause:
+    WHERE domain IN ('Logistics', ...) OR entity_urn IN (allowed_urns)
+  • Đồng thời áp dụng OpenSearch Bool Filter
+  • LLM KHÔNG nhận được siêu dữ liệu ngoài quyền hạn
+
+CƠ CHẾ BẢO VỆ BỔ SUNG:
+  • Prompt Injection Detection: Từ chối lệnh cố ý phá vỡ system prompt
+  • Secret Masking: Tự động ẩn mật khẩu, API keys, connection strings
+  • SQL Safety: Chỉ cho phép SELECT, cấm DDL (DROP, ALTER) và DML
+
+VÍ DỤ THỰC TẾ:
+  Người dùng analyst_logistics hỏi: "Cho tôi xem bảng dim_revenue trong Tài Chính"
+  Kết quả: 403 Forbidden — "domain_access_denied: Tài Chính"
+  → Không hiển thị bất kỳ thông tin nào của bảng đó
+
+
+────────────────────────────────────────────────────────────────────────────────
+SLIDE 9 — CHẤT LƯỢNG & KIỂM THỬ (QUALITY & TESTING)
+────────────────────────────────────────────────────────────────────────────────
+
+TIÊU ĐỀ:
+  Đo lường để tin tưởng — Kiểm thử tự động + Đánh giá chất lượng AI
+
+KẾT QUẢ KIỂM THỬ TỰ ĐỘNG:
+  459 / 459 TESTS PASSED (100%)
+  Thời gian thực thi toàn bộ: ~7–9 giây
+
+  • Unit Test Suite (tests/unit)      : 449 tests
+  • Thinking Test Suite (tests/thinking): 10 tests
+  • Frontend build                    : 0 lỗi TypeScript / ESLint
+  • 6 Actions xác thực trên 100+ ca dữ liệu thực tế
+
+  Lưu ý: 459/459 phản ánh độ bao phủ bộ kiểm thử tự động đối với
+  logic, parser và routing — không suy diễn thành độ chính xác 100%
+  của toàn bộ hội thoại chatbot.
+
+HIỆU NĂNG ĐO THỰC TẾ:
+  Khởi động hệ thống                :  ~2.8 giây  (Nạp DB + 884 ACLs + Redis)
+  Tra cứu metadata (PostgreSQL)     :   8–15 ms   (B-Tree Index name/urn)
+  Tìm kiếm hybrid (OpenSearch)      :  35–70 ms   (BM25 + KNN, 21,196 chunks)
+  Token đầu tiên xuất hiện (TTFT)   : 450–850 ms  (SSE streaming Fireworks)
+  Câu hỏi so sánh đa bảng           : 1.8–3.2 giây (Resolve 2 URNs + LLM)
+
+ĐÁNH GIÁ CHẤT LƯỢNG AI (RAGAS — 34 ca mẫu ban đầu):
+  Faithfulness (Độ trung thực)   : 0.524 (52.4%) — đang tối ưu
+  Answer Relevancy (Độ phù hợp)  : 0.652 (65.2%) — đáp ứng cơ bản
+
+  Ghi chú: Đo trên 34/1,037 logs — cần mở rộng để có thống kê đại diện
+
+VÒNG LẶP CẢI TIẾN LIÊN TỤC:
+  interaction_logs → RAGAS tự động → Human Review Portal → Gắn nhãn lỗi
+  → Regression Candidates → Automated Test Cases → CI/CD Pipeline
+
+  Kết quả từ 7 lượt Human Review:
+  • 3 Accepted  : câu trả lời đúng và đủ căn cứ
+  • 2 Incorrect : lỗi gán nhầm intent hoặc thiếu trường dữ liệu
+  • 1 Hallucination: suy diễn ngoài context
+  • 1 Needs Review
+  → 2 ca lỗi đã đưa vào regression test suite
+
+
+────────────────────────────────────────────────────────────────────────────────
+SLIDE 10 — KẾT LUẬN & HƯỚNG TIẾP THEO
+────────────────────────────────────────────────────────────────────────────────
+
+TIÊU ĐỀ:
+  V-DataAtlas — Nhìn lại & Bước tiếp theo
+
+ĐÃ XÂY DỰNG VÀ KIỂM CHỨNG:
+
+  [DONE] Hệ thống AI chạy thực tế trên catalog 9,067 thực thể, 33 nền tảng
+         → Người dùng hỏi tiếng Việt tự nhiên, nhận câu trả lời có căn cứ
+
+  [DONE] 6 Core Actions đã xác thực trên dữ liệu thực
+         → Search Dataset, Generate SQL, Impact Analysis,
+            Visualize Lineage, Data Quality Check, Metadata Report
+
+  [DONE] Phân quyền RBAC/ACL đầy đủ — 5 roles, 884 quy tắc
+         → Mỗi người chỉ thấy dữ liệu thuộc miền được phép
+
+  [DONE] 459 automated tests — kiến trúc có thể bảo trì và mở rộng
+         → Mỗi lần sửa lỗi đều được bảo vệ bởi regression tests
+
+  [DONE] Vòng lặp cải tiến đã thiết lập
+         → RAGAS đánh giá + Human Review + Regression → CI/CD
+
+CÁC HẠN CHẾ ĐANG BIẾT:
+  • Faithfulness 52.4% (trên 34 ca mẫu) — đang trong quá trình cải thiện
+  • Lineage hiện ở mức table-level; column-level PowerBI chưa đầy đủ
+  • Vision pipeline phụ thuộc độ phân giải ảnh đầu vào
+
+HƯỚNG PHÁT TRIỂN TIẾP THEO:
+  [TODO] Mở rộng RAGAS đánh giá trên toàn bộ 1,037 interaction logs
+         → Số liệu thống kê đại diện để tối ưu chất lượng
+
+  [TODO] Nâng cao Faithfulness qua tinh chỉnh prompt + chunking strategy
+         → Mục tiêu: Faithfulness > 0.75
+
+  [TODO] Column-level Lineage cho các model PowerBI phức tạp
+         → Truy vết chi tiết tới từng trường dữ liệu
+
+  [TODO] Tự động hóa: Human Review → Regression Test Case → CI/CD
+         → Vòng lặp cải tiến không cần can thiệp thủ công
+
+CÂU KẾT (hiển thị lớn):
+  "V-DataAtlas biến catalog dữ liệu kỹ thuật thành cuộc trò chuyện —
+   chính xác, an toàn và có thể truy vết."
+
+
+================================================================================
+  HẾT NỘI DUNG 10 SLIDES
+  V-DataAtlas · Nguyễn Hải An · 08/2026
+================================================================================

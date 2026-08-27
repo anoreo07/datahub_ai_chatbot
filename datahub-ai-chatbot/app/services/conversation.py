@@ -6,7 +6,7 @@ from sqlalchemy import select
 from sqlalchemy import update as sa_update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from database.models import ConversationHistory
+from database.models import ConversationHistory, EvidenceRecordDB
 
 log = structlog.get_logger()
 
@@ -16,6 +16,33 @@ class Turn:
     question: str
     answer: str
     timestamp: float = 0.0
+    # H7: structured state per turn — query_spec, followup_type, evidence snapshot
+    query_spec: dict | None = None        # serialized QuerySpec (see retrieval/query_spec.py)
+    followup_type: str | None = None       # NEW_QUERY | FOLLOW_UP | REFINEMENT | CLARIFICATION_RESPONSE
+    evidence_snapshot: list[dict] | None = None  # copy of evidence at end of turn
+
+
+class FollowUpType:
+    """Classification of how a new question relates to the previous turn."""
+    NEW_QUERY = "NEW_QUERY"                      # completely independent question
+    FOLLOW_UP = "FOLLOW_UP"                      # same entity, new property ("domain của nó?")
+    REFINEMENT = "REFINEMENT"                    # same entity + property, narrower ("Chỉ SAP thôi")
+    CLARIFICATION_RESPONSE = "CLARIFICATION_RESPONSE"  # answer to clarification ("B", "đúng rồi")
+    AMBIGUOUS = "AMBIGUOUS"                      # cannot determine — treat as NEW_QUERY
+
+
+@dataclass
+class ClarificationState:
+    """Persisted clarification prompt — survives until the user answers.
+
+    When the system asks "bạn muốn attribute nào?" or "cái nào — A hay B?",
+    the pending QuerySpec + candidate list is stored here so the next user
+    message can be matched back to the original query.
+    """
+    pending_query_spec: dict | None = None   # serialized QuerySpec being clarified
+    candidates: list[dict] = field(default_factory=list)
+    clarification_type: str = ""             # entity_disambiguation | property_disambiguation | value_disambiguation
+    asked_at: float = 0.0
 
 
 @dataclass
@@ -47,6 +74,10 @@ class Conversation:
     title: str | None = None
     is_pinned: bool = False
     is_favorite: bool = False
+    # H7: QuerySpec persistence across turns
+    last_query_spec: dict | None = None       # serialized QuerySpec from most recent turn
+    # H8: Clarification state (pending until user answers)
+    clarification_state: ClarificationState | None = None
 
 
 class ConversationMemory:
@@ -80,18 +111,34 @@ class ConversationMemory:
             conv.turns = conv.turns[-self._max_turns:]
 
     async def add_turn_db(self, session: AsyncSession, user_id: str, conversation_id: str,
-                          question: str, answer: str) -> None:
+                          question: str, answer: str, *,
+                          query_spec: dict | None = None,
+                          followup_type: str | None = None,
+                          evidence_snapshot: list[dict] | None = None,
+                          render_state: dict | None = None) -> None:
         conv = self.get_or_create(user_id, conversation_id)
         self.add_turn(user_id, conversation_id, question, answer)
+        # H7: Attach structured state to the turn and persist query_spec across turns.
+        # All callers that need query_spec/followup_type pass them explicitly.
+        if query_spec is not None or followup_type is not None:
+            self.set_turn_state(
+                user_id, conversation_id,
+                query_spec=query_spec,
+                followup_type=followup_type,
+                evidence_snapshot=evidence_snapshot,
+            )
+        if query_spec is not None:
+            self.set_query_spec(user_id, conversation_id, query_spec)
         try:
             db_entry = ConversationHistory(
                 user_id=user_id,
-                conversation_id=conversation_id,
+                conversation_id=conversation_id[:64],
                 question=question,
                 answer=answer,
                 title=conv.title,
                 is_pinned=conv.is_pinned,
                 is_favorite=conv.is_favorite,
+                render_state=render_state,
             )
             session.add(db_entry)
             await session.commit()
@@ -199,20 +246,95 @@ class ConversationMemory:
         conv = self.get_or_create(user_id, conversation_id)
         conv.evidence.clear()
 
+    async def persist_evidence(self, session: AsyncSession, user_id: str,
+                               conversation_id: str) -> None:
+        """Persist evidence records to DB for cross-worker/restart survival."""
+        conv = self.get_or_create(user_id, conversation_id)
+        try:
+            # Delete existing evidence for this conversation
+            from sqlalchemy import delete
+            await session.execute(
+                delete(EvidenceRecordDB).where(
+                    EvidenceRecordDB.user_id == user_id,
+                    EvidenceRecordDB.conversation_id == conversation_id,
+                )
+            )
+            # Insert current evidence
+            for ev in conv.evidence:
+                entry = EvidenceRecordDB(
+                    user_id=user_id,
+                    conversation_id=conversation_id,
+                    evidence_id=ev.get("evidence_id", ""),
+                    kind=ev.get("kind", ""),
+                    entity_name=ev.get("entity_name"),
+                    entity_urn=ev.get("entity_urn"),
+                    entity_type=ev.get("entity_type"),
+                    tool_name=ev.get("tool_name"),
+                    query=ev.get("query"),
+                    structured=ev.get("structured"),
+                    citation=ev.get("citation"),
+                    snippet=ev.get("snippet"),
+                )
+                session.add(entry)
+            await session.flush()
+        except Exception:
+            log.exception("evidence_persist_failed",
+                         user_id=user_id, conversation_id=conversation_id)
+
+    async def load_evidence_from_db(self, session: AsyncSession, user_id: str,
+                                    conversation_id: str) -> list[dict]:
+        """Load evidence records from DB into in-memory cache."""
+        conv = self.get_or_create(user_id, conversation_id)
+        if not conv.evidence:
+            try:
+                result = await session.execute(
+                    select(EvidenceRecordDB)
+                    .where(
+                        EvidenceRecordDB.user_id == user_id,
+                        EvidenceRecordDB.conversation_id == conversation_id,
+                    )
+                    .order_by(EvidenceRecordDB.created_at.asc())
+                )
+                for row in result.scalars().all():
+                    conv.evidence.append({
+                        "evidence_id": row.evidence_id,
+                        "kind": row.kind,
+                        "entity_name": row.entity_name,
+                        "entity_urn": row.entity_urn,
+                        "entity_type": row.entity_type,
+                        "tool_name": row.tool_name,
+                        "query": row.query,
+                        "structured": row.structured,
+                        "citation": row.citation,
+                        "snippet": row.snippet,
+                    })
+            except Exception:
+                log.exception("evidence_load_failed",
+                             user_id=user_id, conversation_id=conversation_id)
+        return list(conv.evidence)
+
     async def load_history_from_db(self, session: AsyncSession, user_id: str,
                                    conversation_id: str, last_k: int = 5) -> list[tuple[str, str]]:
         """Load conversation history from DB into in-memory cache and return it."""
         conv = self.get_or_create(user_id, conversation_id)
         if not conv.turns:
             try:
-                result = await session.execute(
-                    select(ConversationHistory)
+                # Subquery to get the IDs of the last K turns
+                subq = (
+                    select(ConversationHistory.id)
                     .where(
                         ConversationHistory.user_id == user_id,
                         ConversationHistory.conversation_id == conversation_id,
                     )
-                    .order_by(ConversationHistory.created_at.asc())
+                    .order_by(ConversationHistory.created_at.desc())
                     .limit(last_k)
+                    .subquery()
+                )
+                # Main query to get the full rows in chronological order
+                result = await session.execute(
+                    select(ConversationHistory)
+                    .where(ConversationHistory.id.in_(select(subq.c.id)))
+                    .order_by(ConversationHistory.created_at.asc())
                 )
                 for row in result.scalars().all():
                     conv.turns.append(Turn(
@@ -259,14 +381,14 @@ class ConversationMemory:
                 sa_select(
                     ConversationHistory.conversation_id,
                     sa_func.count(ConversationHistory.id).label("turn_count"),
-                    sa_func.max(ConversationHistory.created_at).label("last_accessed"),
+                    sa_func.max(ConversationHistory.updated_at).label("last_accessed"),
                     sa_func.max(ConversationHistory.title).label("title"),
                     pinned_max.label("is_pinned"),
                     favorite_max.label("is_favorite"),
                 )
                 .where(ConversationHistory.user_id == user_id)
                 .group_by(ConversationHistory.conversation_id)
-                .order_by(sa_func.max(ConversationHistory.created_at).desc())
+                .order_by(sa_func.max(ConversationHistory.updated_at).desc())
             )
             for row in result.all():
                 cid = row[0]
@@ -294,26 +416,36 @@ class ConversationMemory:
                             break
         except Exception:
             log.exception("conversation_list_db_failed", user_id=user_id)
+        in_memory.sort(key=lambda c: c.get("last_accessed", 0), reverse=True)
         return in_memory
 
     async def get_conversation_detail(self, session: AsyncSession, user_id: str,
                                       conversation_id: str) -> list[dict]:
-        turns = self.get_history(user_id, conversation_id, last_k=1000)
-        if not turns:
-            try:
-                result = await session.execute(
-                    select(ConversationHistory)
-                    .where(
-                        ConversationHistory.user_id == user_id,
-                        ConversationHistory.conversation_id == conversation_id,
-                    )
-                    .order_by(ConversationHistory.created_at.asc())
+        # Always query DB to get render_state (not available from in-memory cache)
+        try:
+            result = await session.execute(
+                select(ConversationHistory)
+                .where(
+                    ConversationHistory.user_id == user_id,
+                    ConversationHistory.conversation_id == conversation_id,
                 )
-                for row in result.scalars().all():
-                    turns.append((row.question, row.answer))
-            except Exception:
-                log.exception("conversation_detail_failed", user_id=user_id,
-                              conversation_id=conversation_id)
+                .order_by(ConversationHistory.created_at.asc())
+            )
+            rows = list(result.scalars().all())
+            if rows:
+                return [
+                    {
+                        "question": row.question,
+                        "answer": row.answer,
+                        "render_state": getattr(row, "render_state", None),
+                    }
+                    for row in rows
+                ]
+        except Exception:
+            log.exception("conversation_detail_failed", user_id=user_id,
+                          conversation_id=conversation_id)
+        # Fallback to in-memory cache (no render_state)
+        turns = self.get_history(user_id, conversation_id, last_k=1000)
         return [{"question": q, "answer": a} for q, a in turns]
 
     async def update_conversation_db(self, session: AsyncSession, user_id: str,
@@ -358,6 +490,61 @@ class ConversationMemory:
             "is_pinned": conv.is_pinned,
             "is_favorite": conv.is_favorite,
         }
+
+    # --- H7: QuerySpec persistence across turns ---
+
+    def set_query_spec(self, user_id: str, conversation_id: str,
+                       query_spec: dict) -> None:
+        """Store the QuerySpec produced by query_parser.parse_query() for this turn."""
+        conv = self.get_or_create(user_id, conversation_id)
+        conv.last_query_spec = query_spec
+
+    def get_query_spec(self, user_id: str, conversation_id: str) -> dict | None:
+        """Get the most recent QuerySpec (from the previous turn)."""
+        conv = self.get_or_create(user_id, conversation_id)
+        return conv.last_query_spec
+
+    def set_turn_state(self, user_id: str, conversation_id: str,
+                       *, query_spec: dict | None = None,
+                       followup_type: str | None = None,
+                       evidence_snapshot: list[dict] | None = None) -> None:
+        """Attach structured state to the most recent turn."""
+        conv = self.get_or_create(user_id, conversation_id)
+        if conv.turns:
+            t = conv.turns[-1]
+            if query_spec is not None:
+                t.query_spec = query_spec
+            if followup_type is not None:
+                t.followup_type = followup_type
+            if evidence_snapshot is not None:
+                t.evidence_snapshot = evidence_snapshot
+
+    def get_last_turn(self, user_id: str, conversation_id: str) -> Turn | None:
+        conv = self.get_or_create(user_id, conversation_id)
+        return conv.turns[-1] if conv.turns else None
+
+    # --- H8: Clarification state persistence ---
+
+    def set_clarification_state(self, user_id: str, conversation_id: str,
+                                pending_query_spec: dict,
+                                candidates: list[dict],
+                                clarification_type: str = "") -> None:
+        """Store pending clarification prompt — survives until the user answers."""
+        conv = self.get_or_create(user_id, conversation_id)
+        conv.clarification_state = ClarificationState(
+            pending_query_spec=pending_query_spec,
+            candidates=candidates,
+            clarification_type=clarification_type,
+            asked_at=time.time(),
+        )
+
+    def get_clarification_state(self, user_id: str, conversation_id: str) -> ClarificationState | None:
+        conv = self.get_or_create(user_id, conversation_id)
+        return conv.clarification_state
+
+    def clear_clarification_state(self, user_id: str, conversation_id: str) -> None:
+        conv = self.get_or_create(user_id, conversation_id)
+        conv.clarification_state = None
 
     def _expire(self, now: float) -> None:
         expired = [key for key, conv in self._conversations.items()

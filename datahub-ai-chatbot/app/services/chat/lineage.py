@@ -95,10 +95,13 @@ class LineageService:
             nonlocal idx
             cid = f"E{idx}"
             idx += 1
+            e = await self._ctx.entity_repo.get_by_urn(urn)
+            name = (e.display_name or e.name) if e else urn
+            plat = f" ({e.platform})" if (e and e.platform) else ""
             citations.append(Citation(cid=cid, source_type="datahub_entity",
-                                      entity_urn=urn, entity_name=await _name(urn),
-                                      url=await _url(urn)))
-            return f"{await _name(urn)} [{cid}]"
+                                      entity_urn=urn, entity_name=name,
+                                      url=e.datahub_url if e else None))
+            return f"{name}{plat} [{cid}]"
 
         if upstreams:
             names = ", ".join([await _fmt(u) for u in upstreams])
@@ -107,7 +110,12 @@ class LineageService:
             names = ", ".join([await _fmt(d) for d in downstreams])
             parts.append(f"{len(downstreams)} downstream: {names}")
 
-        answer = mask_secrets(
-            f"Dataset {result.name} có lineage theo DataHub: " + "; ".join(parts) + "."
-        )
+        if not parts:
+            answer = mask_secrets(
+                f"Dataset **{result.name}** hiện không có lineage (upstream/downstream) được ghi nhận trong DataHub."
+            )
+        else:
+            answer = mask_secrets(
+                f"Dataset **{result.name}** có lineage theo DataHub: " + "; ".join(parts) + "."
+            )
         return answer, citations, result.name

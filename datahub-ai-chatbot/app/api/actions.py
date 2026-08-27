@@ -3,7 +3,7 @@ from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.dependencies.auth import get_auth_service, require_role
+from app.api.dependencies.auth import get_auth_service, get_current_user
 from app.auth.authorization import AuthorizationService
 from app.auth.models import UserContext
 from app.schemas.actions import (
@@ -22,8 +22,6 @@ from database.session import get_session
 
 router = APIRouter()
 
-_VIEWER_ROLES = ("admin", "editor", "steward", "viewer", "user")
-
 
 def _service(session: AsyncSession, auth_service: AuthorizationService) -> ActionService:
     return ActionService(session, auth_service=auth_service)
@@ -33,7 +31,7 @@ def _service(session: AsyncSession, auth_service: AuthorizationService) -> Actio
 async def schema_compare(
     request: SchemaCompareRequest,
     session: AsyncSession = Depends(get_session),
-    current_user: UserContext = Depends(require_role(*_VIEWER_ROLES)),
+    current_user: UserContext = Depends(get_current_user),
     auth_service: AuthorizationService = Depends(get_auth_service),
 ) -> SchemaCompareResponse:
     return await _service(session, auth_service).compare_schema(
@@ -45,7 +43,7 @@ async def schema_compare(
 async def generate_sql(
     request: DatasetQuery,
     session: AsyncSession = Depends(get_session),
-    current_user: UserContext = Depends(require_role(*_VIEWER_ROLES)),
+    current_user: UserContext = Depends(get_current_user),
     auth_service: AuthorizationService = Depends(get_auth_service),
 ) -> SqlResponse:
     return await _service(session, auth_service).generate_sql(
@@ -57,7 +55,7 @@ async def generate_sql(
 async def impact_analysis(
     request: DatasetQuery,
     session: AsyncSession = Depends(get_session),
-    current_user: UserContext = Depends(require_role(*_VIEWER_ROLES)),
+    current_user: UserContext = Depends(get_current_user),
     auth_service: AuthorizationService = Depends(get_auth_service),
 ) -> ImpactResponse:
     result = await _service(session, auth_service).impact_analysis(
@@ -73,7 +71,7 @@ async def impact_analysis(
 async def lineage_graph(
     request: DatasetQuery,
     session: AsyncSession = Depends(get_session),
-    current_user: UserContext = Depends(require_role(*_VIEWER_ROLES)),
+    current_user: UserContext = Depends(get_current_user),
     auth_service: AuthorizationService = Depends(get_auth_service),
 ) -> LineageData:
     service = _service(session, auth_service)
@@ -92,7 +90,7 @@ async def lineage_graph(
 async def quality_check(
     request: DatasetQuery,
     session: AsyncSession = Depends(get_session),
-    current_user: UserContext = Depends(require_role(*_VIEWER_ROLES)),
+    current_user: UserContext = Depends(get_current_user),
     auth_service: AuthorizationService = Depends(get_auth_service),
 ) -> QualityReport:
     result = await _service(session, auth_service).quality_check(
@@ -112,7 +110,7 @@ class QualityExportRequest(BaseModel):
 async def quality_export(
     request: QualityExportRequest,
     session: AsyncSession = Depends(get_session),
-    current_user: UserContext = Depends(require_role(*_VIEWER_ROLES)),
+    current_user: UserContext = Depends(get_current_user),
 ) -> StreamingResponse:
     """Export an already-generated Data Quality Report as PDF or TXT.
 
@@ -145,7 +143,7 @@ async def quality_export(
 async def metadata_report(
     request: DatasetQuery,
     session: AsyncSession = Depends(get_session),
-    current_user: UserContext = Depends(require_role(*_VIEWER_ROLES)),
+    current_user: UserContext = Depends(get_current_user),
     auth_service: AuthorizationService = Depends(get_auth_service),
 ) -> ReportResponse:
     result = await _service(session, auth_service).metadata_report(

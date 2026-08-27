@@ -33,8 +33,8 @@ _RECOMMENDATION_PATTERNS: list[re.Pattern[str]] = [
 ]
 
 _INJECTION_RESPONSE = (
-    "Tôi chỉ trả lời các câu hỏi về metadata trong DataHub và không thực hiện các "
-    "yêu cầu được nhúng trong nội dung dữ liệu. Vui lòng hỏi về dữ liệu cụ thể."
+    "Tôi là trợ lý DataHub và không thể thực hiện yêu cầu này. Hệ thống từ chối các "
+    "yêu cầu vi phạm chính sách bảo mật, trích xuất cấu hình bí mật hoặc can thiệp dữ liệu."
 )
 
 

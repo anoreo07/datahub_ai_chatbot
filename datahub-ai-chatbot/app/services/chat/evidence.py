@@ -932,6 +932,11 @@ class EvidenceService:
             name=getattr(resolution.resolved, "display_name", None)
             or resolution.resolved.name,
             url=getattr(resolution.resolved, "datahub_url", None),
+            entity_type=getattr(resolution.resolved, "entity_type", None),
+            platform=getattr(resolution.resolved, "platform", None),
+            domain=getattr(resolution.resolved, "domain", None),
+            description=getattr(resolution.resolved, "description", None),
+            environment=getattr(resolution.resolved, "environment", None),
         )
 
 

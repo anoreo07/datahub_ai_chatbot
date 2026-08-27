@@ -48,6 +48,9 @@ interface AppStore {
   titles: Record<string, string>;
   chatReset: number;
   requestNewChat: () => void;
+  showResponseTime: boolean;
+  setShowResponseTime: (v: boolean) => void;
+  toggleShowResponseTime: () => void;
 }
 
 const AppContext = createContext<AppStore | null>(null);
@@ -63,6 +66,34 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [pinned, setPinned] = useState<string[]>([]);
   const [favorites, setFavorites] = useState<string[]>([]);
   const [chatReset, setChatReset] = useState<number>(0);
+  const [showResponseTime, setShowResponseTimeState] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("show_response_time");
+      if (stored === "true") {
+        setShowResponseTimeState(true);
+      }
+    }
+  }, []);
+
+  const setShowResponseTime = useCallback((v: boolean) => {
+    setShowResponseTimeState(v);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("show_response_time", String(v));
+    }
+  }, []);
+
+  const toggleShowResponseTime = useCallback(() => {
+    setShowResponseTimeState((prev) => {
+      const next = !prev;
+      if (typeof window !== "undefined") {
+        localStorage.setItem("show_response_time", String(next));
+      }
+      return next;
+    });
+  }, []);
+
 
   const refreshUser = useCallback(async () => {
     if (!auth.getToken()) {
@@ -263,8 +294,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
         titles,
         chatReset,
         requestNewChat,
+        showResponseTime,
+        setShowResponseTime,
+        toggleShowResponseTime,
       }}
     >
+
       {children}
     </AppContext.Provider>
   );

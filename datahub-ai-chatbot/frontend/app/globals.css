@@ -438,3 +438,28 @@
     transform: translateY(-2px);
   }
 }
+
+/* Error message bubble variant */
+.error-bubble {
+  border-left: 3px solid var(--warning);
+}
+
+/* Improve copy button hover feedback */
+.copy-btn:hover {
+  background: color-mix(in srgb, var(--muted) 80%, transparent);
+}
+
+/* User image full-bleed inside bubble */
+.user-image-fullbleed {
+  margin: calc(var(--radius) * -1);
+  margin-bottom: 0;
+  overflow: hidden;
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+/* Responsive image constraints */
+@media (max-width: 640px) {
+  .user-image-fullbleed img {
+    max-height: 200px;
+  }
+}

@@ -79,20 +79,37 @@ class StructuredRetrievalService:
             # directly - it is an explicit, deterministic glossary-term signal.
             term_name = None
             term_is_acronym = False
-            if inferred_entity:
-                term_name = inferred_entity
-            else:
-                # Skip acronym extraction when the question names a
-                # dashboard/report ("mô tả chi tiết của dashboard 'R_Báo cáo ... DMS
-                # - SAP'?"): the acronym regex would grab "DMS"/"SAP" out of the
-                # quoted entity name and resolve the wrong dashboard.
-                names_dashboard = re.search(
-                    r"\b(dashboard|report|báo cáo|bao cao)\b", question, re.I)
-                am = None if names_dashboard else re.search(
-                    r"\b[A-Z]{2,8}(?:-[A-Z]+)*\b", question)
-                if am:
-                    term_name = am.group(0)
-                    term_is_acronym = True
+            preferred_types: list[str] = ["glossary_term", "dataset", "dashboard"]
+
+            # First, check if EntityExtractor finds an exact catalog subsequence
+            try:
+                _ext_top = await self._ctx.entity_extractor.extract(question, top_k=3)
+            except Exception:  # noqa: BLE001
+                _ext_top = []
+
+            for _e in _ext_top:
+                if _e.source == "subsequence" and _e.score >= 1.0:
+                    if not inferred_entity or _is_noisy_entity(inferred_entity):
+                        term_name = _e.name
+                    preferred_types = [_e.entity_type, "glossary_term", "dataset", "dashboard"]
+                    break
+
+            if not term_name:
+                if inferred_entity and not _is_noisy_entity(inferred_entity):
+                    term_name = inferred_entity
+                else:
+                    # Skip acronym extraction when the question names a
+                    # dashboard/report or domain name ("domain CUNG ỨNG").
+                    names_dashboard = re.search(
+                        r"\b(dashboard|report|báo cáo|bao cao)\b", question, re.I)
+                    # Clean out domain phrases before searching acronym
+                    q_no_domain = re.sub(r"\b(?:domain|lĩnh vực|linh vuc|miền|mien)\s+[A-Za-z0-9_\u00C0-\u024F \(\)]+", "", question, flags=re.I)
+                    am = None if names_dashboard else re.search(
+                        r"\b[A-Z]{2,8}(?:-[A-Z]+)*\b", q_no_domain)
+                    if am and am.group(0) not in ("CUNG", "UNG", "SAN", "XUAT", "KINH", "DOANH"):
+                        term_name = am.group(0)
+                        term_is_acronym = True
+
             if not term_name:
                 term_name = await self._ctx.entities.entity_name_for(
                     question, _TERM_REMOVE_WORDS, trace_id=trace_id,
@@ -117,7 +134,6 @@ class StructuredRetrievalService:
             # "dataset/dashboard X là gì ?" must resolve the requested type, not a
             # glossary term. Fall back to glossary_term only when no type is named.
             q = question.lower()
-            preferred_types: list[str] = []
             if inferred_type == "glossary_term":
                 preferred_types = ["glossary_term", "dataset", "dashboard"]
             elif inferred_type in ("dataset", "dashboard"):
@@ -126,24 +142,11 @@ class StructuredRetrievalService:
                 preferred_types = ["dataset", "dashboard", "glossary_term"]
             elif "dashboard" in q or "report" in q or "báo cáo" in q or "bao cao" in q:
                 preferred_types = ["dashboard", "dataset", "glossary_term"]
-            else:
+            elif not _ext_top:
                 preferred_types = ["glossary_term", "dataset", "dashboard"]
-            # When the extractor already landed on the EXACT entity named in the
-            # question (a contiguous subsequence at full score, e.g. the dataset
-            # "Báo cáo BOM" in "báo cáo bom là gì?"), honor its type over the
-            # generic order. The generic order would otherwise try dashboard
-            # first and fuzzy-resolve a different, loosely matching dashboard.
-            try:
-                _ext_top = await self._ctx.entity_extractor.extract(
-                    question, top_k=3)
-            except Exception:  # noqa: BLE001
-                _ext_top = []
-            for _e in _ext_top:
-                if _e.source == "subsequence" and _e.score >= 1.0:
-                    preferred_types = [_e.entity_type, "glossary_term",
-                                       "dataset", "dashboard"]
-                    break
             last_error = None
+
+
             for etype in preferred_types:
                 # The user may reference the term by its ENGLISH parenthetical
                 # alias ("Demand là gì?" -> "Nhu cầu linh kiện (Component Demand
@@ -519,25 +522,22 @@ class StructuredRetrievalService:
                         entity_db.entity_type, entity_db.payload,
                     )
 
-                    upstreams: list[str] = []
-                    downstreams: list[str] = []
-                    try:
-                        up = await self._ctx.source.get_lineage(entity_db.urn, direction="upstream")
-                        down = await self._ctx.source.get_lineage(
-                            entity_db.urn, direction="downstream",
-                        )
-                        upstreams = [r["entity"]["urn"] for r in up.get("relationships", [])
-                                     if (r.get("entity") or {}).get("urn")]
-                        downstreams = [r["entity"]["urn"] for r in down.get("relationships", [])
-                                       if (r.get("entity") or {}).get("urn")]
-                    except Exception:
-                        log.exception("lineage_live_failed", trace_id=trace_id, urn=entity_db.urn)
-                    # When the live source returns no lineage (mock mode, or the
-                    # source is offline), fall back to the persisted metadata so
-                    # stored upstream/downstream relations still answer the query.
+                    upstreams = list(entity_db.payload.get("upstreams") or [])
+                    downstreams = list(entity_db.payload.get("downstreams") or [])
+                    lineage_api_error = False
                     if not upstreams and not downstreams:
-                        upstreams = list(entity_db.payload.get("upstreams") or [])
-                        downstreams = list(entity_db.payload.get("downstreams") or [])
+                        try:
+                            up = await self._ctx.source.get_lineage(entity_db.urn, direction="upstream")
+                            down = await self._ctx.source.get_lineage(
+                                entity_db.urn, direction="downstream",
+                            )
+                            upstreams = [r["entity"]["urn"] for r in up.get("relationships", [])
+                                         if (r.get("entity") or {}).get("urn")]
+                            downstreams = [r["entity"]["urn"] for r in down.get("relationships", [])
+                                           if (r.get("entity") or {}).get("urn")]
+                        except Exception:
+                            log.warning("lineage_live_failed", trace_id=trace_id, urn=entity_db.urn)
+                            lineage_api_error = True
 
                     log.info("structure_lineage", trace_id=trace_id,
                              entity=entity_db.display_name or entity_db.name,
@@ -548,6 +548,7 @@ class StructuredRetrievalService:
                         **entity_db.payload,
                         "upstreams": upstreams,
                         "downstreams": downstreams,
+                        "lineage_api_error": lineage_api_error,
                         "content": (
                             f"Entity: {main_content}\n"
                             "Upstream: "
@@ -587,6 +588,7 @@ class StructuredRetrievalService:
             return []
 
         if intent == QueryIntent.SCHEMA_LOOKUP:
+            _field_ident = _extract_field_identifier(question)
             # Schema / join question across two datasets ("trường nào dùng để
             # liên kết X với Y?") -> resolve both schemas and infer join keys
             # from real metadata, never by extracting the whole sentence as a name.
@@ -596,6 +598,28 @@ class StructuredRetrievalService:
                     log.info("structured_schema_join", trace_id=trace_id,
                              question=question[:100], result_count=len(join_results))
                     return join_results
+
+            target_field = _field_ident or (inferred_entity if inferred_entity and not _is_noisy_entity(inferred_entity) else None)
+
+            if target_field and not _is_column_meaning_question(question):
+                # 1. Check glossary term first (for formulas/metrics e.g. Coverage Date)
+                glossary_res = await self._ctx.entity_resolver.resolve(
+                    target_field, entity_type="glossary_term", trace_id=trace_id
+                )
+                if glossary_res.exact_match:
+                    all_results = await self._ctx.entities.resolve_all_exact_to_results(glossary_res, trace_id=trace_id)
+                    if all_results:
+                        return all_results
+                if glossary_res.resolved and _trusted_resolution(glossary_res):
+                    return await self._ctx.entities.resolve_to_results(glossary_res, trace_id=trace_id)
+
+                # 2. Check dataset column schema
+                field_results = await self.resolve_field_lookup(target_field, trace_id=trace_id)
+                if field_results:
+                    log.info("structured_field_ident_lookup", trace_id=trace_id,
+                             field=target_field, datasets=len(field_results))
+                    return field_results
+
             # Field-location question ("dataset nào chứa trường 'plant_id'?",
             # "which dataset has the column uom_name?") -> the asked column
             # lives inside datasets; list them, never canonicalize the column
@@ -604,12 +628,6 @@ class StructuredRetrievalService:
             # named dataset - the field's meaning is answered in context.
             _field_ident = _extract_field_identifier(question)
             if _field_ident and _is_column_meaning_question(question) and not inferred_entity:
-                # "Trường X trong báo cáo Y nghĩa là gì?" — the question names a
-                # REPORT (dashboard). The dataset canonicalizer below
-                # (prefer_type="dataset") drops the exact dashboard match and
-                # would resolve an unrelated dataset that merely shares name
-                # tokens ("báo cáo KQKD hậu mãi" -> "Báo cáo ước KQKD"). Resolve
-                # the field inside the named report's own datasets instead.
                 report_hits = await self.resolve_report_column(
                     question, trace_id=trace_id)
                 if report_hits:
@@ -634,6 +652,7 @@ class StructuredRetrievalService:
                     log.info("structured_field_location", trace_id=trace_id,
                              field=_field_ident, hits=len(field_results))
                     return field_results
+
             entity_name = inferred_entity or await self._ctx.entities.entity_name_for(question, [
                 "field", "schema", "cột", "trường", "có những",
                 "columns", "fields", "thuộc tính",
@@ -650,6 +669,8 @@ class StructuredRetrievalService:
                          field=entity_name, datasets=len(field_results))
                 return field_results
             return await self._ctx.entities.resolve_to_results(resolution, trace_id=trace_id)
+
+
 
         if intent == QueryIntent.DATAHUB_URL:
             entity_name = inferred_entity or _extract_name(question, [

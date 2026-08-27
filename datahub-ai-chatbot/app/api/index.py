@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.dependencies.auth import get_current_user, require_role
+from app.api.dependencies.auth import require_role
 from app.auth.models import UserContext
 from database.repositories.entity_repository import EntityRepository
 from database.repositories.index_job_repository import IndexJobRepository

@@ -57,3 +57,25 @@ def validate_citations(citations: list[Citation], docs: Sequence[ContextDocument
         if c.entity_urn in doc_urns or c.entity_urn == "":
             valid.append(c)
     return valid
+
+
+def build_listing_citations(
+    entities: list[dict],
+    source_type: str = "database",
+) -> list[Citation]:
+    """Build citations for deterministic listing results (counts, domain lists, missing metadata)."""
+    citations: list[Citation] = []
+    seen: set[str] = set()
+    for i, ent in enumerate(entities):
+        urn = ent.get("urn", "")
+        if urn in seen:
+            continue
+        seen.add(urn)
+        citations.append(Citation(
+            cid=f"LS{i+1}",
+            source_type=source_type,
+            entity_urn=urn,
+            entity_name=ent.get("name", ""),
+            url=ent.get("url"),
+        ))
+    return citations

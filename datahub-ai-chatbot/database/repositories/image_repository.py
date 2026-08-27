@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import datetime
 
-from sqlalchemy import delete, func, or_, select, update
+from sqlalchemy import func, or_, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from database.models import ImageRecord, ImageStatus
@@ -128,7 +128,7 @@ class StorageRepository:
         }
 
     async def update_fields(self, image_id: str, **values) -> ImageRecord | None:
-        values["updated_time"] = datetime.datetime.now(datetime.timezone.utc)
+        values["updated_time"] = datetime.datetime.now(datetime.UTC)
         await self._session.execute(
             update(ImageRecord).where(ImageRecord.image_id == image_id).values(**values)
         )
@@ -139,7 +139,7 @@ class StorageRepository:
         return await self.update_fields(
             image_id,
             is_deleted=True,
-            deleted_at=datetime.datetime.now(datetime.timezone.utc),
+            deleted_at=datetime.datetime.now(datetime.UTC),
         )
 
     async def restore(self, image_id: str) -> ImageRecord | None:

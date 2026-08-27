@@ -26,18 +26,21 @@ export function useTheme(): ThemeContextValue {
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<ThemeName>("light");
-
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored && (THEMES as readonly string[]).includes(stored)) {
-        setThemeState(stored as ThemeName);
+  const [theme, setThemeState] = useState<ThemeName>(() => {
+    // Read localStorage synchronously during first render (client only).
+    // On the server this branch never runs, so no SSR mismatch.
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored && (THEMES as readonly string[]).includes(stored)) {
+          return stored as ThemeName;
+        }
+      } catch {
+        /* ignore */
       }
-    } catch {
-      /* ignore storage errors */
     }
-  }, []);
+    return "light";
+  });
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);

@@ -116,13 +116,9 @@ class GraphQLClient:
                 raise last
 
             if r.status_code == 403 or any(m in r.text.lower() for m in WAF_MARKERS):
-                last = DataHubConnectionError(
-                    f"HTTP 403 WAF: {_sanitize_error_text(r.text)}")
                 log.warning("graphql_waf_blocked", attempt=attempt)
-                if attempt < self._max_retries:
-                    _jittered_sleep(min(RETRY_BACKOFF * 2 ** (attempt - 1), RETRY_BACKOFF_MAX))
-                    continue
-                raise last
+                raise DataHubConnectionError(
+                    f"HTTP 403 WAF: {_sanitize_error_text(r.text)}")
             if r.status_code == 429:
                 last = DataHubConnectionError(
                     f"HTTP 429: {_sanitize_error_text(r.text)}")

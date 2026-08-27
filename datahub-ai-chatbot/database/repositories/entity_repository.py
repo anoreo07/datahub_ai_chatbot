@@ -2,7 +2,7 @@ import datetime
 import unicodedata
 from collections.abc import Sequence
 
-from sqlalchemy import delete as sa_delete
+from sqlalchemy import case, delete as sa_delete
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -60,7 +60,18 @@ class EntityRepository:
         )
         if entity_type:
             stmt = stmt.where(Entity.entity_type == entity_type)
-        stmt = stmt.order_by(Entity.name).limit(50)
+        stmt = stmt.order_by(
+            case(
+                (Entity.name.ilike(name), 1),
+                (Entity.display_name.ilike(name), 2),
+                (Entity.name.ilike(f"{name}%"), 3),
+                (Entity.display_name.ilike(f"{name}%"), 4),
+                (Entity.name.ilike(name_like), 5),
+                (Entity.display_name.ilike(name_like), 6),
+                else_=7,
+            ),
+            Entity.name,
+        ).limit(50)
         result = await self._session.execute(stmt)
         return result.scalars().all()
 

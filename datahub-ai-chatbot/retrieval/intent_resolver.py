@@ -39,6 +39,8 @@ from config.prompts import ACTION_RESOLUTION_PROMPT
 from config.settings import settings
 from llm.base import BaseLLM
 from retrieval.classifier import _first_json, regex_plan
+from retrieval.confirmation import ConfirmationDetector
+from retrieval.entity_detection import EntityNameDetector
 from retrieval.intent import QueryIntent, classify_intent, normalize_intent
 from retrieval.query_models import QueryPlan
 
@@ -90,6 +92,7 @@ _ACTIONS: dict[str, ActionSpec] = {
             "FIND_ENTITY", "DATASET_LOOKUP", "LISTING", "SEMANTIC_SEARCH",
             "RELATED_DATASETS", "MULTI_ENTITY_QUERY", "COMPOSITE_QUERY",
             "DOMAIN_QUERY", "PLATFORM_QUERY", "TAG_QUERY", "ENTITIES_BY_OWNER",
+            "GENERAL",
         }),
         entity_type="dataset",
         tool="hybrid_search",
@@ -103,8 +106,10 @@ _ACTIONS: dict[str, ActionSpec] = {
         title="Generate SQL",
         prompt="Generate SQL cho dataset ",
         canonical_intent="SQL_GENERATION",
-        expected_intents=frozenset({"FIND_ENTITY", "DATASET_LOOKUP", "SCHEMA_LOOKUP",
-                                    "SQL_GENERATION"}),
+        expected_intents=frozenset({
+            "FIND_ENTITY", "DATASET_LOOKUP", "SCHEMA_LOOKUP",
+            "SQL_GENERATION", "GENERAL", "TERM_DEFINITION",
+        }),
         entity_type="dataset",
         tool="sql_generator",
         clarification=(
@@ -117,7 +122,10 @@ _ACTIONS: dict[str, ActionSpec] = {
         title="Impact Analysis",
         prompt="Impact analysis cho dataset ",
         canonical_intent="IMPACT",
-        expected_intents=frozenset({"IMPACT", "RECURSIVE_IMPACT", "IMPACT_ANALYSIS", "LINEAGE"}),
+        expected_intents=frozenset({
+            "IMPACT", "RECURSIVE_IMPACT", "IMPACT_ANALYSIS", "LINEAGE",
+            "GENERAL", "TERM_DEFINITION", "FIND_ENTITY", "DATASET_LOOKUP", "SCHEMA_LOOKUP",
+        }),
         entity_type="dataset",
         tool="recursive_impact",
         clarification="Bạn muốn đánh giá ảnh hưởng hạ nguồn (impact analysis) cho dataset nào?",
@@ -127,7 +135,10 @@ _ACTIONS: dict[str, ActionSpec] = {
         title="Data Lineage",
         prompt="Data lineage của dataset ",
         canonical_intent="LINEAGE",
-        expected_intents=frozenset({"LINEAGE", "LINEAGE_UPSTREAM", "LINEAGE_DOWNSTREAM", "IMPACT"}),
+        expected_intents=frozenset({
+            "LINEAGE", "LINEAGE_UPSTREAM", "LINEAGE_DOWNSTREAM", "IMPACT",
+            "GENERAL", "TERM_DEFINITION", "FIND_ENTITY", "DATASET_LOOKUP",
+        }),
         entity_type="dataset",
         tool="lineage",
         clarification=(
@@ -139,8 +150,11 @@ _ACTIONS: dict[str, ActionSpec] = {
         kind="quality",
         title="Data Quality Check",
         prompt="Data quality check cho dataset ",
-        canonical_intent="GENERAL",
-        expected_intents=frozenset({"FIND_ENTITY", "DATASET_LOOKUP", "GENERAL"}),
+        canonical_intent="QUALITY_CHECK",
+        expected_intents=frozenset({
+            "QUALITY_CHECK", "FIND_ENTITY", "DATASET_LOOKUP", "GENERAL",
+            "TERM_DEFINITION", "SCHEMA_LOOKUP",
+        }),
         entity_type="dataset",
         tool="quality_check",
         clarification="Bạn muốn đánh giá chất lượng metadata (data quality) của dataset nào?",
@@ -149,8 +163,11 @@ _ACTIONS: dict[str, ActionSpec] = {
         kind="report",
         title="Metadata Report",
         prompt="Metadata report cho dataset ",
-        canonical_intent="GENERAL",
-        expected_intents=frozenset({"FIND_ENTITY", "DATASET_LOOKUP", "GENERAL"}),
+        canonical_intent="METADATA_REPORT",
+        expected_intents=frozenset({
+            "METADATA_REPORT", "FIND_ENTITY", "DATASET_LOOKUP", "GENERAL",
+            "TERM_DEFINITION", "SCHEMA_LOOKUP",
+        }),
         entity_type="dataset",
         tool="metadata_report",
         clarification="Bạn muốn tạo metadata report cho dataset nào?",
@@ -170,13 +187,14 @@ _EXPLICIT_METADATA_INTENTS = frozenset({
     QueryIntent.DOMAIN_QUERY, QueryIntent.TAG_QUERY, QueryIntent.PLATFORM_QUERY,
     QueryIntent.ENTITIES_BY_OWNER, QueryIntent.CERTIFIED_LIST, QueryIntent.DOCUMENT_QA,
     QueryIntent.DATAHUB_URL, QueryIntent.ENTITY_EXISTS, QueryIntent.LISTING,
-    QueryIntent.SQL_GENERATION,
+    QueryIntent.SQL_GENERATION, QueryIntent.QUALITY_CHECK, QueryIntent.METADATA_REPORT,
 })
 
 _INTENT_TOOL: dict[QueryIntent, str] = {
     QueryIntent.IMPACT: "recursive_impact",
     QueryIntent.LINEAGE: "lineage",
     QueryIntent.SCHEMA_LOOKUP: "schema_lookup",
+    QueryIntent.FIELD_PROPERTY: "schema_lookup",
     QueryIntent.TERM_DEFINITION: "glossary_lookup",
     QueryIntent.OWNER_LOOKUP: "owner_lookup",
     QueryIntent.ENTITY_EXISTS: "existence",
@@ -196,6 +214,9 @@ _INTENT_TOOL: dict[QueryIntent, str] = {
     QueryIntent.FIELD_LOOKUP: "schema_lookup",
     QueryIntent.DOMAIN_LOOKUP: "resolve_entity",
     QueryIntent.SQL_GENERATION: "sql_generator",
+    QueryIntent.QUALITY_CHECK: "quality_check",
+    QueryIntent.METADATA_REPORT: "metadata_report",
+    QueryIntent.COMPARISON: "comparison",
 }
 
 # Listing detection mirrors chat_service._detect_listing so the resolver can
@@ -259,18 +280,102 @@ def _has_entity(message: str) -> bool:
     return True
 
 
+_ACTION_PREFIX_RE = _re.compile(
+    r"^(?:(?:cho tôi xem|cho toi xem|cho xem|xem|vẽ|ve|hiển thị|hien thi|tạo|tao|kiểm tra|kiem tra|đánh giá|danh gia|phân tích|phan tich)\s+)?"
+    r"(?:visualize\s+)?(?:data\s+)?(?:lineage|linage|impact(?:\s+analysis)?|quality(?:\s+check)?|metadata\s+report|report|generate\s+sql|sql|search(?:\s+dataset)?|tìm\s+kiếm|tim\s+kiem|tìm|tim|tra\s+cứu|tra\s+cuu)\s*"
+    r"(?:(?:của|cho|cua|of|for)\s+)?"
+    r"(?:(?:dataset|dashboard|glossary(?:\s+term)?|document|bảng|bang|tài liệu|tai lieu)\s+)?"
+    r"([A-Za-z0-9][A-Za-z0-9 _\-.'&]{1,80})$",
+    _re.I,
+)
+
+
 def _extract_entity(message: str) -> str | None:
     """Best-guess entity token from the message (snake/dotted token, else short phrase)."""
+    clean_msg = message.strip().rstrip("?.!,;:")
+
+    # 0. Action prefix stripping (e.g. "Lineage của dataset PVB QDAT", "lineage PVB QDAT", "Impact PVB QDAT")
+    m_act = _ACTION_PREFIX_RE.match(clean_msg)
+    if m_act:
+        cand = m_act.group(1).strip()
+        if len(cand) >= 2 and not _re.match(
+            r"^(?:cho|cua|của|of|for|the|a|an|này|đó|nay|do|không|khong|tồn|ton|tại|tai)$", cand, _re.I
+        ):
+            return cand
+
+    # 1. Dotted path (schema.table)
     for m in _re.finditer(r"[A-Za-z0-9_]+(?:\.[A-Za-z0-9_]+)+", message):
-        return m.group(0)
+        tok = m.group(0)
+        if not _re.match(r"^\d+\.\d+$", tok):
+            return tok
+    # 2. Snake_case identifier
     for m in _re.finditer(r"[A-Za-z0-9]{2,}_[A-Za-z0-9_]+", message):
         return m.group(0)
-    if _extract_entity_candidate := _short_phrase(message):
-        return _extract_entity_candidate
+
+    # Metadata verb fragments and question particles that should not be part
+    # of an entity name. Covers Vietnamese and English.
+    _META_NOISE = {
+        "co", "có", "khong", "không", "chua", "chưa", "thieu", "thiếu", "thuoc", "thuộc", "tren", "trên", "nao", "nào",
+        "cung", "cũng", "nhung", "những", "va", "và", "hoac", "hoặc", "de", "để", "nay", "này", "do", "đó",
+        "nhu", "như", "the", "thế", "gi", "gì", "gii", "la", "là", "duoc", "được", "ton tai", "tồn tại",
+        "không tồn tại", "khong ton tai", "ko", "k",
+    }
+
+    # 0. Multi-word entity after Vietnamese/English dataset markers.
+    for m in _re.finditer(
+        r"(?:của|cho|cua|of|for|dataset|bang|bảng)\s+"
+        r"(?:dataset\s+)?"
+        r"([A-Za-z0-9][A-Za-z0-9 _\-.'&]{1,80})",
+        message, _re.I,
+    ):
+        candidate = m.group(1).strip().rstrip("?.!,;:")
+        # Skip if candidate is a stop word or too short
+        if len(candidate) >= 2 and not _re.match(
+            r"^(?:cho|cua|của|of|for|the|a|an|này|đó|nay|do|không|khong|tồn|ton|tại|tai)$", candidate, _re.I
+        ):
+            # Strip trailing metadata verb fragments: "account có lineage" → "account"
+            words = candidate.split()
+            clean = []
+            for w in words:
+                wl = w.lower()
+                if wl in _META_NOISE or _re.match(r"^[co]+$", wl):
+                    break
+                clean.append(w)
+            candidate = " ".join(clean) if clean else candidate
+            if len(candidate) >= 2 and not _re.match(
+                r"^(?:cho|cua|của|of|for|the|a|an|này|đó|nay|do|không|khong|tồn|ton|tại|tai)$", candidate, _re.I
+            ):
+                return candidate
+
+    # 0b. Single-word entity after entity type keyword.
+    _META_VERBS_Q = (
+        r"có|co|không|khong|không có|khong co|chưa có|chua co|thiếu|thieu|thuộc|thuoc|"
+        r"trên|tren|nào|nao|gì|gi|có thể|co the|được không|duoc khong|tồn tại|ton tai|bao nhiêu|bao nhieu"
+    )
+    m = _re.search(
+        rf"(?:dataset|dashboard|glossary(?:\s+term)?|document|bảng|bang"
+        rf"|tai lieu|tài liệu)\s+"
+        rf"(?!{_META_VERBS_Q}\b)"
+        r"([A-Za-z][A-Za-z0-9_\-]{0,40})",
+        message, _re.I,
+    )
+    if m:
+        candidate = m.group(1).strip().rstrip("?.!,;:")
+        if len(candidate) >= 2 and not _re.match(
+            r"^(?:cho|cua|của|of|for|the|a|an|này|đó|nay|do|không|khong|tồn|ton|tại|tai)$", candidate, _re.I
+        ):
+            return candidate
+
+    # 3. Short phrase fallback
+    if not _anon_is_anaphora(clean_msg):
+        if _extract_entity_candidate := _short_phrase(message):
+            return _extract_entity_candidate
     return None
 
 
 def _short_phrase(message: str) -> str | None:
+    if _anon_is_anaphora(message):
+        return None
     n = _norm(message)
     if not n or _CAPABILITY_VERBS.search(n):
         return None
@@ -412,8 +517,53 @@ class IntentResolver:
     async def resolve(self, message: str, selected_action: str | None = None,
                       history: list[tuple[str, str]] | None = None,
                       trace_id: str | None = None) -> IntentResolution:
+        # --- 0. Check for confirmation/denial of previous suggestion ---
+        # Stateless detection: reads conversation history, no server-side state.
+        if history:
+            detector = ConfirmationDetector()
+            confirmation = detector.detect(message, history)
+            if confirmation.action in ("confirm", "deny"):
+                log.info("confirmation_detected", trace_id=trace_id,
+                         action=confirmation.action,
+                         entity=confirmation.entity_name,
+                         confidence=confirmation.confidence,
+                         reason=confirmation.reason)
+                return IntentResolution(
+                    selected_action=selected_action,
+                    message_intent=QueryIntent.GENERAL,
+                    intent=QueryIntent.GENERAL,
+                    decision=confirmation.action,
+                    confidence="high" if confirmation.confidence >= 0.8 else "medium",
+                    chosen_tool="hybrid_search",
+                    entity_hint=confirmation.entity_name,
+                    effective_question=message,
+                    plan=regex_plan(message),
+                    framed=False,
+                    trace_id=trace_id,
+                    override_reason=confirmation.reason,
+                )
+
         msg_intent = self._message_intent(message)
         plan = regex_plan(message)
+
+        # --- Entity name detection ---
+        # When the query looks like an entity name (snake_case, dotted path,
+        # quoted, high proper-noun ratio) AND no action is selected, override
+        # the intent to FIND_ENTITY so it routes through entity resolution fast path.
+        # When an action IS selected, let the existing action-routing logic handle it.
+        if not selected_action or selected_action not in _ACTIONS:
+            detector = EntityNameDetector()
+            entity_signal = detector.detect(message)
+            if (entity_signal.is_entity_name
+                    and msg_intent in (QueryIntent.GENERAL, QueryIntent.SCHEMA_LOOKUP)
+                    and entity_signal.extracted_tokens):
+                entity_hint = " ".join(entity_signal.extracted_tokens)
+                msg_intent = QueryIntent.FIND_ENTITY
+                plan.intent = QueryIntent.FIND_ENTITY
+                log.info("entity_name_detected", trace_id=trace_id,
+                         question=message[:100], signals=entity_signal.signals,
+                         confidence=entity_signal.confidence,
+                         entity_hint=entity_hint)
 
         if not selected_action or selected_action not in _ACTIONS:
             chosen = self._tool_for(msg_intent, plan)
@@ -425,7 +575,7 @@ class IntentResolver:
             )
 
         action = _ACTIONS[selected_action]
-        intent = msg_intent
+        intent = _intent_enum(action.canonical_intent)
         decision = "agree"
         confidence = "high"
         eff_question = message
@@ -434,75 +584,76 @@ class IntentResolver:
         framed = False
         clarification: str | None = None
 
+        anaphor_entity = None
+        if _anon_is_anaphora(message):
+            anaphor_entity = _resolve_anaphora_from_history(history)
+
+        extracted_ent = _extract_entity(message)
+
         # --- 1. Explicit conversational / clear request overrides the action ----
         if msg_intent in (QueryIntent.GREETING, QueryIntent.CHITCHAT):
             decision, confidence = "override", "high"
+            intent = msg_intent
             override_reason = (
                 f"message is {msg_intent.value.lower()}; the explicit conversational "
                 f"request wins over the selected action '{selected_action}'"
             )
-        elif msg_intent in {QueryIntent(i) for i in action.expected_intents}:
-            # --- 2. The message already expresses the action's intent -> agree ------
-            decision, confidence = "agree", "high"
-            intent = msg_intent
-            entity_hint = _extract_entity(message)
-        elif msg_intent in _EXPLICIT_METADATA_INTENTS:
-            # --- 3. Message expresses a different, explicit metadata intent -> override ---
+        # --- 2. Explicit conflicting metadata intent overrides action -----------
+        elif (
+            msg_intent in _EXPLICIT_METADATA_INTENTS
+            and msg_intent.value not in action.expected_intents
+            and msg_intent not in (
+                QueryIntent.GENERAL,
+                QueryIntent.FIND_ENTITY,
+                QueryIntent.DATASET_LOOKUP,
+                QueryIntent.SCHEMA_LOOKUP,
+            )
+        ):
             decision, confidence = "override", "high"
             intent = msg_intent
-            entity_hint = _extract_entity(message)
+            entity_hint = extracted_ent
             override_reason = (
                 f"message expresses explicit intent {msg_intent.value}, which conflicts with "
                 f"the selected action '{selected_action}'; prioritizing the user's explicit request"
             )
-        elif msg_intent == QueryIntent.GENERAL and _anon_is_anaphora(message):
-            # --- 4. Anaphoric follow-up ("nó", "this") -> resolve the entity from history ----
+        # --- 3. Anaphoric follow-up ("nó", "this", "dataset này") -> resolve from history ---
+        elif anaphor_entity:
+            entity_hint = anaphor_entity
+            decision, confidence, intent = "agree", "high", _intent_enum(action.canonical_intent)
+            eff_question = f"{action.prompt.strip()} {anaphor_entity}".strip()
+            framed = True
+        # --- 4. Entity provided in message (short or full query) under the action ---
+        elif extracted_ent:
+            entity_hint = extracted_ent
+            decision, confidence, intent = "agree", "high", _intent_enum(action.canonical_intent)
+            eff_question = f"{action.prompt.strip()} {extracted_ent}".strip()
+            framed = True
+        # --- 5. Message has no explicit entity but is under an active action context ---
+        else:
+            hist_entity = _resolve_anaphora_from_history(history)
+            if hist_entity:
+                entity_hint = hist_entity
+                decision, confidence, intent = "agree", "high", _intent_enum(action.canonical_intent)
+                eff_question = f"{action.prompt.strip()} {hist_entity}: {message}".strip()
+                framed = True
+            elif selected_action == "search":
+                # General semantic discovery search
+                decision, confidence, intent = "agree", "high", QueryIntent.FIND_ENTITY
+                eff_question = message
+                entity_hint = message
+                framed = False
+            else:
+                decision, confidence, intent = "clarify", "low", _intent_enum(action.canonical_intent)
+                clarification = action.clarification
+
+        if entity_hint and _anon_is_anaphora(entity_hint):
             ref_entity = _resolve_anaphora_from_history(history)
             if ref_entity:
                 entity_hint = ref_entity
-                llm = await self._llm_decision(action, message, history, trace_id)
-                if llm is not None and llm.decision == "override":
-                    decision, intent, confidence = (
-                        "override", _intent_enum(llm.intent), llm.confidence)
-                    override_reason = llm.reason or "LLM detected a different explicit intent"
-                    eff_question = message
-                elif llm is not None and llm.decision == "clarify":
-                    decision, confidence, intent = (
-                        "clarify", "low", _intent_enum(action.canonical_intent))
-                    clarification = action.clarification
-                else:
-                    decision, confidence, intent = (
-                        "agree", "high", _intent_enum(action.canonical_intent))
-                    eff_question = f"{action.prompt.strip()} {ref_entity}".strip()
-                    framed = True
-            else:
-                decision, confidence, intent = (
-                    "clarify", "low", _intent_enum(action.canonical_intent))
-                clarification = action.clarification
-        elif msg_intent == QueryIntent.GENERAL and _extract_entity(message):
-            # --- 4. Bare entity (or short entity fragment) under the action ---
-            entity_hint = _extract_entity(message)
-            llm = await self._llm_decision(action, message, history, trace_id)
-            if llm is not None and llm.decision == "override":
-                decision, intent, confidence = "override", _intent_enum(llm.intent), llm.confidence
-                override_reason = llm.reason or "LLM detected a different explicit intent"
-                eff_question = message
-                if llm.entity:
-                    entity_hint = llm.entity
-            elif llm is not None and llm.decision == "clarify":
-                decision, confidence, intent = (
-                    "clarify", "low", _intent_enum(action.canonical_intent))
-                clarification = action.clarification
-            else:
-                decision, confidence, intent = (
-                    "agree", "high", _intent_enum(action.canonical_intent))
-                eff_question = f"{action.prompt.strip()} {entity_hint}".strip()
-                framed = True
-        else:
-            # --- 5. GENERAL with no usable entity -> ambiguous -> ask ---------------
-            decision, confidence, intent = (
-                "clarify", "low", _intent_enum(action.canonical_intent))
-            clarification = action.clarification
+        elif not entity_hint and _anon_is_anaphora(message):
+            ref_entity = _resolve_anaphora_from_history(history)
+            if ref_entity:
+                entity_hint = ref_entity
 
         plan = self._finalize_plan(action, plan, intent, entity_hint, framed)
         chosen_tool = self._tool_for(intent, plan)

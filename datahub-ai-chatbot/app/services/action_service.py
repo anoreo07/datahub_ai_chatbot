@@ -252,12 +252,18 @@ class ActionService:
     # ------------------------------------------------------------------ #
     # Shared retrieval helpers
     # ------------------------------------------------------------------ #
-    async def resolve_dataset(
-        self, query: str, *, user: UserContext | None = None
+    async def resolve_entity(
+        self, query: str, *, user: UserContext | None = None, entity_type: str | None = None
     ) -> Entity | None:
         if not query:
             return None
-        resolution = await self._resolver.resolve(query, entity_type="dataset")
+        clean_q = query.strip()
+        # Strip common prefixes like 'dataset ', 'dashboard ', 'table ', 'bảng '
+        clean_q = re.sub(r"^(?:dataset|dashboard|chart|table|bảng|bang|thực thể|entity)\s+", "", clean_q, flags=re.I).strip()
+        resolution = await self._resolver.resolve(clean_q, entity_type=entity_type)
+        if not resolution.resolved and entity_type is not None:
+            # Fallback across all entity types if specific entity_type didn't match
+            resolution = await self._resolver.resolve(clean_q, entity_type=None)
         if not resolution.resolved:
             return None
         entity = await self._repo.get_by_urn(resolution.resolved.urn)
@@ -275,6 +281,11 @@ class ActionService:
                     raise PermissionDeniedError(message, domain=domain)
         return entity
 
+    async def resolve_dataset(
+        self, query: str, *, user: UserContext | None = None
+    ) -> Entity | None:
+        return await self.resolve_entity(query, user=user, entity_type="dataset")
+
     async def _is_accessible(self, user: UserContext, urn: str) -> bool:
         if self._auth_service is None:
             return True
@@ -288,7 +299,7 @@ class ActionService:
         return out
 
     async def _lineage_urns(self, urn: str) -> tuple[list[str], list[str]]:
-        """Live upstream/downstream URNs retrieved from the DataHub source."""
+        """Live upstream/downstream URNs retrieved from the DataHub source with DB fallback."""
         upstreams: list[str] = []
         downstreams: list[str] = []
         try:
@@ -300,6 +311,18 @@ class ActionService:
                            if (r.get("entity") or {}).get("urn")]
         except Exception:
             log.exception("action_lineage_failed", urn=urn)
+
+        # Fallback to local DB synced payload if remote GraphQL was empty or blocked
+        if not upstreams and not downstreams:
+            entity = await self._repo.get_by_urn(urn)
+            if entity and entity.payload:
+                payload_up = entity.payload.get("upstreams") or []
+                payload_down = entity.payload.get("downstreams") or []
+                if isinstance(payload_up, list):
+                    upstreams = [u for u in payload_up if isinstance(u, str)]
+                if isinstance(payload_down, list):
+                    downstreams = [d for d in payload_down if isinstance(d, str)]
+
         return upstreams, downstreams
 
     async def build_lineage_data(self, urn: str, name: str, url: str | None) -> LineageData | None:
@@ -548,6 +571,20 @@ class ActionService:
                     lines.append(f"WHERE {clause}")
                 else:
                     lines.append(f"  AND {clause}")
+
+        order_m = re.search(r"(?:sắp xếp|sap xep|order by)\s+(?:theo\s+)?([a-z0-9_]+)\s*(giảm dần|giam dan|desc|tăng dần|tang dan|asc)?", question, re.I)
+        if order_m:
+            order_col_raw = order_m.group(1)
+            order_dir = "DESC" if order_m.group(2) and any(d in order_m.group(2).lower() for d in ["giảm", "giam", "desc"]) else "ASC"
+            order_col_match = next((c for c in selected if _norm(c) == _norm(order_col_raw)), None)
+            if order_col_match:
+                lines.append(f"ORDER BY {alias}.{order_col_match} {order_dir}")
+
+        limit_m = re.search(r"(?:lấy|lay|top|limit)\s*(\d+)\s*(?:dòng|dong|bản ghi|ban ghi|rows|records)?", question, re.I)
+        if limit_m:
+            limit_n = int(limit_m.group(1))
+            lines.append(f"LIMIT {limit_n}")
+
         sql = "\n".join(lines)
 
         explanation: list[str] = []
@@ -667,21 +704,22 @@ class ActionService:
     # ------------------------------------------------------------------ #
     # 6. Data Quality Check
     # ------------------------------------------------------------------ #
-    async def quality_check(self, dataset_query: str,
-                            user: UserContext | None = None) -> QualityReport:
+    async def quality_check(
+        self, dataset_query: str,
+        user: UserContext | None = None,
+        entity_type: str | None = None,
+    ) -> QualityReport:
         """Build a professional, deterministic Data Quality Report.
 
-        When profiling data is available (``payload['profiling']``) real metrics
-        are computed: NULL %, duplicate rate, record-count anomalies, schema
-        drift, freshness. Otherwise the report gracefully falls back to metadata
-        quality checks (description, owner, tags, glossary, domain, schema
-        completeness, lineage, deprecation, assertions) and clearly lists which
-        checks could not be evaluated.
+        Supports Datasets, Dashboards, Charts, Documents, and Glossary Terms.
+        When profiling data is available in DataHub (payload['profiling']) real metrics
+        are computed. Missing/N/A/Not-evaluated fields are clearly distinguished.
         """
-        entity = await self.resolve_dataset(dataset_query, user=user)
+        entity = await self.resolve_entity(dataset_query, user=user, entity_type=entity_type)
         if entity is None:
-            return QualityReport(dataset=dataset_query, valid=False)
+            return QualityReport(dataset=dataset_query, entity_name=dataset_query, valid=False)
 
+        real_type = (entity.entity_type or "dataset").lower()
         payload = entity.payload or {}
         generated_at = QualityReport.now_iso()
         generated_by = ""
@@ -691,33 +729,46 @@ class ActionService:
         profiling = _profiling_stats(payload)
         profiling_available = profiling is not None
 
-        description = (payload.get("description") or "").strip()
+        description = (entity.description or payload.get("description") or "").strip()
         owners = _owner_names(payload)
         tags = [str(t) for t in (payload.get("tags") or [])]
         glossary = [str(g) for g in (payload.get("glossary_terms") or [])]
-        domain = (payload.get("domain") or "").strip()
-        platform = (payload.get("platform") or "").strip()
-        environment = (payload.get("environment") or "").strip()
+        domain = (entity.domain or payload.get("domain") or "").strip()
+        platform = (entity.platform or payload.get("platform") or "").strip()
+        environment = (entity.environment or payload.get("environment") or "").strip()
         schema = _schema_columns(payload)
         deprecated = bool(payload.get("deprecated"))
         assertions = payload.get("assertions") or []
         upstreams, downstreams = await self._lineage_urns(entity.urn)
         has_lineage = bool(upstreams or downstreams)
 
+        missing_fields: list[str] = []
+        not_applicable_fields: list[str] = []
+
         def section(key: str, title: str, findings: list[QualityFinding]) -> QualitySection:
+            # If all findings are NOT_APPLICABLE, the entire section is NOT_APPLICABLE with score 100
+            if all(f.status == QualityStatus.NOT_APPLICABLE for f in findings):
+                return QualitySection(key=key, title=title, score=100,
+                                      status=QualityStatus.NOT_APPLICABLE, findings=findings)
+
             score = 100
-            for f in findings:
+            applicable_findings = [f for f in findings if f.status != QualityStatus.NOT_APPLICABLE]
+            for f in applicable_findings:
                 if f.status == QualityStatus.FAILED:
                     score -= 45
                 elif f.status == QualityStatus.WARNING:
                     score -= 18
+                elif f.status == QualityStatus.SOURCE_ERROR:
+                    score -= 50
             score = max(0, min(100, score))
-            status = QualityStatus.PASSED
-            if any(f.status == QualityStatus.FAILED for f in findings):
+
+            if any(f.status == QualityStatus.FAILED for f in applicable_findings):
                 status = QualityStatus.FAILED
-            elif any(f.status == QualityStatus.WARNING for f in findings):
+            elif any(f.status == QualityStatus.WARNING for f in applicable_findings):
                 status = QualityStatus.WARNING
-            elif any(f.status == QualityStatus.PASSED for f in findings):
+            elif any(f.status == QualityStatus.SOURCE_ERROR for f in applicable_findings):
+                status = QualityStatus.SOURCE_ERROR
+            elif any(f.status == QualityStatus.PASSED for f in applicable_findings):
                 status = QualityStatus.PASSED
             else:
                 status = QualityStatus.NOT_EVALUATED
@@ -726,274 +777,6 @@ class ActionService:
 
         sections: list[QualitySection] = []
         not_evaluated: list[str] = []
-
-        # ---------------- Metadata ----------------
-        meta: list[QualityFinding] = []
-        if deprecated:
-            meta.append(QualityFinding(
-                name="Deprecation status", status=QualityStatus.FAILED,
-                detail="Dataset bị đánh dấu deprecated, không nên dùng cho báo cáo mới."))
-        else:
-            meta.append(QualityFinding(
-                name="Deprecation status", status=QualityStatus.PASSED,
-                detail="Dataset chưa bị deprecated."))
-        if not description:
-            meta.append(QualityFinding(
-                name="Business description", status=QualityStatus.FAILED,
-                detail="Thiếu mô tả business."))
-        elif len(description) < 50:
-            meta.append(QualityFinding(
-                name="Business description", status=QualityStatus.WARNING,
-                detail=(f"Mô tả quá ngắn ({len(description)} ký tự), "
-                        "nên mở rộng ngữ cảnh nghiệp vụ."),
-                value=f"{len(description)} ký tự"))
-        else:
-            meta.append(QualityFinding(
-                name="Business description", status=QualityStatus.PASSED,
-                detail="Mô tả business đầy đủ.", value=f"{len(description)} ký tự"))
-        if owners:
-            meta.append(QualityFinding(
-                name="Ownership", status=QualityStatus.PASSED,
-                detail=f"Owner: {', '.join(owners)}.", value=str(len(owners))))
-        else:
-            meta.append(QualityFinding(
-                name="Ownership", status=QualityStatus.FAILED,
-                detail="Chưa gán owner — không rõ ai chịu trách nhiệm dữ liệu."))
-        if tags:
-            meta.append(QualityFinding(
-                name="Tags", status=QualityStatus.PASSED,
-                detail="Có tag phân loại.", value=str(len(tags))))
-        else:
-            meta.append(QualityFinding(
-                name="Tags", status=QualityStatus.WARNING,
-                detail="Chưa có tag — khó tìm kiếm và phân loại."))
-        if glossary:
-            meta.append(QualityFinding(
-                name="Glossary terms", status=QualityStatus.PASSED,
-                detail="Dataset được gắn glossary term nghiệp vụ.",
-                value=str(len(glossary))))
-        else:
-            meta.append(QualityFinding(
-                name="Glossary terms", status=QualityStatus.WARNING,
-                detail="Chưa gắn glossary term — thiếu ngữ nghĩa chuẩn hoá."))
-        if domain:
-            meta.append(QualityFinding(
-                name="Domain", status=QualityStatus.PASSED,
-                detail=f"Thuộc domain {domain}.", value=domain))
-        else:
-            meta.append(QualityFinding(
-                name="Domain", status=QualityStatus.WARNING,
-                detail="Chưa gán domain — thiếu cơ chế quản trị theo phòng ban."))
-        if platform and environment:
-            meta.append(QualityFinding(
-                name="Platform & environment", status=QualityStatus.PASSED,
-                detail=f"Chạy trên {platform} · {environment}.",
-                value=f"{platform}/{environment}"))
-        else:
-            meta.append(QualityFinding(
-                name="Platform & environment", status=QualityStatus.WARNING,
-                detail="Thiếu thông tin platform/environment."))
-        sections.append(section("metadata", "Metadata", meta))
-
-        # ---------------- Schema ----------------
-        schema_findings: list[QualityFinding] = []
-        if not schema:
-            schema_findings.append(QualityFinding(
-                name="Schema presence", status=QualityStatus.FAILED,
-                detail="Dataset không có schema nào được ghi nhận trong DataHub."))
-        else:
-            schema_findings.append(QualityFinding(
-                name="Schema presence", status=QualityStatus.PASSED,
-                detail="Schema có sẵn.", value=f"{len(schema)} cột"))
-            with_type = sum(1 for f in schema if (f.get("type") or f.get("native_data_type")))
-            if with_type == len(schema):
-                schema_findings.append(QualityFinding(
-                    name="Column types", status=QualityStatus.PASSED,
-                    detail="Tất cả cột đều có kiểu dữ liệu."))
-            elif with_type > 0:
-                schema_findings.append(QualityFinding(
-                    name="Column types", status=QualityStatus.WARNING,
-                    detail=f"{len(schema) - with_type} cột thiếu kiểu dữ liệu.",
-                    value=f"{with_type}/{len(schema)}"))
-            else:
-                schema_findings.append(QualityFinding(
-                    name="Column types", status=QualityStatus.FAILED,
-                    detail="Không cột nào có kiểu dữ liệu."))
-            documented = sum(1 for f in schema if (f.get("description") or "").strip())
-            doc_ratio = documented / len(schema)
-            if doc_ratio >= 0.8:
-                schema_findings.append(QualityFinding(
-                    name="Column documentation", status=QualityStatus.PASSED,
-                    detail="Hầu hết cột có mô tả.",
-                    value=f"{documented}/{len(schema)}"))
-            elif doc_ratio >= 0.5:
-                schema_findings.append(QualityFinding(
-                    name="Column documentation", status=QualityStatus.WARNING,
-                    detail="Một phần cột thiếu mô tả.",
-                    value=f"{documented}/{len(schema)}"))
-            else:
-                schema_findings.append(QualityFinding(
-                    name="Column documentation", status=QualityStatus.WARNING,
-                    detail="Ít cột có mô tả — schema khó hiểu.",
-                    value=f"{documented}/{len(schema)}"))
-        if profiling is not None and profiling.get("schema_drift"):
-            drift = profiling["schema_drift"]
-            drift_status = (
-                QualityStatus.PASSED if not drift.get("detected") else QualityStatus.FAILED
-            )
-            schema_findings.append(QualityFinding(
-                name="Schema drift", status=drift_status,
-                detail=(f"Schema thay đổi không khớp "
-                        f"({drift.get('detail') or 'phát hiện thay đổi'})."
-                        if drift.get("detected")
-                        else "Không phát hiện thay đổi schema bất thường.")))
-        else:
-            schema_findings.append(QualityFinding(
-                name="Schema drift", status=QualityStatus.NOT_EVALUATED,
-                detail="Không thể đánh giá — thiếu dữ liệu profiling schema drift."))
-            not_evaluated.append("Schema drift")
-        sections.append(section("schema", "Schema", schema_findings))
-
-        # ---------------- Completeness (data) ----------------
-        comp_findings: list[QualityFinding] = []
-        if profiling is not None and profiling.get("column_stats"):
-            stats = profiling["column_stats"]
-            null_rates = [float(c.get("null_rate", 0.0) or c.get("null_percentage", 0.0) or 0.0)
-                          for c in stats]
-            worst = sorted(stats, key=lambda c: float(c.get("null_rate", 0.0) or 0.0),
-                           reverse=True)[:3]
-            avg_null = sum(null_rates) / len(null_rates) if null_rates else 0.0
-            comp_findings.append(QualityFinding(
-                name="Record completeness (non-null)", status=(
-                    QualityStatus.PASSED if avg_null < 5 else
-                    QualityStatus.WARNING if avg_null < 20 else QualityStatus.FAILED),
-                detail=f"Trung bình {avg_null:.1f}% giá trị NULL trên các cột.",
-                value=f"{100 - avg_null:.1f}%"))
-            for c in worst:
-                rate = float(c.get("null_rate", 0.0) or 0.0)
-                if rate > 0:
-                    comp_findings.append(QualityFinding(
-                        name=f"NULL rate — {c.get('name')}", status=(
-                            QualityStatus.PASSED if rate < 5 else
-                            QualityStatus.WARNING if rate < 20 else QualityStatus.FAILED),
-                        detail=("Không có NULL." if rate == 0 else f"{rate:.1f}% giá trị NULL."),
-                        value=f"{rate:.1f}%"))
-        else:
-            comp_findings.append(QualityFinding(
-                name="Completeness (NULL %)",
-                status=QualityStatus.NOT_EVALUATED,
-                detail="Không thể tính NULL percentage — thiếu dữ liệu profiling."))
-            not_evaluated.append("Completeness (NULL percentage)")
-        sections.append(section("completeness", "Completeness", comp_findings))
-
-        # ---------------- Uniqueness ----------------
-        uni_findings: list[QualityFinding] = []
-        if profiling is not None and profiling.get("duplicate_rate") is not None:
-            dup = float(profiling["duplicate_rate"])
-            uni_findings.append(QualityFinding(
-                name="Duplicate rate", status=(
-                    QualityStatus.PASSED if dup == 0 else
-                    QualityStatus.WARNING if dup < 5 else QualityStatus.FAILED),
-                detail=f"Tỉ lệ bản ghi trùng lặp {dup:.2f}%.", value=f"{dup:.2f}%"))
-        else:
-            uni_findings.append(QualityFinding(
-                name="Duplicate rate",
-                status=QualityStatus.NOT_EVALUATED,
-                detail="Không thể tính duplicate rate — thiếu dữ liệu profiling."))
-            not_evaluated.append("Duplicate rate")
-        sections.append(section("uniqueness", "Uniqueness", uni_findings))
-
-        # ---------------- Validity ----------------
-        val_findings: list[QualityFinding] = []
-        if assertions:
-            val_findings.append(QualityFinding(
-                name="Assertions", status=QualityStatus.PASSED,
-                detail="Có assertions giám sát dữ liệu.", value=str(len(assertions))))
-        else:
-            val_findings.append(QualityFinding(
-                name="Assertions", status=QualityStatus.WARNING,
-                detail="Chưa có assertions — không có ràng buộc giám sát tự động."))
-        if profiling is not None and profiling.get("column_stats"):
-            bad_types = [c for c in profiling["column_stats"]
-                         if c.get("type_validity") and float(c["type_validity"]) < 0.9]
-            if bad_types:
-                val_findings.append(QualityFinding(
-                    name="Type validity", status=QualityStatus.FAILED,
-                    detail=f"{len(bad_types)} cột có dữ liệu sai kiểu.",
-                    value=str(len(bad_types))))
-            else:
-                val_findings.append(QualityFinding(
-                    name="Type validity", status=QualityStatus.PASSED,
-                    detail="Kiểu dữ liệu của cột khớp với dữ liệu lưu trữ."))
-        else:
-            val_findings.append(QualityFinding(
-                name="Type validity (profiling)",
-                status=QualityStatus.NOT_EVALUATED,
-                detail="Không thể kiểm tra kiểu dữ liệu — thiếu profiling."))
-            not_evaluated.append("Type validity (profiling)")
-        sections.append(section("validity", "Validity", val_findings))
-
-        # ---------------- Consistency ----------------
-        con_findings: list[QualityFinding] = []
-        if profiling is not None and profiling.get("row_count") is not None:
-            row_count = int(profiling["row_count"])
-            delta = profiling.get("row_count_delta_pct")
-            if delta is None:
-                con_findings.append(QualityFinding(
-                    name="Record count", status=QualityStatus.PASSED,
-                    detail=(f"Tổng số bản ghi {row_count} — không có dữ liệu "
-                            "lịch sử để so sánh."),
-                    value=str(row_count)))
-            else:
-                con_findings.append(QualityFinding(
-                    name="Record count anomaly", status=(
-                        QualityStatus.PASSED if abs(float(delta)) < 20 else QualityStatus.FAILED),
-                    detail=f"Số bản ghi thay đổi {float(delta):+.1f}% so với kỳ trước.",
-                    value=f"{delta:+.1f}%"))
-        else:
-            con_findings.append(QualityFinding(
-                name="Record count anomaly",
-                status=QualityStatus.NOT_EVALUATED,
-                detail="Không thể đánh giá biến động số bản ghi — thiếu profiling."))
-            not_evaluated.append("Record count anomaly")
-        if platform and domain:
-            con_findings.append(QualityFinding(
-                name="Metadata consistency",
-                status=QualityStatus.PASSED,
-                detail="Platform và domain nhất quán trong metadata."))
-        sections.append(section("consistency", "Consistency", con_findings))
-
-        # ---------------- Freshness ----------------
-        fresh_findings: list[QualityFinding] = []
-        freshness = payload.get("freshness")
-        if isinstance(freshness, dict) and freshness.get("last_updated"):
-            last_updated = str(freshness.get("last_updated"))
-            frequency = str(freshness.get("frequency") or "không rõ tần suất")
-            fresh_findings.append(QualityFinding(
-                name="Freshness", status=QualityStatus.PASSED,
-                detail=f"Dữ liệu cập nhật lần cuối {last_updated} (tần suất {frequency}).",
-                value=last_updated))
-        else:
-            fresh_findings.append(QualityFinding(
-                name="Freshness",
-                status=QualityStatus.NOT_EVALUATED,
-                detail="Không thể đánh giá — thiếu thông tin freshness/profiling."))
-            not_evaluated.append("Freshness")
-        sections.append(section("freshness", "Freshness", fresh_findings))
-
-        # ---------------- Lineage ----------------
-        if has_lineage:
-            lineage_findings = [QualityFinding(
-                name="Lineage coverage", status=QualityStatus.PASSED,
-                detail=f"{len(upstreams)} upstream, {len(downstreams)} downstream.",
-                value=f"{len(upstreams)}↑/{len(downstreams)}↓")]
-        else:
-            lineage_findings = [QualityFinding(
-                name="Lineage coverage", status=QualityStatus.FAILED,
-                detail="Không có lineage upstream/downstream — khó truy vết nguồn dữ liệu.")]
-        sections.append(section("lineage", "Lineage", lineage_findings))
-
-        # ---------------- Recommendations ----------------
         recommendations: list[QualityRecommendation] = []
         seen = set()
 
@@ -1003,57 +786,426 @@ class ActionService:
             seen.add(text)
             recommendations.append(QualityRecommendation(priority=priority, text=text))
 
+        # ---------------- Metadata Section ----------------
+        meta: list[QualityFinding] = []
         if deprecated:
-            _rec("high", "Dataset đang bị deprecated. Chuyển sang dataset thay thế "
-                          "và cập nhật tài liệu tiêu thụ.")
-        if not description or len(description) < 50:
-            _rec("high", "Bổ sung mô tả business đầy đủ (tối thiểu 50 ký tự) "
-                          "để ngữ cảnh hoá dữ liệu.")
-        if not owners:
-            _rec("high", "Gán owner chịu trách nhiệm dữ liệu để quản trị trách nhiệm rõ ràng.")
-        if not tags:
-            _rec("medium", "Thêm tag phân loại (PII, Gold/Silver/Bronze, phòng ban…) "
-                            "để dễ tìm kiếm.")
-        if not glossary:
-            _rec("medium", "Gắn glossary term tương ứng để chuẩn hoá ngữ nghĩa nghiệp vụ.")
-        if not domain:
-            _rec("high", "Gán dataset vào một domain để áp dụng chính sách truy cập "
-                          "theo phòng ban.")
-        if not assertions:
-            _rec("medium", "Thiết lập assertions (freshness, NULL threshold, volume) "
-                            "để giám sát tự động.")
-        if not has_lineage:
-            _rec("high", "Thiết lập lineage để theo dõi luồng dữ liệu và đánh giá "
-                          "tác động hạ nguồn.")
-        if profiling_available:
-            worst_nulls = None
-            if profiling and profiling.get("column_stats"):
-                stats = profiling["column_stats"]
-                bad = [c for c in stats
-                       if float(c.get("null_rate", 0.0) or 0.0) >= 20]
-                if bad:
-                    worst_nulls = ", ".join(str(c.get("name")) for c in bad[:5])
-                    _rec("high", f"Cột {worst_nulls} có tỉ lệ NULL cao (>=20%) — "
-                                  "kiểm tra nguồn dữ liệu và quy trình nhập liệu.")
-            dup = profiling.get("duplicate_rate") if profiling else None
-            if dup is not None and float(dup) > 0:
-                _rec("high", f"Phát hiện {float(dup):.2f}% bản ghi trùng lặp — cần "
-                              "định nghĩa khoá duy nhất (PK) và thêm assertion uniqueness.")
-            delta = profiling.get("row_count_delta_pct") if profiling else None
-            if delta is not None and abs(float(delta)) >= 20:
-                _rec("medium", f"Số bản ghi biến động {float(delta):+.1f}% so với kỳ trước "
-                                "— kiểm tra pipeline ingestion.")
+            meta.append(QualityFinding(
+                name="Deprecation status", status=QualityStatus.FAILED,
+                detail=f"{real_type.capitalize()} bị đánh dấu deprecated, không nên dùng cho báo cáo mới.",
+                source="metadata"))
+            missing_fields.append("not_deprecated")
+            _rec("high", f"{real_type.capitalize()} đang bị deprecated. Cần chuyển sang phiên bản thay thế.")
         else:
-            _rec("medium", "Bật profiling (null %, duplicate %, row count) để đánh giá "
-                            "Completeness/Uniqueness/Consistency thực tế.")
+            meta.append(QualityFinding(
+                name="Deprecation status", status=QualityStatus.PASSED,
+                detail=f"{real_type.capitalize()} đang hoạt động bình thường (chưa bị deprecated).",
+                source="metadata"))
 
-        evaluated_sections = [s for s in sections if s.status != QualityStatus.NOT_EVALUATED]
+        if not description:
+            meta.append(QualityFinding(
+                name="Business description", status=QualityStatus.FAILED,
+                detail="Thiếu mô tả nghiệp vụ (business description).",
+                source="metadata"))
+            missing_fields.append("description")
+            _rec("high", f"Bổ sung mô tả nghiệp vụ đầy đủ cho {real_type} để người dùng hiểu rõ mục đích sử dụng.")
+        elif len(description) < 30:
+            meta.append(QualityFinding(
+                name="Business description", status=QualityStatus.WARNING,
+                detail=f"Mô tả quá ngắn ({len(description)} ký tự), nên bổ sung chi tiết nghiệp vụ.",
+                value=f"{len(description)} ký tự",
+                source="metadata"))
+            _rec("medium", f"Mở rộng mô tả nghiệp vụ (tối thiểu 50 ký tự) cho {real_type}.")
+        else:
+            meta.append(QualityFinding(
+                name="Business description", status=QualityStatus.PASSED,
+                detail="Mô tả nghiệp vụ đầy đủ.",
+                value=f"{len(description)} ký tự",
+                source="metadata"))
+
+        if owners:
+            meta.append(QualityFinding(
+                name="Ownership", status=QualityStatus.PASSED,
+                detail=f"Owner: {', '.join(owners)}.",
+                value=str(len(owners)),
+                source="metadata"))
+        else:
+            meta.append(QualityFinding(
+                name="Ownership", status=QualityStatus.FAILED,
+                detail="Chưa gán owner — không rõ ai chịu trách nhiệm dữ liệu.",
+                source="metadata"))
+            missing_fields.append("owner")
+            _rec("high", f"Gán Owner chịu trách nhiệm dữ liệu/báo cáo cho {real_type}.")
+
+        if tags:
+            meta.append(QualityFinding(
+                name="Tags", status=QualityStatus.PASSED,
+                detail="Có tag phân loại.",
+                value=str(len(tags)),
+                source="metadata"))
+        else:
+            meta.append(QualityFinding(
+                name="Tags", status=QualityStatus.WARNING,
+                detail="Chưa có tag — khó tìm kiếm và phân loại.",
+                source="metadata"))
+            missing_fields.append("tags")
+            _rec("medium", f"Thêm tag phân loại nghiệp vụ/bộ phận cho {real_type}.")
+
+        if glossary:
+            meta.append(QualityFinding(
+                name="Glossary terms", status=QualityStatus.PASSED,
+                detail="Được gắn thuật ngữ Glossary chuẩn hoá.",
+                value=str(len(glossary)),
+                source="metadata"))
+        else:
+            meta.append(QualityFinding(
+                name="Glossary terms", status=QualityStatus.WARNING,
+                detail="Chưa gắn Glossary term — thiếu ngữ nghĩa chuẩn hoá.",
+                source="metadata"))
+            missing_fields.append("glossary_terms")
+            _rec("medium", f"Gắn Glossary term tương ứng cho {real_type} để chuẩn hoá ngữ nghĩa.")
+
+        if domain:
+            meta.append(QualityFinding(
+                name="Domain", status=QualityStatus.PASSED,
+                detail=f"Thuộc domain '{domain}'.",
+                value=domain,
+                source="metadata"))
+        else:
+            meta.append(QualityFinding(
+                name="Domain", status=QualityStatus.WARNING,
+                detail="Chưa gán domain — thiếu cơ chế phân quyền theo phòng ban.",
+                source="metadata"))
+            missing_fields.append("domain")
+            _rec("high", f"Gán {real_type} vào Domain nghiệp vụ để áp dụng chính sách quản trị.")
+
+        if platform:
+            meta.append(QualityFinding(
+                name="Platform & environment", status=QualityStatus.PASSED,
+                detail=f"Nền tảng {platform}" + (f" · Môi trường {environment}" if environment else ""),
+                value=f"{platform}/{environment or 'PROD'}",
+                source="metadata"))
+        else:
+            meta.append(QualityFinding(
+                name="Platform & environment", status=QualityStatus.WARNING,
+                detail="Thiếu thông tin platform/environment.",
+                source="metadata"))
+            missing_fields.append("platform")
+
+        sections.append(section("metadata", "Metadata", meta))
+
+        # ---------------- Schema Section ----------------
+        if real_type in ("dashboard", "chart", "document", "glossary_term"):
+            schema_findings = [
+                QualityFinding(
+                    name="Schema presence",
+                    status=QualityStatus.NOT_APPLICABLE,
+                    detail=f"{real_type.capitalize()} không có cấu trúc schema cột bảng (N/A).",
+                    applicable=False,
+                    source="metadata",
+                ),
+                QualityFinding(
+                    name="Column types",
+                    status=QualityStatus.NOT_APPLICABLE,
+                    detail="Không áp dụng kiểu dữ liệu cột cho thực thể loại này (N/A).",
+                    applicable=False,
+                    source="metadata",
+                ),
+                QualityFinding(
+                    name="Column documentation",
+                    status=QualityStatus.NOT_APPLICABLE,
+                    detail="Không áp dụng mô tả cột cho thực thể loại này (N/A).",
+                    applicable=False,
+                    source="metadata",
+                ),
+            ]
+            not_applicable_fields.extend(["schema", "column_types", "column_documentation"])
+            sections.append(section("schema", "Schema", schema_findings))
+        else:
+            # Dataset schema
+            schema_findings = []
+            if not schema:
+                schema_findings.append(QualityFinding(
+                    name="Schema presence", status=QualityStatus.FAILED,
+                    detail="Dataset không có schema nào được ghi nhận trong DataHub.",
+                    source="metadata"))
+                missing_fields.append("schema")
+                _rec("high", "Đồng bộ schema bảng từ nguồn dữ liệu vào DataHub.")
+            else:
+                schema_findings.append(QualityFinding(
+                    name="Schema presence", status=QualityStatus.PASSED,
+                    detail="Schema có sẵn trong metadata.",
+                    value=f"{len(schema)} cột",
+                    source="metadata"))
+                with_type = sum(1 for f in schema if (f.get("type") or f.get("native_data_type")))
+                if with_type == len(schema):
+                    schema_findings.append(QualityFinding(
+                        name="Column types", status=QualityStatus.PASSED,
+                        detail="Tất cả cột đều có kiểu dữ liệu đầy đủ.",
+                        source="metadata"))
+                elif with_type > 0:
+                    schema_findings.append(QualityFinding(
+                        name="Column types", status=QualityStatus.WARNING,
+                        detail=f"{len(schema) - with_type} cột thiếu kiểu dữ liệu.",
+                        value=f"{with_type}/{len(schema)}",
+                        source="metadata"))
+                    _rec("medium", "Bổ sung đầy đủ data type cho các cột còn thiếu.")
+                else:
+                    schema_findings.append(QualityFinding(
+                        name="Column types", status=QualityStatus.FAILED,
+                        detail="Không cột nào có kiểu dữ liệu.",
+                        source="metadata"))
+                    _rec("high", "Cập nhật kiểu dữ liệu cho toàn bộ cột trong schema.")
+
+                documented = sum(1 for f in schema if (f.get("description") or "").strip())
+                doc_ratio = documented / len(schema)
+                if doc_ratio >= 0.8:
+                    schema_findings.append(QualityFinding(
+                        name="Column documentation", status=QualityStatus.PASSED,
+                        detail="Hầu hết cột có mô tả ý nghĩa.",
+                        value=f"{documented}/{len(schema)}",
+                        source="metadata"))
+                elif doc_ratio >= 0.5:
+                    schema_findings.append(QualityFinding(
+                        name="Column documentation", status=QualityStatus.WARNING,
+                        detail="Một phần cột thiếu mô tả ý nghĩa.",
+                        value=f"{documented}/{len(schema)}",
+                        source="metadata"))
+                    _rec("medium", "Bổ sung mô tả ý nghĩa cho các cột dữ liệu quan trọng.")
+                else:
+                    schema_findings.append(QualityFinding(
+                        name="Column documentation", status=QualityStatus.WARNING,
+                        detail="Ít cột có mô tả — schema khó hiểu cho người mới.",
+                        value=f"{documented}/{len(schema)}",
+                        source="metadata"))
+                    _rec("medium", "Ghi chú tài liệu/mô tả ý nghĩa cho các cột trong dataset.")
+
+            if profiling is not None and profiling.get("schema_drift"):
+                drift = profiling["schema_drift"]
+                drift_status = (
+                    QualityStatus.PASSED if not drift.get("detected") else QualityStatus.FAILED
+                )
+                schema_findings.append(QualityFinding(
+                    name="Schema drift", status=drift_status,
+                    detail=(f"Schema thay đổi không khớp ({drift.get('detail') or 'phát hiện thay đổi'})."
+                            if drift.get("detected") else "Không phát hiện thay đổi schema bất thường."),
+                    source="profiling"))
+            else:
+                schema_findings.append(QualityFinding(
+                    name="Schema drift", status=QualityStatus.NOT_EVALUATED,
+                    detail="Không thể đánh giá — thiếu dữ liệu profiling schema drift.",
+                    applicable=False,
+                    source="profiling"))
+                not_evaluated.append("Schema drift")
+            sections.append(section("schema", "Schema", schema_findings))
+
+        # ---------------- Lineage Section ----------------
+        lineage_findings = []
+        if real_type in ("dashboard", "chart"):
+            if upstreams:
+                lineage_findings.append(QualityFinding(
+                    name="Upstream Lineage", status=QualityStatus.PASSED,
+                    detail=f"{len(upstreams)} nguồn dữ liệu đầu vào (upstream datasets/dataflows).",
+                    value=f"{len(upstreams)} nguồn",
+                    source="lineage"))
+            else:
+                lineage_findings.append(QualityFinding(
+                    name="Upstream Lineage", status=QualityStatus.FAILED,
+                    detail="Chưa liên kết Lineage nguồn — không rõ báo cáo lấy dữ liệu từ bảng nào.",
+                    source="lineage"))
+                missing_fields.append("upstream_lineage")
+                _rec("high", f"Liên kết Lineage giữa {real_type} và các Dataset nguồn để theo dõi luồng dữ liệu.")
+            if downstreams:
+                lineage_findings.append(QualityFinding(
+                    name="Downstream Dependencies", status=QualityStatus.PASSED,
+                    detail=f"{len(downstreams)} báo cáo/bảng phụ thuộc hạ nguồn.",
+                    value=f"{len(downstreams)}↓",
+                    source="lineage"))
+        else:
+            if has_lineage:
+                lineage_findings.append(QualityFinding(
+                    name="Lineage coverage", status=QualityStatus.PASSED,
+                    detail=f"{len(upstreams)} upstream, {len(downstreams)} downstream.",
+                    value=f"{len(upstreams)}↑/{len(downstreams)}↓",
+                    source="lineage"))
+            else:
+                lineage_findings.append(QualityFinding(
+                    name="Lineage coverage", status=QualityStatus.FAILED,
+                    detail="Không có lineage upstream/downstream — khó truy vết nguồn dữ liệu.",
+                    source="lineage"))
+                missing_fields.append("lineage")
+                _rec("high", "Thiết lập lineage để theo dõi luồng dữ liệu và đánh giá tác động.")
+        sections.append(section("lineage", "Lineage", lineage_findings))
+
+        # ---------------- Profiling Sections (Completeness, Uniqueness, Validity, Consistency, Freshness) ----------------
+        if real_type in ("dashboard", "chart", "document", "glossary_term"):
+            not_applicable_fields.extend(["completeness", "uniqueness", "validity", "consistency", "freshness"])
+            # Mark all data profiling sections as NOT_APPLICABLE for dashboard/document/glossary
+            sections.append(section("completeness", "Completeness", [
+                QualityFinding(name="Completeness (NULL %)", status=QualityStatus.NOT_APPLICABLE,
+                               detail="Không áp dụng kiểm tra giá trị NULL cho thực thể này (N/A).",
+                               applicable=False, source="profiling")
+            ]))
+            sections.append(section("uniqueness", "Uniqueness", [
+                QualityFinding(name="Duplicate rate", status=QualityStatus.NOT_APPLICABLE,
+                               detail="Không áp dụng kiểm tra bản ghi trùng lặp cho thực thể này (N/A).",
+                               applicable=False, source="profiling")
+            ]))
+            sections.append(section("validity", "Validity", [
+                QualityFinding(name="Assertions / Type validity", status=QualityStatus.NOT_APPLICABLE,
+                               detail="Không áp dụng assertion dữ liệu cho thực thể này (N/A).",
+                               applicable=False, source="profiling")
+            ]))
+            sections.append(section("consistency", "Consistency", [
+                QualityFinding(name="Record count consistency", status=QualityStatus.NOT_APPLICABLE,
+                               detail="Không áp dụng biến động số bản ghi cho thực thể này (N/A).",
+                               applicable=False, source="profiling")
+            ]))
+            sections.append(section("freshness", "Freshness", [
+                QualityFinding(name="Data freshness", status=QualityStatus.NOT_APPLICABLE,
+                               detail="Không áp dụng kiểm tra freshness dòng dữ liệu cho thực thể này (N/A).",
+                               applicable=False, source="profiling")
+            ]))
+        else:
+            # Dataset profiling
+            # 1. Completeness
+            comp_findings = []
+            if profiling is not None and profiling.get("column_stats"):
+                stats = profiling["column_stats"]
+                null_rates = [float(c.get("null_rate", 0.0) or c.get("null_percentage", 0.0) or 0.0)
+                              for c in stats]
+                worst = sorted(stats, key=lambda c: float(c.get("null_rate", 0.0) or 0.0), reverse=True)[:3]
+                avg_null = sum(null_rates) / len(null_rates) if null_rates else 0.0
+                comp_findings.append(QualityFinding(
+                    name="Record completeness (non-null)", status=(
+                        QualityStatus.PASSED if avg_null < 5 else
+                        QualityStatus.WARNING if avg_null < 20 else QualityStatus.FAILED),
+                    detail=f"Trung bình {avg_null:.1f}% giá trị NULL trên các cột.",
+                    value=f"{100 - avg_null:.1f}%", source="profiling"))
+                for c in worst:
+                    rate = float(c.get("null_rate", 0.0) or 0.0)
+                    if rate > 0:
+                        comp_findings.append(QualityFinding(
+                            name=f"NULL rate — {c.get('name')}", status=(
+                                QualityStatus.PASSED if rate < 5 else
+                                QualityStatus.WARNING if rate < 20 else QualityStatus.FAILED),
+                            detail=("Không có NULL." if rate == 0 else f"{rate:.1f}% giá trị NULL."),
+                            value=f"{rate:.1f}%", source="profiling"))
+            else:
+                comp_findings.append(QualityFinding(
+                    name="Completeness (NULL %)", status=QualityStatus.NOT_EVALUATED,
+                    detail="Không thể tính NULL percentage — thiếu dữ liệu profiling trong DataHub.",
+                    applicable=False, source="profiling"))
+                not_evaluated.append("Completeness (NULL percentage)")
+            sections.append(section("completeness", "Completeness", comp_findings))
+
+            # 2. Uniqueness
+            uni_findings = []
+            if profiling is not None and profiling.get("duplicate_rate") is not None:
+                dup = float(profiling["duplicate_rate"])
+                uni_findings.append(QualityFinding(
+                    name="Duplicate rate", status=(
+                        QualityStatus.PASSED if dup == 0 else
+                        QualityStatus.WARNING if dup < 5 else QualityStatus.FAILED),
+                    detail=f"Tỉ lệ bản ghi trùng lặp {dup:.2f}%.", value=f"{dup:.2f}%", source="profiling"))
+            else:
+                uni_findings.append(QualityFinding(
+                    name="Duplicate rate", status=QualityStatus.NOT_EVALUATED,
+                    detail="Không thể tính duplicate rate — thiếu dữ liệu profiling trong DataHub.",
+                    applicable=False, source="profiling"))
+                not_evaluated.append("Duplicate rate")
+            sections.append(section("uniqueness", "Uniqueness", uni_findings))
+
+            # 3. Validity
+            val_findings = []
+            if assertions:
+                val_findings.append(QualityFinding(
+                    name="Assertions", status=QualityStatus.PASSED,
+                    detail="Có assertions giám sát dữ liệu tự động.", value=str(len(assertions)), source="assertions"))
+            else:
+                val_findings.append(QualityFinding(
+                    name="Assertions", status=QualityStatus.WARNING,
+                    detail="Chưa có assertions — không có ràng buộc giám sát tự động.", source="assertions"))
+                _rec("medium", "Thiết lập assertions (freshness, NULL threshold, volume) để giám sát tự động.")
+            if profiling is not None and profiling.get("column_stats"):
+                bad_types = [c for c in profiling["column_stats"]
+                             if c.get("type_validity") and float(c["type_validity"]) < 0.9]
+                if bad_types:
+                    val_findings.append(QualityFinding(
+                        name="Type validity", status=QualityStatus.FAILED,
+                        detail=f"{len(bad_types)} cột có dữ liệu sai kiểu.",
+                        value=str(len(bad_types)), source="profiling"))
+                else:
+                    val_findings.append(QualityFinding(
+                        name="Type validity", status=QualityStatus.PASSED,
+                        detail="Kiểu dữ liệu của cột khớp với dữ liệu lưu trữ.", source="profiling"))
+            else:
+                val_findings.append(QualityFinding(
+                    name="Type validity (profiling)", status=QualityStatus.NOT_EVALUATED,
+                    detail="Không thể kiểm tra kiểu dữ liệu — thiếu profiling trong DataHub.",
+                    applicable=False, source="profiling"))
+                not_evaluated.append("Type validity (profiling)")
+            sections.append(section("validity", "Validity", val_findings))
+
+            # 4. Consistency
+            con_findings = []
+            if profiling is not None and profiling.get("row_count") is not None:
+                row_count = int(profiling["row_count"])
+                delta = profiling.get("row_count_delta_pct")
+                if delta is None:
+                    con_findings.append(QualityFinding(
+                        name="Record count", status=QualityStatus.PASSED,
+                        detail=f"Tổng số bản ghi {row_count} — không có dữ liệu lịch sử để so sánh.",
+                        value=str(row_count), source="profiling"))
+                else:
+                    con_findings.append(QualityFinding(
+                        name="Record count anomaly", status=(
+                            QualityStatus.PASSED if abs(float(delta)) < 20 else QualityStatus.FAILED),
+                        detail=f"Số bản ghi thay đổi {float(delta):+.1f}% so với kỳ trước.",
+                        value=f"{delta:+.1f}%", source="profiling"))
+            else:
+                con_findings.append(QualityFinding(
+                    name="Record count anomaly", status=QualityStatus.NOT_EVALUATED,
+                    detail="Không thể đánh giá biến động số bản ghi — thiếu profiling trong DataHub.",
+                    applicable=False, source="profiling"))
+                not_evaluated.append("Record count anomaly")
+            if platform and domain:
+                con_findings.append(QualityFinding(
+                    name="Metadata consistency", status=QualityStatus.PASSED,
+                    detail="Platform và domain nhất quán trong metadata.", source="metadata"))
+            sections.append(section("consistency", "Consistency", con_findings))
+
+            # 5. Freshness
+            fresh_findings = []
+            freshness = payload.get("freshness")
+            if isinstance(freshness, dict) and freshness.get("last_updated"):
+                last_updated = str(freshness.get("last_updated"))
+                frequency = str(freshness.get("frequency") or "không rõ tần suất")
+                fresh_findings.append(QualityFinding(
+                    name="Freshness", status=QualityStatus.PASSED,
+                    detail=f"Dữ liệu cập nhật lần cuối {last_updated} (tần suất {frequency}).",
+                    value=last_updated, source="metadata"))
+            else:
+                fresh_findings.append(QualityFinding(
+                    name="Freshness", status=QualityStatus.NOT_EVALUATED,
+                    detail="Không thể đánh giá — thiếu thông tin freshness/profiling.",
+                    applicable=False, source="metadata"))
+                not_evaluated.append("Freshness")
+            sections.append(section("freshness", "Freshness", fresh_findings))
+
+        # Overall Score: computed ONLY on evaluated, applicable sections
+        evaluated_sections = [
+            s for s in sections
+            if s.status not in (QualityStatus.NOT_EVALUATED, QualityStatus.NOT_APPLICABLE)
+        ]
         overall = int(sum(s.score for s in evaluated_sections) / len(evaluated_sections)) \
-            if evaluated_sections else 0
+            if evaluated_sections else 100
         rating = _rating_of(overall)
 
         return QualityReport(
-            dataset=entity.display_name or entity.name,
+            dataset=entity.display_name or entity.name or dataset_query,
+            entity_name=entity.display_name or entity.name or dataset_query,
+            entity_type=real_type,
+            platform=platform,
             urn=entity.urn,
             url=entity.datahub_url,
             generated_at=generated_at,
@@ -1064,6 +1216,8 @@ class ActionService:
             sections=sections,
             recommendations=recommendations,
             not_evaluated_checks=sorted(set(not_evaluated)),
+            missing_fields=missing_fields,
+            not_applicable_fields=not_applicable_fields,
             valid=True,
         )
 
@@ -1097,7 +1251,7 @@ class ActionService:
             f"- Name: {entity.display_name or entity.name}",
             f"- Platform: {platform or '(chưa có)'} · Environment: {environment or '(chưa có)'}"
             + (f" · Domain: {domain}" if domain else ""),
-            f"- URN: {entity.urn}",
+            f"- URN: `{entity.urn}`",
         ]))
         sections.append(ReportSection(title="Business Description", lines=[
             business_purpose or description or "(chưa có mô tả business)",

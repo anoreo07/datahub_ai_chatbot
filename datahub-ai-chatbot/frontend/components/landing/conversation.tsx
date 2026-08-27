@@ -80,48 +80,50 @@ export function Conversation() {
   return (
     <section id="conversation" className="scroll-mt-20 border-y border-border bg-[#f7f7f8] py-20 sm:py-28">
       <LandingContainer>
-        <Reveal>
-          <SectionHeading
-            eyebrow="Conversational"
-            title="Ask naturally. Get connected answers."
-            description="Follow-up questions stay in the same conversation — V-DataAtlas keeps the context and connects each answer back to the entities it referenced before."
-          />
-        </Reveal>
-
-        <Reveal delay={0.15} className="mx-auto mt-14 max-w-3xl">
-          <div className="relative flex flex-col gap-8 rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-8">
-            {/* context thread rail */}
-            <div
-              className="absolute bottom-10 left-[1.15rem] top-16 w-px bg-border sm:left-[1.4rem]"
-              aria-hidden="true"
+        <div className="mt-14 flex flex-col items-center gap-12 lg:flex-row lg:items-start lg:gap-16">
+          <Reveal className="w-full lg:w-1/3 lg:sticky lg:top-28">
+            <SectionHeading
+              eyebrow="Conversational"
+              title="Ask naturally. Get connected answers."
+              description="Follow-up questions stay in the same conversation — V-DataAtlas keeps the context and connects each answer back to the entities it referenced before."
+              align="left"
             />
-            <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-primary/30 bg-accent px-3 py-1 text-xs font-medium text-primary">
-              <span className="h-2 w-2 rounded-full bg-primary" />
-              One context — dim_warehouse
-            </div>
+          </Reveal>
 
-            <div className="flex flex-col gap-8">
-              {TURNS.map((t, i) => (
-                <Reveal key={t.question} delay={0.1 + i * 0.08} className="relative flex flex-col gap-4">
-                  <QuestionBubble text={t.question} />
-                  <AnswerBubble turn={t} />
-                </Reveal>
-              ))}
-            </div>
+          <Reveal delay={0.15} className="w-full lg:w-2/3">
+            <div className="relative flex flex-col gap-8 rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-8">
+              <div
+                className="absolute bottom-10 left-[1.15rem] top-16 w-px bg-border sm:left-[1.4rem]"
+                aria-hidden="true"
+              />
+              <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-primary/30 bg-accent px-3 py-1 text-xs font-medium text-primary">
+                <span className="h-2 w-2 rounded-full bg-primary" />
+                One context — dim_warehouse
+              </div>
 
-            <Reveal delay={0.4}>
-              <p
-                className={cn(
-                  "flex items-center justify-center gap-2 border-t border-border pt-5 text-xs text-muted-foreground",
-                  "text-center"
-                )}
-              >
-                <Bot className="h-3.5 w-3.5" aria-hidden="true" />
-                Every turn builds on the previous one — no repeated context needed.
-              </p>
-            </Reveal>
-          </div>
-        </Reveal>
+              <div className="flex flex-col gap-8">
+                {TURNS.map((t, i) => (
+                  <Reveal key={t.question} delay={0.1 + i * 0.08} className="relative flex flex-col gap-4">
+                    <QuestionBubble text={t.question} />
+                    <AnswerBubble turn={t} />
+                  </Reveal>
+                ))}
+              </div>
+
+              <Reveal delay={0.4}>
+                <p
+                  className={cn(
+                    "flex items-center justify-center gap-2 border-t border-border pt-5 text-xs text-muted-foreground",
+                    "text-center"
+                  )}
+                >
+                  <Bot className="h-3.5 w-3.5" aria-hidden="true" />
+                  Every turn builds on the previous one — no repeated context needed.
+                </p>
+              </Reveal>
+            </div>
+          </Reveal>
+        </div>
       </LandingContainer>
     </section>
   );

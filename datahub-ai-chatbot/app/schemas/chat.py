@@ -16,6 +16,8 @@ class ChatRequest(BaseModel):
     # Optional data-related image attachments as `data:` URLs (base64). When
     # present, the Visual Understanding layer runs first and feeds the router.
     images: list[str] = []
+    # When false, skip the fire-and-forget RAGAS evaluation to save Gemini API quota.
+    ragas_enabled: bool = True
 
 
 class Suggestion(BaseModel):
@@ -37,6 +39,11 @@ class EntityItem(BaseModel):
     urn: str = ""
     name: str = ""
     url: str | None = None
+    entity_type: str | None = None
+    platform: str | None = None
+    domain: str | None = None
+    description: str | None = None
+    environment: str | None = None
 
 
 class LineageNode(BaseModel):
@@ -73,3 +80,6 @@ class ChatResponse(BaseModel):
     quality_report: QualityReport | None = None
     # Structured vision-extraction result (present only for image requests).
     vision: dict | None = None
+    selected_action: str | None = None
+    response_time_ms: int | None = None
+

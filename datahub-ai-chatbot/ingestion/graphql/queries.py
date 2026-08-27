@@ -133,6 +133,18 @@ query scrollAcrossEntities($input: ScrollAcrossEntitiesInput!) {
           tags {
             tags { tag { name urn } }
           }
+          upstreamLineage: lineage(input: { direction: UPSTREAM, count: 100 }) {
+            total
+            relationships {
+              entity { urn type }
+            }
+          }
+          downstreamLineage: lineage(input: { direction: DOWNSTREAM, count: 100 }) {
+            total
+            relationships {
+              entity { urn type }
+            }
+          }
         }
         ... on Dashboard {
           properties { name description }
@@ -147,6 +159,18 @@ query scrollAcrossEntities($input: ScrollAcrossEntitiesInput!) {
           }
           domain {
             domain { urn properties { name description } }
+          }
+          upstreamLineage: lineage(input: { direction: UPSTREAM, count: 100 }) {
+            total
+            relationships {
+              entity { urn type }
+            }
+          }
+          downstreamLineage: lineage(input: { direction: DOWNSTREAM, count: 100 }) {
+            total
+            relationships {
+              entity { urn type }
+            }
           }
         }
         ... on GlossaryTerm {
@@ -414,10 +438,14 @@ def build_search_query(entity_type: str) -> str:
         glossaryTerms { terms { term { urn name properties { name description } } } }
         tags { tags { tag { urn name } } }
         schemaMetadata { fields { fieldPath description nativeDataType type nullable isPartOfKey } }
+        upstreamLineage: lineage(input: { direction: UPSTREAM, count: 100 }) { total relationships { entity { urn type } } }
+        downstreamLineage: lineage(input: { direction: DOWNSTREAM, count: 100 }) { total relationships { entity { urn type } } }
       }""",
         "DASHBOARD": """... on Dashboard {
         tool dashboardId properties { name description } platform { name urn }
         domain { domain { urn properties { name description } } }
+        upstreamLineage: lineage(input: { direction: UPSTREAM, count: 100 }) { total relationships { entity { urn type } } }
+        downstreamLineage: lineage(input: { direction: DOWNSTREAM, count: 100 }) { total relationships { entity { urn type } } }
       }""",
         "CHART": """... on Chart {
         tool chartId properties { name description } platform { name urn }

@@ -93,8 +93,29 @@ class GroundedSqlGenerator:
             raw = await self._gen._llm.generate(
                 prompt, context=None, system_prompt=_SQL_SYSTEM_PROMPT,
             )
-            data = json.loads(raw or "")
-            sql = (data.get("sql") or "").strip()
+            raw_str = (raw or "").strip()
+            clean_str = re.sub(r"^```(?:json|sql)?\s*", "", raw_str, flags=re.IGNORECASE)
+            clean_str = re.sub(r"\s*```$", "", clean_str).strip()
+
+            sql = ""
+            try:
+                data = json.loads(clean_str)
+                if isinstance(data, dict):
+                    sql = (data.get("sql") or "").strip()
+            except Exception:
+                m_json = re.search(r"\{.*\}", clean_str, re.DOTALL)
+                if m_json:
+                    try:
+                        data = json.loads(m_json.group(0))
+                        if isinstance(data, dict):
+                            sql = (data.get("sql") or "").strip()
+                    except Exception:
+                        pass
+
+            if not sql:
+                m_sql = re.search(r"(select\s+.+?)(?:;|\n\n|\Z)", clean_str, re.IGNORECASE | re.DOTALL)
+                if m_sql:
+                    sql = m_sql.group(1).strip()
         except Exception:
             log.exception("sql_llm_failed", table=table)
             return None

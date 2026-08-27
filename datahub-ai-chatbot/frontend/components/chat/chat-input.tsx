@@ -1,8 +1,8 @@
 "use client";
 
-import { useRef, useState, type ChangeEvent, type ClipboardEvent, type KeyboardEvent } from "react";
+import { useEffect, useRef, useState, type ChangeEvent, type ClipboardEvent, type KeyboardEvent } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowUp, ImageIcon, X } from "lucide-react";
+import { ArrowUp, Square, ImageIcon, X } from "lucide-react";
 
 import { ActionMenu, ACTION_DEFS, type ActionDef } from "@/components/chat/action-menu";
 import { ModelMenu } from "@/components/chat/model-menu";
@@ -22,10 +22,11 @@ interface ChatInputProps {
     selectedAction?: string,
     images?: string[]
   ) => void;
+  onCancel?: () => void;
   placeholder?: string;
 }
 
-export function ChatInput({ isStreaming, onSend, placeholder }: ChatInputProps) {
+export function ChatInput({ isStreaming, onSend, onCancel, placeholder }: ChatInputProps) {
   const [value, setValue] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
   const [modelOpen, setModelOpen] = useState(false);
@@ -39,6 +40,18 @@ export function ChatInput({ isStreaming, onSend, placeholder }: ChatInputProps) 
   const [preview, setPreview] = useState<string | null>(null);
   const ref = useRef<HTMLTextAreaElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+  const slashMenuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!slashOpen) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (slashMenuRef.current && !slashMenuRef.current.contains(e.target as Node)) {
+        closeSlash();
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [slashOpen]);
 
   const canSend = value.trim().length > 0 && !isStreaming;
 
@@ -202,15 +215,16 @@ export function ChatInput({ isStreaming, onSend, placeholder }: ChatInputProps) 
   };
 
   return (
-    <div className="relative px-4 pb-4 pt-2">
+    <div className="relative px-4 pb-4 pt-2 sm:px-6 md:px-16 lg:px-32 xl:px-64 2xl:px-80">
       <AnimatePresence>
         {slashOpen && (
           <motion.div
+            ref={slashMenuRef}
             initial={{ opacity: 0, y: 8, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8, scale: 0.96 }}
             transition={{ duration: 0.15 }}
-            className="absolute bottom-full left-1/2 z-40 mb-3 w-full max-w-3xl -translate-x-1/2"
+            className="absolute bottom-full left-1/2 z-40 mb-3 w-full -translate-x-1/2"
           >
             <div className="overflow-hidden rounded-2xl border bg-popover p-1.5 shadow-lg">
               <p className="px-3 pb-1.5 pt-2 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
@@ -252,7 +266,7 @@ export function ChatInput({ isStreaming, onSend, placeholder }: ChatInputProps) 
       </AnimatePresence>
       <div
         className={cn(
-          "relative mx-auto flex max-w-3xl items-end gap-2 rounded-3xl border bg-card p-2 shadow-lg transition-shadow focus-within:shadow-xl",
+          "relative mx-auto flex max-w-4xl items-end gap-2 rounded-3xl border bg-card p-2 shadow-lg transition-shadow focus-within:shadow-xl",
           expanded ? "items-end" : "items-center"
         )}
       >
@@ -391,17 +405,20 @@ export function ChatInput({ isStreaming, onSend, placeholder }: ChatInputProps) 
             <Button
               type="button"
               size="icon"
-              onClick={submit}
-              disabled={!canSend}
-              aria-label="Gửi tin nhắn"
-              className="h-10 w-10 shrink-0 rounded-full"
+              onClick={isStreaming ? onCancel : submit}
+              disabled={!isStreaming && !canSend}
+              aria-label={isStreaming ? "Dừng trả lời" : "Gửi tin nhắn"}
+              className={cn(
+                "h-10 w-10 shrink-0 rounded-full",
+                isStreaming && "bg-red-500/10 hover:bg-red-500/20 text-red-600"
+              )}
             >
-              {isStreaming ? <Dots /> : <ArrowUp className="h-5 w-5" />}
+              {isStreaming ? <Square className="h-4 w-4 fill-current" /> : <ArrowUp className="h-5 w-5" />}
             </Button>
           </motion.div>
         </AnimatePresence>
       </div>
-      <p className="mx-auto mt-1.5 max-w-3xl text-center text-[10px] text-muted-foreground">
+      <p className="mx-auto mt-1.5 max-w-4xl text-center text-[10px] text-muted-foreground">
         Enter để gửi · Shift+Enter để xuống dòng
       </p>
 

@@ -112,6 +112,10 @@ class EntityResolutionService:
             r"[A-Za-z0-9_]+(?:\.[A-Za-z0-9_]+)+|[A-Za-z0-9_]+_[A-Za-z0-9_]+",
             question,
         ))
+        from retrieval.query_parser import _extract_entity
+        extracted_name = _extract_entity(question)
+        if extracted_name:
+            tokens.add(extracted_name)
         if not tokens:
             return []
         svc = ActionService(self._ctx.session, auth_service=self._ctx.auth_service)

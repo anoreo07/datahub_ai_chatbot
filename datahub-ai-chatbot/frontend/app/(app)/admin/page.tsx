@@ -12,35 +12,54 @@ import { apiFetch } from "@/lib/api";
 import { cn } from "@/lib/utils";
 
 import { RolesPanel } from "./roles-panel";
+import { InteractionsPanel } from "./interactions-panel";
 
-const TABS = ["Sync", "Index", "Documents", "DataHub", "Roles"] as const;
+const TABS = ["System Operations", "Roles & Permissions", "Interactions"] as const;
 type Tab = (typeof TABS)[number];
 
 export default function AdminPage() {
-  const [tab, setTab] = useState<Tab>("Sync");
+  const [tab, setTab] = useState<Tab>("System Operations");
 
   return (
-    <div className="h-full overflow-y-auto">
-      <div className="mx-auto max-w-3xl space-y-5 p-6">
-        <div className="flex gap-1 rounded-lg border bg-muted/40 p-1">
-          {TABS.map((t) => (
-            <button
-              key={t}
-              onClick={() => setTab(t)}
-              className={cn(
-                "flex-1 rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
-                tab === t ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
-              )}
-            >
-              {t}
-            </button>
-          ))}
-        </div>
-        {tab === "Sync" && <SyncPanel />}
-        {tab === "Index" && <IndexPanel />}
-        {tab === "Documents" && <DocumentsPanel />}
-        {tab === "DataHub" && <DataHubPanel />}
-        {tab === "Roles" && <RolesPanel />}
+    <div className="h-full w-full flex flex-col p-6 overflow-hidden space-y-4">
+      {/* Consolidated Admin Tabs */}
+      <div className="flex gap-1 rounded-lg border bg-muted/40 p-1 shrink-0">
+        {TABS.map((t) => (
+          <button
+            key={t}
+            onClick={() => setTab(t)}
+            className={cn(
+              "flex-1 rounded-md px-3 py-2 text-sm font-medium transition-all",
+              tab === t
+                ? "bg-background text-foreground shadow-sm border border-border/10"
+                : "text-muted-foreground hover:text-foreground"
+            )}
+          >
+            {t}
+          </button>
+        ))}
+      </div>
+
+      {/* Panel Area - Fixed Height, Scroll Handled Internally */}
+      <div className="flex-1 min-h-0 overflow-hidden flex flex-col">
+        {tab === "System Operations" && <SystemOperationsPanel />}
+        {tab === "Roles & Permissions" && <RolesPanel />}
+        {tab === "Interactions" && <InteractionsPanel />}
+      </div>
+    </div>
+  );
+}
+
+function SystemOperationsPanel() {
+  return (
+    <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-2 gap-6 overflow-y-auto pr-1">
+      <div className="space-y-6">
+        <DataHubPanel />
+        <DocumentsPanel />
+      </div>
+      <div className="space-y-6">
+        <SyncPanel />
+        <IndexPanel />
       </div>
     </div>
   );
@@ -82,28 +101,37 @@ function SyncPanel() {
   return (
     <>
       <Card>
-        <CardHeader>
-          <CardTitle>Full Sync</CardTitle>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base font-semibold">Full Data Sync</CardTitle>
         </CardHeader>
         <CardContent>
-          <Button onClick={runFull} disabled={running}>
-            {running && <Loader2 className="animate-spin" />} Run Full Sync
+          <Button onClick={runFull} disabled={running} className="w-full sm:w-auto">
+            {running && <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />} Run Full Sync
           </Button>
           {result && (
-            <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-3 text-xs">{result}</pre>
+            <pre className="mt-3 max-h-[160px] overflow-y-auto overflow-x-auto rounded-lg bg-muted p-3 text-xs font-mono leading-relaxed border">
+              {result}
+            </pre>
           )}
         </CardContent>
       </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>Sync Entity by URN</CardTitle>
+      <Card className="mt-6">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base font-semibold">Sync Entity by URN</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex gap-2">
-            <Input value={urn} onChange={(e) => setUrn(e.target.value)} placeholder="urn:li:dataset:abc" />
-            <Button onClick={syncEntity}>Sync</Button>
+          <div className="flex gap-2 flex-col sm:flex-row">
+            <Input
+              value={urn}
+              onChange={(e) => setUrn(e.target.value)}
+              placeholder="urn:li:dataset:abc"
+              className="flex-1 h-9 text-sm"
+            />
+            <Button onClick={syncEntity} className="h-9 shrink-0">
+              Sync Entity
+            </Button>
           </div>
-          {entityResult && <p className="mt-2 text-sm text-muted-foreground">{entityResult}</p>}
+          {entityResult && <p className="mt-2 text-xs text-muted-foreground font-mono">{entityResult}</p>}
         </CardContent>
       </Card>
     </>
@@ -129,14 +157,14 @@ function IndexPanel() {
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Rebuild Index</CardTitle>
+      <CardHeader className="pb-3">
+        <CardTitle className="text-base font-semibold">Search Index</CardTitle>
       </CardHeader>
       <CardContent>
-        <Button variant="warning" onClick={rebuild} disabled={running}>
-          {running && <Loader2 className="animate-spin" />} Rebuild Index
+        <Button variant="warning" onClick={rebuild} disabled={running} className="w-full sm:w-auto">
+          {running && <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />} Rebuild Search Index
         </Button>
-        {result && <p className="mt-2 text-sm text-muted-foreground">{result}</p>}
+        {result && <p className="mt-2.5 text-xs text-muted-foreground font-mono bg-muted/50 p-2 border rounded">{result}</p>}
       </CardContent>
     </Card>
   );
@@ -166,22 +194,33 @@ function DocumentsPanel() {
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Import Document</CardTitle>
+      <CardHeader className="pb-3">
+        <CardTitle className="text-base font-semibold">Import Document Reference</CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
-        <div className="space-y-1.5">
-          <Label htmlFor="doc-url">URL</Label>
-          <Input id="doc-url" value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://example.com/document.pdf" />
+        <div className="space-y-1">
+          <Label htmlFor="doc-url" className="text-xs">Document URL</Label>
+          <Input
+            id="doc-url"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            placeholder="https://example.com/document.pdf"
+            className="h-9 text-sm"
+          />
         </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="doc-title">Title (tùy chọn)</Label>
-          <Input id="doc-title" value={title} onChange={(e) => setTitle(e.target.value)} />
+        <div className="space-y-1">
+          <Label htmlFor="doc-title" className="text-xs">Title (Optional)</Label>
+          <Input
+            id="doc-title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="h-9 text-sm"
+          />
         </div>
-        <Button onClick={importDoc} disabled={loading}>
-          {loading && <Loader2 className="animate-spin" />} Import
+        <Button onClick={importDoc} disabled={loading} className="w-full sm:w-auto">
+          {loading && <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />} Import Document
         </Button>
-        {result && <p className="text-sm text-muted-foreground">{result}</p>}
+        {result && <p className="text-xs text-muted-foreground font-mono bg-muted/50 p-2 border rounded">{result}</p>}
       </CardContent>
     </Card>
   );
@@ -218,39 +257,39 @@ function DataHubPanel() {
 
   return (
     <Card>
-      <CardHeader className="flex-row items-center justify-between">
-        <CardTitle>Kết nối DataHub</CardTitle>
-        <Button onClick={run} disabled={checking} size="sm">
-          {checking ? <Loader2 className="animate-spin" /> : <PlugZap />} Kiểm tra kết nối
+      <CardHeader className="flex-row items-center justify-between space-y-0 pb-3">
+        <CardTitle className="text-base font-semibold">DataHub Connection</CardTitle>
+        <Button onClick={run} disabled={checking} size="sm" className="h-8 px-2">
+          {checking ? <Loader2 className="mr-1 h-3.5 w-3.5 animate-spin" /> : <PlugZap className="mr-1 h-3.5 w-3.5" />} Ping
         </Button>
       </CardHeader>
       <CardContent className="space-y-4">
-        {error && <p className="text-sm text-destructive">{error}</p>}
+        {error && <p className="text-xs text-destructive bg-destructive/10 p-2 border rounded font-mono">{error}</p>}
 
-        <div className="space-y-3 rounded-lg border p-4 text-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-muted-foreground">KẾT NỐI DATAHUB (URL)</span>
-            <span className="font-mono font-medium">{health?.gms_url || "-"}</span>
+        <div className="space-y-2 rounded-lg border p-3 text-xs leading-relaxed">
+          <div className="flex items-center justify-between py-1 border-b last:border-0 border-border/40">
+            <span className="text-muted-foreground uppercase font-medium">GMS URL</span>
+            <span className="font-mono text-foreground font-medium truncate max-w-[200px]">{health?.gms_url || "-"}</span>
           </div>
-          <div className="flex items-center justify-between">
-            <span className="text-muted-foreground">Chế độ</span>
-            <Badge variant="secondary">{health?.mode === "mock" ? "Mock" : "GraphQL (GMS)"}</Badge>
+          <div className="flex items-center justify-between py-1 border-b last:border-0 border-border/40">
+            <span className="text-muted-foreground uppercase font-medium">Mode</span>
+            <Badge variant="secondary" className="font-normal py-0">{health?.mode === "mock" ? "Mock" : "GraphQL (GMS)"}</Badge>
           </div>
-          <div className="flex items-center justify-between">
-            <span className="text-muted-foreground">Trạng thái</span>
-            <span className="flex items-center gap-2">
+          <div className="flex items-center justify-between py-1 border-b last:border-0 border-border/40">
+            <span className="text-muted-foreground uppercase font-medium">Status</span>
+            <span className="flex items-center gap-1.5 font-medium">
               {health && (
-                <Badge variant={ok ? "success" : "destructive"}>{health.status}</Badge>
+                <Badge variant={ok ? "success" : "destructive"} className="py-0">{health.status}</Badge>
               )}
               {health?.latency_ms != null && (
-                <span className="text-xs text-muted-foreground">{health.latency_ms} ms</span>
+                <span className="text-muted-foreground font-mono text-[10px]">({health.latency_ms} ms)</span>
               )}
             </span>
           </div>
           {health?.checked_at && (
-            <div className="flex items-center justify-between border-t pt-2">
-              <span className="text-muted-foreground">Thời điểm kiểm tra</span>
-              <span className="text-xs text-muted-foreground">
+            <div className="flex items-center justify-between border-t pt-2 mt-1">
+              <span className="text-muted-foreground uppercase font-medium">Last Checked</span>
+              <span className="text-muted-foreground font-mono">
                 {new Date(health.checked_at).toLocaleString()}
               </span>
             </div>
@@ -258,9 +297,9 @@ function DataHubPanel() {
         </div>
 
         {!health && !error && (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <PlugZap className="h-4 w-4" />
-            Nhấn &ldquo;Kiểm tra kết nối&rdquo; để ping DataHub GMS API.
+          <div className="flex items-center gap-1.5 text-xs text-muted-foreground italic">
+            <PlugZap className="h-3.5 w-3.5 text-primary" />
+            Click Ping to test connections to DataHub GMS instance.
           </div>
         )}
       </CardContent>

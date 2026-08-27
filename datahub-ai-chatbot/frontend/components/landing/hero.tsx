@@ -12,7 +12,7 @@ export function Hero() {
   return (
     <section id="top" className="relative overflow-hidden">
       <LandingContainer className="pb-20 pt-16 sm:pb-24 sm:pt-24">
-        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+        <div className="grid items-center gap-12 lg:grid-cols-[1fr_1.35fr] lg:gap-16">
           <div className="flex flex-col items-start gap-8 text-left">
             <Reveal>
               <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3.5 py-1.5 text-xs font-medium text-muted-foreground">
@@ -25,7 +25,7 @@ export function Hero() {
               initial={{ opacity: 0, y: reduce ? 0 : 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-              className="text-balance text-5xl font-semibold leading-[1.05] tracking-tight text-foreground sm:text-6xl md:text-7xl"
+              className="text-balance text-3xl font-semibold leading-[1.1] tracking-tight text-foreground sm:text-4xl md:text-5xl"
             >
               Talk to your data.
               <br />

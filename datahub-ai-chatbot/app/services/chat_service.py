@@ -1,3 +1,4 @@
+import asyncio
 import re
 import time
 import uuid
@@ -5,7 +6,10 @@ from collections.abc import Awaitable, Callable, Sequence
 from typing import Any
 
 import structlog
+from sqlalchemy import update as sa_update
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from database.models import ConversationHistory
 
 from app.auth.authorization import AuthorizationService
 from app.auth.models import UserContext
@@ -27,6 +31,7 @@ from app.services.chat.question_analysis import (
     _GREETING_RESPONSES,
     _IMAGE_REF_RE,
     _MULTI_HOP_CHAIN_RE,
+    _METADATA_REPORT_RE,
     _QUALITY_FAVORED_INTENTS,
     _SYNC_RE,
     _TERM_REMOVE_WORDS,
@@ -43,6 +48,7 @@ from app.services.chat.question_analysis import (
     _is_datahub_relevant,
     _is_field_location_question,
     _is_glossary_followup,
+    _is_noisy_entity,
     _is_term_in_dataset_question,
     _looks_like_join,
     _short_negative_answer,
@@ -50,6 +56,8 @@ from app.services.chat.question_analysis import (
 )
 from app.services.image_context import ImageContext
 from config.settings import settings
+from database.repositories.job_repository import JobRepository
+from database.repositories.notification_repository import NotificationRepository
 from guardrails.sanitizer import mask_secrets
 from llm.generator import AnswerGenerator
 from retrieval import classifier as intent_classifier
@@ -68,6 +76,9 @@ from retrieval.evidence import (
 )
 from retrieval.hybrid_search import SearchResult
 from retrieval.intent import QueryIntent, _norm_vn
+from retrieval.metadata_filter_engine import MetadataFilterEngine
+from retrieval.metadata_query_parser import parse_metadata_query
+from retrieval.query_parser import classify_followup_type, merge_query_specs, parse_query
 from retrieval.query_understanding import understand_query
 
 log = structlog.get_logger()
@@ -241,10 +252,11 @@ def _build_grounded_fallback(intent: QueryIntent, results: Sequence[Any]) -> str
         if _desc:
             _bit += f" — {_desc[:180]}"
         lines.append(_bit)
+        lines.append("")
     if intent == QueryIntent.TERM_TO_DATASETS:
         return ("Các entity liên quan trong metadata DataHub:\n\n"
-                + "\n".join(lines))
-    return "Trong metadata DataHub hiện có các entity liên quan:\n\n" + "\n".join(lines)
+                + "\n".join(lines).strip())
+    return "Trong metadata DataHub hiện có các entity liên quan:\n\n" + "\n".join(lines).strip()
 
 
 async def _term_domain_map(entity_repo) -> dict[str, set[str]]:
@@ -398,20 +410,22 @@ async def _domain_scoped_term_answer(question: str, ctx: "ChatContext",
                 f"Không có thuật ngữ **{concept}** rõ ràng trong domain "
                 f"**{domains[0]}** trong DataHub → UNKNOWN."
             )
-    elif len(domains) >= 2 and re.search(r"so sánh|so sanh|compare|so với|so voi", q):
+    elif len(domains) >= 2 and re.search(r"so sánh|so sanh|compare|so với|so voi|khác gì|khac gi|khác nhau|khac nhau|khác biệt|khac biet|phân biệt|phan biet|khác|khac", q):
         parts = []
         for dom in domains:
             m = _member_for_domain(dom)
             if m:
+                _desc = (m.get("description") or "").strip()
+                if len(_desc) > 300:
+                    _desc = _desc[:300] + "..."
                 parts.append(
-                    f"**{dom}**: **{m['name']}** ({m['description'][:200]})"
+                    f"- **Domain {dom.upper()}**:\n  Thuật ngữ tương ứng: **{m['name']}** (`{m['urn']}`).\n  *Định nghĩa:* {_desc}"
                 )
             else:
                 parts.append(
-                    f"**{dom}**: không có thuật ngữ Demand rõ ràng trong "
-                    "DataHub → UNKNOWN"
+                    f"- **Domain {dom.upper()}**:\n  Hiện chưa có thuật ngữ chuyên biệt cho **{concept}** trong DataHub (UNKNOWN). Trong nghiệp vụ bán hàng / thương mại, Demand thường đại diện cho nhu cầu thị trường, đơn hàng hoặc dự báo doanh số."
                 )
-        answer_text = "So sánh Demand theo domain:\n\n" + "\n\n".join(parts)
+        answer_text = f"Sự khác biệt về định nghĩa **{concept}** giữa các domain:\n\n" + "\n\n".join(parts)
     else:
         # The query may name ONE family member exactly ("Nhu cầu linh kiện
         # là gì?") — answer that term directly instead of re-listing the whole
@@ -459,6 +473,7 @@ class ChatService:
         from app.services.chat.listing import ListingService
         from app.services.chat.structured_retrieval import StructuredRetrievalService
         from app.services.chat.vision import VisionContextService
+        from app.services.interaction_logger import InteractionLogger
 
         ctx = ChatContext(session, auth_service=auth_service)
         self._ctx = ctx
@@ -481,6 +496,7 @@ class ChatService:
         self._source = ctx.source
         self._vision = ctx.vision_skill
         self._conv_context = ctx.conv_context
+        self._interaction_logger = InteractionLogger(session)
         self._last_denied_names: list[str] = []
 
 
@@ -490,6 +506,199 @@ class ChatService:
         return ImageUploadService(
             self._ctx.session, vision_service=self._ctx.conversation_vision,
         )
+
+    async def _log_interaction_async(self, op: str, **kwargs: Any) -> None:
+        """Write interaction log using a dedicated session to avoid autoflush conflicts.
+
+        ``op`` is ``"request"`` or ``"response"``.
+        In test mode (APP_ENV=test) the write is skipped entirely.
+        """
+        import os
+        if os.getenv("APP_ENV") == "test":
+            return
+        try:
+            from app.services.interaction_logger import InteractionLogger
+            from database.session import async_session_factory
+
+            async with async_session_factory() as bg_session:
+                logger = InteractionLogger(bg_session)
+                if op == "request":
+                    await logger.log_request(**kwargs)
+                elif op == "response":
+                    await logger.log_response(**kwargs)
+                await bg_session.commit()
+        except Exception:  # noqa: BLE001
+            log.warning("interaction_log_async_failed", op=op)
+
+    async def _postprocess_response(
+
+        self,
+        res: ChatResponse,
+        t_start: float,
+        uid: str,
+        cid: str,
+        question: str,
+    ) -> ChatResponse:
+        if res.response_time_ms is None:
+            res.response_time_ms = int((time.perf_counter() - t_start) * 1000)
+
+        try:
+            from sqlalchemy import select, update as sa_update
+            from database.models import ConversationHistory
+
+            result = await self._ctx.session.execute(
+                select(ConversationHistory)
+                .where(
+                    ConversationHistory.user_id == uid,
+                    ConversationHistory.conversation_id == cid,
+                )
+                .order_by(ConversationHistory.id.desc())
+                .limit(1)
+            )
+            latest = result.scalars().first()
+            if latest:
+                rs = dict(latest.render_state or {})
+                rs["response_time_ms"] = res.response_time_ms
+                if res.intent:
+                    rs["intent"] = res.intent
+                if res.trace_id:
+                    rs["trace_id"] = res.trace_id
+                if res.confidence:
+                    rs["confidence"] = res.confidence
+                if res.entities:
+                    rs["entities"] = [e.model_dump() for e in res.entities]
+                if res.citations:
+                    rs["citations"] = [
+                        c.model_dump() if hasattr(c, "model_dump") else dict(c)
+                        for c in res.citations
+                    ]
+                if res.lineage:
+                    rs["lineage"] = res.lineage.model_dump()
+                if res.selected_action:
+                    rs["selected_action"] = res.selected_action
+
+                latest.render_state = rs
+                await self._ctx.session.commit()
+
+        except Exception as exc:
+            log.exception("postprocess_response_render_state_failed", trace_id=res.trace_id, error=str(exc))
+
+
+        return res
+
+    async def _background_ragas_eval(
+
+        self, trace_id: str, question: str, answer: str, contexts: list, history: list | None = None
+    ) -> None:
+        """Run RAGAS evaluation in background. Never raises, never blocks chat.
+
+        Uses a fresh database session to avoid conflicts with the request session.
+        Creates job and notification linked to the evaluation.
+        When history is provided, uses conversation-aware evaluation.
+        """
+        import os
+        if os.getenv("APP_ENV") == "test":
+            return
+
+        from database.repositories.job_repository import JobRepository
+        from database.repositories.notification_repository import NotificationRepository
+        from database.session import async_session_factory
+
+        try:
+            from evaluation.ragas_evaluator import evaluate_interaction
+
+            # Create a fresh session for background evaluation
+            async with async_session_factory() as bg_session:
+                job_repo = JobRepository(bg_session)
+                notif_repo = NotificationRepository(bg_session)
+
+                # Create job and notification for this evaluation
+                user_id = getattr(self._ctx, "user", None).user_id if self._ctx and hasattr(self._ctx, "user") else None
+                job = await job_repo.create(
+                    type="ragas_evaluation",
+                    title="RAGAS Evaluation",
+                    message=f"Starting evaluation for trace {trace_id[:8]}...",
+                    user_id=user_id,
+                    job_metadata={"trace_id": trace_id},
+                )
+
+                await notif_repo.create(
+                    job_id=job.id,
+                    user_id=user_id or "system",
+                    type="ragas_evaluation",
+                    title="RAGAS Evaluation",
+                    message="Starting evaluation...",
+                    status="running",
+                )
+
+                from app.services.interaction_logger import InteractionLogger
+
+                # Convert ContextDocument objects to strings for RAGAS
+                ctx_strings = []
+                for ctx in contexts:
+                    if isinstance(ctx, str):
+                        ctx_strings.append(ctx)
+                    elif hasattr(ctx, "content"):
+                        ctx_strings.append(ctx.content)
+                    else:
+                        ctx_strings.append(str(ctx))
+
+                bg_logger = InteractionLogger(bg_session)
+
+                await bg_logger.set_evaluation_status(trace_id, "RUNNING")
+
+                if history:
+                    from evaluation.ragas_evaluator import evaluate_conversation_turn
+                    result = await evaluate_conversation_turn(
+                        question=question,
+                        answer=answer,
+                        retrieved_contexts=ctx_strings,
+                        conversation_history=history,
+                        reference="\n".join(ctx_strings) if ctx_strings else None,
+                        timeout_seconds=120.0,
+                    )
+                else:
+                    result = await evaluate_interaction(
+                        question=question,
+                        answer=answer,
+                        retrieved_contexts=ctx_strings,
+                        reference="\n".join(ctx_strings) if ctx_strings else None,
+                        timeout_seconds=120.0,
+                    )
+
+                await bg_logger.update_ragas_scores(
+                    trace_id=trace_id,
+                    faithfulness=result.faithfulness,
+                    faithfulness_status=result.faithfulness_status,
+                    answer_relevancy=result.answer_relevancy,
+                    answer_relevancy_status=result.answer_relevancy_status,
+                    context_precision=result.context_precision,
+                    context_precision_status=result.context_precision_status,
+                    context_recall=result.context_recall,
+                    context_recall_status=result.context_recall_status,
+                    evaluation_model=result.evaluation_model,
+                    evaluation_error=result.error,
+                )
+
+                # Mark job as success and update notification status
+                await job_repo.mark_success(job.id)
+
+                await bg_session.commit()
+                log.info("ragas_background_eval_done", trace_id=trace_id)
+        except Exception as exc:  # noqa: BLE001
+            log.warning("ragas_background_eval_failed", trace_id=trace_id, error=str(exc))
+            try:
+                async with async_session_factory() as err_session:
+                    err_repo = JobRepository(err_session)
+                    notif_repo = NotificationRepository(err_session)
+                    # Try to find and update existing job/notif
+                    if 'job' in dir() and job is not None:
+                        await err_repo.mark_failed(job.id, str(exc))
+                    if 'notif' in dir() and 'notif' in dir():
+                        pass  # notification already created with running status
+                    await err_session.commit()
+            except Exception:  # noqa: BLE001
+                pass
 
     async def _generate_or_fallback(
         self, generator, question: str, results: Sequence[Any],
@@ -538,10 +747,41 @@ class ChatService:
                      model: str | None = None,
                      selected_action: str | None = None,
                      images: list[str] | None = None,
+                     ragas_enabled: bool = True,
                      on_status: Callable[[str], Awaitable[None]] | None = None,
                      on_token: Callable[[str], Awaitable[None]] | None = None) -> ChatResponse:
         trace_id = uuid.uuid4().hex[:12]
         cid = conversation_id or trace_id
+        _t_start = time.perf_counter()
+        user_ctx = user or UserContext(user_id="anonymous", is_admin=False)
+        uid = user_ctx.user_id
+
+        res = await self._answer_impl(
+            question=question, user=user, conversation_id=conversation_id,
+            suggested_name=suggested_name, model=model,
+            selected_action=selected_action, images=images,
+            ragas_enabled=ragas_enabled, on_status=on_status,
+            on_token=on_token, trace_id=trace_id, cid=cid,
+            _t_start=_t_start, user_ctx=user_ctx, uid=uid,
+        )
+        return await self._postprocess_response(res, _t_start, uid, cid, question)
+
+    async def _answer_impl(
+        self, question: str, user: UserContext | None,
+        conversation_id: str | None, suggested_name: str | None,
+        model: str | None, selected_action: str | None,
+        images: list[str] | None, ragas_enabled: bool,
+        on_status: Callable[[str], Awaitable[None]] | None,
+        on_token: Callable[[str], Awaitable[None]] | None,
+        trace_id: str, cid: str, _t_start: float, user_ctx: UserContext, uid: str,
+    ) -> ChatResponse:
+        # Log incoming request (uses dedicated session to avoid autoflush conflicts)
+        await self._log_interaction_async(
+            "request", trace_id=trace_id,
+            question=question, user_id=user_ctx.user_id,
+            conversation_id=cid, selected_action=selected_action, model=model,
+        )
+
 
         # Model selection: a per-request model id swaps in a dedicated generator
         # (e.g. NVIDIA NVCF) without disturbing the default Fireworks pipeline.
@@ -570,6 +810,37 @@ class ChatService:
         history = await self._ctx.memory.load_history_from_db(self._ctx.session, uid, cid)
         # Canonical entities this conversation last talked about (for coreference).
         active_entities = self._ctx.memory.get_active_entities(uid, cid)
+
+        # H7: Parse query into structured QuerySpec and classify follow-up type.
+        # This replaces the regex-based _is_contextual_followup() for the
+        # structured path and provides merge logic for follow-ups.
+        try:
+            new_query_spec = parse_query(question, selected_action=selected_action)
+            prev_query_spec = self._ctx.memory.get_query_spec(uid, cid)
+            prev_entity = (prev_query_spec or {}).get("entity_name")
+            _followup_type = classify_followup_type(question, prev_query_spec, prev_entity)
+            merged_spec = merge_query_specs(prev_query_spec, new_query_spec)
+            _query_spec_dict = merged_spec.to_dict()
+        except Exception:
+            log.exception("query_spec_parse_error", trace_id=trace_id, question=question[:100])
+            new_query_spec = None
+            prev_query_spec = None
+            _followup_type = "NEW_QUERY"
+            _query_spec_dict = None
+            merged_spec = None
+
+        # H8: If this is a clarification response, check for pending clarification
+        # state in ConversationMemory to get the actual pending query spec.
+        if _followup_type == "CLARIFICATION_RESPONSE":
+            pending_clarification = self._ctx.memory.get_clarification_state(uid, cid)
+            if pending_clarification and pending_clarification.pending_query_spec:
+                _query_spec_dict = pending_clarification.pending_query_spec
+                self._ctx.memory.clear_clarification_state(uid, cid)
+                log.info("clarification_response_resolved", trace_id=trace_id,
+                         clarification_type=pending_clarification.clarification_type)
+
+        # H7: query_spec_dict and _followup_type are now passed explicitly
+        # to add_turn_db() at the critical call sites below (no context vars).
 
         # Semantic intent resolution: merge the raw user message with the selected
         # "+" menu action (a hint, never an order) and the conversation context to
@@ -623,13 +894,107 @@ class ChatService:
             question=question[:120],
         )
 
+        # Guardrails: scope restriction (#5) and prompt injection in user input (#16).
+        out_of_scope = self._ctx.guardrails.enforce_scope(question)
+        if out_of_scope:
+            log.info("chat_out_of_scope", trace_id=trace_id, question=question[:100])
+            await self._ctx.memory.add_turn_db(
+                self._ctx.session, uid, cid, question, out_of_scope,
+                query_spec=_query_spec_dict, followup_type=_followup_type,
+            )
+            return ChatResponse(answer=out_of_scope, intent=intent.value, confidence="high",
+                                insufficient_context=False, trace_id=trace_id, conversation_id=cid)
+
+        injection_message = self._ctx.guardrails.check_prompt_injection(question)
+        if injection_message:
+            log.info("chat_injection_blocked", trace_id=trace_id, question=question[:100])
+            await self._ctx.memory.add_turn_db(
+                self._ctx.session, uid, cid, question, injection_message,
+            )
+            return ChatResponse(answer=injection_message, intent=intent.value, confidence="high",
+                                insufficient_context=False, trace_id=trace_id, conversation_id=cid)
+
         if decision == "clarify":
             answer_text = resolution.clarification or (
                 "Xin lỗi, tôi chưa rõ bạn muốn làm gì. Bạn có thể làm rõ thêm yêu cầu được không?"
             )
             log.info("route_clarify", trace_id=trace_id, intent=intent.value,
                      selected_action=selected_action, answer=answer_text[:120])
-            await self._ctx.memory.add_turn_db(self._ctx.session, uid, cid, question, answer_text)
+            # H8: Persist clarification state — store pending query spec + candidates
+            # so the next user message can be matched back to the original query.
+            if _query_spec_dict:
+                candidates = []
+                if hasattr(resolution, "candidates") and resolution.candidates:
+                    candidates = [
+                        {"name": getattr(c, "name", str(c)),
+                         "entity_type": getattr(c, "entity_type", None),
+                         "urn": getattr(c, "urn", None)}
+                        for c in resolution.candidates
+                    ]
+                self._ctx.memory.set_clarification_state(
+                    uid, cid,
+                    pending_query_spec=_query_spec_dict,
+                    candidates=candidates,
+                    clarification_type="entity_disambiguation",
+                )
+            await self._ctx.memory.add_turn_db(
+                self._ctx.session, uid, cid, question, answer_text,
+                query_spec=_query_spec_dict, followup_type=_followup_type,
+            )
+            _processing_ms = int((time.perf_counter() - _t_start) * 1000)
+            await self._log_interaction_async(
+                "response", trace_id=trace_id, answer=answer_text, intent=intent.value,
+                confidence="low", ambiguous=True, insufficient_context=True,
+                processing_time_ms=_processing_ms, routing_decision="clarify",
+            )
+            await _emit("done")
+            return ChatResponse(
+                answer=answer_text, intent=intent.value, confidence="low",
+                ambiguous=True, insufficient_context=True,
+                trace_id=trace_id, conversation_id=cid,
+            )
+
+        # --- Confirmation/Denial of previous suggestion ---
+        # When the user confirms a suggestion ("đúng rồi", "yes"), rewrite the
+        # question with the confirmed entity and proceed normally.
+        # When the user denies ("không", "khác"), ask for clarification.
+        if decision == "confirm":
+            # H8: Check if there's a pending clarification state — use the
+            # pending query spec as the base, merging with the user's selection.
+            pending_clarification = self._ctx.memory.get_clarification_state(uid, cid)
+            if pending_clarification and pending_clarification.pending_query_spec:
+                _query_spec_dict = pending_clarification.pending_query_spec
+                self._ctx.memory.clear_clarification_state(uid, cid)
+                log.info("route_confirm_clarification_resolved", trace_id=trace_id,
+                         clarification_type=pending_clarification.clarification_type,
+                         conversation_id=cid)
+
+            confirmed_entity = resolution.entity_hint
+            if confirmed_entity:
+                # Rewrite question with confirmed entity
+                query = f"{confirmed_entity}"
+                entity_hint = confirmed_entity
+                log.info("route_confirm", trace_id=trace_id, intent=intent.value,
+                         entity=confirmed_entity, conversation_id=cid)
+            else:
+                # Confirm without entity — proceed with original query
+                log.info("route_confirm_no_entity", trace_id=trace_id,
+                         intent=intent.value, conversation_id=cid)
+        elif decision == "deny":
+            answer_text = (
+                "Bạn muốn hỏi về entity nào khác? Vui lòng nhập tên entity bạn muốn tìm."
+            )
+            await self._ctx.memory.add_turn_db(
+                self._ctx.session, uid, cid, question, answer_text,
+                query_spec=_query_spec_dict, followup_type=_followup_type,
+            )
+            _processing_ms = int((time.perf_counter() - _t_start) * 1000)
+            await self._log_interaction_async(
+                "response",
+                trace_id=trace_id, answer=answer_text, intent=intent.value,
+                confidence="low", ambiguous=True, insufficient_context=True,
+                processing_time_ms=_processing_ms, routing_decision="deny",
+            )
             await _emit("done")
             return ChatResponse(
                 answer=answer_text, intent=intent.value, confidence="low",
@@ -654,7 +1019,7 @@ class ChatService:
         # Retrieval / generation runs on the effective question: the raw message,
         # or the action-framed question when the action supplies the missing context.
         query = resolution.effective_question or question
-        entity_hint = suggested_name or resolution.entity_hint
+        entity_hint = suggested_name or resolution.entity_hint or new_query_spec.entity_name
         if concept_phrase:
             entity_hint = concept_phrase
 
@@ -724,10 +1089,16 @@ class ChatService:
             import random
             answer_text = random.choice(_GREETING_RESPONSES)
             await self._ctx.memory.add_turn_db(self._ctx.session, uid, cid, question, answer_text)
-            return ChatResponse(
-                answer=answer_text, intent=intent.value, confidence="high",
-                trace_id=trace_id, conversation_id=cid,
+            _processing_ms = int((time.perf_counter() - _t_start) * 1000)
+            await self._log_interaction_async("response",
+                trace_id=trace_id, answer=answer_text, intent=intent.value,
+                confidence="high", processing_time_ms=_processing_ms,
             )
+            res = ChatResponse(
+                answer=answer_text, intent=intent.value, confidence="high",
+                trace_id=trace_id, conversation_id=cid, response_time_ms=_processing_ms,
+            )
+            return await self._postprocess_response(res, _t_start, uid, cid, question)
 
         if intent == QueryIntent.CHITCHAT:
             cleaned = question.lower().strip().rstrip("?!.")
@@ -735,16 +1106,26 @@ class ChatService:
                 cleaned, "Tôi là trợ lý DataHub, sẵn sàng giúp bạn!",
             )
             await self._ctx.memory.add_turn_db(self._ctx.session, uid, cid, question, answer_text)
-            return ChatResponse(
-                answer=answer_text, intent=intent.value, confidence="high",
-                trace_id=trace_id, conversation_id=cid,
+            _processing_ms = int((time.perf_counter() - _t_start) * 1000)
+            await self._log_interaction_async("response",
+                trace_id=trace_id, answer=answer_text, intent=intent.value,
+                confidence="high", processing_time_ms=_processing_ms,
             )
+            res = ChatResponse(
+                answer=answer_text, intent=intent.value, confidence="high",
+                trace_id=trace_id, conversation_id=cid, response_time_ms=_processing_ms,
+            )
+            return await self._postprocess_response(res, _t_start, uid, cid, question)
+
 
         # Guardrails: scope restriction (#5) and prompt injection in user input (#16).
         out_of_scope = self._ctx.guardrails.enforce_scope(question)
         if out_of_scope:
             log.info("chat_out_of_scope", trace_id=trace_id, question=question[:100])
-            await self._ctx.memory.add_turn_db(self._ctx.session, uid, cid, question, out_of_scope)
+            await self._ctx.memory.add_turn_db(
+                self._ctx.session, uid, cid, question, out_of_scope,
+                query_spec=_query_spec_dict, followup_type=_followup_type,
+            )
             return ChatResponse(answer=out_of_scope, intent=intent.value, confidence="high",
                                 insufficient_context=False, trace_id=trace_id, conversation_id=cid)
 
@@ -1107,6 +1488,14 @@ class ChatService:
             intent = QueryIntent.SCHEMA_LOOKUP
             log.info("route_field_location", trace_id=trace_id,
                      question=query[:100], intent=QueryIntent.SCHEMA_LOOKUP.value)
+        # R2e — Schema-and-Owner composite reroute. "cấu trúc schema của X và ai sở hữu?"
+        # asks for both schema and ownership. Route to SCHEMA_LOOKUP so schema is rendered
+        # and owner is appended deterministically.
+        if (intent in (QueryIntent.OWNER_LOOKUP, QueryIntent.FIND_ENTITY, QueryIntent.GENERAL)
+                and re.search(r"schema|cấu trúc|cau truc|cột|cot|các trường|cac truong", query, re.I)):
+            intent = QueryIntent.SCHEMA_LOOKUP
+            log.info("route_schema_owner_composite", trace_id=trace_id,
+                     question=query[:100], intent=QueryIntent.SCHEMA_LOOKUP.value)
 
         # R2c — Term-to-datasets reroute. "tìm dataset tính/chứa/lưu <term>?"
         # asks which datasets carry a business concept (a glossary term). The
@@ -1290,8 +1679,16 @@ class ChatService:
                                  intent=QueryIntent.TERM_DEFINITION.value)
                         intent = QueryIntent.TERM_DEFINITION
 
+        _is_multihop_or_formula = bool(
+            re.search(
+                r"từ báo cáo|tu bao cao|công thức|cong thuc|nguồn dữ liệu|nguon du lieu|lineage|lấy từ đâu|lay tu dau|tính như thế nào|tinh nhu the nao",
+                _norm_vn(query),
+                re.I,
+            )
+        )
         if settings.THINKING_MODE_ENABLED and intent == QueryIntent.GENERAL \
-                and not _ctx_followup:
+                and not _ctx_followup and not _is_multihop_or_formula:
+
             _complex = bool(
                 understanding is not None and understanding.needs_thinking
             )
@@ -1341,6 +1738,27 @@ class ChatService:
                     trace_id=trace_id, conversation_id=cid,
                 )
 
+        # Comparison: "so sánh A và B về schema, lineage, quality"
+        # Extract ALL entities, resolve each independently, retrieve metadata
+        # for each, then compare and generate a structured answer.
+        if intent == QueryIntent.COMPARISON or resolution.chosen_tool == "comparison":
+            from retrieval.query_parser import _extract_all_entities
+            all_entity_names = _extract_all_entities(query)
+            if len(all_entity_names) >= 2:
+                comparison_response = await self._comparison_flow(
+                    query, all_entity_names, user_ctx, trace_id, cid,
+                    on_token=on_token, on_status=_emit,
+                )
+                if comparison_response is not None:
+                    if selected_action and not comparison_response.selected_action:
+                        comparison_response.selected_action = selected_action
+                    await self._ctx.memory.add_turn_db(
+                        self._ctx.session, uid, cid, query,
+                        comparison_response.answer,
+                    )
+                    await _emit("done")
+                    return comparison_response
+
         # SQL Generation: when the intent resolver picked the sql_generator tool
         # (explicit "Generate SQL" action, or a field/query request like
         # "truy vấn ... warehouse_id"), run the field-aware SQL pipeline instead
@@ -1350,6 +1768,8 @@ class ChatService:
                 query, user_ctx, trace_id, cid, entity_hint,
             )
             if sql_response is not None:
+                if selected_action and not sql_response.selected_action:
+                    sql_response.selected_action = selected_action
                 await _emit("done")
                 return sql_response
 
@@ -1365,6 +1785,8 @@ class ChatService:
                 query, user_ctx, trace_id, cid,
             )
             if sync_response is not None:
+                if selected_action and not sync_response.selected_action:
+                    sync_response.selected_action = selected_action
                 await _emit("done")
                 return sync_response
 
@@ -1372,15 +1794,79 @@ class ChatService:
         # quality request, runs the deterministic quality report against DataHub
         # metadata and returns it as a rendered markdown answer plus the structured
         # report (carried on ChatResponse.quality_report) for the chat export UI.
-        if resolution.chosen_tool == "quality_check" or (
+        if resolution.chosen_tool == "quality_check" or selected_action == "quality" or (
             selected_action == "quality" and intent in _QUALITY_FAVORED_INTENTS
         ):
             quality_response = await self._flows.quality_check_flow(
                 query, user_ctx, trace_id, cid, entity_hint,
             )
             if quality_response is not None:
+                if selected_action and not quality_response.selected_action:
+                    quality_response.selected_action = selected_action
                 await _emit("done")
                 return quality_response
+            if selected_action == "quality":
+                fallback_msg = (
+                    "Tôi cần biết bạn muốn kiểm tra chất lượng cho thực thể nào. "
+                    "Vui lòng nhập tên dataset hoặc dashboard (ví dụ: PVB QDAT, Dim_BaoCaoLayout)."
+                )
+                await _emit("done")
+                return ChatResponse(
+                    answer=fallback_msg, intent="QUALITY_CHECK", confidence="high",
+                    ambiguous=False, insufficient_context=True, selected_action="quality",
+                    trace_id=trace_id, conversation_id=cid,
+                )
+
+        # Metadata Report: an explicit "report" action or chosen_tool == "metadata_report"
+        # or question explicitly requesting a metadata report.
+        if (
+            resolution.chosen_tool == "metadata_report"
+            or selected_action == "report"
+            or intent == QueryIntent.METADATA_REPORT
+            or (_METADATA_REPORT_RE.search(query) and not is_ellipsis)
+        ):
+            report_response = await self._flows.metadata_report_flow(
+                query, user_ctx, trace_id, cid, entity_hint,
+            )
+            if report_response is not None:
+                if selected_action and not report_response.selected_action:
+                    report_response.selected_action = selected_action
+                await _emit("done")
+                return report_response
+            if selected_action == "report":
+                fallback_msg = (
+                    "Tôi cần biết bạn muốn tạo metadata report cho thực thể nào. "
+                    "Vui lòng nhập tên dataset hoặc dashboard (ví dụ: PVB QDAT, Dim_BaoCaoLayout)."
+                )
+                await _emit("done")
+                return ChatResponse(
+                    answer=fallback_msg, intent="METADATA_REPORT", confidence="high",
+                    ambiguous=False, insufficient_context=True, selected_action="report",
+                    trace_id=trace_id, conversation_id=cid,
+                )
+
+        # How-to / System guidance questions without an explicit entity name:
+        # answer conversationally / guide user how to use DataHub capabilities instead of searching random entities.
+        if (intent == QueryIntent.GENERAL and not resolution.framed
+                and re.search(r"^(?:làm thế nào|lam the nao|làm sao|lam sao|hướng dẫn|huong dan|cách nào|cach nao|như thế nào|nhu the nao|bằng cách nào|bang cach nao)\b", _norm_vn(query), re.I)
+                and not _has_own_identifier(query)):
+            log.info("route_howto_guidance", trace_id=trace_id, question=query[:100])
+            await _emit("generate")
+            answer_text = await generator.generate_conversational(query, on_token=on_token)
+            if not answer_text or len(answer_text.strip()) < 10:
+                answer_text = (
+                    "Để sử dụng các tính năng tra cứu trên DataHub AI Chatbot:\n\n"
+                    "1. **Tra cứu Lineage:** Bạn có thể nhập cú pháp `Lineage của dataset <tên_bảng>` (ví dụ: `Lineage của dataset PVB QDAT`) hoặc chọn chức năng **Data Lineage** trên giao diện.\n"
+                    "2. **Kiểm tra chất lượng metadata:** Bạn có thể chọn chức năng **Quality Check** hoặc hỏi `Kiểm tra chất lượng metadata của dataset <tên_bảng>` để xem báo cáo đánh giá 8 tiêu chí chất lượng.\n"
+                    "3. **Tra cứu Schema & Owner:** Bạn có thể hỏi trực tiếp như `Cấu trúc schema của bảng <tên_bảng> và ai là người sở hữu?`."
+                )
+            await self._ctx.memory.add_turn_db(self._ctx.session, uid, cid, question, answer_text)
+            await _emit("done")
+            return ChatResponse(
+                answer=answer_text, intent="HOW_TO", confidence="high",
+                ambiguous=False, insufficient_context=False,
+                trace_id=trace_id, conversation_id=cid,
+            )
 
         # GENERAL intent with no DataHub relevance (trivia, non-business questions)
         # is answered conversationally without retrieval, so no spurious citations.
@@ -1402,6 +1888,16 @@ class ChatService:
                 ambiguous=False, insufficient_context=False,
                 trace_id=trace_id, conversation_id=cid,
             )
+
+        # Generic metadata listing: "dataset nào có lineage?", "dataset nào không có owner?"
+        # Skip if intent is already a known listing/count intent (handled by existing flow)
+        if intent not in _DETERMINISTIC_LISTING_INTENTS:
+            metadata_listing = await self._try_metadata_listing(
+                query, user_ctx, trace_id, cid, _t_start=_t_start
+            )
+
+            if metadata_listing is not None:
+                return metadata_listing
 
         listing_type = _detect_listing(query)
         if listing_type:
@@ -1425,19 +1921,25 @@ class ChatService:
             for e in entities:
                 p = e.platform or "unknown"
                 platforms.setdefault(p, []).append(e.display_name or e.name)
-            lines = [f"Có tổng cộng {count} {entity_type_label} trong hệ thống."]
+            lines = [f"Có tổng cộng {count} {entity_type_label} trong hệ thống.\n"]
             for plat, names in sorted(platforms.items()):
                 sample = sorted(names)
-                lines.append(
-                f"\n{plat}: {', '.join(sample[:15])}"
-                f"{', ...' if len(sample) > 15 else ''}"
-            )
-            answer_text = mask_secrets("\n".join(lines))
+                lines.append(f"**{plat}:**")
+                for name in sample[:15]:
+                    lines.append(f"- {name}")
+                if len(sample) > 15:
+                    lines.append(f"- ... và {len(sample) - 15} {entity_type_label} khác")
+                lines.append("")
+            answer_text = mask_secrets("\n".join(lines).strip())
 
             entity_list = []
             for e in entities:
                 entity_list.append(
-                EntityItem(urn=e.urn, name=e.display_name or e.name, url=e.datahub_url)
+                EntityItem(
+                    urn=e.urn, name=e.display_name or e.name, url=e.datahub_url,
+                    entity_type=e.entity_type, platform=e.platform, domain=e.domain,
+                    description=e.description, environment=e.environment,
+                )
             )
                 if len(entity_list) >= 50:
                     break
@@ -1528,7 +2030,6 @@ class ChatService:
                          sub_questions=len(understanding.sub_questions),
                          steps=len(_qu_steps))
 
-        import time
         _t0 = time.perf_counter()
         planner_results: list[SearchResult] = []
         # Deterministic two-dataset schema analysis (join keys / common fields
@@ -1801,9 +2302,47 @@ class ChatService:
                             trace_id=trace_id, conversation_id=cid,
                         )
                 else:
-                    results = await self._ctx.hybrid_search.search(query, trace_id=trace_id)
+                    acl_filter = None
+                    if self._ctx.auth_service:
+                        acl_filter = await self._ctx.auth_service.build_opensearch_acl_filter(user_ctx)
+                    results = await self._ctx.hybrid_search.search(query, trace_id=trace_id, acl_filter=acl_filter)
                 log.info("route_hybrid", trace_id=trace_id, question=query[:100],
                          intent=intent.value, result_count=len(results))
+
+                # Multi-hop question expansion (e.g. report + lineage + formula)
+                if results and re.search(r"nguồn dữ liệu|nguon du lieu|lấy từ đâu|lay tu dau|lineage|upstream|nguồn gốc|nguon goc", query, re.I):
+                    from retrieval.hybrid_search import _entity_payload_to_text
+                    for r in list(results):
+                        entity_db = await self._ctx.entity_repo.get_by_urn(r.urn)
+                        if entity_db:
+                            upstreams = list(entity_db.payload.get("upstreams") or [])
+                            if not upstreams:
+                                try:
+                                    up = await self._ctx.source.get_lineage(entity_db.urn, direction="upstream")
+                                    upstreams = [rel["entity"]["urn"] for rel in up.get("relationships", []) if (rel.get("entity") or {}).get("urn")]
+                                except Exception:
+                                    pass
+                            for u in upstreams:
+                                rel_ent = await self._ctx.entity_repo.get_by_urn(u)
+                                if rel_ent and not any(res.urn == u for res in results):
+                                    name = (rel_ent.display_name or rel_ent.name)
+                                    content = _entity_payload_to_text(rel_ent.entity_type, rel_ent.payload or {})
+                                    results.append(SearchResult(
+                                        urn=rel_ent.urn, entity_type=rel_ent.entity_type,
+                                        name=name, score=0.85, datahub_url=rel_ent.datahub_url,
+                                        payload={"content": f"Nguồn dữ liệu đầu vào (Upstream raw data): {content}"},
+                                    ))
+
+                if results and re.search(r"công thức|cong thuc|cách tính|cach tinh|formula|coverage date", query, re.I):
+                    _f_id = _extract_field_identifier(query)
+                    if _f_id:
+                        g_res = await self._ctx.entity_resolver.resolve(_f_id, entity_type="glossary_term", trace_id=trace_id)
+                        if g_res.candidates:
+                            g_results = await self._ctx.entities.resolve_all_exact_to_results(g_res, trace_id=trace_id)
+                            for gr in g_results:
+                                if not any(res.urn == gr.urn for res in results):
+                                    results.append(gr)
+
 
         # Remember the entities this turn resolved so follow-ups ("nó", "đó")
         # can be answered from canonical names instead of raw text tokens.
@@ -1825,7 +2364,7 @@ class ChatService:
                 suggestion = await self._entities.suggest_entity(
                     extracted, "glossary_term", query, trace_id
                 )
-                if extracted:
+                if extracted and not _is_noisy_entity(extracted):
                     # Deterministic term-not-found: name the term so follow-up
                     # troubleshooting is possible instead of an LLM "no info".
                     term_not_found = (
@@ -1847,16 +2386,16 @@ class ChatService:
                     )
             elif intent == QueryIntent.DOMAIN_QUERY:
                 value = _extract_filter_value(query, QueryIntent.DOMAIN_QUERY)
-                if value and value not in _ANAPHORA_WORDS:
+                if value and value not in _ANAPHORA_WORDS and not _is_noisy_entity(value):
                     suggestion = await self._entities.suggest_entity(value, None, query, trace_id)
             elif intent in (QueryIntent.LINEAGE, QueryIntent.OWNER_LOOKUP,
                             QueryIntent.ENTITY_DOMAIN, QueryIntent.SCHEMA_LOOKUP,
                             QueryIntent.TERM_TO_DATASETS, QueryIntent.ENTITY_EXISTS):
                 # A picked function (Data Lineage, quality, …) with no matching
-                # entity -> friendly, grounded "not found" answer instead of a
-                # generic LLM guess.
+                # entity -> friendly, grounded "not found" answer ONLY when a clean
+                # non-noisy entity name was explicitly extracted.
                 extracted = _extract_name(query, _TERM_REMOVE_WORDS)
-                if extracted and extracted not in _ANAPHORA_WORDS:
+                if extracted and not _is_noisy_entity(extracted) and extracted not in _ANAPHORA_WORDS:
                     suggestion = await self._entities.suggest_entity(
                         extracted,
                         "dataset" if intent != QueryIntent.TERM_TO_DATASETS else None,
@@ -1876,12 +2415,19 @@ class ChatService:
                              original=extracted,
                              suggested=suggestion.suggested if suggestion else None,
                              conversation_id=cid)
+                    _processing_ms = int((time.perf_counter() - _t_start) * 1000)
+                    await self._log_interaction_async("response",
+                        trace_id=trace_id, answer=not_found, intent=intent.value,
+                        confidence="high", processing_time_ms=_processing_ms,
+                        entity_hint=extracted,
+                        resolution_state="not_found",
+                    )
                     return ChatResponse(
                         answer=not_found, intent=intent.value, confidence="high",
                         ambiguous=False, insufficient_context=False,
                         trace_id=trace_id, conversation_id=cid,
                     )
-            if suggestion is not None:
+            if suggestion is not None and not _is_noisy_entity(getattr(suggestion, "original", "")):
                 answer_text = (
                     f"'{suggestion.original}' không tồn tại trong hệ thống. "
                     f"Ý bạn là '{suggestion.suggested}'?"
@@ -1892,12 +2438,31 @@ class ChatService:
                 log.info("chat_suggestion", trace_id=trace_id, intent=intent.value,
                          original=suggestion.original, suggested=suggestion.suggested,
                          conversation_id=cid)
+                _processing_ms = int((time.perf_counter() - _t_start) * 1000)
+                await self._log_interaction_async("response",
+                    trace_id=trace_id, answer=answer_text, intent=intent.value,
+                    confidence="high", processing_time_ms=_processing_ms,
+                    entity_hint=suggestion.original,
+                    entity_resolved_name=suggestion.suggested,
+                    resolution_state="suggested",
+                )
                 return ChatResponse(
                     answer=answer_text, intent=intent.value, confidence="high",
                     ambiguous=False, insufficient_context=False,
                     trace_id=trace_id, conversation_id=cid,
                     suggestion=suggestion,
                 )
+
+        # Fallback to hybrid search if structured retrieval yielded no results
+        # for a natural language or complex multi-hop question.
+        if not results:
+            acl_filter = None
+            if self._ctx.auth_service:
+                acl_filter = await self._ctx.auth_service.build_opensearch_acl_filter(user_ctx)
+            results = await self._ctx.hybrid_search.search(query, trace_id=trace_id, acl_filter=acl_filter)
+            log.info("route_hybrid_fallback", trace_id=trace_id, question=query[:100],
+                     intent=intent.value, result_count=len(results))
+
 
         # When the user confirmed a suggestion, the question still contains the
         # misspelled name. Rewrite it with the confirmed entity so the generator
@@ -1921,12 +2486,18 @@ class ChatService:
                 p = r.payload or {}
                 return (p.get("domain") or "").strip() or None
 
-            results = await self._ctx.auth_service.filter_results_by_domain(
+            results_domain_filtered = await self._ctx.auth_service.filter_results_by_domain(
                 user_ctx, results, _result_domain
             )
             accessible = await self._ctx.auth_service.filter_accessible_urns(
-                user_ctx, [r.urn for r in results]
+                user_ctx, [r.urn for r in results_domain_filtered]
             )
+
+            # Audit denied access:
+            for r in results:
+                if r.urn not in accessible:
+                    await self._ctx.auth_service.can_view_entity(user_ctx, r.urn)
+
             if intent == QueryIntent.LINEAGE and results:
                 # The main entity (score 1.0, first result) is the subject of the
                 # question. If it is denied, never answer with a related entity's
@@ -2003,6 +2574,13 @@ class ChatService:
                 for k in kws
             )
         )
+        _is_formula_question = bool(
+            re.search(
+                r"công thức|cong thuc|cách tính|cach tinh|formula|tính như thế nào|tinh nhu the nao|tính bằng gì|tinh bang gi|được tính|duoc tinh",
+                _norm_vn(question_for_gen),
+                re.I,
+            )
+        )
         ambiguous = (
             len(results) > 1
             and not _multi_entity_join
@@ -2010,10 +2588,12 @@ class ChatService:
             and not _field_location_question
             and not _term_in_dataset_question
             and not _concept_family_question
+            and not _is_formula_question
             and intent != QueryIntent.FIND_ENTITY
             and abs(results[0].score - results[1].score) < 0.15
             and results[1].score > 0.5
         )
+
         if _same_name_tie:
             # Collapse same-named datasets to a single representative (they are
             # the same table mirrored on several platforms). Same-named glossary
@@ -2037,7 +2617,14 @@ class ChatService:
                 "Bạn muốn hỏi về entity nào?"
             )
             entity_list = [
-                EntityItem(urn=r.urn, name=r.name, url=r.datahub_url)
+                EntityItem(
+                    urn=r.urn, name=r.name, url=r.datahub_url,
+                    entity_type=r.entity_type,
+                    platform=(r.payload or {}).get("platform"),
+                    domain=(r.payload or {}).get("domain"),
+                    description=(r.payload or {}).get("description"),
+                    environment=(r.payload or {}).get("environment"),
+                )
                 for r in results if r.name
             ]
             await self._ctx.memory.add_turn_db(
@@ -2045,16 +2632,30 @@ class ChatService:
             )
             log.info("chat_ambiguous_clarification", trace_id=trace_id, intent=intent.value,
                      top=results[0].name, runner_up=results[1].name, conversation_id=cid)
+            _processing_ms = int((time.perf_counter() - _t_start) * 1000)
+            await self._log_interaction_async("response",
+                trace_id=trace_id, answer=clarification, intent=intent.value,
+                confidence="low", ambiguous=True, processing_time_ms=_processing_ms,
+                result_count=len(results), entity_resolved_name=results[0].name,
+                resolution_state="ambiguous",
+            )
             return ChatResponse(
                 answer=clarification, intent=intent.value, entities=entity_list,
                 confidence="low", ambiguous=True, insufficient_context=False,
                 trace_id=trace_id, conversation_id=cid,
             )
 
-        short_answer = None if impact_mode else _short_negative_answer(intent, results)
+        short_answer = None if impact_mode else _short_negative_answer(intent, results, question_for_gen)
         if short_answer is not None:
             entity_list = [
-                EntityItem(urn=r.urn, name=r.name, url=r.datahub_url)
+                EntityItem(
+                    urn=r.urn, name=r.name, url=r.datahub_url,
+                    entity_type=r.entity_type,
+                    platform=(r.payload or {}).get("platform"),
+                    domain=(r.payload or {}).get("domain"),
+                    description=(r.payload or {}).get("description"),
+                    environment=(r.payload or {}).get("environment"),
+                )
                 for r in results if r.name
             ]
             await self._ctx.memory.add_turn_db(
@@ -2547,7 +3148,17 @@ class ChatService:
             else:
                 _payload = (results[0].payload or {}) if results[0].payload else {}
                 _schema_fields = [
-                    f.get("name") or "" for f in (_payload.get("schema_fields") or [])
+                    {
+                        "name": (f.get("name") or "").strip(),
+                        "type": (f.get("type") or "").strip(),
+                    }
+                    for f in (_payload.get("schema_fields") or [])
+                    if (f.get("name") or "").strip()
+                ]
+                # Flat list of "name — type" strings for display
+                _schema_fields_names = [
+                    f"{f.get('name', '') or ''} — {f.get('type', '') or ''}"
+                    for f in (_payload.get("schema_fields") or [])
                     if (f.get("name") or "").strip()
                 ]
                 _join_analysis = _payload.get("join_analysis")
@@ -2581,9 +3192,21 @@ class ChatService:
                     if on_token:
                         await on_token(answer_text)
                 elif _schema_fields:
+                    # Build human-readable field list with name and type
+                    field_lines = []
+                    for sf in _schema_fields:
+                        name = sf.get("name", "") or ""
+                        ftype = sf.get("type", "") or ""
+                        if name and ftype:
+                            field_lines.append(f"{name} — {ftype}")
+                        elif name:
+                            field_lines.append(name)
+                        elif ftype:
+                            field_lines.append(ftype)
+                    field_str = ", ".join(field_lines[:10])
                     answer_text = (
                         f"Dataset **{results[0].name}** có các trường: "
-                        f"{', '.join(_schema_fields)}."
+                        f"{field_str}."
                     )
                     # A composite ask that also names ONE field and its data type
                     # ("... field có batch_number hay không, và kiểu dữ liệu của
@@ -2649,6 +3272,19 @@ class ChatService:
                             answer_text += (
                                 " Dataset này chưa có domain được ghi nhận trong metadata."
                             )
+                    if re.search(
+                        r"\bowner\b|sở hữu|so huu|chủ|chu\b|ai là người|ai la nguoi|người quản lý|nguoi quan ly",
+                        query, re.I,
+                    ):
+                        _owners = [o for o in (_payload.get("owners") or []) if o]
+                        if _owners:
+                            answer_text += (
+                                f" Người sở hữu (owner): {', '.join(_owners)}."
+                            )
+                        else:
+                            answer_text += (
+                                " Dataset hiện chưa có thông tin người sở hữu (owner)."
+                            )
                     citations = []
                     docs, context_xml = build_context(results)
                     confidence = "high"
@@ -2677,10 +3313,20 @@ class ChatService:
                 url_block = "\n".join(f"- {u}" for u in dict.fromkeys(urls))
                 answer_text = f"{answer_text.rstrip()}\n\nLink DataHub:\n{url_block}"
 
-        entity_list = [
-            EntityItem(urn=d.entity_urn, name=d.entity_name, url=d.url)
-            for d in docs if d.entity_name
-        ]
+        _results_by_urn = {r.urn: r for r in results if r.urn}
+        entity_list = []
+        for d in docs:
+            if not d.entity_name:
+                continue
+            _r = _results_by_urn.get(d.entity_urn)
+            entity_list.append(EntityItem(
+                urn=d.entity_urn, name=d.entity_name, url=d.url,
+                entity_type=_r.entity_type if _r else None,
+                platform=((_r.payload or {}).get("platform") if _r else None),
+                domain=((_r.payload or {}).get("domain") if _r else None),
+                description=((_r.payload or {}).get("description") if _r else None),
+                environment=((_r.payload or {}).get("environment") if _r else None),
+            ))
         # Field-location listings ("dataset nào chứa trường X?") may match far
         # more datasets than the capped context docs carry. Expose every
         # matching dataset as an entity so the full answer is not silently
@@ -2696,6 +3342,11 @@ class ChatService:
                     _seen_list.add(_key)
                     _full_list.append(EntityItem(
                         urn=_r.urn, name=_r.name, url=_r.datahub_url,
+                        entity_type=_r.entity_type,
+                        platform=(_r.payload or {}).get("platform"),
+                        domain=(_r.payload or {}).get("domain"),
+                        description=(_r.payload or {}).get("description"),
+                        environment=(_r.payload or {}).get("environment"),
                     ))
             if _full_list:
                 entity_list = _full_list
@@ -2703,12 +3354,24 @@ class ChatService:
             lineage_data = await self._lineage.build_lineage_data(results[0])
             if lineage_data:
                 entity_list = [
-                    EntityItem(urn=n.urn, name=n.name, url=n.url)
+                    EntityItem(urn=n.urn, name=n.name, url=n.url, entity_type=n.entity_type)
                     for n in (lineage_data.upstreams + lineage_data.downstreams)
                 ] + [
                     EntityItem(urn=lineage_data.entity_urn,
                                name=lineage_data.entity_name,
                                url=lineage_data.entity_url)
+                ]
+            elif results[0].urn:
+                _r0 = results[0]
+                entity_list = [
+                    EntityItem(
+                        urn=_r0.urn, name=_r0.name, url=_r0.datahub_url,
+                        entity_type=_r0.entity_type,
+                        platform=((_r0.payload or {}).get("platform") if _r0 else None),
+                        domain=((_r0.payload or {}).get("domain") if _r0 else None),
+                        description=((_r0.payload or {}).get("description") if _r0 else None),
+                        environment=((_r0.payload or {}).get("environment") if _r0 else None),
+                    )
                 ]
 
         # Guardrail #9b: ambiguity only applies to single-entity intents. Listing
@@ -2734,13 +3397,94 @@ class ChatService:
                  confidence=confidence, ambiguous=ambiguous,
                  insufficient_context=insufficient_context, conversation_id=cid)
 
+        # Log response for admin audit (includes context snapshot for RAGAS)
+        _processing_ms = int((time.perf_counter() - _t_start) * 1000)
+        # Always capture docs as a list (may be empty if no results/filtered),
+        # so the interaction log and RAGAS evaluation always have a snapshot.
+        _ctx_snap: list = docs if isinstance(docs, list) else []
+        await self._log_interaction_async(
+            "response",
+            trace_id=trace_id,
+            answer=answer_text,
+            intent=intent.value,
+            confidence=confidence,
+            ambiguous=ambiguous,
+            insufficient_context=insufficient_context,
+            result_count=len(results),
+            top_score=results[0].score if results else None,
+            citation_count=len(citations),
+            processing_time_ms=_processing_ms,
+            message_intent=resolution.message_intent.value if resolution.message_intent else None,
+            routing_decision=resolution.decision,
+            chosen_tool=resolution.chosen_tool,
+            entity_hint=entity_hint,
+            entity_resolved_name=results[0].name if results else None,
+            entity_resolved_urn=results[0].urn if results else None,
+            retrieved_contexts=_ctx_snap,
+        )
+
+        # Trigger async RAGAS evaluation (fire-and-forget, never blocks chat)
+        if _ctx_snap and ragas_enabled:
+            # Build conversation history for context-aware RAGAS evaluation
+            _conv_history = []
+            if history:
+                for h_q, h_a in history:
+                    _conv_history.append({"question": h_q, "answer": h_a})
+            asyncio.create_task(
+                self._background_ragas_eval(trace_id, question_for_gen, answer_text, _ctx_snap, _conv_history)
+            )
+
         lineage: LineageData | None = None
-        if intent == QueryIntent.LINEAGE and results and not impact_mode:
+        # Only populate lineage graph visualization payload if the user explicitly
+        # requested/selected "Visualize Data Lineage" (selected_action == "lineage").
+        # If the user asks a normal lineage question without selecting the visualization action,
+        # the response is returned as rich text only.
+        if (
+            selected_action == "lineage"
+            and intent == QueryIntent.LINEAGE
+            and results
+            and not impact_mode
+        ):
             lineage = await self._lineage.build_lineage_data(results[0])
+
+        # Build render_state for conversation persistence (structured data
+        # that the frontend needs to re-render entity cards, lineage, etc.)
+        _render_state: dict = {}
+        _render_state["response_time_ms"] = _processing_ms
+        if entity_list:
+            _render_state["entities"] = [e.model_dump() for e in entity_list]
+        if citations:
+            _render_state["citations"] = [c.to_dict() for c in citations]
+        if lineage:
+            _render_state["lineage"] = lineage.model_dump()
+        if selected_action:
+            _render_state["selected_action"] = selected_action
+        if confidence:
+            _render_state["confidence"] = confidence
+        if ambiguous:
+            _render_state["ambiguous"] = ambiguous
+        if insufficient_context:
+            _render_state["insufficient_context"] = insufficient_context
+        if intent:
+            _render_state["intent"] = intent.value
+        _render_state["trace_id"] = trace_id
+
+        # Persist render_state into conversation_history for hydration on reload
+        try:
+            await self._ctx.session.execute(
+                sa_update(ConversationHistory).where(
+                    ConversationHistory.user_id == uid,
+                    ConversationHistory.conversation_id == cid,
+                    ConversationHistory.question == question_for_gen,
+                ).values(render_state=_render_state or None)
+            )
+            await self._ctx.session.commit()
+        except Exception:
+            log.warning("render_state_persist_failed", trace_id=trace_id)
 
         await _emit("done")
 
-        return ChatResponse(
+        res = ChatResponse(
             answer=answer_text,
             intent=plan.intent if (
                 impact_mode
@@ -2754,7 +3498,82 @@ class ChatService:
             trace_id=trace_id,
             conversation_id=cid,
             lineage=lineage,
+            selected_action=selected_action,
+            response_time_ms=_processing_ms,
         )
+        return await self._postprocess_response(res, _t_start, uid, cid, question_for_gen)
+
+
+
+    async def _try_metadata_listing(
+        self,
+        question: str,
+        user_ctx: UserContext,
+        trace_id: str,
+        cid: str,
+        _t_start: float = 0.0,
+    ) -> ChatResponse | None:
+        """Try to parse and execute a generic metadata listing query.
+
+        Handles "dataset nào có X?", "dataset nào không có X?",
+        "dataset nào thuộc domain Y?" patterns.
+
+        Returns ChatResponse if a metadata query was parsed, else None.
+        """
+        from guardrails.sanitizer import mask_secrets
+
+        mq = parse_metadata_query(question)
+        if mq is None:
+            return None
+
+        log.info(
+            "metadata_listing_detected",
+            trace_id=trace_id,
+            query=mq.to_dict(),
+            message=question[:100],
+        )
+
+        engine = MetadataFilterEngine(self._ctx.session)
+        result = await engine.execute(mq)
+
+        # Apply RBAC filtering
+        if self._ctx.auth_service:
+            entities = await self._ctx.auth_service.filter_entities_by_domain(
+                user_ctx, result.entities
+            )
+            accessible = await self._ctx.auth_service.filter_accessible_urns(
+                user_ctx, [e.urn for e in entities]
+            )
+            result.entities = [e for e in entities if e.urn in accessible]
+            result.returned_count = len(result.entities)
+
+        answer_text = mask_secrets(result.to_answer_text())
+
+        entity_list = [
+            EntityItem(
+                urn=e.urn, name=e.display_name or e.name, url=e.datahub_url,
+                entity_type=e.entity_type, platform=e.platform, domain=e.domain,
+                description=e.description, environment=e.environment,
+            )
+            for e in result.entities
+        ]
+
+        await self._ctx.memory.add_turn_db(
+            self._ctx.session, user_ctx.user_id, cid, question, answer_text,
+        )
+
+        res = ChatResponse(
+            answer=answer_text,
+            intent="METADATA_LISTING",
+            entities=entity_list,
+            confidence="high",
+            ambiguous=False,
+            insufficient_context=False,
+            trace_id=trace_id,
+            conversation_id=cid,
+        )
+        return await self._postprocess_response(res, _t_start, user_ctx.user_id, cid, question)
+
 
     @staticmethod
     def _detect_listing(question: str) -> str | None:
@@ -2979,4 +3798,270 @@ class ChatService:
             trace_id=trace_id,
             conversation_id=cid,
         )
+
+    # ------------------------------------------------------------------ #
+    # Comparison flow
+    # ------------------------------------------------------------------ #
+
+    async def _comparison_flow(
+        self,
+        query: str,
+        entity_names: list[str],
+        user_ctx: UserContext | None,
+        trace_id: str,
+        cid: str,
+        on_token: Callable | None = None,
+        on_status: Callable | None = None,
+    ) -> ChatResponse | None:
+        """Compare multiple entities side-by-side.
+
+        Steps:
+          1. Resolve each entity name to a catalog entry (URN + metadata)
+          2. Retrieve schema, lineage, quality, domain for each
+          3. Generate a structured comparison answer via LLM
+        """
+        if on_status:
+            await on_status("retrieve")
+
+        from retrieval.hybrid_search import HybridSearch
+
+        resolved_entities: list[dict[str, Any]] = []
+        failed_entities: list[str] = []
+
+        # Step 1: Resolve each entity independently
+        for name in entity_names:
+            try:
+                res = await self._ctx.entity_resolver.resolve(name, entity_type=None, trace_id=trace_id)
+                if res and res.resolved:
+                    best = res.resolved
+                    resolved_entities.append({
+                        "name": name,
+                        "resolved_name": getattr(best, "display_name", None) or getattr(best, "name", str(best)),
+                        "urn": best.urn,
+                        "entity_type": best.entity_type,
+                        "score": 1.0,
+                    })
+                else:
+                    results = await self._ctx.hybrid_search.search(name, entity_type=None)
+                    if results:
+                        best_res = results[0]
+                        resolved_entities.append({
+                            "name": name,
+                            "resolved_name": best_res.name,
+                            "urn": best_res.urn,
+                            "entity_type": best_res.entity_type,
+                            "score": best_res.score,
+                        })
+                    else:
+                        failed_entities.append(name)
+            except Exception:  # noqa: BLE001
+                log.exception("comparison_resolve_failed", entity=name, trace_id=trace_id)
+                failed_entities.append(name)
+
+        if not resolved_entities:
+            entity_list = ", ".join(entity_names)
+            answer = (
+                f"Không tìm thấy entity nào trong số: {entity_list}. "
+                "Vui lòng kiểm tra lại tên và thử lại."
+            )
+            return ChatResponse(
+                answer=answer, intent="COMPARISON", confidence="low",
+                ambiguous=False, insufficient_context=True,
+                trace_id=trace_id, conversation_id=cid,
+            )
+
+        # Step 2: Retrieve metadata for each resolved entity
+        entity_details: list[dict[str, Any]] = []
+        for ent in resolved_entities:
+            detail: dict[str, Any] = {
+                "name": ent["resolved_name"],
+                "urn": ent["urn"],
+                "entity_type": ent["entity_type"],
+                "schema": [],
+                "lineage": {"upstreams": [], "downstreams": []},
+                "domain": None,
+                "owner": None,
+                "description": None,
+                "tags": [],
+                "glossary_terms": [],
+            }
+            try:
+                db_entity = await self._ctx.entity_repo.get_by_urn(ent["urn"])
+                if db_entity:
+                    payload = db_entity.payload or {}
+                    detail["schema"] = payload.get("schema_fields") or []
+                    detail["domain"] = db_entity.domain
+                    detail["description"] = db_entity.description
+                    detail["owner"] = payload.get("owner") or (payload.get("owners")[0] if payload.get("owners") else None)
+                    detail["tags"] = payload.get("tags") or []
+                    detail["glossary_terms"] = payload.get("glossary_terms") or []
+            except Exception:  # noqa: BLE001
+                log.exception("comparison_detail_failed", urn=ent["urn"], trace_id=trace_id)
+
+            # Lineage
+            try:
+                lineage_data = await self._ctx.source.get_lineage(
+                    ent["urn"], direction="both", depth=1,
+                )
+                for rel in lineage_data.get("relationships", []):
+                    entity_info = rel.get("entity", {})
+                    node = {
+                        "name": entity_info.get("urn", ""),
+                        "type": entity_info.get("type", "unknown"),
+                    }
+                    if rel.get("type") == "UPSTREAM":
+                        detail["lineage"]["upstreams"].append(node)
+                    elif rel.get("type") == "DOWNSTREAM":
+                        detail["lineage"]["downstreams"].append(node)
+            except Exception:  # noqa: BLE001
+                log.exception("comparison_lineage_failed", urn=ent["urn"], trace_id=trace_id)
+
+            if not detail["lineage"]["upstreams"] and not detail["lineage"]["downstreams"]:
+                db_ent = await self._ctx.entity_repo.get_by_urn(ent["urn"])
+                if db_ent and db_ent.payload:
+                    for u in db_ent.payload.get("upstreams") or []:
+                        detail["lineage"]["upstreams"].append({"name": u, "type": "dataset"})
+                    for d in db_ent.payload.get("downstreams") or []:
+                        detail["lineage"]["downstreams"].append({"name": d, "type": "dataset"})
+
+            entity_details.append(detail)
+
+        # Step 3: Build comparison prompt and generate answer
+        import json as _json
+
+        entities_text = _json.dumps(entity_details, ensure_ascii=False, indent=2, default=str)
+
+        # Extract what aspects to compare from the query
+        compare_aspects: list[str] = []
+        _ASPECT_PATTERNS = [
+            (r"schema|field|column|cột|trường", "schema"),
+            (r"quality|chất lượng|chat luong|kém|sạch", "quality"),
+            (r"lineage|upstream|downstream|nguồn|nguon", "lineage"),
+            (r"owner|sở hữu|so huu|thuộc về ai", "owner"),
+            (r"domain|lĩnh vực|linh vuc|miền|mien", "domain"),
+            (r"description|mô tả|mo ta|nội dung", "description"),
+            (r"tag|nhãn|nhan|gắn tag", "tags"),
+            (r"glossary|term|thuật ngữ|thuat ngu|khái niệm", "glossary"),
+        ]
+        query_lower = query.lower()
+        for pattern, aspect in _ASPECT_PATTERNS:
+            if re.search(pattern, query_lower):
+                compare_aspects.append(aspect)
+        if not compare_aspects:
+            compare_aspects = ["schema", "quality", "lineage", "domain"]
+
+        comparison_prompt = (
+            f"Bạn là trợ lý metadata. Hãy so sánh các entity sau dựa trên "
+            f"các khía cạnh: {', '.join(compare_aspects)}.\n\n"
+            f"Dữ liệu entities:\n{entities_text}\n\n"
+            f"Câu hỏi gốc: {query}\n\n"
+            f"Yêu cầu:\n"
+            f"1. Liệt kê thông tin thực tế từ dữ liệu cho mỗi entity\n"
+            f"2. So sánh rõ ràng giữa các entity\n"
+            f"3. Đưa ra recommendation có căn cứ\n"
+            f"4. Chỉ dùng thông tin có trong dữ liệu, KHÔNG bịa đặt\n"
+            f"5. Trả lời bằng tiếng Việt, format markdown\n"
+        )
+
+        if on_status:
+            await on_status("generate")
+
+        try:
+            answer_text = await self._ctx.llm.generate(
+                comparison_prompt,
+            )
+        except Exception:  # noqa: BLE001
+            log.exception("comparison_llm_failed", trace_id=trace_id)
+            answer_text = ""
+
+        if answer_text and answer_text.strip().startswith("{"):
+            try:
+                parsed_ans = _json.loads(answer_text)
+                if isinstance(parsed_ans, dict) and "answer" in parsed_ans:
+                    answer_text = str(parsed_ans["answer"])
+            except Exception:
+                pass
+
+        if not answer_text or not answer_text.strip():
+            answer_text = self._deterministic_comparison(entity_details, compare_aspects)
+
+        answer_text = mask_secrets(answer_text)
+
+        # Record evidence for each entity
+        for ent in resolved_entities:
+            await self._evidence.record_active_entities(
+                uid=user_ctx.user_id if user_ctx else "anonymous",
+                cid=cid, results=[], question=query, extra=[{
+                    "name": ent["resolved_name"],
+                    "urn": ent["urn"],
+                    "entity_type": ent["entity_type"],
+                }],
+            )
+
+        return ChatResponse(
+            answer=answer_text,
+            intent="COMPARISON",
+            confidence="high",
+            ambiguous=len(resolved_entities) < 2,
+            insufficient_context=bool(failed_entities),
+            trace_id=trace_id,
+            conversation_id=cid,
+            entities=[
+                {
+                    "urn": ent["urn"],
+                    "name": ent["resolved_name"],
+                    "url": f"https://datahub.vinfastauto.com/dataset/{ent['urn']}",
+                }
+                for ent in resolved_entities
+            ],
+        )
+
+    def _deterministic_comparison(
+        self,
+        entity_details: list[dict[str, Any]],
+        aspects: list[str],
+    ) -> str:
+        """Fallback comparison when LLM fails — render structured markdown from metadata."""
+        lines: list[str] = []
+        lines.append("### So sánh entities\n")
+
+        for ent in entity_details:
+            lines.append(f"#### {ent['name']}")
+            lines.append(f"- **URN**: `{ent['urn']}`")
+            lines.append(f"- **Type**: {ent['entity_type']}")
+            if ent.get("domain"):
+                lines.append(f"- **Domain**: {ent['domain']}")
+            if ent.get("owner"):
+                lines.append(f"- **Owner**: {ent['owner']}")
+            if ent.get("description"):
+                lines.append(f"- **Description**: {ent['description'][:200]}")
+
+            if "schema" in aspects and ent.get("schema"):
+                lines.append(f"- **Schema** ({len(ent['schema'])} fields):")
+                for f in ent["schema"][:10]:
+                    fname = f.get("name", "?")
+                    ftype = f.get("type", f.get("native_data_type", "?"))
+                    lines.append(f"  - `{fname}` ({ftype})")
+                if len(ent["schema"]) > 10:
+                    lines.append(f"  - ... và {len(ent['schema']) - 10} trường khác")
+
+            if "lineage" in aspects:
+                up = ent["lineage"]["upstreams"]
+                down = ent["lineage"]["downstreams"]
+                if up or down:
+                    lines.append(f"- **Lineage**: {len(up)} upstream, {len(down)} downstream")
+                else:
+                    lines.append("- **Lineage**: Không có lineage được ghi nhận")
+
+            if "tags" in aspects and ent.get("tags"):
+                lines.append(f"- **Tags**: {', '.join(ent['tags'][:5])}")
+
+            if "glossary" in aspects and ent.get("glossary_terms"):
+                lines.append(f"- **Glossary**: {', '.join(ent['glossary_terms'][:5])}")
+
+            lines.append("")
+
+        lines.append("### Kết luận")
+        lines.append("So sánh trên dựa trên metadata thực tế từ catalog.")
+        return "\n".join(lines)
 

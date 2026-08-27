@@ -31,6 +31,9 @@ const STATUS_BADGE: Record<QualityStatusValue, { label: string; cls: string; ico
   warning: { label: "Warning", cls: "bg-amber-500/15 text-amber-600", icon: <CircleAlert className="h-3.5 w-3.5" /> },
   failed: { label: "Failed", cls: "bg-red-500/15 text-red-600", icon: <CircleX className="h-3.5 w-3.5" /> },
   not_evaluated: { label: "Not evaluated", cls: "bg-muted text-muted-foreground", icon: <Minus className="h-3.5 w-3.5" /> },
+  not_applicable: { label: "N/A", cls: "bg-muted/70 text-muted-foreground", icon: <Minus className="h-3.5 w-3.5" /> },
+  unknown: { label: "Unknown", cls: "bg-muted text-muted-foreground", icon: <Minus className="h-3.5 w-3.5" /> },
+  source_error: { label: "Source Error", cls: "bg-red-500/15 text-red-600", icon: <CircleX className="h-3.5 w-3.5" /> },
 };
 
 const RATING_CLS: Record<QualityReport["rating"], string> = {
@@ -41,19 +44,30 @@ const RATING_CLS: Record<QualityReport["rating"], string> = {
 };
 
 async function exportReport(report: QualityReport, format: "pdf" | "txt") {
+  const token = auth.getToken();
   const res = await fetch("/api/v1/actions/quality/export", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      ...(auth.getToken() ? { Authorization: `Bearer ${auth.getToken()}` } : {}),
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
     body: JSON.stringify({ report, format }),
   });
-  if (!res.ok) throw new Error("Không thể xuất báo cáo");
+  if (!res.ok) {
+    let errorDetail = "Không thể xuất báo cáo";
+    try {
+      const data = await res.json();
+      if (data?.detail) errorDetail = data.detail;
+    } catch {
+      // ignore
+    }
+    throw new Error(errorDetail);
+  }
   const blob = await res.blob();
   const disposition = res.headers.get("Content-Disposition") || "";
   const match = /filename="?([^"]+)"?/.exec(disposition);
-  const filename = match?.[1] || `data-quality-report-${report.dataset}.${format}`;
+  const cleanDatasetName = (report.dataset || "dataset").replace(/[/\\?%*:|"<>]/g, "_");
+  const filename = match?.[1] || `data-quality-report-${cleanDatasetName}.${format}`;
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
@@ -103,11 +117,17 @@ function categoryGroups(report: QualityReport) {
 
 function worstStatus(sections: QualityReport["sections"]): QualityStatusValue {
   const order: Record<QualityStatusValue, number> = {
-    failed: 4,
-    warning: 3,
+    source_error: 6,
+    failed: 5,
+    warning: 4,
+    unknown: 3,
     not_evaluated: 2,
-    passed: 1,
+    not_applicable: 1,
+    passed: 0,
   };
+  if (sections.every((s) => s.status === "not_applicable")) {
+    return "not_applicable";
+  }
   return sections.reduce<QualityStatusValue>(
     (worst, s) => (order[s.status] > order[worst] ? s.status : worst),
     "passed"
@@ -116,7 +136,7 @@ function worstStatus(sections: QualityReport["sections"]): QualityStatusValue {
 
 function issueCount(sections: QualityReport["sections"]) {
   return sections.reduce(
-    (n, s) => n + s.findings.filter((f) => f.status === "failed" || f.status === "warning").length,
+    (n, s) => n + s.findings.filter((f) => f.status === "failed" || f.status === "warning" || f.status === "source_error").length,
     0
   );
 }
@@ -160,9 +180,12 @@ export function QualityReportCard({ report }: { report: QualityReport }) {
         <div className="flex items-center gap-2">
           <Sparkles className="h-4 w-4 text-primary" />
           <div>
-            <p className="text-sm font-semibold leading-tight">Data Quality Report</p>
+            <p className="text-sm font-semibold leading-tight">
+              Data Quality Report{report.entity_type && report.entity_type !== "dataset" ? ` (${report.entity_type.charAt(0).toUpperCase() + report.entity_type.slice(1)})` : ""}
+            </p>
             <p className="text-xs text-muted-foreground">
               {report.dataset}
+              {report.platform && ` · ${report.platform}`}
               {report.generated_by && ` · tạo bởi ${report.generated_by}`}
               {report.generated_at && ` · ${new Date(report.generated_at).toLocaleString()}`}
             </p>
@@ -210,11 +233,13 @@ export function QualityReportCard({ report }: { report: QualityReport }) {
               const status = worstStatus(sections);
               const issues = issueCount(sections);
               const summary =
-                status === "not_evaluated"
-                  ? "Chưa đánh giá (thiếu dữ liệu)"
-                  : issues === 0
-                    ? "Đạt"
-                    : `${issues} vấn đề`;
+                status === "not_applicable"
+                  ? "Không áp dụng (N/A)"
+                  : status === "not_evaluated"
+                    ? "Chưa đánh giá (thiếu dữ liệu)"
+                    : issues === 0
+                      ? "Đạt"
+                      : `${issues} vấn đề`;
               return (
                 <div key={label} className="flex items-center justify-between gap-3 text-[13px]">
                   <span className="text-muted-foreground">{label}</span>
@@ -225,7 +250,7 @@ export function QualityReportCard({ report }: { report: QualityReport }) {
                 </div>
               );
             })}
-            {!report.profiling_available && report.not_evaluated_checks.length > 0 && (
+            {(!report.entity_type || report.entity_type === "dataset") && !report.profiling_available && report.not_evaluated_checks.length > 0 && (
               <p className="text-[11px] italic text-muted-foreground">
                 Profiling metrics unavailable
               </p>

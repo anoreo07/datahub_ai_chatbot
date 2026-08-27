@@ -38,7 +38,8 @@ async def chat(
                                 suggested_name=request.suggested_name,
                                 model=request.model,
                                 selected_action=request.selected_action,
-                                images=request.images)
+                                images=request.images,
+                                ragas_enabled=request.ragas_enabled)
 
 
 @router.post("/stream")
@@ -71,9 +72,12 @@ async def chat_stream(
                     model=request.model,
                     selected_action=request.selected_action,
                     images=request.images,
+                    ragas_enabled=request.ragas_enabled,
                     on_status=on_status,
                     on_token=on_token,
                 )
+            except asyncio.CancelledError:
+                pass
             except Exception as exc:  # noqa: BLE001
                 from guardrails.sanitizer import mask_secrets
                 await queue.put(await _sse("error", {"detail": mask_secrets(str(exc))}))
@@ -89,8 +93,15 @@ async def chat_stream(
                 if item is None:
                     break
                 yield item
+        except GeneratorExit:
+            task.cancel()
         finally:
-            await task
+            if not task.done():
+                task.cancel()
+                try:
+                    await task
+                except asyncio.CancelledError:
+                    pass
 
     return StreamingResponse(
         event_gen(),

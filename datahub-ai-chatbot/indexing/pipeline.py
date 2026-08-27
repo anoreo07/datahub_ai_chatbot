@@ -8,6 +8,8 @@ from database.models import EntityChunk
 from database.repositories.chunk_repository import ChunkRepository
 from database.repositories.entity_repository import EntityRepository
 from database.repositories.index_job_repository import IndexJobRepository
+from database.repositories.job_repository import JobRepository
+from database.repositories.notification_repository import NotificationRepository
 from indexing.chunker import chunk_text
 from indexing.embedder import Embedder, create_embedder
 from indexing.entity_document import ChunkItem, build_chunks_for_entity
@@ -25,6 +27,8 @@ class IndexingPipeline:
         self._entity_repo = EntityRepository(session)
         self._chunk_repo = ChunkRepository(session)
         self._index_repo = IndexJobRepository(session)
+        self._job_repo = JobRepository(session)
+        self._notif_repo = NotificationRepository(session)
         self._vector_store = OpenSearchVectorStore()
         self._embedder: Embedder = create_embedder()
 
@@ -104,17 +108,69 @@ class IndexingPipeline:
         for job in jobs:
             try:
                 await self._index_repo.mark_running(job.id)
+
+                # Create a Job in the jobs table to satisfy the ForeignKey of Notification
+                db_job = await self._job_repo.create(
+                    type="index_job",
+                    title="Search Index rebuild",
+                    message=f"Rebuilding search index for {job.entity_urn[:50]}...",
+                    user_id="system",
+                    entity_urn=job.entity_urn,
+                )
+
+                # Create notification linked to the job
+                await self._notif_repo.create(
+                    job_id=db_job.id,
+                    user_id="system",
+                    type="index_job",
+                    title="Search Index rebuild",
+                    message=f"Rebuilding search index for {job.entity_urn[:50]}...",
+                    status="running",
+                )
+
                 entity_db = await self._entity_repo.get_by_urn(job.entity_urn)
                 if not entity_db:
                     await self._index_repo.mark_failed(job.id, "entity_not_found")
+                    await self._job_repo.mark_failed(db_job.id, "Entity not found")
+                    await self._notif_repo.create(
+                        job_id=db_job.id,
+                        user_id="system",
+                        type="index_job",
+                        title="Search Index rebuild",
+                        message=f"Entity {job.entity_urn} not found",
+                        status="failed",
+                    )
                     continue
                 payload = entity_db.payload or {}
                 canonical = CanonicalEntity(**payload)
                 await self.process_entity(canonical)
                 await self._index_repo.mark_completed(job.id)
+                await self._job_repo.mark_success(db_job.id)
+
+                # Update notification to success
+                await self._notif_repo.create(
+                    job_id=db_job.id,
+                    user_id="system",
+                    type="index_job",
+                    title="Search Index rebuild",
+                    message=f"Search index rebuilt successfully for {job.entity_urn[:50]}",
+                    status="success",
+                )
+
                 processed += 1
             except Exception as e:
                 log.exception("index_job_failed", job_id=job.id, urn=job.entity_urn)
                 from guardrails.sanitizer import mask_secrets
                 await self._index_repo.mark_failed(job.id, mask_secrets(str(e))[:500])
+                if 'db_job' in locals():
+                    await self._job_repo.mark_failed(db_job.id, mask_secrets(str(e))[:500])
+                    # Update notification to failed
+                    await self._notif_repo.create(
+                        job_id=db_job.id,
+                        user_id="system",
+                        type="index_job",
+                        title="Search Index rebuild",
+                        message=f"Search index rebuild failed for {job.entity_urn[:50]}: {str(e)[:200]}",
+                        status="failed",
+                    )
         return processed

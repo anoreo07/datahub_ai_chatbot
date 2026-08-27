@@ -1,0 +1,246 @@
+{
+  "total": 40,
+  "passed": 40,
+  "pass_rate": 1.0,
+  "results": [
+    {
+      "test": "Global Lineage Search",
+      "status": "PASS",
+      "latency_ms": 8375.73525402695
+    },
+    {
+      "dataset": "account_use_vehicle",
+      "status": "PASS",
+      "has_lineage": true,
+      "latency_ms": 6780.49016406294
+    },
+    {
+      "dataset": "accounts",
+      "status": "PASS",
+      "has_lineage": true,
+      "latency_ms": 4472.470737993717
+    },
+    {
+      "dataset": "sourcing_tracker",
+      "status": "PASS",
+      "has_lineage": true,
+      "latency_ms": 4642.458703019656
+    },
+    {
+      "dataset": "tc_pvf4_line_itemrevision",
+      "status": "PASS",
+      "has_lineage": true,
+      "latency_ms": 5420.062020071782
+    },
+    {
+      "dataset": "dim_mldoc_extract",
+      "status": "PASS",
+      "has_lineage": true,
+      "latency_ms": 3911.162810982205
+    },
+    {
+      "dataset": "dim_build_option",
+      "status": "PASS",
+      "has_lineage": true,
+      "latency_ms": 5070.194712025113
+    },
+    {
+      "dataset": "dim_color_interior",
+      "status": "PASS",
+      "has_lineage": false,
+      "latency_ms": 27913.811462000012
+    },
+    {
+      "dataset": "dim_market",
+      "status": "PASS",
+      "has_lineage": false,
+      "latency_ms": 28646.00112696644
+    },
+    {
+      "dataset": "dim_super_bom",
+      "status": "PASS",
+      "has_lineage": false,
+      "latency_ms": 30297.75786702521
+    },
+    {
+      "dataset": "dim_variant_sales_desc",
+      "status": "PASS",
+      "has_lineage": false,
+      "latency_ms": 32021.696148090996
+    },
+    {
+      "dataset": "dim_variant_sales_pivot_ea15_2023",
+      "status": "PASS",
+      "has_lineage": true,
+      "latency_ms": 9026.767784031108
+    },
+    {
+      "dataset": "dms.external.account_use_vehicle",
+      "status": "PASS",
+      "has_lineage": true,
+      "latency_ms": 6135.3693309938535
+    },
+    {
+      "dataset": "dms.account_use_vehicle",
+      "status": "PASS",
+      "has_lineage": true,
+      "latency_ms": 7881.744576035999
+    },
+    {
+      "dataset": "dataanalyticsprd.tc_pvf4_line_itemrevision",
+      "status": "PASS",
+      "has_lineage": true,
+      "latency_ms": 14550.283890916035
+    },
+    {
+      "dataset": "dataanalyticsprd.stg_external.tc_pvf4_line_itemrevision",
+      "status": "PASS",
+      "has_lineage": true,
+      "latency_ms": 6142.695543006994
+    },
+    {
+      "dataset": "PFEP Report - Indonesia Factory",
+      "status": "PASS",
+      "has_lineage": true,
+      "latency_ms": 8752.590712043457
+    },
+    {
+      "dataset": "Global_Bom_Data",
+      "status": "PASS",
+      "has_lineage": true,
+      "latency_ms": 6416.202547959983
+    },
+    {
+      "dataset": "dim_battery_pack",
+      "status": "PASS",
+      "has_lineage": true,
+      "latency_ms": 10315.560888964683
+    },
+    {
+      "dataset": "dim_battery_cell",
+      "status": "PASS",
+      "has_lineage": true,
+      "latency_ms": 11073.60023201909
+    },
+    {
+      "dataset": "dim_vin_master",
+      "status": "PASS",
+      "has_lineage": true,
+      "latency_ms": 10976.301937014796
+    },
+    {
+      "dataset": "dim_sales_order",
+      "status": "PASS",
+      "has_lineage": true,
+      "latency_ms": 14527.759561082348
+    },
+    {
+      "dataset": "dim_dealer",
+      "status": "PASS",
+      "has_lineage": true,
+      "latency_ms": 11044.297102023847
+    },
+    {
+      "dataset": "fact_production_daily",
+      "status": "PASS",
+      "has_lineage": true,
+      "latency_ms": 21004.569599055685
+    },
+    {
+      "dataset": "fact_vehicle_delivery",
+      "status": "PASS",
+      "has_lineage": true,
+      "latency_ms": 8751.988559029996
+    },
+    {
+      "dataset": "fact_warranty_claim",
+      "status": "PASS",
+      "has_lineage": false,
+      "latency_ms": 32487.013441044837
+    },
+    {
+      "multi_turn": 1,
+      "question": "Cho t\u00f4i th\u00f4ng tin v\u1ec1 dataset account_use_vehicle.",
+      "status": "PASS",
+      "latency_ms": 10836.597820976749
+    },
+    {
+      "multi_turn": 2,
+      "question": "Dataset n\u00e0y c\u00f3 upstream n\u00e0o kh\u00f4ng?",
+      "status": "PASS",
+      "latency_ms": 29076.966341002844
+    },
+    {
+      "multi_turn": 3,
+      "question": "N\u00f3 c\u00f3 downstream ch\u1ea3y t\u1edbi b\u1ea3ng n\u00e0o?",
+      "status": "PASS",
+      "latency_ms": 10044.437294942327
+    },
+    {
+      "multi_turn": 4,
+      "question": "V\u1ebd bi\u1ec3u \u0111\u1ed3 d\u00f2ng d\u1eef li\u1ec7u (lineage) c\u1ee7a n\u00f3.",
+      "status": "PASS",
+      "latency_ms": 7865.225550951436
+    },
+    {
+      "dataset": "test_adhoc_dataset_01",
+      "status": "PASS",
+      "has_lineage": false,
+      "latency_ms": 10019.504506024532
+    },
+    {
+      "dataset": "temp_export_2024",
+      "status": "PASS",
+      "has_lineage": false,
+      "latency_ms": 9905.451089027338
+    },
+    {
+      "dataset": "sample_staging_unlinked",
+      "status": "PASS",
+      "has_lineage": false,
+      "latency_ms": 16069.679116946645
+    },
+    {
+      "dataset": "audit_log_internal",
+      "status": "PASS",
+      "has_lineage": false,
+      "latency_ms": 10554.650692967698
+    },
+    {
+      "dataset": "sys_config_parameters",
+      "status": "PASS",
+      "has_lineage": false,
+      "latency_ms": 12697.809366043657
+    },
+    {
+      "dataset": "metrics_snapshot_raw",
+      "status": "PASS",
+      "has_lineage": false,
+      "latency_ms": 11275.681145023555
+    },
+    {
+      "dataset": "debug_trace_records",
+      "status": "PASS",
+      "has_lineage": false,
+      "latency_ms": 10201.483338954858
+    },
+    {
+      "dataset": "manual_import_dump",
+      "status": "PASS",
+      "has_lineage": false,
+      "latency_ms": 33353.044276009314
+    },
+    {
+      "dataset": "backup_metadata_store",
+      "status": "PASS",
+      "has_lineage": false,
+      "latency_ms": 10963.169933995232
+    },
+    {
+      "dataset": "dummy_reference_table",
+      "status": "PASS",
+      "has_lineage": false,
+      "latency_ms": 9400.7689319551
+    }
+  ]
+}

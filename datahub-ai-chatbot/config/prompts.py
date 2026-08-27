@@ -77,6 +77,7 @@ Intents (exactly one primary):
 - "LINEAGE": upstream/downstream of a dataset, where data comes from, what depends on it
 - "IMPACT": downstream blast radius / recursive impact ("ảnh hưởng", "bị ảnh hưởng", "impact", "who uses", "điều gì phụ thuộc")
 - "SCHEMA_LOOKUP": columns/fields of a dataset ("trường X", "cột", "schema")
+- "COMPARISON": comparing 2+ entities ("so sánh A và B", "compare X with Y", "A khác B thế nào", "nên dùng A hay B")
 - "ENTITY_DOMAIN": domain of an entity
 - "COUNT_ENTITIES": how many entities / assets
 - "DOMAIN_QUERY": entities in a domain

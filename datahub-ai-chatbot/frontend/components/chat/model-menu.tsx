@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Check } from "lucide-react";
 
@@ -23,6 +23,18 @@ interface ModelMenuProps {
 
 export function ModelMenu({ open, onOpenChange, selectedId, onSelect }: ModelMenuProps) {
   const [models, setModels] = useState<ModelOption[]>([]);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        onOpenChange(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [open, onOpenChange]);
 
   useEffect(() => {
     if (!open || models.length > 0) return;
@@ -48,6 +60,7 @@ export function ModelMenu({ open, onOpenChange, selectedId, onSelect }: ModelMen
     <AnimatePresence>
       {open && (
         <motion.div
+          ref={ref}
           initial={{ opacity: 0, y: 8, scale: 0.96 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 8, scale: 0.96 }}

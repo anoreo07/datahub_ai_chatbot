@@ -1,6 +1,6 @@
 import unicodedata
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -98,7 +98,7 @@ async def search(
     owner: str | None = Query(None),
     tag: str | None = Query(None),
     column: str | None = Query(None),
-    limit: int = Query(10),
+    limit: int = Query(2000),
     session: AsyncSession = Depends(get_session),
     current_user: UserContext = Depends(require_role("admin", "editor", "steward", "viewer", "user")),
     auth_service: AuthorizationService = Depends(get_auth_service),
@@ -133,3 +133,141 @@ async def search(
         for r in results
     ]
     return SearchResponse(results=items, total=len(items))
+
+
+class SchemaFieldItem(BaseModel):
+    field_path: str = ""
+    name: str = ""
+    type: str = ""
+    description: str | None = None
+    nullable: bool = True
+    is_primary_key: bool = False
+
+
+class LineageNodeItem(BaseModel):
+    urn: str
+    name: str
+    entity_type: str | None = None
+    platform: str | None = None
+
+
+class EntityDetailResponse(BaseModel):
+    urn: str
+    entity_type: str
+    name: str
+    display_name: str | None = None
+    description: str | None = None
+    platform: str | None = None
+    environment: str | None = None
+    domain: str | None = None
+    datahub_url: str | None = None
+    schema_fields: list[SchemaFieldItem] = []
+    upstreams: list[LineageNodeItem] = []
+    downstreams: list[LineageNodeItem] = []
+
+
+def _name_from_urn(r: str) -> str:
+    if not isinstance(r, str):
+        return str(r)
+    if "PROD" in r:
+        inner = r.split("PROD")[0].rsplit("(", 1)[-1].strip().strip(",")
+    else:
+        inner = r
+    if "," in inner:
+        parts = inner.split(",")
+        if len(parts) >= 2:
+            return parts[1]
+    return inner.split(":")[-1]
+
+
+@router.get("/entity", response_model=EntityDetailResponse)
+async def get_entity_detail(
+    urn: str,
+    session: AsyncSession = Depends(get_session),
+    current_user: UserContext = Depends(require_role("admin", "editor", "steward", "viewer", "user")),
+    auth_service: AuthorizationService = Depends(get_auth_service),
+) -> EntityDetailResponse:
+    repo = EntityRepository(session)
+    entity = await repo.get_by_urn(urn)
+    if not entity:
+        raise HTTPException(status_code=404, detail="Entity not found")
+
+    if not await auth_service.can_access_domain(current_user, entity.domain):
+        raise HTTPException(status_code=403, detail="Permission denied to access this domain")
+
+    payload = entity.payload or {}
+
+    # Extract schema fields
+    schema_fields = []
+    for f in (payload.get("schema_fields") or []):
+        schema_fields.append(
+            SchemaFieldItem(
+                field_path=f.get("field_path") or f.get("fieldPath") or "",
+                name=f.get("name") or "",
+                type=f.get("type") or "",
+                description=f.get("description"),
+                nullable=f.get("nullable", True),
+                is_primary_key=f.get("is_primary_key") or f.get("isPartOfKey", False),
+            )
+        )
+
+    # Extract lineage URNs
+    upstreams_raw = payload.get("upstreams") or []
+    downstreams_raw = payload.get("downstreams") or []
+
+    # Query database for all related lineage entities to resolve their names/platforms
+    all_lineage_urns = list(set(upstreams_raw + downstreams_raw))
+    resolved_entities = {}
+    if all_lineage_urns:
+        entities_list = await repo.list_by_urns(all_lineage_urns)
+        for ent in entities_list:
+            resolved_entities[ent.urn] = ent
+
+    # Map related entities
+    def map_lineage_node(urn_str: str) -> LineageNodeItem:
+        ent = resolved_entities.get(urn_str)
+        if ent:
+            return LineageNodeItem(
+                urn=ent.urn,
+                name=ent.display_name or ent.name,
+                entity_type=ent.entity_type,
+                platform=ent.platform,
+            )
+        else:
+            # Fallback when entity is not in local DB
+            inferred_type = "dataset"
+            if ":dashboard:" in urn_str or ":dashboard(" in urn_str:
+                inferred_type = "dashboard"
+            elif ":glossaryTerm:" in urn_str:
+                inferred_type = "glossary_term"
+            elif ":document:" in urn_str:
+                inferred_type = "document"
+
+            inferred_platform = None
+            if "dataPlatform:" in urn_str:
+                inferred_platform = urn_str.split("dataPlatform:")[-1].split(",")[0]
+
+            return LineageNodeItem(
+                urn=urn_str,
+                name=_name_from_urn(urn_str),
+                entity_type=inferred_type,
+                platform=inferred_platform,
+            )
+
+    upstreams = [map_lineage_node(u) for u in upstreams_raw]
+    downstreams = [map_lineage_node(d) for d in downstreams_raw]
+
+    return EntityDetailResponse(
+        urn=entity.urn,
+        entity_type=entity.entity_type,
+        name=entity.name,
+        display_name=entity.display_name,
+        description=entity.description,
+        platform=entity.platform,
+        environment=entity.environment,
+        domain=entity.domain,
+        datahub_url=entity.datahub_url,
+        schema_fields=schema_fields,
+        upstreams=upstreams,
+        downstreams=downstreams,
+    )

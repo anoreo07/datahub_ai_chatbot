@@ -109,6 +109,46 @@ BUILTIN_SAMPLES: list[GoldenSample] = [
         expected_intent="GENERAL",
         tags=["general"],
     ),
+    # --- Phase 1-7 test cases ---
+    GoldenSample(
+        question="Dataset nào chưa có mô tả?",
+        expected_intent="MISSING_DESCRIPTION",
+        tags=["metadata", "listing"],
+        notes="Should list datasets without description",
+    ),
+    GoldenSample(
+        question="Dataset thiếu chủ sở hữu",
+        expected_intent="MISSING_OWNER",
+        tags=["metadata", "listing"],
+        notes="Should list datasets without owner",
+    ),
+    GoldenSample(
+        question="Dataset chưa có domain",
+        expected_intent="MISSING_DOMAIN",
+        tags=["metadata", "listing"],
+        notes="Should list datasets without domain",
+    ),
+    GoldenSample(
+        question="Kiểu dữ liệu của field plant_id",
+        expected_intent="FIELD_PROPERTY",
+        tags=["schema", "field"],
+        notes="Should answer field property question",
+    ),
+    GoldenSample(
+        question="Có bao nhiêu dataset trong hệ thống?",
+        expected_intent="COUNT_ENTITIES",
+        tags=["count", "listing"],
+    ),
+    GoldenSample(
+        question="Liệt kê các domain",
+        expected_intent="DOMAIN_QUERY",
+        tags=["domain", "listing"],
+    ),
+    GoldenSample(
+        question="Dataset cost collector có những field nào?",
+        expected_intent="SCHEMA_LOOKUP",
+        tags=["schema", "dataset"],
+    ),
 ]
 
 

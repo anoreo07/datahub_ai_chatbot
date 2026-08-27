@@ -19,7 +19,6 @@ from retrieval.coreference import (
 )
 from retrieval.intent_resolver import IntentResolver, _resolve_anaphora_from_history
 
-
 HIST_DATASET_THEN_FIELD = [
     ("Dataset dim_warehouse có schema gì?", "10 fields"),
     ("warehouse_id là gì?", "mã kho"),

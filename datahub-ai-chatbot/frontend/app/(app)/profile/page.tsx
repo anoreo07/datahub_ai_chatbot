@@ -50,8 +50,8 @@ export default function ProfilePage() {
 
   return (
     <div className="h-full overflow-y-auto">
-      <div className="mx-auto max-w-5xl space-y-5 p-6">
-        <div className="grid gap-5 lg:grid-cols-[320px_1fr]">
+      <div className="mx-auto w-full max-w-[1920px] space-y-6 p-6">
+        <div className="grid gap-6 lg:grid-cols-[320px_1fr]">
           <Card>
             <CardContent className="flex flex-col items-center pt-8 text-center">
               <Avatar className="h-20 w-20">
@@ -74,22 +74,22 @@ export default function ProfilePage() {
             <CardHeader>
               <CardTitle>Thông tin tài khoản</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3 text-sm">
-              <div className="flex justify-between border-b pb-2">
+            <CardContent className="space-y-4 text-sm pt-2">
+              <div className="flex justify-between border-b pb-2.5">
                 <span className="text-muted-foreground">Username</span>
                 <span className="font-medium">{user?.username}</span>
               </div>
-              <div className="flex justify-between border-b pb-2">
+              <div className="flex justify-between border-b pb-2.5">
                 <span className="text-muted-foreground">Tên hiển thị</span>
                 <span className="font-medium">{user?.display_name || "—"}</span>
               </div>
-              <div className="flex justify-between border-b pb-2">
+              <div className="flex justify-between border-b pb-2.5">
                 <span className="text-muted-foreground">Quyền admin</span>
                 <span className="font-medium">{user?.is_admin ? "Có" : "Không"}</span>
               </div>
               <div className="flex justify-between pb-1">
                 <span className="text-muted-foreground">Tên đăng nhập</span>
-                <span className="text-xs text-muted-foreground">{user?.username}</span>
+                <span className="text-xs text-muted-foreground font-mono">{user?.username}</span>
               </div>
             </CardContent>
           </Card>
@@ -100,22 +100,22 @@ export default function ProfilePage() {
             <CardHeader>
               <CardTitle>Quản trị hệ thống</CardTitle>
             </CardHeader>
-            <CardContent className="grid gap-3 sm:grid-cols-2">
+            <CardContent className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {ADMIN_TOOLS.map((tool) => (
                 <Link
                   key={tool.href}
                   href={tool.href}
                   className={cn(
-                    "group flex items-start gap-3 rounded-lg border p-3 transition-colors",
-                    "hover:border-primary/40 hover:bg-accent"
+                    "group flex items-start gap-3 rounded-lg border p-4 transition-all duration-200",
+                    "hover:border-primary/40 hover:bg-accent hover:shadow-sm"
                   )}
                 >
-                  <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors">
                     <tool.icon className="h-4 w-4" />
                   </span>
                   <span className="min-w-0">
-                    <span className="block text-sm font-medium">{tool.label}</span>
-                    <span className="block text-xs text-muted-foreground">{tool.desc}</span>
+                    <span className="block text-sm font-semibold text-foreground group-hover:text-primary transition-colors">{tool.label}</span>
+                    <span className="block text-xs text-muted-foreground mt-1 leading-normal">{tool.desc}</span>
                   </span>
                 </Link>
               ))}

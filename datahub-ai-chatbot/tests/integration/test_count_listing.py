@@ -234,7 +234,9 @@ async def test_list_glossary_terms_full_from_db(db_session) -> None:
     assert response.confidence == "high"
     assert "20" in response.answer
     assert len(response.entities) == 20
-    assert "Term 0, Term 1, Term 10" in response.answer
+    assert "- Term 0" in response.answer
+    assert "- Term 1" in response.answer
+    assert "- Term 10" in response.answer
     assert "..." in response.answer
     assert not any(f"dim_other_{i}" in response.answer for i in range(3))
     names_in_entities = {e.name for e in response.entities}
@@ -269,7 +271,9 @@ async def test_list_documents_vietnamese(db_session) -> None:
     assert response.confidence == "high"
     assert "6" in response.answer
     assert len(response.entities) == 6
-    assert "Doc 0, Doc 1, Doc 2" in response.answer
+    assert "- Doc 0" in response.answer
+    assert "- Doc 1" in response.answer
+    assert "- Doc 2" in response.answer
     assert not any(f"dim_other_{i}" in response.answer for i in range(3))
     names_in_entities = {e.name for e in response.entities}
     assert all(f"Doc {i}" in names_in_entities for i in range(6))
@@ -343,5 +347,7 @@ async def test_list_documents_trailing_system_scope(db_session) -> None:
     assert response.confidence == "high"
     assert "3" in response.answer
     assert len(response.entities) == 3
-    assert "DocS 0, DocS 1, DocS 2" in response.answer
+    assert "- DocS 0" in response.answer
+    assert "- DocS 1" in response.answer
+    assert "- DocS 2" in response.answer
     assert not any(f"dim_other_{i}" in response.answer for i in range(3))

@@ -87,6 +87,18 @@ _INJECTION_PATTERNS: list[re.Pattern[str]] = [
         r"(?:run|execute|write)\s+(?:arbitrary\s+)?(?:code|command|python|shell|sql)\b",
         re.I,
     ),
+    re.compile(
+        r"(?:output|print|show|reveal|display|echo|tell)\s+(?:me\s+)?(?:your\s+)?(?:internal\s+)?system\s+prompt",
+        re.I,
+    ),
+    re.compile(
+        r"\b(?:database_url|jwt_secret_key|redis_url|api_key|secret_key|credentials?|mật\s*khẩu)\b",
+        re.I,
+    ),
+    re.compile(
+        r"\b(?:drop\s+table|delete\s+from|truncate\s+table|alter\s+table|insert\s+into|update\s+\w+\s+set)\b",
+        re.I,
+    ),
 ]
 
 

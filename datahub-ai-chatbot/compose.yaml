@@ -70,6 +70,7 @@ services:
       OPENSEARCH_URL: http://opensearch:9200
       DATAHUB_GMS_URL: http://datahub-datahub-gms-quickstart-1:8080
       OLLAMA_BASE_URL: http://ollama:11434/v1
+      DATAHUB_SKIP_STARTUP_SYNC: "1"
     depends_on:
       postgres:
         condition: service_healthy
@@ -103,6 +104,8 @@ services:
     networks:
       - chatbot-network
       - datahub_network
+    healthcheck:
+      disable: true
     restart: unless-stopped
 
   indexing-worker:
@@ -128,6 +131,8 @@ services:
     networks:
       - chatbot-network
       - datahub_network
+    healthcheck:
+      disable: true
     restart: unless-stopped
 
 

@@ -13,6 +13,9 @@ STATUS_ICON = {
     QualityStatus.WARNING: "⚠",
     QualityStatus.FAILED: "✗",
     QualityStatus.NOT_EVALUATED: "–",
+    QualityStatus.NOT_APPLICABLE: "—",
+    QualityStatus.UNKNOWN: "?",
+    QualityStatus.SOURCE_ERROR: "!",
 }
 
 STATUS_LABEL = {
@@ -20,6 +23,9 @@ STATUS_LABEL = {
     QualityStatus.WARNING: "WARNING",
     QualityStatus.FAILED: "FAILED",
     QualityStatus.NOT_EVALUATED: "NOT EVALUATED",
+    QualityStatus.NOT_APPLICABLE: "N/A",
+    QualityStatus.UNKNOWN: "UNKNOWN",
+    QualityStatus.SOURCE_ERROR: "SOURCE ERROR",
 }
 
 
@@ -59,18 +65,24 @@ def _group_sections(report: QualityReport) -> list[tuple[str, list]]:
 
 def _worst_status(sections: list) -> QualityStatus:
     order = {
-        QualityStatus.FAILED: 3,
-        QualityStatus.WARNING: 2,
+        QualityStatus.SOURCE_ERROR: 5,
+        QualityStatus.FAILED: 4,
+        QualityStatus.WARNING: 3,
+        QualityStatus.UNKNOWN: 2,
         QualityStatus.NOT_EVALUATED: 1,
+        QualityStatus.NOT_APPLICABLE: 0,
         QualityStatus.PASSED: 0,
     }
+    # If all are NOT_APPLICABLE, return NOT_APPLICABLE
+    if all(s.status == QualityStatus.NOT_APPLICABLE for s in sections):
+        return QualityStatus.NOT_APPLICABLE
     return max((s.status for s in sections), key=lambda st: order.get(st, 0))
 
 
 def _issue_count(sections: list) -> int:
     return sum(
         1 for s in sections for f in s.findings
-        if f.status in (QualityStatus.FAILED, QualityStatus.WARNING)
+        if f.status in (QualityStatus.FAILED, QualityStatus.WARNING, QualityStatus.SOURCE_ERROR)
     )
 
 
@@ -82,8 +94,9 @@ def render_summary_markdown(report: QualityReport) -> str:
     stays available through the collapsible "View Full Report" UI or a
     follow-up question asking for the full report.
     """
+    entity_type_suffix = f" ({report.entity_type.capitalize()})" if report.entity_type and report.entity_type != "dataset" else ""
     lines: list[str] = []
-    lines.append(f"# 📊 Data Quality Report: {report.dataset}")
+    lines.append(f"# 📊 Data Quality Report: {report.dataset}{entity_type_suffix}")
     lines.append("")
     lines.append(f"**{report.overall_score}/100 — {report.rating}**"
                  + (f" · tạo bởi {report.generated_by}" if report.generated_by else ""))
@@ -94,14 +107,18 @@ def render_summary_markdown(report: QualityReport) -> str:
     for label, sections in _group_sections(report):
         worst = _worst_status(sections)
         issues = _issue_count(sections)
-        if worst == QualityStatus.NOT_EVALUATED:
+        if worst == QualityStatus.NOT_APPLICABLE:
+            summary = "Không áp dụng (N/A)"
+        elif worst == QualityStatus.NOT_EVALUATED:
             summary = "Chưa đánh giá (thiếu dữ liệu)"
+        elif worst == QualityStatus.SOURCE_ERROR:
+            summary = "Lỗi kết nối DataHub nguồn"
         elif issues == 0:
             summary = "Đạt"
         else:
             summary = f"{issues} vấn đề"
         lines.append(f"- **{label}**: {summary} ({STATUS_LABEL[worst]})")
-    if not report.profiling_available and report.not_evaluated_checks:
+    if report.entity_type == "dataset" and not report.profiling_available and report.not_evaluated_checks:
         lines.append("  *Profiling metrics unavailable*")
     lines.append("")
 
@@ -239,12 +256,18 @@ def render_pdf_bytes(report: QualityReport) -> bytes:
         QualityStatus.WARNING: colors.HexColor("#92400e"),
         QualityStatus.FAILED: colors.HexColor("#991b1b"),
         QualityStatus.NOT_EVALUATED: colors.HexColor("#6b7280"),
+        QualityStatus.NOT_APPLICABLE: colors.HexColor("#6b7280"),
+        QualityStatus.UNKNOWN: colors.HexColor("#6b7280"),
+        QualityStatus.SOURCE_ERROR: colors.HexColor("#991b1b"),
     }
     bg_for = {
         QualityStatus.PASSED: colors.HexColor("#dcfce7"),
         QualityStatus.WARNING: colors.HexColor("#fef3c7"),
         QualityStatus.FAILED: colors.HexColor("#fee2e2"),
         QualityStatus.NOT_EVALUATED: colors.HexColor("#f3f4f6"),
+        QualityStatus.NOT_APPLICABLE: colors.HexColor("#f3f4f6"),
+        QualityStatus.UNKNOWN: colors.HexColor("#f3f4f6"),
+        QualityStatus.SOURCE_ERROR: colors.HexColor("#fee2e2"),
     }
 
     styles = getSampleStyleSheet()

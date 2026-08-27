@@ -151,15 +151,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build API image
-        run: docker build -f deploy/docker/api.Dockerfile -t datahub-ai-chatbot:ci ./datahub-ai-chatbot
+        run: docker build -f datahub-ai-chatbot/Dockerfile -t datahub-ai-chatbot:ci ./datahub-ai-chatbot
       - name: Build Worker image
-        run: docker build -f deploy/docker/worker.Dockerfile -t datahub-ai-worker:ci ./datahub-ai-chatbot
+        run: docker build -f datahub-ai-chatbot/Dockerfile -t datahub-ai-worker:ci ./datahub-ai-chatbot
       - name: Check non-root user
         run: |
           docker run --rm --entrypoint id datahub-ai-chatbot:ci
           docker run --rm --entrypoint id datahub-ai-worker:ci
       - name: Docker Compose config check
-        run: docker compose -f compose.yaml config || echo "Compose check done"
+        run: docker compose -f datahub-ai-chatbot/compose.yaml config || echo "Compose check done"
 
   lint-frontend:
     name: Lint Frontend
@@ -219,11 +219,11 @@ jobs:
           else
             TAG="staging-${TAG}"
           fi
-          docker build -f deploy/docker/api.Dockerfile \
+          docker build -f datahub-ai-chatbot/Dockerfile \
             -t registry.example.com/datahub-ai-chatbot:${TAG} \
             -t registry.example.com/datahub-ai-chatbot:latest \
             ./datahub-ai-chatbot
-          docker build -f deploy/docker/worker.Dockerfile \
+          docker build -f datahub-ai-chatbot/Dockerfile \
             -t registry.example.com/datahub-ai-worker:${TAG} \
             -t registry.example.com/datahub-ai-worker:latest \
             ./datahub-ai-chatbot

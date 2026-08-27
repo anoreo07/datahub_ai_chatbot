@@ -1,22 +1,36 @@
 "use client";
 
 import { useState } from "react";
-import { User, Sparkles, ChevronDown, ChevronUp, X, Bot, Copy, Check } from "lucide-react";
+import { User, Sparkles, ChevronDown, ChevronUp, X, Bot, Copy, Check, AlertTriangle, Clock } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 
-import { Markdown } from "@/components/chat/markdown";
 import { LineageGraph } from "@/components/chat/lineage-graph";
 import { QualityReportCard } from "@/components/chat/quality-report-card";
+import { MessageRenderer } from "@/components/chat/message-renderer";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { cn, formatTime } from "@/lib/utils";
 import { getRoleAvatar } from "@/lib/avatar";
 import { useApp } from "@/lib/app-store";
 import type { ChatMessage } from "@/lib/use-chat";
+import type { EntityItem, RecoveryAction } from "@/lib/types";
+
+function formatResponseTime(ms: number): string {
+  if (ms < 1000) {
+    return `${ms}ms`;
+  }
+  return `${(ms / 1000).toFixed(2)}s`;
+}
+
 
 interface MessageBubbleProps {
   message: ChatMessage;
   onApplySuggestion?: (suggested: string) => void;
+  onEntityClick?: (entity: EntityItem) => void;
+  onCitationClick?: (citation: { id: string; url?: string; entity_urn?: string }) => void;
+  onRecoveryAction?: (action: RecoveryAction) => void;
+  onConfirmClarification?: (candidate: { name: string; urn: string; entity_type?: string }) => void;
+  onRejectClarification?: () => void;
 }
 
 const MAX_VISIBLE_CITATIONS = 5;
@@ -30,32 +44,44 @@ function UserMessageContent({
 }) {
   const text = message.displayContent || message.content;
   const match = /^<tag>(.*?)<\/tag>\s?/.exec(text);
+  const hasImages = (message.images?.length ?? 0) > 0;
+  const caption = hasImages ? text : text;
   return (
-    <div className="flex flex-col gap-2">
-      {(message.images?.length ?? 0) > 0 && (
-        <div className="flex flex-wrap gap-2">
-          {message.images!.map((src, i) => (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              key={i}
-              src={src}
-              alt={`Ảnh đính kèm ${i + 1}`}
-              onClick={() => onOpenImage?.(src)}
-              className="max-h-64 max-w-xs cursor-zoom-in rounded-lg object-cover transition-transform hover:scale-[1.02]"
-            />
-          ))}
+    <div className="flex flex-col">
+      {hasImages && (
+        <div className="-mx-4 -mt-3 -mb-1 md:-mx-7 md:-mt-4 md:-mb-1 overflow-hidden first:rounded-t-3xl md:first:rounded-t-3xl">
+          <div className={cn("flex flex-wrap", message.images!.length > 1 && "gap-1")}>
+            {message.images!.map((src, i) => (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                key={i}
+                src={src}
+                alt={`Ảnh đính kèm ${i + 1}`}
+                onClick={() => onOpenImage?.(src)}
+                className={cn(
+                  "max-h-80 w-full cursor-zoom-in object-contain transition-transform hover:opacity-90",
+                  message.images!.length === 1 && "rounded-t-3xl md:first:rounded-t-3xl",
+                  message.images!.length > 1 && "flex-1 min-w-0 max-w-[50%]"
+                )}
+              />
+            ))}
+          </div>
         </div>
       )}
-      {match ? (
-        <p className="whitespace-pre-wrap leading-relaxed">
-          <span className="mr-2 inline-flex max-w-full align-middle items-center gap-1.5 rounded-full bg-user-msg-foreground px-2.5 py-0.5 text-xs font-semibold text-user-msg shadow-sm">
-            <Sparkles className="h-3 w-3 shrink-0" />
-            {match[1]}
-          </span>
-          {text.slice(match[0].length)}
-        </p>
-      ) : (
-        <p className="whitespace-pre-wrap leading-relaxed">{text}</p>
+      {caption && (
+        <div className={cn("px-1", hasImages && "pt-2 pb-0")}>
+          {match ? (
+            <p className="whitespace-pre-wrap leading-relaxed">
+              <span className="mr-2 inline-flex max-w-full align-middle items-center gap-1.5 rounded-full bg-white px-3 py-1 text-xs font-bold text-blue-600 shadow-md ring-1 ring-blue-200">
+                <Sparkles className="h-3 w-3 shrink-0" />
+                {match[1]}
+              </span>
+              {caption.slice(match[0].length)}
+            </p>
+          ) : (
+            <p className="whitespace-pre-wrap leading-relaxed">{caption}</p>
+          )}
+        </div>
       )}
     </div>
   );
@@ -170,19 +196,27 @@ function CopyButton({ text, className }: { text: string; className?: string }) {
       title="Copy nội dung"
       onClick={copy}
       className={cn(
-        "flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground transition-all",
-        "hover:bg-muted hover:text-foreground",
-        "opacity-0 focus-visible:opacity-100 group-hover:opacity-100",
+        "flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground/70 transition-all",
+        "hover:bg-muted hover:text-foreground hover:shadow-sm",
+        "active:scale-95",
         className
       )}
     >
-      {copied ? <Check className="h-3.5 w-3.5 text-emerald-500" /> : <Copy className="h-3.5 w-3.5" />}
+      {copied ? <Check className="h-4 w-4 text-emerald-500" /> : <Copy className="h-4 w-4" />}
     </button>
   );
 }
 
-export function MessageBubble({ message, onApplySuggestion }: MessageBubbleProps) {
-  const { user } = useApp();
+export function MessageBubble({
+  message,
+  onApplySuggestion,
+  onEntityClick,
+  onCitationClick,
+  onRecoveryAction,
+  onConfirmClarification,
+  onRejectClarification,
+}: MessageBubbleProps) {
+  const { user, showResponseTime } = useApp();
   const userAvatar = getRoleAvatar(user);
   const isUser = message.role === "user";
   const isError = message.role === "error";
@@ -199,44 +233,50 @@ export function MessageBubble({ message, onApplySuggestion }: MessageBubbleProps
       transition={{ duration: 0.2 }}
       className={cn(
         "group flex w-full gap-3",
-        isUser ? "justify-end -mr-4" : "justify-start -ml-4"
+        isUser ? "justify-end" : "justify-start"
       )}
     >
       {!isUser && (
-        <Avatar className="mt-0.5 h-14 w-14 shrink-0 overflow-hidden rounded-full bg-bot-msg text-bot-msg-foreground">
+        <Avatar className="mt-0.5 h-10 w-10 shrink-0 overflow-hidden rounded-full bg-bot-msg text-bot-msg-foreground md:h-14 md:w-14">
           <AvatarImage src="/logo.png" alt="DataHub AI" />
           <AvatarFallback>
-            <Bot className="h-7 w-7" />
+            <Bot className="h-5 w-5 md:h-7 md:w-7" />
           </AvatarFallback>
         </Avatar>
       )}
 
       <div
         className={cn(
-          "relative flex max-w-[90%] flex-col",
-          isUser ? "items-end" : "items-start sm:max-w-[84%]"
+          "relative flex flex-col",
+          isUser
+            ? "max-w-[90%] items-end md:max-w-[70%]"
+            : "max-w-[90%] items-start md:max-w-[85%]"
         )}
       >
-        {!message.streaming && (
-          <div
-            className={cn(
-              "absolute -top-2.5 z-10",
-              isUser ? "-left-2.5" : "-right-2.5"
-            )}
-          >
-            <CopyButton text={copyText} />
-          </div>
-        )}
         <div
           className={cn(
-            "rounded-3xl px-7 py-4 text-[15px] shadow-sm",
+            "rounded-3xl px-4 py-3 text-[15px] shadow-md md:px-7 md:py-4",
             isUser
               ? "rounded-br-md bg-user-msg text-user-msg-foreground"
               : isError
-                ? "rounded-bl-md bg-destructive/10 text-destructive"
+                ? "rounded-bl-md border border-amber-200/60 bg-amber-50 text-amber-900 dark:border-amber-800/40 dark:bg-amber-950/50 dark:text-amber-200"
                 : "rounded-bl-md bg-bot-msg text-bot-msg-foreground"
           )}
         >
+          {isError && (
+            <div className="mb-2 flex items-center gap-2">
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/60">
+                <AlertTriangle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+              </span>
+              <span className="text-sm font-medium text-amber-700 dark:text-amber-300">Cảnh báo</span>
+            </div>
+          )}
+          {!isUser && !isError && (message.intent === "THINKING_OVERVIEW" || message.intent === "COMPARISON") && (
+            <div className="mb-2.5 inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary ring-1 ring-primary/20">
+              <Sparkles className="h-3.5 w-3.5" />
+              <span>Thinking Mode</span>
+            </div>
+          )}
           {isUser ? (
             <UserMessageContent message={message} onOpenImage={setLightbox} />
           ) : (
@@ -244,12 +284,21 @@ export function MessageBubble({ message, onApplySuggestion }: MessageBubbleProps
               {message.streaming && message.content === "" ? (
                 <StreamingTyping />
               ) : (
-                <Markdown content={message.content} />
+                <MessageRenderer
+                  message={message}
+                  onApplySuggestion={onApplySuggestion}
+                  onEntityClick={onEntityClick}
+                  onRecoveryAction={onRecoveryAction}
+                  onConfirmClarification={onConfirmClarification}
+                  onRejectClarification={onRejectClarification}
+                />
               )}
             </AnimatePresence>
           )}
 
-          {!isUser && message.lineage && <LineageGraph lg={message.lineage} />}
+          {!isUser && message.selected_action === "lineage" && message.lineage && (
+            <LineageGraph lg={message.lineage} />
+          )}
 
           {!isUser && message.quality_report && (
             <QualityReportCard report={message.quality_report} />
@@ -260,19 +309,22 @@ export function MessageBubble({ message, onApplySuggestion }: MessageBubbleProps
           )}
         </div>
 
-        {!isUser && (
-          <div className="mt-1 flex flex-col items-start gap-1 px-1">
-            <Citations
-              ids={message.citations?.map((c) => c.id)}
-              urls={message.citations?.map((c) => c.url)}
-            />
-            <Entities items={message.entities} />
+        {!isUser && showResponseTime && typeof message.response_time_ms === "number" && !message.streaming && (
+          <div className="mt-1.5 flex items-center gap-1.5 text-xs font-medium text-primary bg-primary/10 border border-primary/20 px-2.5 py-0.5 rounded-full w-fit">
+            <Clock className="h-3 w-3 shrink-0" />
+            <span>Response time: {formatResponseTime(message.response_time_ms)}</span>
+          </div>
+        )}
+
+        {!isUser && !message.streaming && (
+          <div className="mt-1 flex items-center gap-1 px-1">
+            <CopyButton text={copyText} />
           </div>
         )}
 
         <span
           className={cn(
-            "mt-1 px-1 text-[10px] text-muted-foreground",
+            "mt-1 px-1 text-[11px] font-medium text-muted-foreground/80",
             isUser && "text-right"
           )}
         >
@@ -282,11 +334,12 @@ export function MessageBubble({ message, onApplySuggestion }: MessageBubbleProps
         </span>
       </div>
 
+
       {isUser && (
-        <Avatar className="mt-0.5 h-14 w-14 shrink-0">
+        <Avatar className="mt-0.5 h-10 w-10 shrink-0 md:h-14 md:w-14">
           {userAvatar && <AvatarImage src={userAvatar} alt="User" />}
           <AvatarFallback className="bg-user-msg/15 text-user-msg">
-            <User className="h-7 w-7" />
+            <User className="h-5 w-5 md:h-7 md:w-7" />
           </AvatarFallback>
         </Avatar>
       )}

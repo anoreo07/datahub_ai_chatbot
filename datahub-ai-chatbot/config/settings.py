@@ -54,8 +54,12 @@ class Settings(BaseSettings):
     AWS_REGION: str = "us-east-1"
     OPENAI_API_KEY: str = ""
 
-    FIREWORKS_API_KEY: str = ""
+    FIREWORKS_API_KEY: str = "fake-fireworks-key"
     FIREWORKS_MODEL_ID: str = "accounts/fireworks/models/deepseek-v4-flash-0731"
+
+    GEMINI_API_KEY: str = ""
+    GEMINI_MODEL_1: str = "gemini-3.1-flash-lite"
+    GEMINI_MODEL_2: str = "gemini-3.5-flash-lite"
 
     NVIDIA_API_KEY: str = ""
     NVIDIA_BASE_URL: str = "https://integrate.api.nvidia.com/v1"
@@ -145,8 +149,8 @@ class Settings(BaseSettings):
 
     @model_validator(mode="after")
     def _validate_config(self) -> "Settings":
-        if self.AUTH_MODE == "jwt" and not self.JWT_SECRET_KEY:
-            raise ValueError("JWT_SECRET_KEY must be set when AUTH_MODE=jwt")
+        if self.AUTH_MODE == "jwt" and (not self.JWT_SECRET_KEY or self.JWT_SECRET_KEY in ("dev-secret", "dev-secret-jwt-key")):
+            raise ValueError("JWT_SECRET_KEY must be set to a secure custom value when AUTH_MODE=jwt")
         if not self.USE_MOCK_DATAHUB and not self.DATAHUB_GMS_URL:
             raise ValueError("DATAHUB_GMS_URL must be set when USE_MOCK_DATAHUB=false")
         if (

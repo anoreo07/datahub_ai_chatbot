@@ -14,5 +14,17 @@
   {"source": "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,DEV)", "target": "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,PROD)"},
   {"source": "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,PROD)", "target": "urn:li:document:inventory_policy"},
   {"source": "urn:li:dataset:(urn:li:dataPlatform:snowflake,finance.monthly_revenue,PROD)", "target": "urn:li:document:monthly_revenue_methodology"},
-  {"source": "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.dim_supplier,PROD)", "target": "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,PROD)"}
+  {"source": "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.dim_supplier,PROD)", "target": "urn:li:dataset:(urn:li:dataPlatform:postgres,logistic.fact_inventory,PROD)"},
+  {"source": "urn:li:dataset:(urn:li:dataPlatform:powerbi,Bc_Hàng_tồn_kho_theo_kỳ.Dim_BaoCaoLayout,PROD)", "target": "urn:li:dashboard:(powerbi,Bc_Hàng_tồn_kho_theo_kỳ.Visual_1)"},
+  {"source": "urn:li:dataset:(urn:li:dataPlatform:powerbi,Bc_Hàng_tồn_kho_theo_kỳ.Dim_BaoCaoLayout,PROD)", "target": "urn:li:dashboard:(powerbi,Bc_Hàng_tồn_kho_theo_kỳ.Visual_2)"},
+  {"source": "urn:li:dataset:(urn:li:dataPlatform:powerbi,Bc_Hàng_tồn_kho_theo_kỳ.Dim_BaoCaoLayout,PROD)", "target": "urn:li:dashboard:(powerbi,Bc_Hàng_tồn_kho_theo_kỳ.Visual_3)"},
+  {"source": "urn:li:dataset:(urn:li:dataPlatform:powerbi,Bc_Hàng_tồn_kho_theo_kỳ.Dim_BaoCaoLayout,PROD)", "target": "urn:li:dashboard:(powerbi,Bc_Hàng_tồn_kho_theo_kỳ.Visual_4)"},
+  {"source": "urn:li:dataset:(urn:li:dataPlatform:powerbi,Bc_Hàng_tồn_kho_theo_kỳ.Dim_BaoCaoLayout,PROD)", "target": "urn:li:dashboard:(powerbi,Bc_Hàng_tồn_kho_theo_kỳ.Visual_5)"},
+  {"source": "urn:li:dataset:(urn:li:dataPlatform:powerbi,Bc_Hàng_tồn_kho_theo_kỳ.Dim_BaoCaoLayout,PROD)", "target": "urn:li:dashboard:(powerbi,Bc_Hàng_tồn_kho_theo_kỳ.Visual_6)"},
+  {"source": "urn:li:dataset:(urn:li:dataPlatform:powerbi,Bc_Hàng_tồn_kho_theo_kỳ.Dim_BaoCaoLayout,PROD)", "target": "urn:li:dashboard:(powerbi,Bc_Hàng_tồn_kho_theo_kỳ.Visual_7)"},
+  {"source": "urn:li:dataset:(urn:li:dataPlatform:powerbi,Bc_Hàng_tồn_kho_theo_kỳ.Dim_BaoCaoLayout,PROD)", "target": "urn:li:dashboard:(powerbi,Bc_Hàng_tồn_kho_theo_kỳ.Visual_8)"},
+  {"source": "urn:li:dataset:(urn:li:dataPlatform:powerbi,Bc_Hàng_tồn_kho_theo_kỳ.Dim_BaoCaoLayout,PROD)", "target": "urn:li:dashboard:(powerbi,Bc_Hàng_tồn_kho_theo_kỳ.Visual_9)"},
+  {"source": "urn:li:dataset:(urn:li:dataPlatform:powerbi,Bc_Hàng_tồn_kho_theo_kỳ.Dim_BaoCaoLayout,PROD)", "target": "urn:li:dashboard:(powerbi,Bc_Hàng_tồn_kho_theo_kỳ.Visual_10)"},
+  {"source": "urn:li:dataset:(urn:li:dataPlatform:powerbi,Bc_Hàng_tồn_kho_theo_kỳ.Dim_BaoCaoLayout,PROD)", "target": "urn:li:dashboard:(powerbi,Bc_Hàng_tồn_kho_theo_kỳ.Visual_11)"},
+  {"source": "urn:li:dataset:(urn:li:dataPlatform:powerbi,Bc_Hàng_tồn_kho_theo_kỳ.Dim_BaoCaoLayout,PROD)", "target": "urn:li:dashboard:(powerbi,Bc_Hàng_tồn_kho_theo_kỳ.Visual_12)"}
 ]

@@ -240,10 +240,13 @@ class AuthorizationService:
             return and_(Entity.urn.in_(accessible) if accessible else not_(Entity.urn.in_(denied)))
         if accessible and denied:
             return and_(Entity.urn.in_(accessible), not_(Entity.urn.in_(denied)))
-        # No session or no ACL data — restrict to public entities as safe default
-        if self._session is None:
-            return None  # caller decides fallback
-        return not_(Entity.urn.in_(denied)) if denied else None
+
+        # Non-admin with no explicit ACL permissions — restrict to public entities
+        public_urns = await self._get_public_urns(user)
+        if public_urns:
+            return Entity.urn.in_(public_urns)
+        # No ACL data at all — restrict everything for non-admin
+        return Entity.urn.in_([])
 
     async def build_opensearch_acl_filter(self, user: UserContext) -> dict | None:
         if user.is_admin:

@@ -1,0 +1,1161 @@
+{
+  "datasets_schema_lineage": [],
+  "datasets_downstreams": [
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,dataanalyticsprd.sourcing_tracker,PROD)",
+      "name": "sourcing_tracker",
+      "display_name": "sourcing_tracker",
+      "platform": "glue",
+      "environment": "PROD",
+      "domain": null,
+      "upstreams": [],
+      "downstreams": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dataanalyticsprd.stg_external.sourcing_tracker,PROD)"
+      ],
+      "owners": [
+        {
+          "name": "owner",
+          "email": "",
+          "type": "USER"
+        }
+      ]
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,dms.accounts,PROD)",
+      "name": "accounts",
+      "display_name": "accounts",
+      "platform": "glue",
+      "environment": "PROD",
+      "domain": null,
+      "upstreams": [],
+      "downstreams": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dms.external.accounts,PROD)"
+      ],
+      "owners": [
+        {
+          "name": "owner",
+          "email": "",
+          "type": "USER"
+        }
+      ]
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,dataanalyticsprd.tc_pvf4_line_itemrevision,PROD)",
+      "name": "tc_pvf4_line_itemrevision",
+      "display_name": "tc_pvf4_line_itemrevision",
+      "platform": "glue",
+      "environment": "PROD",
+      "domain": null,
+      "upstreams": [],
+      "downstreams": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dataanalyticsprd.stg_external.tc_pvf4_line_itemrevision,PROD)"
+      ],
+      "owners": [
+        {
+          "name": "spectrum_v1",
+          "email": "",
+          "type": "USER"
+        }
+      ]
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,azure_external.dim_mldoc_extract,PROD)",
+      "name": "dim_mldoc_extract",
+      "display_name": "dim_mldoc_extract",
+      "platform": "glue",
+      "environment": "PROD",
+      "domain": null,
+      "upstreams": [],
+      "downstreams": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dataanalyticsprd.azure_external.dim_mldoc_extract,PROD)"
+      ],
+      "owners": [
+        {
+          "name": "owner",
+          "email": "",
+          "type": "USER"
+        }
+      ]
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,azure_external.dim_build_option,PROD)",
+      "name": "dim_build_option",
+      "display_name": "dim_build_option",
+      "platform": "glue",
+      "environment": "PROD",
+      "domain": null,
+      "upstreams": [],
+      "downstreams": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dataanalyticsprd.azure_external.dim_build_option,PROD)"
+      ],
+      "owners": [
+        {
+          "name": "owner",
+          "email": "",
+          "type": "USER"
+        }
+      ]
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,azure_external.dim_color_interior,PROD)",
+      "name": "dim_color_interior",
+      "display_name": "dim_color_interior",
+      "platform": "glue",
+      "environment": "PROD",
+      "domain": null,
+      "upstreams": [],
+      "downstreams": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dataanalyticsprd.azure_external.dim_color_interior,PROD)"
+      ],
+      "owners": [
+        {
+          "name": "owner",
+          "email": "",
+          "type": "USER"
+        }
+      ]
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,azure_external.dim_market,PROD)",
+      "name": "dim_market",
+      "display_name": "dim_market",
+      "platform": "glue",
+      "environment": "PROD",
+      "domain": null,
+      "upstreams": [],
+      "downstreams": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dataanalyticsprd.azure_external.dim_market,PROD)"
+      ],
+      "owners": [
+        {
+          "name": "owner",
+          "email": "",
+          "type": "USER"
+        }
+      ]
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,azure_external.dim_super_bom,PROD)",
+      "name": "dim_super_bom",
+      "display_name": "dim_super_bom",
+      "platform": "glue",
+      "environment": "PROD",
+      "domain": null,
+      "upstreams": [],
+      "downstreams": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dataanalyticsprd.azure_external.dim_super_bom,PROD)"
+      ],
+      "owners": [
+        {
+          "name": "owner",
+          "email": "",
+          "type": "USER"
+        }
+      ]
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,azure_external.dim_variant_sales_desc,PROD)",
+      "name": "dim_variant_sales_desc",
+      "display_name": "dim_variant_sales_desc",
+      "platform": "glue",
+      "environment": "PROD",
+      "domain": null,
+      "upstreams": [],
+      "downstreams": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dataanalyticsprd.azure_external.dim_variant_sales_desc,PROD)"
+      ],
+      "owners": [
+        {
+          "name": "owner",
+          "email": "",
+          "type": "USER"
+        }
+      ]
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,azure_external.dim_variant_sales_pivot_ea15_2023,PROD)",
+      "name": "dim_variant_sales_pivot_ea15_2023",
+      "display_name": "dim_variant_sales_pivot_ea15_2023",
+      "platform": "glue",
+      "environment": "PROD",
+      "domain": null,
+      "upstreams": [],
+      "downstreams": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dataanalyticsprd.azure_external.dim_variant_sales_pivot_ea15_2023,PROD)"
+      ],
+      "owners": [
+        {
+          "name": "owner",
+          "email": "",
+          "type": "USER"
+        }
+      ]
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,azure_external.dim_variant_sales_pivot_id1u_2019,PROD)",
+      "name": "dim_variant_sales_pivot_id1u_2019",
+      "display_name": "dim_variant_sales_pivot_id1u_2019",
+      "platform": "glue",
+      "environment": "PROD",
+      "domain": null,
+      "upstreams": [],
+      "downstreams": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dataanalyticsprd.azure_external.dim_variant_sales_pivot_id1u_2019,PROD)"
+      ],
+      "owners": [
+        {
+          "name": "owner",
+          "email": "",
+          "type": "USER"
+        }
+      ]
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,azure_external.dim_variant_sales_pivot_pe1u_2023,PROD)",
+      "name": "dim_variant_sales_pivot_pe1u_2023",
+      "display_name": "dim_variant_sales_pivot_pe1u_2023",
+      "platform": "glue",
+      "environment": "PROD",
+      "domain": null,
+      "upstreams": [],
+      "downstreams": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dataanalyticsprd.azure_external.dim_variant_sales_pivot_pe1u_2023,PROD)"
+      ],
+      "owners": [
+        {
+          "name": "owner",
+          "email": "",
+          "type": "USER"
+        }
+      ]
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,azure_external.fct_backflush,PROD)",
+      "name": "fct_backflush",
+      "display_name": "fct_backflush",
+      "platform": "glue",
+      "environment": "PROD",
+      "domain": null,
+      "upstreams": [],
+      "downstreams": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dataanalyticsprd.azure_external.fct_backflush,PROD)"
+      ],
+      "owners": [
+        {
+          "name": "owner",
+          "email": "",
+          "type": "USER"
+        }
+      ]
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,azure_external.temp_sales_combine,PROD)",
+      "name": "temp_sales_combine",
+      "display_name": "temp_sales_combine",
+      "platform": "glue",
+      "environment": "PROD",
+      "domain": null,
+      "upstreams": [],
+      "downstreams": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dataanalyticsprd.azure_external.temp_sales_combine,PROD)"
+      ],
+      "owners": [
+        {
+          "name": "owner",
+          "email": "",
+          "type": "USER"
+        }
+      ]
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,azure_external.temp_sales_plan,PROD)",
+      "name": "temp_sales_plan",
+      "display_name": "temp_sales_plan",
+      "platform": "glue",
+      "environment": "PROD",
+      "domain": null,
+      "upstreams": [],
+      "downstreams": [
+        "urn:li:dataset:(urn:li:dataPlatform:redshift,dataanalyticsprd.azure_external.temp_sales_plan,PROD)"
+      ],
+      "owners": [
+        {
+          "name": "owner",
+          "email": "",
+          "type": "USER"
+        }
+      ]
+    }
+  ],
+  "datasets_no_lineage": [
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,sap_external.stas,PROD)",
+      "name": "stas",
+      "display_name": "stas",
+      "platform": "glue",
+      "env": "PROD",
+      "domain": null
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,sap_external.stko,PROD)",
+      "name": "stko",
+      "display_name": "stko",
+      "platform": "glue",
+      "env": "PROD",
+      "domain": null
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,sap_external.super_bom_copt,PROD)",
+      "name": "super_bom_copt",
+      "display_name": "super_bom_copt",
+      "platform": "glue",
+      "env": "PROD",
+      "domain": null
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:Cisco,Chăm sóc khách hàng.[CSKH]_Monthly Report_Báo cáo chỉ số hài lòng KH 1801 (nội bộ),PROD)",
+      "name": "[CSKH]_Monthly Report_Báo cáo chỉ số hài lòng KH 1801 (nội bộ)",
+      "display_name": "[CSKH]_Monthly Report_Báo cáo chỉ số hài lòng KH 1801 (nội bộ)",
+      "platform": "Cisco",
+      "env": "PROD",
+      "domain": "HẬU MÃI"
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,sap_external.surplus_deficit_20241014_parquet,PROD)",
+      "name": "surplus_deficit_20241014_parquet",
+      "display_name": "surplus_deficit_20241014_parquet",
+      "platform": "glue",
+      "env": "PROD",
+      "domain": null
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,sap_external.survey_send,PROD)",
+      "name": "survey_send",
+      "display_name": "survey_send",
+      "platform": "glue",
+      "env": "PROD",
+      "domain": null
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:DMS,Dịch vụ.[HMVN]_KDDV_Báo cáo lượt xe dịch vụ,PROD)",
+      "name": "[HMVN]_KDDV_Báo cáo lượt xe dịch vụ",
+      "display_name": "[HMVN]_KDDV_Báo cáo lượt xe dịch vụ",
+      "platform": "DMS",
+      "env": "PROD",
+      "domain": "HẬU MÃI"
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:DMS,Dịch vụ.[HMVN]_VHDV_Báo cáo tỷ lệ bảo hành,PROD)",
+      "name": "[HMVN]_VHDV_Báo cáo tỷ lệ bảo hành",
+      "display_name": "[HMVN]_VHDV_Báo cáo tỷ lệ bảo hành",
+      "platform": "DMS",
+      "env": "PROD",
+      "domain": "HẬU MÃI"
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,sap_external.t001k,PROD)",
+      "name": "t001k",
+      "display_name": "t001k",
+      "platform": "glue",
+      "env": "PROD",
+      "domain": null
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,sap_external.t001k_0a25e9e53c424bf1608adc6f1bf30ed1,PROD)",
+      "name": "t001k_0a25e9e53c424bf1608adc6f1bf30ed1",
+      "display_name": "t001k_0a25e9e53c424bf1608adc6f1bf30ed1",
+      "platform": "glue",
+      "env": "PROD",
+      "domain": null
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:powerbi,MRP_Master_Data_Viet_Nam_Editing.fact_coverage_days_mrp,PROD)",
+      "name": "fact_coverage_days_mrp",
+      "display_name": "fact_coverage_days_mrp",
+      "platform": "powerbi",
+      "env": "PROD",
+      "domain": null
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:DMS,Hàng xuất.[LOG]_Báo cáo giao nhận hàng phụ tùng AFS của từng nhà vận tải,PROD)",
+      "name": "[LOG]_Báo cáo giao nhận hàng phụ tùng AFS của từng nhà vận tải",
+      "display_name": "[LOG]_Báo cáo giao nhận hàng phụ tùng AFS của từng nhà vận tải",
+      "platform": "DMS",
+      "env": "PROD",
+      "domain": "LOGISTIC"
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:DMS,Hàng xuất.[LOG]_Báo cáo quản lý kho xe máy điện HCM,PROD)",
+      "name": "[LOG]_Báo cáo quản lý kho xe máy điện HCM",
+      "display_name": "[LOG]_Báo cáo quản lý kho xe máy điện HCM",
+      "platform": "DMS",
+      "env": "PROD",
+      "domain": "LOGISTIC"
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,sap_external.t001w,PROD)",
+      "name": "t001w",
+      "display_name": "t001w",
+      "platform": "glue",
+      "env": "PROD",
+      "domain": null
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,sap_external.t025,PROD)",
+      "name": "t025",
+      "display_name": "t025",
+      "platform": "glue",
+      "env": "PROD",
+      "domain": null
+    }
+  ],
+  "datasets_with_owner": [
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,dataanalyticsprd.sourcing_tracker,PROD)",
+      "name": "sourcing_tracker",
+      "display_name": "sourcing_tracker",
+      "platform": "glue",
+      "domain": null,
+      "owners": [
+        {
+          "name": "owner",
+          "email": "",
+          "type": "USER"
+        }
+      ],
+      "custom_owner": null
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,dms.accounts,PROD)",
+      "name": "accounts",
+      "display_name": "accounts",
+      "platform": "glue",
+      "domain": null,
+      "owners": [
+        {
+          "name": "owner",
+          "email": "",
+          "type": "USER"
+        }
+      ],
+      "custom_owner": null
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,dataanalyticsprd.tc_pvf4_line_itemrevision,PROD)",
+      "name": "tc_pvf4_line_itemrevision",
+      "display_name": "tc_pvf4_line_itemrevision",
+      "platform": "glue",
+      "domain": null,
+      "owners": [
+        {
+          "name": "spectrum_v1",
+          "email": "",
+          "type": "USER"
+        }
+      ],
+      "custom_owner": null
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,azure_external.bill,PROD)",
+      "name": "bill",
+      "display_name": "bill",
+      "platform": "glue",
+      "domain": null,
+      "owners": [
+        {
+          "name": "owner",
+          "email": "",
+          "type": "USER"
+        }
+      ],
+      "custom_owner": null
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,azure_external.chargingbill,PROD)",
+      "name": "chargingbill",
+      "display_name": "chargingbill",
+      "platform": "glue",
+      "domain": null,
+      "owners": [
+        {
+          "name": "owner",
+          "email": "",
+          "type": "USER"
+        }
+      ],
+      "custom_owner": null
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,azure_external.dim_mldoc_extract,PROD)",
+      "name": "dim_mldoc_extract",
+      "display_name": "dim_mldoc_extract",
+      "platform": "glue",
+      "domain": null,
+      "owners": [
+        {
+          "name": "owner",
+          "email": "",
+          "type": "USER"
+        }
+      ],
+      "custom_owner": null
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,azure_external.dim_build_option,PROD)",
+      "name": "dim_build_option",
+      "display_name": "dim_build_option",
+      "platform": "glue",
+      "domain": null,
+      "owners": [
+        {
+          "name": "owner",
+          "email": "",
+          "type": "USER"
+        }
+      ],
+      "custom_owner": null
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,azure_external.dim_color_interior,PROD)",
+      "name": "dim_color_interior",
+      "display_name": "dim_color_interior",
+      "platform": "glue",
+      "domain": null,
+      "owners": [
+        {
+          "name": "owner",
+          "email": "",
+          "type": "USER"
+        }
+      ],
+      "custom_owner": null
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,azure_external.dim_market,PROD)",
+      "name": "dim_market",
+      "display_name": "dim_market",
+      "platform": "glue",
+      "domain": null,
+      "owners": [
+        {
+          "name": "owner",
+          "email": "",
+          "type": "USER"
+        }
+      ],
+      "custom_owner": null
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,azure_external.dim_super_bom,PROD)",
+      "name": "dim_super_bom",
+      "display_name": "dim_super_bom",
+      "platform": "glue",
+      "domain": null,
+      "owners": [
+        {
+          "name": "owner",
+          "email": "",
+          "type": "USER"
+        }
+      ],
+      "custom_owner": null
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,azure_external.dim_variant_sales_desc,PROD)",
+      "name": "dim_variant_sales_desc",
+      "display_name": "dim_variant_sales_desc",
+      "platform": "glue",
+      "domain": null,
+      "owners": [
+        {
+          "name": "owner",
+          "email": "",
+          "type": "USER"
+        }
+      ],
+      "custom_owner": null
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,azure_external.dim_variant_sales_pivot_ea15_2023,PROD)",
+      "name": "dim_variant_sales_pivot_ea15_2023",
+      "display_name": "dim_variant_sales_pivot_ea15_2023",
+      "platform": "glue",
+      "domain": null,
+      "owners": [
+        {
+          "name": "owner",
+          "email": "",
+          "type": "USER"
+        }
+      ],
+      "custom_owner": null
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,azure_external.dim_variant_sales_pivot_id1u_2019,PROD)",
+      "name": "dim_variant_sales_pivot_id1u_2019",
+      "display_name": "dim_variant_sales_pivot_id1u_2019",
+      "platform": "glue",
+      "domain": null,
+      "owners": [
+        {
+          "name": "owner",
+          "email": "",
+          "type": "USER"
+        }
+      ],
+      "custom_owner": null
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,azure_external.dim_variant_sales_pivot_pe1u_2023,PROD)",
+      "name": "dim_variant_sales_pivot_pe1u_2023",
+      "display_name": "dim_variant_sales_pivot_pe1u_2023",
+      "platform": "glue",
+      "domain": null,
+      "owners": [
+        {
+          "name": "owner",
+          "email": "",
+          "type": "USER"
+        }
+      ],
+      "custom_owner": null
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,azure_external.fct_backflush,PROD)",
+      "name": "fct_backflush",
+      "display_name": "fct_backflush",
+      "platform": "glue",
+      "domain": null,
+      "owners": [
+        {
+          "name": "owner",
+          "email": "",
+          "type": "USER"
+        }
+      ],
+      "custom_owner": null
+    }
+  ],
+  "datasets_no_owner": [
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,sap_external.stas,PROD)",
+      "name": "stas",
+      "display_name": "stas",
+      "platform": "glue",
+      "domain": null
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,sap_external.stko,PROD)",
+      "name": "stko",
+      "display_name": "stko",
+      "platform": "glue",
+      "domain": null
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,sap_external.super_bom_copt,PROD)",
+      "name": "super_bom_copt",
+      "display_name": "super_bom_copt",
+      "platform": "glue",
+      "domain": null
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:Cisco,Chăm sóc khách hàng.[CSKH]_Monthly Report_Báo cáo chỉ số hài lòng KH 1801 (nội bộ),PROD)",
+      "name": "[CSKH]_Monthly Report_Báo cáo chỉ số hài lòng KH 1801 (nội bộ)",
+      "display_name": "[CSKH]_Monthly Report_Báo cáo chỉ số hài lòng KH 1801 (nội bộ)",
+      "platform": "Cisco",
+      "domain": "HẬU MÃI"
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,sap_external.surplus_deficit_20241014_parquet,PROD)",
+      "name": "surplus_deficit_20241014_parquet",
+      "display_name": "surplus_deficit_20241014_parquet",
+      "platform": "glue",
+      "domain": null
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,sap_external.survey_send,PROD)",
+      "name": "survey_send",
+      "display_name": "survey_send",
+      "platform": "glue",
+      "domain": null
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:DMS,Dịch vụ.[HMVN]_KDDV_Báo cáo lượt xe dịch vụ,PROD)",
+      "name": "[HMVN]_KDDV_Báo cáo lượt xe dịch vụ",
+      "display_name": "[HMVN]_KDDV_Báo cáo lượt xe dịch vụ",
+      "platform": "DMS",
+      "domain": "HẬU MÃI"
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:DMS,Dịch vụ.[HMVN]_VHDV_Báo cáo tỷ lệ bảo hành,PROD)",
+      "name": "[HMVN]_VHDV_Báo cáo tỷ lệ bảo hành",
+      "display_name": "[HMVN]_VHDV_Báo cáo tỷ lệ bảo hành",
+      "platform": "DMS",
+      "domain": "HẬU MÃI"
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,sap_external.t001k,PROD)",
+      "name": "t001k",
+      "display_name": "t001k",
+      "platform": "glue",
+      "domain": null
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,sap_external.t001k_0a25e9e53c424bf1608adc6f1bf30ed1,PROD)",
+      "name": "t001k_0a25e9e53c424bf1608adc6f1bf30ed1",
+      "display_name": "t001k_0a25e9e53c424bf1608adc6f1bf30ed1",
+      "platform": "glue",
+      "domain": null
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:powerbi,MRP_Master_Data_Viet_Nam_Editing.fact_coverage_days_mrp,PROD)",
+      "name": "fact_coverage_days_mrp",
+      "display_name": "fact_coverage_days_mrp",
+      "platform": "powerbi",
+      "domain": null
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:DMS,Hàng xuất.[LOG]_Báo cáo giao nhận hàng phụ tùng AFS của từng nhà vận tải,PROD)",
+      "name": "[LOG]_Báo cáo giao nhận hàng phụ tùng AFS của từng nhà vận tải",
+      "display_name": "[LOG]_Báo cáo giao nhận hàng phụ tùng AFS của từng nhà vận tải",
+      "platform": "DMS",
+      "domain": "LOGISTIC"
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:DMS,Hàng xuất.[LOG]_Báo cáo quản lý kho xe máy điện HCM,PROD)",
+      "name": "[LOG]_Báo cáo quản lý kho xe máy điện HCM",
+      "display_name": "[LOG]_Báo cáo quản lý kho xe máy điện HCM",
+      "platform": "DMS",
+      "domain": "LOGISTIC"
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,sap_external.t001w,PROD)",
+      "name": "t001w",
+      "display_name": "t001w",
+      "platform": "glue",
+      "domain": null
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:glue,sap_external.t025,PROD)",
+      "name": "t025",
+      "display_name": "t025",
+      "platform": "glue",
+      "domain": null
+    }
+  ],
+  "dashboards": [
+    {
+      "urn": "urn:li:dashboard:(powerbi,reports.0cd9f9cc-a55f-4646-9bb0-3c5849aba9b6)",
+      "name": "PLANNING_ONELAKE",
+      "display_name": "PLANNING_ONELAKE",
+      "platform": "powerbi",
+      "domain": "SẢN XUẤT",
+      "upstreams": [
+        "urn:li:chart:(powerbi,pages.0cd9f9cc-a55f-4646-9bb0-3c5849aba9b6.bbe7b2010e0dbddcf0d1)"
+      ],
+      "downstreams": [],
+      "description": null
+    },
+    {
+      "urn": "urn:li:dashboard:(powerbi,reports.0f01f803-f2c1-4fea-9f1d-4452b12287f9)",
+      "name": "PFEP Report - Indonesia Factory",
+      "display_name": "PFEP Report - Indonesia Factory",
+      "platform": "powerbi",
+      "domain": "LOGISTIC",
+      "upstreams": [
+        "urn:li:chart:(powerbi,pages.0f01f803-f2c1-4fea-9f1d-4452b12287f9.c75c50f441ebb49006a3)",
+        "urn:li:chart:(powerbi,pages.0f01f803-f2c1-4fea-9f1d-4452b12287f9.9e32c3d0edd5a0108d88)",
+        "urn:li:chart:(powerbi,pages.0f01f803-f2c1-4fea-9f1d-4452b12287f9.22ea4fe8990838e67440)",
+        "urn:li:chart:(powerbi,pages.0f01f803-f2c1-4fea-9f1d-4452b12287f9.e9e6dbea77416bb150cb)"
+      ],
+      "downstreams": [],
+      "description": null
+    },
+    {
+      "urn": "urn:li:dashboard:(powerbi,reports.0f6db46e-0e45-4328-b44e-e7e9e247aaac)",
+      "name": "SurveyNew2025",
+      "display_name": "SurveyNew2025",
+      "platform": "powerbi",
+      "domain": null,
+      "upstreams": [
+        "urn:li:chart:(powerbi,pages.0f6db46e-0e45-4328-b44e-e7e9e247aaac.e6dd5217098285a9dbd3)"
+      ],
+      "downstreams": [],
+      "description": null
+    },
+    {
+      "urn": "urn:li:dashboard:(powerbi,reports.0f73ba8d-6fb0-4961-9682-54de0a619c83)",
+      "name": "5_Báo cáo lái thử",
+      "display_name": "5_Báo cáo lái thử",
+      "platform": "powerbi",
+      "domain": null,
+      "upstreams": [
+        "urn:li:chart:(powerbi,pages.0f73ba8d-6fb0-4961-9682-54de0a619c83.ReportSection)",
+        "urn:li:chart:(powerbi,pages.0f73ba8d-6fb0-4961-9682-54de0a619c83.ReportSection7d2eab523776fb47b403)"
+      ],
+      "downstreams": [],
+      "description": null
+    },
+    {
+      "urn": "urn:li:dashboard:(powerbi,reports.149d2da4-1f9e-4356-9094-8187519f3ebb)",
+      "name": "MD_R_báo cáo đối soát VDO SAP DMS",
+      "display_name": "MD_R_báo cáo đối soát VDO SAP DMS",
+      "platform": "powerbi",
+      "domain": null,
+      "upstreams": [
+        "urn:li:chart:(powerbi,pages.149d2da4-1f9e-4356-9094-8187519f3ebb.284b6dfc22d0da865b08)"
+      ],
+      "downstreams": [],
+      "description": null
+    },
+    {
+      "urn": "urn:li:dashboard:(powerbi,reports.1aaab375-4934-44a7-b022-264b55cba524)",
+      "name": "VFVN01_Báo cáo giá thành",
+      "display_name": "VFVN01_Báo cáo giá thành",
+      "platform": "powerbi",
+      "domain": "SẢN XUẤT",
+      "upstreams": [
+        "urn:li:chart:(powerbi,pages.1aaab375-4934-44a7-b022-264b55cba524.fee5ce405d1e4f9b6d62)",
+        "urn:li:chart:(powerbi,pages.1aaab375-4934-44a7-b022-264b55cba524.96da53969e26de49b9fc)"
+      ],
+      "downstreams": [],
+      "description": null
+    },
+    {
+      "urn": "urn:li:dashboard:(powerbi,reports.1b03d1fe-b240-40d1-a042-5c30336e88a2)",
+      "name": "VFVN2_DG_R Ước HTK và LK Thừa",
+      "display_name": "VFVN2_DG_R Ước HTK và LK Thừa",
+      "platform": "powerbi",
+      "domain": "SẢN XUẤT",
+      "upstreams": [
+        "urn:li:chart:(powerbi,pages.1b03d1fe-b240-40d1-a042-5c30336e88a2.ReportSectionfb822ebf27bc5231570a)",
+        "urn:li:chart:(powerbi,pages.1b03d1fe-b240-40d1-a042-5c30336e88a2.ReportSection52e4ca0534036e412bd0)",
+        "urn:li:chart:(powerbi,pages.1b03d1fe-b240-40d1-a042-5c30336e88a2.ReportSection5e8e6d9d274b389e2a1a)"
+      ],
+      "downstreams": [],
+      "description": null
+    },
+    {
+      "urn": "urn:li:dashboard:(powerbi,reports.1e5fa981-fa24-4071-b98d-adfe9e3217c0)",
+      "name": "Report Usage Metrics Report",
+      "display_name": "Report Usage Metrics Report",
+      "platform": "powerbi",
+      "domain": null,
+      "upstreams": [
+        "urn:li:chart:(powerbi,pages.1e5fa981-fa24-4071-b98d-adfe9e3217c0.ReportSection)"
+      ],
+      "downstreams": [],
+      "description": null
+    },
+    {
+      "urn": "urn:li:dashboard:(powerbi,reports.1e8f034b-4d15-44af-9527-be151eb1abd1)",
+      "name": "VINFAST_Report5 v3.0_prd",
+      "display_name": "VINFAST_Report5 v3.0_prd",
+      "platform": "powerbi",
+      "domain": "PHÁT TRIỂN XE",
+      "upstreams": [
+        "urn:li:chart:(powerbi,pages.1e8f034b-4d15-44af-9527-be151eb1abd1.ReportSection68d741792a47b7275941)",
+        "urn:li:chart:(powerbi,pages.1e8f034b-4d15-44af-9527-be151eb1abd1.ReportSection2a431b5c0e52211ee586)",
+        "urn:li:chart:(powerbi,pages.1e8f034b-4d15-44af-9527-be151eb1abd1.ReportSectionf2b8acfe6a8a1b19baf0)",
+        "urn:li:chart:(powerbi,pages.1e8f034b-4d15-44af-9527-be151eb1abd1.ReportSection237b708019bd7e79d180)",
+        "urn:li:chart:(powerbi,pages.1e8f034b-4d15-44af-9527-be151eb1abd1.ReportSectiondcdbd0be6c5d746ba2e1)",
+        "urn:li:chart:(powerbi,pages.1e8f034b-4d15-44af-9527-be151eb1abd1.ReportSection2434842c07096a07ec30)",
+        "urn:li:chart:(powerbi,pages.1e8f034b-4d15-44af-9527-be151eb1abd1.ReportSectionc4098f666a5559d0a18a)",
+        "urn:li:chart:(powerbi,pages.1e8f034b-4d15-44af-9527-be151eb1abd1.ReportSection395116510d572a61c53a)",
+        "urn:li:chart:(powerbi,pages.1e8f034b-4d15-44af-9527-be151eb1abd1.ReportSection4cc260fe0e90759d573e)",
+        "urn:li:chart:(powerbi,pages.1e8f034b-4d15-44af-9527-be151eb1abd1.ReportSection21dcb2697b424391f082)",
+        "urn:li:chart:(powerbi,pages.1e8f034b-4d15-44af-9527-be151eb1abd1.ReportSection210089f8895d0d4bdaef)",
+        "urn:li:chart:(powerbi,pages.1e8f034b-4d15-44af-9527-be151eb1abd1.ReportSectiond445350aa461ed747c9c)",
+        "urn:li:chart:(powerbi,pages.1e8f034b-4d15-44af-9527-be151eb1abd1.ReportSection4e48d03918192a072edd)"
+      ],
+      "downstreams": [],
+      "description": null
+    },
+    {
+      "urn": "urn:li:dashboard:(powerbi,reports.1efb7fcf-218e-46d2-9d8b-eea3ad07670d)",
+      "name": "VFVN02_Phân bổ trọn bộ theo thứ tự ưu tiên xe bé đến lớn_Safety Time",
+      "display_name": "VFVN02_Phân bổ trọn bộ theo thứ tự ưu tiên xe bé đến lớn_Safety Time",
+      "platform": "powerbi",
+      "domain": "SẢN XUẤT",
+      "upstreams": [],
+      "downstreams": [],
+      "description": null
+    },
+    {
+      "urn": "urn:li:dashboard:(powerbi,reports.1f69df33-17de-4181-ad70-7360c25f4089)",
+      "name": "Global_Production_Plan",
+      "display_name": "Global_Production_Plan",
+      "platform": "powerbi",
+      "domain": "LOGISTIC",
+      "upstreams": [
+        "urn:li:chart:(powerbi,pages.1f69df33-17de-4181-ad70-7360c25f4089.1fa08fa066b106d65e00)",
+        "urn:li:chart:(powerbi,pages.1f69df33-17de-4181-ad70-7360c25f4089.a6d2bd9249555d0ca1c9)",
+        "urn:li:chart:(powerbi,pages.1f69df33-17de-4181-ad70-7360c25f4089.4be6d21dda6c893704ac)",
+        "urn:li:chart:(powerbi,pages.1f69df33-17de-4181-ad70-7360c25f4089.73911df788f464f6ad3a)",
+        "urn:li:chart:(powerbi,pages.1f69df33-17de-4181-ad70-7360c25f4089.421db6cee1a3ae153329)",
+        "urn:li:chart:(powerbi,pages.1f69df33-17de-4181-ad70-7360c25f4089.20fc6a7b304f6ff90a6d)",
+        "urn:li:chart:(powerbi,pages.1f69df33-17de-4181-ad70-7360c25f4089.8e0bc2ddedb9df8c3c3d)"
+      ],
+      "downstreams": [],
+      "description": null
+    },
+    {
+      "urn": "urn:li:dashboard:(powerbi,reports.211bd14a-ff7b-4f5e-84d9-2a56fe4451d2)",
+      "name": "TEST",
+      "display_name": "TEST",
+      "platform": "powerbi",
+      "domain": null,
+      "upstreams": [
+        "urn:li:chart:(powerbi,pages.211bd14a-ff7b-4f5e-84d9-2a56fe4451d2.a735951ed254336336e6)",
+        "urn:li:chart:(powerbi,pages.211bd14a-ff7b-4f5e-84d9-2a56fe4451d2.ReportSection1dc4899ceb8a04e36d5c)",
+        "urn:li:chart:(powerbi,pages.211bd14a-ff7b-4f5e-84d9-2a56fe4451d2.ReportSectionc47efcc282336e3d0304)",
+        "urn:li:chart:(powerbi,pages.211bd14a-ff7b-4f5e-84d9-2a56fe4451d2.ReportSection1af73846c7c4eb5461ab)",
+        "urn:li:chart:(powerbi,pages.211bd14a-ff7b-4f5e-84d9-2a56fe4451d2.ReportSection141b0c0f1a8c475cab54)"
+      ],
+      "downstreams": [],
+      "description": null
+    },
+    {
+      "urn": "urn:li:dashboard:(powerbi,reports.216bb0e7-cbca-4a5d-bc0e-4b8581fce5bb)",
+      "name": "Demand backlog check",
+      "display_name": "Demand backlog check",
+      "platform": "powerbi",
+      "domain": null,
+      "upstreams": [
+        "urn:li:chart:(powerbi,pages.216bb0e7-cbca-4a5d-bc0e-4b8581fce5bb.1ee264618090051a53b5)"
+      ],
+      "downstreams": [],
+      "description": null
+    },
+    {
+      "urn": "urn:li:dashboard:(powerbi,reports.3b6c4261-0ec2-45f7-94d6-fb7c3f80bd2c)",
+      "name": "Bc Hàng tồn kho theo kỳ VF India",
+      "display_name": "Bc Hàng tồn kho theo kỳ VF India",
+      "platform": "powerbi",
+      "domain": "LOGISTIC",
+      "upstreams": [
+        "urn:li:chart:(powerbi,pages.3b6c4261-0ec2-45f7-94d6-fb7c3f80bd2c.ReportSection6f828c2213282d505366)",
+        "urn:li:chart:(powerbi,pages.3b6c4261-0ec2-45f7-94d6-fb7c3f80bd2c.ReportSectionba76fc587c0272559be4)",
+        "urn:li:chart:(powerbi,pages.3b6c4261-0ec2-45f7-94d6-fb7c3f80bd2c.ReportSection8c950056604808044535)",
+        "urn:li:chart:(powerbi,pages.3b6c4261-0ec2-45f7-94d6-fb7c3f80bd2c.a8261924f2bb5a60bc55)"
+      ],
+      "downstreams": [],
+      "description": null
+    },
+    {
+      "urn": "urn:li:dashboard:(powerbi,reports.3c95cd73-ec27-42f7-a707-70853813c6a7)",
+      "name": "Báo cáo check WIP MES_SAP Escooter",
+      "display_name": "Báo cáo check WIP MES_SAP Escooter",
+      "platform": "powerbi",
+      "domain": "SẢN XUẤT",
+      "upstreams": [
+        "urn:li:chart:(powerbi,pages.3c95cd73-ec27-42f7-a707-70853813c6a7.ReportSection61143e4a08470d28227b)",
+        "urn:li:chart:(powerbi,pages.3c95cd73-ec27-42f7-a707-70853813c6a7.ReportSection39eac661e078ec7906ac)"
+      ],
+      "downstreams": [],
+      "description": null
+    }
+  ],
+  "glossary_terms": [
+    {
+      "urn": "urn:li:glossaryTerm:9ce5e5bd-d5bf-4952-9aac-53edcc655708",
+      "name": "Pending Order​ - Đơn hàng tồn",
+      "display_name": "Pending Order​ - Đơn hàng tồn",
+      "domain": null,
+      "definition": null,
+      "custom_properties": {}
+    },
+    {
+      "urn": "urn:li:glossaryTerm:198941d2-d781-4d5e-a54e-bc53e4cfd315",
+      "name": "EBOM (Engineering Bill of Materials)",
+      "display_name": "EBOM (Engineering Bill of Materials)",
+      "domain": null,
+      "definition": null,
+      "custom_properties": {}
+    },
+    {
+      "urn": "urn:li:glossaryTerm:01b39061-a341-4862-b041-a08b91e5e0b5",
+      "name": "% vs Target​ - Tỉ lệ hoàn thành chỉ tiêu",
+      "display_name": "% vs Target​ - Tỉ lệ hoàn thành chỉ tiêu",
+      "domain": null,
+      "definition": null,
+      "custom_properties": {}
+    },
+    {
+      "urn": "urn:li:glossaryTerm:08a72308-dd7c-438b-bd5b-938c44b9d3e3",
+      "name": "Premium Shipment Car- Plan",
+      "display_name": "Premium Shipment Car- Plan",
+      "domain": null,
+      "definition": null,
+      "custom_properties": {}
+    },
+    {
+      "urn": "urn:li:glossaryTerm:abc0d5c9-dada-461f-9927-db92e333a79d",
+      "name": "MIS (Months In Service)",
+      "display_name": "MIS (Months In Service)",
+      "domain": null,
+      "definition": null,
+      "custom_properties": {}
+    },
+    {
+      "urn": "urn:li:glossaryTerm:fca03804-ad25-43bb-a0ef-aa8e311a065a",
+      "name": "Balance",
+      "display_name": "Balance",
+      "domain": null,
+      "definition": null,
+      "custom_properties": {}
+    },
+    {
+      "urn": "urn:li:glossaryTerm:028df638-7947-411d-b7cf-ed8529e5cbe8",
+      "name": "[VN] Sell Out - Retail",
+      "display_name": "[VN] Sell Out - Retail",
+      "domain": null,
+      "definition": null,
+      "custom_properties": {}
+    },
+    {
+      "urn": "urn:li:glossaryTerm:05ca6a81-08dc-4743-9323-44aa09a78345",
+      "name": "CP sản xuất bình quân/xe SOP",
+      "display_name": "CP sản xuất bình quân/xe SOP",
+      "domain": null,
+      "definition": null,
+      "custom_properties": {}
+    },
+    {
+      "urn": "urn:li:glossaryTerm:098c96ca-6b59-4834-bfe0-fe0f0d0ddc63",
+      "name": "[VN] Đơn hàng GF",
+      "display_name": "[VN] Đơn hàng GF",
+      "domain": null,
+      "definition": null,
+      "custom_properties": {}
+    },
+    {
+      "urn": "urn:li:glossaryTerm:0a239243-b4da-42ae-98b9-748f7cca62ab",
+      "name": "MRD (Material Readiness Date)",
+      "display_name": "MRD (Material Readiness Date)",
+      "domain": null,
+      "definition": null,
+      "custom_properties": {}
+    },
+    {
+      "urn": "urn:li:glossaryTerm:0a622e0c-5206-4fc7-b956-732d6b0bef0b",
+      "name": "BCO - BOM COST OPTIMIZATION",
+      "display_name": "BCO - BOM COST OPTIMIZATION",
+      "domain": null,
+      "definition": null,
+      "custom_properties": {}
+    },
+    {
+      "urn": "urn:li:glossaryTerm:0ae35b70-0bba-464f-ba15-ed686bf43b4d",
+      "name": "Phát thải GHG",
+      "display_name": "Phát thải GHG",
+      "domain": null,
+      "definition": null,
+      "custom_properties": {}
+    },
+    {
+      "urn": "urn:li:glossaryTerm:0b7a021e-0d16-4e47-b294-1399946cfb59",
+      "name": "Tồn kho min max",
+      "display_name": "Tồn kho min max",
+      "domain": null,
+      "definition": null,
+      "custom_properties": {}
+    },
+    {
+      "urn": "urn:li:glossaryTerm:12ab9399-bc7b-4890-8ee4-2c4979c469bf",
+      "name": "Doanh thu",
+      "display_name": "Doanh thu",
+      "domain": null,
+      "definition": null,
+      "custom_properties": {}
+    },
+    {
+      "urn": "urn:li:glossaryTerm:1625507a-1054-4289-85e9-1b237c414dbc",
+      "name": "[VN] Lead SR",
+      "display_name": "[VN] Lead SR",
+      "domain": null,
+      "definition": null,
+      "custom_properties": {}
+    },
+    {
+      "urn": "urn:li:glossaryTerm:16be55ff-de44-4d51-acab-137d562e1aaa",
+      "name": "Chỉ số trọn bộ theo KHSX",
+      "display_name": "Chỉ số trọn bộ theo KHSX",
+      "domain": null,
+      "definition": null,
+      "custom_properties": {}
+    },
+    {
+      "urn": "urn:li:glossaryTerm:1b1cd4af-70bf-4dcf-9f3d-8df4fc644556",
+      "name": "Giá Net tính thưởng",
+      "display_name": "Giá Net tính thưởng",
+      "domain": null,
+      "definition": null,
+      "custom_properties": {}
+    },
+    {
+      "urn": "urn:li:glossaryTerm:3c5fb01b-a9ce-480d-8d71-0e4acc7be046",
+      "name": "VF Direct to Customer - VF bán trực tiếp",
+      "display_name": "VF Direct to Customer - VF bán trực tiếp",
+      "domain": null,
+      "definition": null,
+      "custom_properties": {}
+    },
+    {
+      "urn": "urn:li:glossaryTerm:2113bb28-9df3-4679-94ba-8927e7f6c8ac",
+      "name": "Business Unit",
+      "display_name": "Business Unit",
+      "domain": null,
+      "definition": null,
+      "custom_properties": {}
+    },
+    {
+      "urn": "urn:li:glossaryTerm:2298718c-7a59-47bb-9a65-ce42a268d04c",
+      "name": "Cost Component",
+      "display_name": "Cost Component",
+      "domain": null,
+      "definition": null,
+      "custom_properties": {}
+    },
+    {
+      "urn": "urn:li:glossaryTerm:25dec5c4-ea94-44b2-9859-918c5af83589",
+      "name": "KPIs Logic Sales CA",
+      "display_name": "KPIs Logic Sales CA",
+      "domain": null,
+      "definition": null,
+      "custom_properties": {}
+    },
+    {
+      "urn": "urn:li:glossaryTerm:26ad6f58-ec9f-4deb-b08f-e9735cc3b38e",
+      "name": "MBOM (Manufacturing Bill of Materials)",
+      "display_name": "MBOM (Manufacturing Bill of Materials)",
+      "domain": null,
+      "definition": null,
+      "custom_properties": {}
+    },
+    {
+      "urn": "urn:li:glossaryTerm:4bf6a5e5-76f4-4949-82ad-7b21ed3379dd",
+      "name": "US Reservation",
+      "display_name": "US Reservation",
+      "domain": null,
+      "definition": null,
+      "custom_properties": {}
+    },
+    {
+      "urn": "urn:li:glossaryTerm:2975ae20-a916-4d1f-b806-7ce926add466",
+      "name": "[Tồn kho] MBOM status",
+      "display_name": "[Tồn kho] MBOM status",
+      "domain": null,
+      "definition": null,
+      "custom_properties": {}
+    },
+    {
+      "urn": "urn:li:glossaryTerm:299637f7-d463-4700-bed8-d315d1c1e858",
+      "name": "Tính toán “Quantity per variant”",
+      "display_name": "Tính toán “Quantity per variant”",
+      "domain": null,
+      "definition": null,
+      "custom_properties": {}
+    }
+  ]
+}

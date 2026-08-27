@@ -81,11 +81,7 @@ class ToolRegistry:
         if not entity:
             return None
         payload = {**(entity.payload or {})}
-        if enrich:
-            try:
-                payload["live_lineage"] = await self._live_lineage_urns(urn)
-            except Exception:  # noqa: BLE001
-                pass
+        # Lineage is stored in entity.payload (upstreams/downstreams)
         return SearchResult(
             urn=entity.urn, entity_type=entity.entity_type,
             name=entity.display_name or entity.name, score=score,
@@ -220,7 +216,7 @@ class ToolRegistry:
     async def lineage(self, params: dict[str, Any]) -> list[SearchResult]:
         name = params.get("name") or ""
         direction = params.get("direction") or "both"
-        urn = await self._resolve(name, "dataset")
+        urn = await self._resolve(name, "dataset") or await self._resolve(name)
         if not urn:
             return []
         result = await self._entity_to_result(urn, score=1.0, enrich=True)
@@ -247,7 +243,7 @@ class ToolRegistry:
         name = params.get("name") or ""
         depth = int(params.get("depth") or settings.IMPACT_DEFAULT_DEPTH)
         max_nodes = int(params.get("max_nodes") or settings.IMPACT_MAX_NODES)
-        urn = await self._resolve(name, "dataset")
+        urn = await self._resolve(name, "dataset") or await self._resolve(name)
         if not urn:
             return []
         impact: ImpactResult = await self._graph.impact(urn, depth=depth, max_nodes=max_nodes)
@@ -278,7 +274,7 @@ class ToolRegistry:
         name = params.get("name") or ""
         depth = int(params.get("depth") or settings.IMPACT_DEFAULT_DEPTH)
         max_nodes = int(params.get("max_nodes") or settings.IMPACT_MAX_NODES)
-        urn = await self._resolve(name, "dataset")
+        urn = await self._resolve(name, "dataset") or await self._resolve(name)
         if not urn:
             return []
         src: ImpactResult = await self._graph.sources(urn, depth=depth, max_nodes=max_nodes)

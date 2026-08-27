@@ -116,6 +116,7 @@ class OpenSearchVectorStore:
         return success
 
     async def keyword_search(self, query: str, size: int = 10, **filters: Any) -> list[VectorSearchResult]:
+        acl_filter = filters.pop("acl_filter", None)
         if settings.USE_FAKE_OPENSEARCH:
             results = await self._get_fake().search(query, top_k=size, **filters)
             return [
@@ -126,6 +127,8 @@ class OpenSearchVectorStore:
                 ) for r in results
             ]
         must: list[dict] = [{"match": {"content": query}}]
+        if acl_filter:
+            must.append(acl_filter)
         if filters:
             for key, value in filters.items():
                 if value:
@@ -137,9 +140,12 @@ class OpenSearchVectorStore:
         return await self._search(body)
 
     async def vector_search(self, vector: list[float], size: int = 10, **filters: Any) -> list[VectorSearchResult]:
+        acl_filter = filters.pop("acl_filter", None)
         if settings.USE_FAKE_OPENSEARCH:
             return await self.keyword_search("", size=size, **filters)
         must: list[dict] = [{"knn": {"embedding": {"vector": vector, "k": size}}}]
+        if acl_filter:
+            must.append(acl_filter)
         if filters:
             for key, value in filters.items():
                 if value:
@@ -152,6 +158,9 @@ class OpenSearchVectorStore:
             return await self._search(body)
         except Exception:
             log.warning("knn_fallback_to_keyword", index=self._index)
+            # Re-insert acl_filter if we fallback to keyword search
+            if acl_filter:
+                filters["acl_filter"] = acl_filter
             return await self.keyword_search("", size=size, **filters)
 
     async def hybrid_search(self, query: str, vector: list[float], size: int = 10, **filters: Any) -> list[VectorSearchResult]:

@@ -5,7 +5,7 @@ import structlog
 from app.auth.models import UserContext
 from app.schemas.actions import SqlResponse
 from app.schemas.chat import ChatResponse, EntityItem
-from app.services.action_service import ActionService, _schema_columns
+from app.services.action_service import ActionService, PermissionDeniedError, _schema_columns
 from app.services.chat.context import ChatContext
 from app.services.chat.question_analysis import _infer_entity_from_history
 from app.services.quality_report import render_markdown, render_summary_markdown
@@ -94,8 +94,15 @@ class ChatFlowsService:
             return ChatResponse(
                 answer=answer_text, intent="SQL_GENERATION", confidence="high",
                 ambiguous=False, insufficient_context=False,
-                entities=[EntityItem(urn=resp.urn, name=resp.dataset,
-                                     url=resolved.datahub_url if resolved else None)],
+                entities=[EntityItem(
+                    urn=resp.urn, name=resp.dataset,
+                    url=resolved.datahub_url if resolved else None,
+                    entity_type=resolved.entity_type if resolved else None,
+                    platform=resolved.platform if resolved else None,
+                    domain=resolved.domain if resolved else None,
+                    description=resolved.description if resolved else None,
+                    environment=resolved.environment if resolved else None,
+                )],
                 trace_id=trace_id, conversation_id=cid,
             )
 
@@ -198,8 +205,15 @@ class ChatFlowsService:
         return ChatResponse(
             answer=clarification, intent="SQL_GENERATION", confidence="low",
             ambiguous=True, insufficient_context=False,
-            entities=[EntityItem(urn=c.entity.urn, name=c.entity.display_name or c.entity.name,
-                                 url=c.entity.datahub_url) for c in candidates[:3]],
+            entities=[EntityItem(
+                urn=c.entity.urn, name=c.entity.display_name or c.entity.name,
+                url=c.entity.datahub_url,
+                entity_type=c.entity.entity_type,
+                platform=c.entity.platform,
+                domain=c.entity.domain,
+                description=c.entity.description,
+                environment=c.entity.environment,
+            ) for c in candidates[:3]],
             trace_id=trace_id, conversation_id=cid,
         )
 
@@ -208,31 +222,118 @@ class ChatFlowsService:
         self, question: str, user_ctx: UserContext, trace_id: str,
         cid: str, entity_hint: str | None,
     ) -> ChatResponse | None:
-        """Deterministic metadata-based data quality report for a dataset.
+        """Deterministic metadata-based data quality report for any catalog entity.
 
-        Picks a dataset (explicit mention, entity hint, then a single history
-        reference), runs ``ActionService.quality_check``, and returns the report
-        rendered as markdown plus the structured report payload for the export UI.
+        Supports Datasets, Dashboards, Charts, Documents, and Glossary Terms.
+        Picks an entity (explicit mention, entity hint, or conversational history),
+        runs ``ActionService.quality_check``, and returns the report rendered as
+        markdown plus the structured report payload for the export UI.
         """
         svc = ActionService(self._ctx.session, auth_service=self._ctx.auth_service)
 
         async def _remember(answer: str, cq: str) -> None:
             await self._ctx.memory.add_turn_db(self._ctx.session, user_ctx.user_id, cid, cq, answer)
 
-        async def _report(dataset_name: str) -> ChatResponse | None:
-            report = await svc.quality_check(dataset_name, user=user_ctx)
-            if not report.valid:
-                await _remember(
-                    "Không tìm thấy dataset để đánh giá chất lượng.",
-                    question,
+        # (1) Resolve target entity name / reference
+        target = entity_hint
+        _GENERIC_ANAPHORS = {
+            "nó", "no", "this", "it", "cái này", "bang nay", "bảng này",
+            "báo cáo này", "dashboard này", "còn thiếu gì", "còn thiếu gì?",
+            "con thieu gi", "con thieu gi?", "owner", "domain", "schema", "quality",
+            "chất lượng", "chat luong", "kiểm tra", "kiem tra", "check",
+        }
+        if target is not None and target.strip().lower() in _GENERIC_ANAPHORS:
+            target = None
+
+        if target is None:
+            active_entities = self._ctx.memory.get_active_entities(user_ctx.user_id, cid)
+            if active_entities:
+                last_act = active_entities[-1]
+                target = last_act.get("name") if isinstance(last_act, dict) else str(last_act)
+
+        if target is None:
+            history_tuples = await self._ctx.memory.get_recent_history(
+                self._ctx.session, user_ctx.user_id, cid, limit=5
+            )
+            if history_tuples:
+                from retrieval.coreference import resolve_entity_reference
+                target = resolve_entity_reference(history_tuples)
+
+        if target is None:
+            clean_q = re.sub(
+                r"^(?:dataset|dashboard|chart|table|bảng|bang|kiểm tra|kiem tra|check|quality|chất lượng|chat luong)\s+",
+                "", question, flags=re.I,
+            ).strip()
+            if clean_q and clean_q.lower() not in _GENERIC_ANAPHORS and len(clean_q) >= 2:
+                target = clean_q
+
+        if target is None:
+            tokens = re.findall(r"[a-z0-9_]+(?:\.[a-z0-9_]+)+", question, re.I)
+            if tokens:
+                target = tokens[0]
+
+        if target is None:
+            no_target_msg = (
+                "Tôi cần biết bạn muốn kiểm tra chất lượng cho thực thể nào. "
+                "Vui lòng nhập tên dataset hoặc dashboard (ví dụ: PVB QDAT, Dim_BaoCaoLayout)."
+            )
+            await _remember(no_target_msg, question)
+            return ChatResponse(
+                answer=no_target_msg, intent="QUALITY_CHECK", confidence="high",
+                ambiguous=False, insufficient_context=True,
+                trace_id=trace_id, conversation_id=cid,
+            )
+
+        # (2) Check ambiguity across catalog
+        resolution = await self._ctx.entity_resolver.resolve(
+            target, entity_type=None, trace_id=trace_id,
+        )
+        if resolution.ambiguous:
+            options = " | ".join(f"'{c.name}'" for c in resolution.candidates[:3])
+            clarification = (
+                f"Có nhiều thực thể khớp với '{target}': {options}. "
+                "Bạn muốn đánh giá chất lượng cho thực thể nào?"
+            )
+            await _remember(clarification, question)
+            return ChatResponse(
+                answer=clarification, intent="QUALITY_CHECK", confidence="low",
+                ambiguous=True, insufficient_context=False,
+                entities=[EntityItem(
+                    urn=c.urn, name=c.name, url=c.datahub_url,
+                    entity_type=c.entity_type,
+                    platform=c.platform,
+                    domain=c.domain,
+                ) for c in resolution.candidates[:3]],
+                trace_id=trace_id, conversation_id=cid,
+            )
+
+        # (3) Execute quality check with permission handling
+        try:
+            resolved_entity = await svc.resolve_entity(target, user=user_ctx)
+            if resolved_entity is None:
+                not_found_msg = (
+                    f"Không tìm thấy thực thể '{target}' trong metadata DataHub. "
+                    "Vui lòng kiểm tra lại tên dataset hoặc dashboard."
                 )
+                await _remember(not_found_msg, question)
                 return ChatResponse(
-                    answer="Không tìm thấy dataset trong metadata DataHub. "
-                           "Bạn có thể cho tên dataset cụ thể không?",
-                    intent="QUALITY_CHECK", confidence="high",
+                    answer=not_found_msg, intent="QUALITY_CHECK", confidence="high",
                     ambiguous=False, insufficient_context=True,
                     trace_id=trace_id, conversation_id=cid,
                 )
+
+            report = await svc.quality_check(target, user=user_ctx)
+            if not report.valid:
+                not_valid_msg = (
+                    f"Không thể đánh giá chất lượng cho '{target}' do thiếu dữ liệu metadata."
+                )
+                await _remember(not_valid_msg, question)
+                return ChatResponse(
+                    answer=not_valid_msg, intent="QUALITY_CHECK", confidence="high",
+                    ambiguous=False, insufficient_context=True,
+                    trace_id=trace_id, conversation_id=cid,
+                )
+
             wants_full = bool(re.search(
                 r"đầy đủ|chi tiết|\bfull\b|toàn bộ|báo cáo đầy đủ|complete",
                 question, re.I,
@@ -242,51 +343,198 @@ class ChatFlowsService:
                 else render_summary_markdown(report)
             )
             await self._ctx.evidence.record_quality_evidence(
-                user_ctx.user_id, cid, question, dataset_name, report,
+                user_ctx.user_id, cid, question, report.dataset, report,
             )
             await _remember(answer_text, question)
-            log.info("quality_flow_report", trace_id=trace_id, dataset=dataset_name,
-                     score=report.overall_score, rating=report.rating,
-                     sections=len(report.sections))
+            await self._ctx.evidence.record_active_entities(
+                user_ctx.user_id, cid, [], extra=[{
+                    "name": report.dataset,
+                    "urn": report.urn,
+                    "entity_type": report.entity_type,
+                }]
+            )
+            log.info("quality_flow_report", trace_id=trace_id, entity=report.dataset,
+                     entity_type=report.entity_type, score=report.overall_score,
+                     rating=report.rating, sections=len(report.sections))
             return ChatResponse(
                 answer=answer_text, intent="QUALITY_CHECK", confidence="high",
                 ambiguous=False, insufficient_context=False,
-                entities=[EntityItem(urn=report.urn, name=dataset_name, url=report.url)],
+                entities=[EntityItem(
+                    urn=report.urn, name=report.dataset, url=report.url,
+                    entity_type=report.entity_type, platform=report.platform,
+                )],
                 quality_report=report, trace_id=trace_id, conversation_id=cid,
             )
+        except PermissionDeniedError as err:
+            await _remember(err.message, question)
+            return ChatResponse(
+                answer=err.message, intent="QUALITY_CHECK", confidence="high",
+                ambiguous=False, insufficient_context=False,
+                trace_id=trace_id, conversation_id=cid,
+            )
 
-        # (1) Explicit dataset named in the question.
+
+    async def metadata_report_flow(
+        self, question: str, user_ctx: UserContext, trace_id: str,
+        cid: str, entity_hint: str | None,
+    ) -> ChatResponse | None:
+        """Deterministic metadata report generation for any catalog entity."""
+        svc = ActionService(self._ctx.session, auth_service=self._ctx.auth_service)
+
+        async def _remember(answer: str, cq: str) -> None:
+            await self._ctx.memory.add_turn_db(self._ctx.session, user_ctx.user_id, cid, cq, answer)
+
+        def _render(report) -> str:
+            lines = [f"# Báo cáo Metadata: {report.dataset}\n"]
+            for s in report.sections:
+                lines.append(f"### {s.title}")
+                for l in s.lines:
+                    lines.append(l)
+                lines.append("")
+            if report.assessment:
+                lines.append("### Đánh giá Trưởng thành Metadata (Maturity Assessment)")
+                lines.append(f"**Điểm tổng quan:** {report.overall_score}/100 ({report.overall_rating})\n")
+                lines.append("| Tiêu chí | Điểm | Xếp loại |")
+                lines.append("| :--- | :---: | :--- |")
+                for a in report.assessment:
+                    stars_str = "⭐" * a.stars
+                    lines.append(f"| {a.dimension} | {a.score}/100 | {a.rating} {stars_str} |")
+                lines.append("")
+            if report.recommendations:
+                lines.append("### Khuyến nghị Quản trị Dữ liệu (Recommendations)")
+                for r in report.recommendations:
+                    lines.append(f"- {r}")
+                lines.append("")
+            return "\n".join(lines).strip()
+
+        # (1) Resolve target entity name / reference
         target = entity_hint
+        _GENERIC_ANAPHORS = {
+            "nó", "no", "this", "it", "cái này", "bang nay", "bảng này",
+            "báo cáo này", "dashboard này", "report", "báo cáo", "bao cao",
+        }
+        if target is not None and target.strip().lower() in _GENERIC_ANAPHORS:
+            target = None
+
+        if target is None:
+            active_entities = self._ctx.memory.get_active_entities(user_ctx.user_id, cid)
+            if active_entities:
+                last_act = active_entities[-1]
+                target = last_act.get("name") if isinstance(last_act, dict) else str(last_act)
+
+        if target is None:
+            history_tuples = await self._ctx.memory.get_recent_history(
+                self._ctx.session, user_ctx.user_id, cid, limit=5
+            )
+            if history_tuples:
+                from retrieval.coreference import resolve_entity_reference
+                target = resolve_entity_reference(history_tuples)
+
+        if target is None:
+            clean_q = re.sub(
+                r"^(?:dataset|dashboard|chart|table|bảng|bang|tạo báo cáo|bao cao|report)\s+",
+                "", question, flags=re.I,
+            ).strip()
+            if clean_q and clean_q.lower() not in _GENERIC_ANAPHORS and len(clean_q) >= 2:
+                target = clean_q
+
         if target is None:
             tokens = re.findall(r"[a-z0-9_]+(?:\.[a-z0-9_]+)+", question, re.I)
             if tokens:
                 target = tokens[0]
+
         if target is None:
-            target = _infer_entity_from_history([(question, "")])
-        if target is not None:
-            resolution = await self._ctx.entity_resolver.resolve(
-                target, entity_type="dataset", trace_id=trace_id,
+            no_target_msg = (
+                "Tôi cần biết bạn muốn tạo metadata report cho thực thể nào. "
+                "Vui lòng nhập tên dataset hoặc dashboard (ví dụ: PVB QDAT, Dim_BaoCaoLayout)."
             )
-            if resolution.ambiguous:
-                options = " | ".join(
-                    f"'{c.name}'" for c in resolution.candidates[:3]
+            await _remember(no_target_msg, question)
+            return ChatResponse(
+                answer=no_target_msg, intent="METADATA_REPORT", confidence="high",
+                ambiguous=False, insufficient_context=True,
+                trace_id=trace_id, conversation_id=cid,
+            )
+
+        resolution = await self._ctx.entity_resolver.resolve(
+            target, entity_type=None, trace_id=trace_id,
+        )
+        if resolution.ambiguous:
+            options = " | ".join(f"'{c.name}'" for c in resolution.candidates[:3])
+            clarification = (
+                f"Có nhiều thực thể khớp với '{target}': {options}. "
+                "Bạn muốn tạo metadata report cho thực thể nào?"
+            )
+            await _remember(clarification, question)
+            return ChatResponse(
+                answer=clarification, intent="METADATA_REPORT", confidence="low",
+                ambiguous=True, insufficient_context=False,
+                entities=[EntityItem(
+                    urn=c.urn, name=c.name, url=c.datahub_url,
+                    entity_type=c.entity_type,
+                    platform=c.platform,
+                    domain=c.domain,
+                ) for c in resolution.candidates[:3]],
+                trace_id=trace_id, conversation_id=cid,
+            )
+
+        try:
+            resolved = await svc.resolve_entity(target, user=user_ctx)
+            if resolved is None:
+                not_found_msg = (
+                    f"Không tìm thấy thực thể '{target}' trong metadata DataHub. "
+                    "Vui lòng kiểm tra lại tên dataset hoặc dashboard."
                 )
-                clarification = (
-                    f"Có nhiều dataset khớp với '{target}': {options}. "
-                    "Bạn muốn đánh giá chất lượng cho dataset nào?"
-                )
-                await _remember(clarification, question)
+                await _remember(not_found_msg, question)
                 return ChatResponse(
-                    answer=clarification, intent="QUALITY_CHECK", confidence="low",
-                    ambiguous=True, insufficient_context=False,
-                    entities=[EntityItem(urn=c.urn, name=c.name, url=c.datahub_url)
-                              for c in resolution.candidates[:3]],
+                    answer=not_found_msg, intent="METADATA_REPORT", confidence="high",
+                    ambiguous=False, insufficient_context=True,
                     trace_id=trace_id, conversation_id=cid,
                 )
-            resolved = await svc.resolve_dataset(target, user=user_ctx)
-            if resolved is not None:
-                return await _report(resolved.display_name or resolved.name)
-        return None
+
+            report = await svc.metadata_report(target, user=user_ctx)
+            if not report.valid:
+                not_valid_msg = f"Không thể tạo metadata report cho '{target}' do thiếu dữ liệu."
+                await _remember(not_valid_msg, question)
+                return ChatResponse(
+                    answer=not_valid_msg, intent="METADATA_REPORT", confidence="high",
+                    ambiguous=False, insufficient_context=True,
+                    trace_id=trace_id, conversation_id=cid,
+                )
+
+            answer_text = _render(report)
+            await _remember(answer_text, question)
+            await self._ctx.evidence.record_active_entities(
+                user_ctx.user_id, cid, [], extra=[{
+                    "name": resolved.display_name or resolved.name or target,
+                    "urn": resolved.urn,
+                    "entity_type": resolved.entity_type,
+                }]
+            )
+            log.info("metadata_report_flow", trace_id=trace_id, dataset=target,
+                     score=report.overall_score, rating=report.overall_rating,
+                     sections=len(report.sections))
+            return ChatResponse(
+                answer=answer_text, intent="METADATA_REPORT", confidence="high",
+                ambiguous=False, insufficient_context=False,
+                entities=[EntityItem(
+                    urn=report.urn or resolved.urn,
+                    name=resolved.display_name or resolved.name or target,
+                    url=resolved.datahub_url,
+                    entity_type=resolved.entity_type,
+                    platform=resolved.platform,
+                    domain=resolved.domain,
+                    description=resolved.description,
+                    environment=resolved.environment,
+                )],
+                trace_id=trace_id, conversation_id=cid,
+            )
+        except PermissionDeniedError as err:
+            await _remember(err.message, question)
+            return ChatResponse(
+                answer=err.message, intent="METADATA_REPORT", confidence="high",
+                ambiguous=False, insufficient_context=False,
+                trace_id=trace_id, conversation_id=cid,
+            )
 
 
     async def sync_relation_flow(
@@ -321,14 +569,19 @@ class ChatFlowsService:
                     break
         if not hits:
             return None
-        lines = [f"Trường '{field}' được dùng làm khóa liên kết/đồng bộ giữa các dataset sau:"]
+        lines = [f"Trường '{field}' được dùng làm khóa liên kết/đồng bộ giữa các dataset sau:\n"]
         for ds in hits[:10]:
             lines.append(f"- {ds.display_name or ds.name}")
+            lines.append("")
         if len(hits) > 10:
             lines.append(f"- ... và {len(hits) - 10} dataset khác")
-        answer_text = mask_secrets("\n".join(lines))
+        answer_text = mask_secrets("\n".join(lines).strip())
         entity_list = [
-            EntityItem(urn=ds.urn, name=ds.display_name or ds.name, url=ds.datahub_url)
+            EntityItem(
+                urn=ds.urn, name=ds.display_name or ds.name, url=ds.datahub_url,
+                entity_type=ds.entity_type, platform=ds.platform,
+                domain=ds.domain, description=ds.description, environment=ds.environment,
+            )
             for ds in hits[:10]
         ]
         primary = hits[0]
@@ -463,10 +716,11 @@ class ChatFlowsService:
             names = sorted(
                 {e.display_name or e.name for e in linked}
             )
-            answer = (
-                f"Glossary term **{display}** được gán cho {len(linked)} dataset: "
-                + ", ".join(names)
-            )
+            lines = [f"Glossary term **{display}** được gán cho {len(linked)} dataset:\n"]
+            for n in names:
+                lines.append(f"- {n}")
+                lines.append("")
+            answer = "\n".join(lines).strip()
         log.info("term_datasets_flow", trace_id=trace_id, term=display,
                  linked_count=len(linked))
         self._ctx.evidence.record_evidence(
@@ -561,10 +815,25 @@ class ChatFlowsService:
             fields = (dataset.payload or {}).get("schema_fields") or []
         col_names = [str(f.get("name") or "") for f in fields if f.get("name")]
 
-        # Hop 4 — formula. No formula metadata is stored -> UNKNOWN.
+        # Hop 4 — formula / metric calculation from dataset or glossary terms mentioned in query
         formula = None
         if dataset is not None:
             formula = (dataset.payload or {}).get("formula")
+        if not formula:
+            for _m_kpi in ["coverage date", "coverage", "balance", "ftq", "drr", "ppm", "lob", "last date cover", "safety stock"]:
+                if _m_kpi in question.lower():
+                    _gterms = await self._ctx.entity_repo.list_by_type("glossary_term")
+                    for _g in _gterms:
+                        if _m_kpi in (_g.display_name or _g.name or "").lower():
+                            _desc = _g.description or ""
+                            _m_formula = re.search(r"(?:công thức|cong thuc|formula|tính toán|tinh toan)[:\s*]+([^\n\.]+)", _desc, re.I)
+                            if _m_formula:
+                                formula = f"{_g.display_name or _g.name}: {_m_formula.group(0).strip()}"
+                            elif _desc:
+                                formula = f"{_g.display_name or _g.name}: {_desc[:200].strip()}"
+                            break
+                    if formula:
+                        break
 
         # Hop 5 — raw source / lineage.
         upstream = []
@@ -580,18 +849,18 @@ class ChatFlowsService:
             f"{term_name if term_name else 'UNKNOWN (không có term chuyên biệt trong catalog)'}"
         )
         lines.append(
-            f"**Hop 3 – Cột của {dataset_name or 'dataset'}:** "
+            f"**Hop 3 – Cột của {dataset_name or 'dataset'}:**\n"
             + (", ".join(col_names[:20]) if col_names else "UNKNOWN")
         )
         lines.append(
-            f"**Hop 4 – Công thức:** "
-            f"{str(formula)[:200] if formula else 'UNKNOWN (không có trong metadata)'}"
+            f"**Hop 4 – Công thức:**\n"
+            f"{str(formula)[:300] if formula else 'UNKNOWN (không có trong metadata)'}"
         )
         lines.append(
-            "**Hop 5 – Nguồn dữ liệu thô:** "
+            "**Hop 5 – Nguồn dữ liệu thô:**\n"
             + (", ".join(upstream[:10]) if lineage_known else "UNKNOWN (không có lineage)")
         )
-        answer_text = mask_secrets("\n".join(lines))
+        answer_text = mask_secrets("\n\n".join(lines))
 
         entity_list = []
         seen: set[str] = set()
@@ -603,7 +872,10 @@ class ChatFlowsService:
                 continue
             seen.add(_u)
             entity_list.append(EntityItem(
-                urn=_u, name=_e.display_name or _e.name, url=_e.datahub_url))
+                urn=_u, name=_e.display_name or _e.name, url=_e.datahub_url,
+                entity_type=_e.entity_type, platform=_e.platform,
+                domain=_e.domain, description=_e.description, environment=_e.environment,
+            ))
 
         log.info("multi_hop_chain_flow", trace_id=trace_id,
                  question=question[:100], report=report_name,

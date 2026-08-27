@@ -11,10 +11,11 @@ from ingestion.graphql.queries import (
     GET_DATASET_QUERY,
     GET_DOCUMENT_QUERY,
     GET_GLOSSARY_TERM_QUERY,
+    SCROLL_ACROSS_ENTITIES_QUERY,
     build_search_query,
 )
 from ingestion.mappers.dashboard import DashboardMapper
-from ingestion.mappers.dataset import DatasetMapper
+from ingestion.mappers.dataset import DatasetMapper, _normalize_field_path
 from ingestion.mappers.document import DocumentMapper
 from ingestion.mappers.glossary import GlossaryNodeMapper, GlossaryTermMapper
 from ingestion.models import CanonicalEntity, EntityPage
@@ -51,65 +52,52 @@ class GraphQLDataHubSource(DataHubSource):
         cursor: str | None = None,
         page_size: int = 100,
     ) -> EntityPage:
-        type_map = {
-            "dataset": "DATASET",
-            "dashboard": "DASHBOARD",
-            "glossary_term": "GLOSSARY_TERM",
-            "chart": "CHART",
-            "dataFlow": "DATA_FLOW",
-            "dataJob": "DATA_JOB",
-            "container": "CONTAINER",
-            "tag": "TAG",
-            "mlModel": "MLMODEL",
-            "mlFeatureTable": "ML_FEATURE_TABLE",
+        graphql_type = self._internal_to_gql_type(entity_type)
+        input_obj = {
+            "types": [graphql_type],
+            "query": "*",
+            "count": page_size,
         }
-        graphql_type = type_map.get(entity_type, entity_type.upper())
-        start = int(cursor) if cursor else 0
-        count = page_size
+        if cursor:
+            input_obj["scrollId"] = cursor
+
         n_bad = 0
-        total: int | None = None
         while True:
             try:
                 data = await self._client.execute(
-                    build_search_query(graphql_type),
+                    SCROLL_ACROSS_ENTITIES_QUERY,
                     {
-                        "query": "*",
-                        "start": start,
-                        "count": count,
+                        "input": input_obj,
                     },
                 )
             except DataHubConnectionError:
-                if count > 1:
-                    count = max(1, count // 2)
+                if input_obj["count"] > 1:
+                    input_obj["count"] = max(1, input_obj["count"] // 2)
                     continue
-                # count=1 vẫn lỗi -> index hỏng, skip offset này (giống pull script)
                 n_bad += 1
-                log.warning("graphql_search_bad_offset", entity_type=entity_type,
-                            gql_type=graphql_type, start=start)
-                start += 1
-                count = page_size
+                log.warning("graphql_scroll_bad_offset", entity_type=entity_type,
+                            gql_type=graphql_type, cursor=cursor)
+                if n_bad > 20:
+                    log.error("graphql_list_entities_failed", entity_type=entity_type,
+                              gql_type=graphql_type, reason="too many failures")
+                    return EntityPage(items=[])
                 import asyncio
                 await asyncio.sleep(0.8)
-                if n_bad > 200:
-                    log.error("graphql_list_entities_failed", entity_type=entity_type,
-                              gql_type=graphql_type, reason="quá nhiều bad offset")
-                    return EntityPage(items=[])
                 continue
 
-            search = data.get("search") or {}
-            if total is None:
-                total = search.get("total")
+            scroll = data.get("scrollAcrossEntities") or {}
+            total = scroll.get("total")
+            next_scroll_id = scroll.get("nextScrollId")
+
             items = []
-            for hit in (search.get("searchResults") or []):
+            for hit in (scroll.get("searchResults") or []):
                 entity = hit.get("entity") or {}
                 items.append(entity)
 
-            fetched = len(items)
-            next_offset = start + fetched
-            has_more = bool(items) and (total is None or next_offset < total)
+            has_more = bool(next_scroll_id) and bool(items)
             return EntityPage(
                 items=items,
-                next_cursor=str(next_offset) if has_more else None,
+                next_cursor=next_scroll_id if has_more else None,
                 has_more=has_more,
                 total=total,
             )
@@ -201,10 +189,18 @@ class GraphQLDataHubSource(DataHubSource):
             return await self._get_document(urn)
         return await self._search_fallback_entity(urn, etype)
 
+    @classmethod
+    def _internal_to_gql_type(cls, etype: str) -> str:
+        for gql, internal in cls._GQL_TYPE_TO_INTERNAL.items():
+            if internal == etype:
+                return gql
+        return etype.upper()
+
     async def _search_fallback_entity(self, urn: str, etype: str) -> CanonicalEntity | None:
+        gql_type = self._internal_to_gql_type(etype)
         try:
             data = await self._client.execute(
-                build_search_query(etype.upper()),
+                build_search_query(gql_type),
                 {"query": urn, "start": 0, "count": 1},
             )
             search = data.get("search") or {}
@@ -255,9 +251,10 @@ class GraphQLDataHubSource(DataHubSource):
         fields = []
         schema = entity.get("schemaMetadata") or {}
         for f in (schema.get("fields") or []):
+            raw_path = f.get("fieldPath", "")
             fields.append({
-                "field_path": f.get("fieldPath", ""),
-                "name": f.get("fieldPath", ""),
+                "field_path": raw_path,
+                "name": _normalize_field_path(raw_path),
                 "type": f.get("nativeDataType") or f.get("type", ""),
                 "native_data_type": f.get("nativeDataType", ""),
                 "description": f.get("description"),

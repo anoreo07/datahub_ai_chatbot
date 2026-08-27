@@ -14,12 +14,19 @@ class QueryIntent(StrEnum):
     LINEAGE_DOWNSTREAM = "LINEAGE_DOWNSTREAM"
     IMPACT_ANALYSIS = "IMPACT_ANALYSIS"
     RECURSIVE_IMPACT = "RECURSIVE_IMPACT"
+    COMPARISON = "COMPARISON"
     COMPOSITE_QUERY = "COMPOSITE_QUERY"
     GRAPH_QUERY = "GRAPH_QUERY"
     RELATED_DATASETS = "RELATED_DATASETS"
     SEMANTIC_SEARCH = "SEMANTIC_SEARCH"
     MULTI_ENTITY_QUERY = "MULTI_ENTITY_QUERY"
     MULTI_HOP_CHAIN = "MULTI_HOP_CHAIN"
+    # --- metadata listing intents --------------------------------------------
+    MISSING_DESCRIPTION = "MISSING_DESCRIPTION"
+    MISSING_OWNER = "MISSING_OWNER"
+    MISSING_DOMAIN = "MISSING_DOMAIN"
+    # --- field property intent -----------------------------------------------
+    FIELD_PROPERTY = "FIELD_PROPERTY"
     # --- legacy intents kept for compatibility with existing routing ---------
     FIND_ENTITY = "FIND_ENTITY"
     TERM_TO_DATASETS = "TERM_TO_DATASETS"
@@ -40,6 +47,8 @@ class QueryIntent(StrEnum):
     ENTITY_EXISTS = "ENTITY_EXISTS"
     LISTING = "LISTING"
     SQL_GENERATION = "SQL_GENERATION"
+    QUALITY_CHECK = "QUALITY_CHECK"
+    METADATA_REPORT = "METADATA_REPORT"
 
 
 # Mapping from the new taxonomy onto the legacy intents so existing routing
@@ -47,23 +56,25 @@ class QueryIntent(StrEnum):
 LEGACY_FOR: dict["QueryIntent", "QueryIntent"] = {
     QueryIntent.DATASET_LOOKUP: QueryIntent.FIND_ENTITY,
     QueryIntent.FIELD_LOOKUP: QueryIntent.SCHEMA_LOOKUP,
+    QueryIntent.FIELD_PROPERTY: QueryIntent.SCHEMA_LOOKUP,
     QueryIntent.DOMAIN_LOOKUP: QueryIntent.ENTITY_DOMAIN,
     QueryIntent.LINEAGE_UPSTREAM: QueryIntent.LINEAGE,
     QueryIntent.LINEAGE_DOWNSTREAM: QueryIntent.LINEAGE,
     QueryIntent.IMPACT_ANALYSIS: QueryIntent.IMPACT,
     QueryIntent.RECURSIVE_IMPACT: QueryIntent.IMPACT,
+    QueryIntent.COMPARISON: QueryIntent.GENERAL,
     QueryIntent.COMPOSITE_QUERY: QueryIntent.GENERAL,
     QueryIntent.GRAPH_QUERY: QueryIntent.GENERAL,
     QueryIntent.RELATED_DATASETS: QueryIntent.FIND_ENTITY,
     QueryIntent.SEMANTIC_SEARCH: QueryIntent.GENERAL,
     QueryIntent.MULTI_ENTITY_QUERY: QueryIntent.GENERAL,
-    QueryIntent.MULTI_HOP_CHAIN: QueryIntent.FIND_ENTITY,
+    QueryIntent.MULTI_HOP_CHAIN: QueryIntent.GENERAL,
 }
 
 
 _GREETINGS = {
     "xin chào", "xin chao", "chào", "chao", "hello", "hi", "hey",
-    "chào bạn", "chao ban", "chào bot", "chao bot",
+    "chào bạn", "chao ban", "xin chào bạn", "xin chao ban", "chào bot", "chao bot",
     "hello bot", "hi there",
 }
 
@@ -107,6 +118,41 @@ _RULE_STRINGS: list[tuple[str, QueryIntent]] = [
     (r"(?:tìm|tim|find)\s+(?:report|báo cáo|bao cao)\b[^\n]{0,120}\b"
      r"(?:term|thuật ngữ|thuat ngu|lineage|nguồn|nguon|dataset nguồn)",
      QueryIntent.MULTI_HOP_CHAIN),
+    (r"(?:từ|tu|from)\s+(?:báo cáo|bao cao|report|dataset|bảng|bang)\s+[^\n]{1,60}?\b"
+     r"(?:cho tôi biết|cho toi biet|xem|tìm|tim|biết|biet|hướng dẫn)\s+[^\n]{1,80}?\b"
+     r"(?:công thức|cong thuc|lineage|nguồn|nguon|dữ liệu thô|du lieu tho)",
+     QueryIntent.MULTI_HOP_CHAIN),
+    # Explicit term definition phrases
+    (r"(?:giải thích|giai thich|cho biết|cho biet|tìm hiểu|tim hieu)\s+(?:khái niệm|khai niem|thuật ngữ|thuat ngu|term)\b",
+     QueryIntent.TERM_DEFINITION),
+    (r"(?:khái niệm|khai niem|thuật ngữ|thuat ngu)\s+[^\n]{1,60}?\s+"
+     r"(?:là gì|la gi|được định nghĩa|duoc dinh nghia|có ý nghĩa gì|co y nghia gi|nghĩa là gì|nghia la gi)",
+     QueryIntent.TERM_DEFINITION),
+    # Formula / Column calculation property queries
+    (r"(?:công thức|cong thuc|cách tính|cach tinh|formula)\s+(?:tính\s+)?(?:của\s+)?(?:column|cột|cot|trường|truong|field)?",
+     QueryIntent.FIELD_PROPERTY),
+
+    # Comparison: "so sánh A và B", "compare X with Y", "A khác B thế nào"
+    # Must win over SCHEMA_LOOKUP / LINEAGE / TERM_DEFINITION which would each
+    # grab just one entity from a multi-entity comparison question.
+    (r"(?:so sánh|so sanh|so với|so voi|compare|comparison|comparing|"
+     r"khác|khac|đ khác|d khac|difference|versus|\bvs\.?|"
+     r"nên dùng|nen dung|phù hợp|phu hop|suitable|recommend|"
+     r"tốt hơn|tot hon|better|best|ưu tiên|uu tien|"
+     r"đánh giá|danh gia|evaluate|assessment)\b"
+     r"[^\n]{0,120}?"
+     r"(?:\b(?:và|va|with|với|voi|hay|or|hoặc|hoac|,)\b"
+     r"[^\n]{0,60}?)?"
+     r"(?:\b(?:về|ve|about|trên|tren|in|of)\b"
+     r"[^\n]{0,60}?)?"
+     r"(?:dataset|bảng|bang|dashboard|report|báo cáo|term|thuật ngữ|schema)",
+     QueryIntent.COMPARISON),
+    # Broader comparison pattern: just "so sánh" + any entity type mention
+    (r"(?:so sánh|so sanh|compare|comparison|versus|\bvs\.?)\b"
+     r"[^\n]{0,200}?"
+     r"(?:\b(?:và|va|with|với|voi|,)\b"
+     r"[^\n]{0,100}?)",
+     QueryIntent.COMPARISON),
     # Graph / traversal questions (shortest/longest path, cycle, reachability).
     (r"(?:đường ngắn nhất|duong ngan nhat|shortest path|longest path|chuỗi dài nhất|duong di dai nhat|"
      r"mối quan hệ|moi quan he|relationship|chu kỳ|chu ky|cycle|phụ thuộc lẫn nhau|circular|loop\b)",
@@ -252,6 +298,37 @@ _RULE_STRINGS: list[tuple[str, QueryIntent]] = [
      QueryIntent.SQL_GENERATION),
     (r"(?:lấy|lay|cho tôi|cho toi|get|fetch|gắ|dieu).{0,25}\b(?:có|cot|co)\s+"
      r"\w+[_]\w+(\s*[=<>]?\s*['\"]?[a-z0-9_]+['\"]?)?", QueryIntent.SQL_GENERATION),
+    # Missing metadata queries — deterministic answers from DB
+    (r"(dataset|asset|entity|dashboard)s?\s+(chưa có|chua co|thiếu|thieu|missing|without)\s+"
+     r"(mô\s+tả|mo ta|description|giới thiệu|gioi thieu)", QueryIntent.MISSING_DESCRIPTION),
+    (r"(chưa có|chua co|thiếu|thieu|missing|without)\s+"
+     r"(mô\s+tả|mo ta|description|giới thiệu|gioi thieu)\s+"
+     r"(của|cua|cho|cho|các|cac|những|nhung)?\s*(dataset|asset|entity|dashboard)s?",
+     QueryIntent.MISSING_DESCRIPTION),
+    (r"(dataset|asset|entity|dashboard)s?\s+(chưa có|chua co|thiếu|thieu|missing|without)\s+"
+     r"(chủ\s+sở\s+hữu|chu so huu|owner|người\s+quản\s+lý|nguoi quan ly)",
+     QueryIntent.MISSING_OWNER),
+    (r"(chưa có|chua co|thiếu|thieu|missing|without)\s+"
+     r"(chủ\s+sở\s+hữu|chu so huu|owner|người\s+quản\s+lý|nguoi quan ly)\s+"
+     r"(của|cua|cho|cho|các|cac|những|nhung)?\s*(dataset|asset|entity|dashboard)s?",
+     QueryIntent.MISSING_OWNER),
+    (r"(dataset|asset|entity|dashboard)s?\s+(chưa có|chua co|thiếu|thieu|missing|without)\s+"
+     r"(domain|lĩnh vực|linh vuc|miền|mien)",
+     QueryIntent.MISSING_DOMAIN),
+    (r"(chưa có|chua co|thiếu|thieu|missing|without)\s+"
+     r"(domain|lĩnh vực|linh vuc|miền|mien)\s+"
+     r"(của|cua|cho|cho|các|cac|những|nhung)?\s*(dataset|asset|entity|dashboard)s?",
+     QueryIntent.MISSING_DOMAIN),
+    # Field property queries — "field X có bao nhiêu kiểu dữ liệu?", "kiểu dữ liệu của cột Y",
+    # "field X có description không?", "mô tả của field Y".
+    (r"(field|column|cột|trường)\s+[\w\.\- ]{1,60}\s+"
+     r"(kiểu|kieu|type|dtype|data\s*type|mô\s*tả|mo ta|description|"
+     r"là gì|la gi|thuộc tính|thuoc tinh|property|metadata)",
+     QueryIntent.FIELD_PROPERTY),
+    (r"(kiểu|kieu|type|dtype|data\s*type|mô\s*tả|mo ta|description|"
+     r"thuộc tính|thuoc tinh|property)\s+"
+     r"(của|cua|cho|for)\s+(field|column|cột|trường)\s+[\w\.\- ]{1,60}",
+     QueryIntent.FIELD_PROPERTY),
 ]
 
 _RULES: list[tuple[re.Pattern[str], QueryIntent]] = [
@@ -265,10 +342,13 @@ _RULES_ASCII: list[tuple[re.Pattern[str], QueryIntent]] = [
 
 def classify_intent(query: str) -> QueryIntent:
     cleaned = query.lower().strip().rstrip("?!.")
-    if cleaned in _GREETINGS:
-        return QueryIntent.GREETING
-    if cleaned in _CHITCHAT or any(c in cleaned for c in _CHITCHAT if len(c) > 4):
-        return QueryIntent.CHITCHAT
+    _q_norm = _norm_vn(query)
+    if re.search(
+        r"^(?:làm thế nào|lam the nao|làm sao|lam sao|hướng dẫn|huong dan|cách nào|cach nao|như thế nào|nhu the nao|bằng cách nào|bang cach nao)\b",
+        _q_norm,
+        re.I,
+    ) and not re.search(r"[A-Za-z0-9]{2,}_[A-Za-z0-9_]+|[A-Za-z0-9_]+\.[A-Za-z0-9_]+|[\"“”'`][A-Za-z0-9_]+[\"“”'`]", query):
+        return QueryIntent.GENERAL
 
     for pattern, intent in _RULES:
         if pattern.search(query):

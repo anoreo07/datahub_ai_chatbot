@@ -16,12 +16,14 @@ os.environ["OPENSEARCH_INDEX"] = "datahub-rag-chunks-test-v1"
 os.environ["APP_ENV"] = "test"
 os.environ["DATAHUB_FRONTEND_URL"] = "http://localhost:9002"
 os.environ["LOCAL_STORAGE_PATH"] = "/tmp/datahub_test_storage"
+os.environ["RATE_LIMIT_ENABLED"] = "false"
+os.environ["JWT_SECRET_KEY"] = "test-secret-key-that-is-secure-and-long-enough-32-chars"
 
 from collections.abc import AsyncGenerator
 
 import pytest
 import pytest_asyncio
-from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.pool import NullPool
 
 from config.settings import settings
@@ -39,19 +41,31 @@ def event_loop():
     loop.close()
 
 
-@pytest_asyncio.fixture(scope="function")
-async def db_session() -> AsyncGenerator[AsyncSession, None]:
+@pytest_asyncio.fixture(scope="session", autouse=True)
+async def setup_db() -> AsyncGenerator[None, None]:
     engine = create_async_engine(settings.DATABASE_URL, poolclass=NullPool, echo=False)
     async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.drop_all)
         await conn.run_sync(Base.metadata.create_all)
-    async_session = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-
-    async with async_session() as session:
-        yield session
-
+    yield
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
     await engine.dispose()
+
+
+@pytest_asyncio.fixture(scope="function")
+async def db_session() -> AsyncGenerator[AsyncSession, None]:
+    engine = create_async_engine(settings.DATABASE_URL, poolclass=NullPool, echo=False)
+    async with engine.connect() as conn:
+        transaction = await conn.begin()
+        async_session = AsyncSession(bind=conn, expire_on_commit=False)
+        try:
+            yield async_session
+        finally:
+            await async_session.close()
+            await transaction.rollback()
+    await engine.dispose()
+
 
 
 @pytest.fixture

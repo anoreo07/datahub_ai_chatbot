@@ -33,6 +33,18 @@ class MockDataHubSource(DataHubSource):
         for entity in loader.load_entities():
             self._entities[entity.urn] = entity
         self._lineage = loader.load_lineage_edges()
+
+        # Populate upstreams/downstreams arrays on entity objects from lineage edges
+        for edge in self._lineage:
+            src = edge.get("source")
+            tgt = edge.get("target")
+            if src and tgt:
+                if src in self._entities:
+                    if tgt not in self._entities[src].downstreams:
+                        self._entities[src].downstreams.append(tgt)
+                if tgt in self._entities:
+                    if src not in self._entities[tgt].upstreams:
+                        self._entities[tgt].upstreams.append(src)
         content_path = fixtures_path / "documents_content.json"
         if content_path.exists():
             import json

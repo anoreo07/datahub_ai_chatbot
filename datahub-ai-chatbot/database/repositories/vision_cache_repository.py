@@ -43,7 +43,7 @@ class VisionCacheRepository:
                     model_id=model_id,
                     vision_result=vision_result,
                     image_context=image_context,
-                    updated_at=datetime.datetime.now(datetime.timezone.utc),
+                    updated_at=datetime.datetime.now(datetime.UTC),
                 )
             )
             await self._session.commit()

@@ -7,6 +7,8 @@ from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 
 from app.api.actions import router as actions_router
+from app.api.admin import router as admin_router
+from app.api.reviews import router as reviews_router
 from app.api.auth import router as auth_router
 from app.api.chat import router as chat_router
 from app.api.conversations import router as conversations_router
@@ -17,10 +19,11 @@ from app.api.health import router as health_router
 from app.api.index import router as index_router
 from app.api.me import router as me_router
 from app.api.metrics import router as metrics_router
+from app.api.notification import router as notification_router
 from app.api.roles import router as roles_router
 from app.api.search import router as search_router
-from app.api.sync import router as sync_router
 from app.api.storage import router as storage_router
+from app.api.sync import router as sync_router
 from app.middleware.error_handler import ErrorHandlingMiddleware
 from app.middleware.metrics import MetricsMiddleware
 from app.middleware.rate_limit import RateLimitMiddleware
@@ -96,8 +99,10 @@ async def _permission_denied_handler(request, exc: PermissionDeniedError) -> JSO
     )
 
 
-app.include_router(auth_router, prefix="/api/v1/auth", tags=["auth"])
 app.include_router(actions_router, prefix="/api/v1/actions", tags=["actions"])
+app.include_router(auth_router, prefix="/api/v1/auth", tags=["auth"])
+app.include_router(notification_router, prefix="/api/v1/notifications", tags=["notifications"])
+app.include_router(admin_router, prefix="/api/v1/admin", tags=["admin"])
 app.include_router(health_router, tags=["health"])
 app.include_router(chat_router, prefix="/api/v1/chat", tags=["chat"])
 app.include_router(conversations_router, prefix="/api/v1/conversations", tags=["conversations"])
@@ -111,4 +116,5 @@ app.include_router(documents_router, tags=["documents"])
 app.include_router(datasource_router, prefix="/api/v1/datasources", tags=["datasources"])
 app.include_router(me_router, prefix="/api", tags=["dev"])
 app.include_router(storage_router, prefix="/api/v1/storage", tags=["storage"])
+app.include_router(reviews_router, prefix="/api/v1/reviews", tags=["reviews"])
 

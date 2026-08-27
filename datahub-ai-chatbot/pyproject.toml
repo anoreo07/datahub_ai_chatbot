@@ -22,6 +22,9 @@ dependencies = [
     "numpy>=1.26.0",
     "pyjwt>=2.8.0",
     "PyMuPDF>=1.23.0",
+    "reportlab>=4.0.0",
+    "ragas>=0.4.0",
+    "langchain-google-genai>=2.0.0",
 ]
 
 [project.optional-dependencies]
@@ -48,6 +51,9 @@ ignore_missing_imports = true
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]
+markers = [
+  "acl: live DataHub ACL/auth read-only tests (enable with RUN_ACL_TESTS=1)",
+]
 
 [tool.setuptools.packages.find]
 where = ["."]

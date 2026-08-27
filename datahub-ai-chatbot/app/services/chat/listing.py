@@ -97,7 +97,7 @@ class ListingService:
         label = _ENTITY_TYPE_LABELS.get(entity_type, "assets")
 
         if intent == QueryIntent.DOMAIN_QUERY and _DOMAIN_LISTING_RE.search(question):
-            all_entities = await self._ctx.entity_repo.list_all(limit=2000)
+            all_entities = await self._ctx.entity_repo.list_all()
             if self._ctx.auth_service:
                 accessible = await self._ctx.auth_service.filter_accessible_urns(
                     user_ctx, [e.urn for e in all_entities]
@@ -205,9 +205,9 @@ class ListingService:
             elif dimension == "name":
                 pass
             elif entity_type:
-                entities = await self._ctx.entity_repo.list_by_type(entity_type, limit=500)
+                entities = await self._ctx.entity_repo.list_by_type(entity_type)
             else:
-                entities = await self._ctx.entity_repo.list_all(limit=500)
+                entities = await self._ctx.entity_repo.list_all()
 
             if (dimension == "domain" and not entities and not suggested_name
                     and intent != QueryIntent.CERTIFIED_LIST):
@@ -237,6 +237,37 @@ class ListingService:
 
         count = len(entities)
         scope = _scope_text(dimension, value, entities)
+
+        sub_platform = None
+        if dimension == "domain":
+            _known_platforms = {"sap", "powerbi", "mes", "redshift", "glue", "dms", "excel", "jira", "ignition", "tfs", "sq"}
+            for p in sorted(_known_platforms, key=len, reverse=True):
+                if re.search(rf"\b{p}\b", question, re.I):
+                    sub_platform = p
+                    break
+
+        if sub_platform:
+            filtered_entities = [
+                e for e in entities
+                if (e.platform or "").strip().lower() == sub_platform.lower()
+            ]
+            lines = [
+                f"Có tổng cộng {count} {label}{scope}.",
+                f"Trong đó, có {len(filtered_entities)} dataset thuộc nền tảng **{sub_platform.upper()}**:\n",
+            ]
+            for e in filtered_entities:
+                lines.append(f"- {e.display_name or e.name}")
+            answer_text = mask_secrets("\n".join(lines).strip())
+            entity_list = [
+                EntityItem(urn=e.urn, name=e.display_name or e.name, url=e.datahub_url)
+                for e in filtered_entities
+            ]
+            return ChatResponse(
+                answer=answer_text, intent=intent.value, entities=entity_list,
+                confidence="high", ambiguous=False, insufficient_context=False,
+                trace_id=trace_id, conversation_id=conversation_id,
+            )
+
         lines = [f"Có tổng cộng {count} {label}{scope}."]
 
         platforms: dict[str, list[str]] = {}
@@ -256,13 +287,15 @@ class ListingService:
                 )]
         for plat, names in sorted(platforms.items()):
             sample = sorted(names)
-            shown = ", ".join(sample[:50])
-            lines.append(f"\n{plat}: {shown}{', ...' if len(sample) > 50 else ''}")
+            lines.append(f"**{plat}:**")
+            for name in sample:
+                lines.append(f"- {name}")
+            lines.append("")
         answer_text = mask_secrets("\n".join(lines))
 
         entity_list = [
             EntityItem(urn=e.urn, name=e.display_name or e.name, url=e.datahub_url)
-            for e in entities[:200]
+            for e in entities
         ]
 
         return ChatResponse(
@@ -274,7 +307,7 @@ class ListingService:
 
     async def listing_retrieval(self, entity_type: str) -> list[SearchResult]:
         count = await self._ctx.entity_repo.count_by_type(entity_type)
-        entities = await self._ctx.entity_repo.list_by_type(entity_type, limit=200)
+        entities = await self._ctx.entity_repo.list_by_type(entity_type)
         platforms: dict[str, list[str]] = {}
         for e in entities:
             p = e.platform or "unknown"
@@ -284,12 +317,11 @@ class ListingService:
             summary_parts.append(f"Platforms: {', '.join(sorted(platforms.keys()))}.")
             for plat, names in sorted(platforms.items()):
                 summary_parts.append(
-                    f"- {plat}: {', '.join(sorted(names)[:30])}"
-                    f"{'...' if len(names) > 30 else ''}"
+                    f"- {plat}: {', '.join(sorted(names))}"
                 )
         summary_text = "\n".join(summary_parts)
         results: list[SearchResult] = []
-        for e in entities[:20]:
+        for e in entities:
             payload = e.payload or {}
             content = _entity_payload_to_text(e.entity_type, payload)
             results.append(SearchResult(

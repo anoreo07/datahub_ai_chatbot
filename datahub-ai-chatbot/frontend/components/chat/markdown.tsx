@@ -10,6 +10,21 @@ interface MarkdownProps {
   content: string;
 }
 
+function sanitizeUrnMarkdown(text: string): string {
+  if (!text) return text;
+  // Restore any Liechtenstein flag emoji (🇱🇮 or unicode \uD83C\uDDF1\uD83C\uDDEE)
+  // that may have been converted from :li: in DataHub URNs
+  let sanitized = text.replace(/urn(?::)?\s*(?:🇱🇮|\uD83C\uDDF1\uD83C\uDDEE)\s*(?::)?/gi, "urn:li:");
+  sanitized = sanitized.replace(/(?:🇱🇮|\uD83C\uDDF1\uD83C\uDDEE)/g, (match, offset, str) => {
+    const before = str.slice(Math.max(0, offset - 10), offset);
+    if (/urn:?$/i.test(before) || /urn:li:[^ \n]*$/i.test(before)) {
+      return ":li:";
+    }
+    return match;
+  });
+  return sanitized;
+}
+
 function CodeBlock({ children }: { children: React.ReactNode }) {
   const [copied, setCopied] = useState(false);
   const text = String(children ?? "").replace(/\n$/, "");
@@ -33,6 +48,8 @@ function CodeBlock({ children }: { children: React.ReactNode }) {
 }
 
 export function Markdown({ content }: MarkdownProps) {
+  const sanitizedContent = sanitizeUrnMarkdown(content);
+
   return (
     <div className="markdown">
       <ReactMarkdown
@@ -67,7 +84,7 @@ export function Markdown({ content }: MarkdownProps) {
           },
         }}
       >
-        {content}
+        {sanitizedContent}
       </ReactMarkdown>
     </div>
   );

@@ -33,7 +33,7 @@ VALID_INTENTS = {
     "ENTITY_DOMAIN", "COUNT_ENTITIES",
     "DOMAIN_QUERY", "PLATFORM_QUERY", "TAG_QUERY", "ENTITIES_BY_OWNER",
     "CERTIFIED_LIST", "DOCUMENT_QA", "DATAHUB_URL", "ENTITY_EXISTS",
-    "LISTING", "GREETING", "CHITCHAT", "GENERAL",
+    "LISTING", "GREETING", "CHITCHAT", "GENERAL", "COMPARISON",
 }
 
 # Normalize a classifier-returned intent to the intent the service executes.
@@ -62,6 +62,7 @@ _DIMENSIONS = {"domain", "platform", "tag", "owner", "certified"}
 _IMPACT_RE = re.compile(
     r"(ảnh hưởng|anh huong|bị\s?tác động|bi tac dong|impact|cascade|dây chuyền|day chuyen|"
     r"who\s+(uses|consumes|depends on)|phụ thuộc xuống|phu thuoc xuong|lan\s+truyền|lan truyen|"
+    r"mức độ rủi ro|muc do rui ro|rủi ro.*khi|rui ro.*khi|risk\s+level|"
     r"điều gì.*dùng|dieu gi.*dung|"
     r"(?:xóa|xoá|xoa|delete|drop|remove|thay đổi|thay doi)\b[^\n]{0,90}?"
     r"(?:thì sao|thi sao|thế nào|the nao|ra gì|ra gi|sẽ ra sao|se ra sao|what happens|"
@@ -74,10 +75,11 @@ _IMPACT_RE = re.compile(
 )
 _LINEAGE_RE = re.compile(
     r"(lineage|linage|nguồn|nguon|upstream|downstream|dòng dữ liệu|dong du lieu|"
-    r"data flow|luồng dữ liệu|luong du lieu)",
+    r"data flow|luồng dữ liệu|luong du lieu|gửi dữ liệu|gui du lieu|đẩy dữ liệu|day du lieu|"
+    r"chảy sang|chay sang|truyền dữ liệu|truyen du lieu)",
     re.I,
 )
-_DIRECTION_RE = re.compile(r"(downstream|xuống|xuoi|xuong|dưới)", re.I)
+_DIRECTION_RE = re.compile(r"(downstream|xuống|xuoi|xuong|dưới|sang|toi|tới)", re.I)
 
 
 _SCHEMA_PLACEHOLDER = re.compile(
@@ -228,8 +230,23 @@ def _regex_entity(question: str) -> list[str]:
     return [" ".join(keep)]
 
 
+_COMPARE_RE = re.compile(
+    r"\b(?:so sánh|so sanh|compare|comparison|comparing|phù hợp hơn|phu hop hon|đối chiếu|doi chieu|khác nhau|khac nhau|versus|\bvs\.?)\b",
+    re.I,
+)
+
+
 def _regex_plan(question: str) -> QueryPlan:
     """Build a ``QueryPlan`` from the existing keyword/regex router."""
+    if _COMPARE_RE.search(question):
+        return QueryPlan(
+            intent="COMPARISON",
+            entity_refs=_regex_entity(question),
+            direction=None,
+            confidence="high",
+            source="regex",
+        )
+
     intent = classify_intent(question)
 
     if _IMPACT_RE.search(question):
@@ -272,14 +289,14 @@ _STRONG_REGEX_INTENTS = {
     "TERM_TO_DATASETS", "COUNT_ENTITIES", "LINEAGE", "OWNER_LOOKUP",
     "ENTITY_DOMAIN", "DOMAIN_QUERY", "PLATFORM_QUERY", "TAG_QUERY",
     "CERTIFIED_LIST", "LISTING", "GREETING", "CHITCHAT", "DATAHUB_URL",
-    "ENTITIES_BY_OWNER", "IMPACT",
+    "ENTITIES_BY_OWNER", "IMPACT", "COMPARISON",
 }
 
 # LLM intents allowed to REPLACE a weak regex intent for routing. Kept to the
 # labels that resolve ambiguous discovery / linkage questions the regex router
 # first-match-wins mistakes (R1: the LLM, not the regex, is the primary intent
 # analyzer; regex stays as fast-path + validation).
-_LLM_OVERRIDE_CAPABLE = {"FIND_ENTITY", "TERM_TO_DATASETS"}
+_LLM_OVERRIDE_CAPABLE = {"FIND_ENTITY", "TERM_TO_DATASETS", "COMPARISON"}
 
 _SCHEMA_ANCHOR_RE = re.compile(
     r"(?:trường|cột|cột|field|column)\b[^\n]{0,30}?"
@@ -328,7 +345,7 @@ def needs_semantic(question: str, intent: str) -> bool:
         return True
     return intent in (
         "GENERAL", "LINEAGE", "FIND_ENTITY", "DOCUMENT_QA",
-        "SCHEMA_LOOKUP", "ENTITY_EXISTS",
+        "SCHEMA_LOOKUP", "ENTITY_EXISTS", "COMPARISON",
     )
 
 

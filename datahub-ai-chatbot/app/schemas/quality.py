@@ -16,6 +16,9 @@ class QualityStatus(StrEnum):
     WARNING = "warning"
     FAILED = "failed"
     NOT_EVALUATED = "not_evaluated"
+    NOT_APPLICABLE = "not_applicable"
+    UNKNOWN = "unknown"
+    SOURCE_ERROR = "source_error"
 
 
 class QualityFinding(BaseModel):
@@ -23,6 +26,8 @@ class QualityFinding(BaseModel):
     status: QualityStatus = QualityStatus.NOT_EVALUATED
     detail: str = ""
     value: str = ""
+    applicable: bool = True
+    source: str = "metadata"
 
 
 class QualitySection(BaseModel):
@@ -40,6 +45,9 @@ class QualityRecommendation(BaseModel):
 
 class QualityReport(BaseModel):
     dataset: str = ""
+    entity_name: str = ""
+    entity_type: str = "dataset"
+    platform: str = ""
     urn: str = ""
     url: str | None = None
     generated_at: str = ""
@@ -50,8 +58,11 @@ class QualityReport(BaseModel):
     sections: list[QualitySection] = []
     recommendations: list[QualityRecommendation] = []
     not_evaluated_checks: list[str] = []
+    missing_fields: list[str] = []
+    not_applicable_fields: list[str] = []
     valid: bool = True
 
     @staticmethod
     def now_iso() -> str:
         return datetime.datetime.now().astimezone().isoformat(timespec="seconds")
+

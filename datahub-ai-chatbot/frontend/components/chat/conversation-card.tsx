@@ -45,7 +45,7 @@ interface ConversationCardProps {
 
 function shortTitle(c: Conversation) {
   const base = c.title?.trim() || c.last_question?.trim();
-  if (base) return base.length > 30 ? base.slice(0, 30) + "…" : base;
+  if (base) return base.length > 18 ? base.slice(0, 18) + "…" : base;
   return "Cuộc trò chuyện";
 }
 

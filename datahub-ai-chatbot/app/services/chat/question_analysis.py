@@ -96,13 +96,23 @@ _DETERMINISTIC_LISTING_INTENTS = {
     QueryIntent.TAG_QUERY,
     QueryIntent.ENTITIES_BY_OWNER,
     QueryIntent.CERTIFIED_LIST,
+    QueryIntent.MISSING_DESCRIPTION,
+    QueryIntent.MISSING_OWNER,
+    QueryIntent.MISSING_DOMAIN,
 }
 
 _QUALITY_FAVORED_INTENTS = frozenset({
     QueryIntent.FIND_ENTITY,
     QueryIntent.DATASET_LOOKUP,
     QueryIntent.GENERAL,
+    QueryIntent.QUALITY_CHECK,
 })
+
+_METADATA_REPORT_RE = re.compile(
+    r"(?:metadata\s*report|báo\s*cáo\s*metadata|bao\s*cao\s*metadata|"
+    r"report\s*metadata|tổng\s*quan\s*metadata|tong\s*quan\s*metadata)",
+    re.I,
+)
 
 _DIMENSION_MAP: dict[QueryIntent, str] = {
     QueryIntent.DOMAIN_QUERY: "domain",
@@ -185,8 +195,7 @@ _JOIN_SIGNAL_RE = re.compile(
     r"relationship between|quan hệ giữa|relate|"
     r"trường nào chung|truong nao chung|trường chung|truong chung|"
     r"common (?:fields?|columns?|keys?)|shared (?:fields?|columns?|keys?)|"
-    r"fields? in common|giống nhau|giong nhau|"
-    r"so sánh|so sanh|compare|comparison)",
+    r"fields? in common|giống nhau|giong nhau)",
     re.IGNORECASE,
 )
 _JOIN_TOKEN_RE = re.compile(
@@ -294,7 +303,11 @@ _IMAGE_REF_RE = re.compile(
 
 def _has_own_identifier(question: str) -> bool:
     """True when the message itself names a concrete catalog identifier."""
-    return bool(_contextual_identifier_re.search(question or ""))
+    if bool(_contextual_identifier_re.search(question or "")):
+        return True
+    from retrieval.query_parser import _extract_entity
+    ent = _extract_entity(question or "")
+    return ent is not None
 
 
 # --------------------------------------------------------------------------- #
@@ -554,19 +567,53 @@ def _extract_field_identifier(question: str) -> str | None:
     snake_case and appears first, so a naive first-match picks the dataset
     instead of the column ("dim_businessunit ... trường bu_short_name").
     """
-    m = re.search(
-        r"(?:trường|truong|cột|cot|field|column|col)\s+[\"“”'`]?"
-        r"([a-z0-9_]+(?:\.[a-z0-9_]+)*)",
+    # Vietnamese question words that should NOT be treated as field names.
+    # "gì" (what), "nào" (which), "chi" (dialect gì), "sao" (how), etc.
+    _VN_QUESTION_WORDS = frozenset({
+        "gi", "nao", "chi", "sao", "the", "vay", "dau", "bao", "may", "nhung",
+        "cac", "khi", "tai", "tu", "voi", "trong", "ngoai", "tren", "duoi",
+        "sau", "truoc", "giua", "hay", "hoac", "hoc", "roi", "da", "se",
+        "dang", "con", "duoc", "bi", "phai", "can", "co", "khong", "la",
+        "de", "vi", "nen", "nhu", "nay", "do", "o", "theo", "bang", "ve", "cho",
+        "va", "and", "with",
+    })
+    # Explicit snake_case identifier right after field indicator
+    m_snake = re.search(
+        r"(?:trường|truong|cột|cot|field|column|col)\s+[\"“”'`]?([A-Za-z0-9]+(?:_[A-Za-z0-9]+)+)[\"“”'`]?",
         question, re.I,
     )
+    if m_snake:
+        return m_snake.group(1).strip()
+
+    m = re.search(
+        r"(?:trường|truong|cột|cot|field|column|col)\s+[\"“”'`]?"
+        r"([\w\u00C0-\u024F]+(?:\s+[\w\u00C0-\u024F]+)*(?:\.[\w\u00C0-\u024F]+)*)",
+        question, re.I | re.UNICODE,
+    )
     if m:
-        return m.group(1)
+        candidate_raw = m.group(1).strip()
+        cand_tokens = candidate_raw.split()
+        clean_tokens = []
+        for tok in cand_tokens:
+            if _norm_vn(tok) in _VN_QUESTION_WORDS and clean_tokens:
+                break
+            clean_tokens.append(tok)
+        while clean_tokens and _norm_vn(clean_tokens[-1]) in _VN_QUESTION_WORDS:
+            clean_tokens.pop()
+        candidate = " ".join(clean_tokens).strip(" \"'“”`")
+        if not candidate or _norm_vn(candidate) in _VN_QUESTION_WORDS:
+            return None
+        if len(candidate) < 3:
+            return None
+        return candidate
     m = re.search(r"[A-Za-z0-9_]+(?:\.[A-Za-z0-9_]+)+", question)
     if m:
         return m.group(0)
     for m in re.finditer(r"\b[A-Za-z0-9]+(_[A-Za-z0-9]+)+\b", question):
         return m.group(0)
     return None
+
+
 
 def _extract_filter_value(question: str, intent: QueryIntent) -> str:
     q = _norm_vn(question)
@@ -598,6 +645,16 @@ def _is_field_location_question(question: str) -> bool:
     # Column-definition asks ("trường X nghĩa là gì?", "...có trường Y nghĩa
     # là gì?") ask the field's MEANING inside its dataset, not WHERE it lives.
     if re.search(r"nghĩa|nghia|meaning|ý nghĩa|y nghia|có nghĩa|co nghia", q, re.I):
+        return False
+    # Schema-listing asks ("có trường gì?", "có những trường nào?", "có bao
+    # nhiêu trường?") ask WHAT fields the dataset has — NOT where a named
+    # column lives.  These end with a question word after "trường/truong":
+    # gì, nào, bao nhiêu, ...
+    if re.search(
+        r"(?:có\s+)?(?:trường|truong|cột|cot|field|column)\s+"
+        r"(?:gì|gi|nào|nao|chi|bao\s+nhiêu|bao\s+nhieu|gì\b)",
+        q, re.I,
+    ):
         return False
     has_field_signal = bool(re.search(
         r"trường|truong|cột|cot|field|column|schema",
@@ -721,6 +778,10 @@ def _extract_name(question: str, remove_words: list[str]) -> str:
         "la", "the", "a", "an", "of", "in", "to", "for", "with",
         "khong", "cac", "duoc", "ban", "hay", "business", "ai",
         "thong", "tin", "ve", "lineage", "linage", "field", "schema",
+        "giai", "thich", "khai", "niem", "thuat", "ngu", "term",
+        "cong", "thuc", "cach", "tinh", "can", "biet", "muon",
+        "huong", "dan", "nhu", "the", "nao", "trong", "domain",
+        "o", "nay", "do", "tu", "den",
     }
     clean_tokens = [t for t in tokens if t not in stop_words]
     # Drop leading noise tokens (verbs/prepositions) that often precede the
@@ -730,13 +791,19 @@ def _extract_name(question: str, remove_words: list[str]) -> str:
         "trinh", "bay", "mo", "ta", "neu", "cho", "giup", "hay", "ban",
         "tim", "hieu", "noi", "giui", "the", "nay", "do", "biet", "xin",
         "describe", "about", "explain", "what", "tell", "me", "please",
-        "information", "info", "show", "display", "detail",
+        "information", "info", "show", "display", "detail", "can",
+        "muon", "giai", "thich", "khai", "niem", "thuat", "ngu",
+        "cong", "thuc", "tinh", "huong", "dan", "bao", "cao",
+        "report", "dashboard", "column", "cot", "truong",
     }
     while clean_tokens and clean_tokens[0] in _leading_noise:
         clean_tokens.pop(0)
+    while clean_tokens and clean_tokens[-1] in _leading_noise:
+        clean_tokens.pop()
     result = " ".join(clean_tokens) if clean_tokens else name
     result = result.strip().strip(" ?.!,:;-'\"").strip()
     return result
+
 
 def _infer_entity_from_history(history: list[tuple[str, str]]) -> str | None:
     from retrieval.coreference import resolve_entity_reference
@@ -818,8 +885,6 @@ def _looks_like_join(question: str) -> bool:
     matched = _JOIN_SIGNAL_RE.search(question).group(0).lower()
     if matched in ("giữa", "between"):
         return _count_identifiers(question) >= 2
-    if matched in ("so sánh", "so sanh", "compare", "comparison"):
-        return _count_identifiers(question) >= 2
     return _count_identifiers(question) >= 2 or (
         "liên kết" in question.lower() or "lien ket" in question.lower()
         or "join" in question.lower()
@@ -847,7 +912,11 @@ def _scope_text(dimension: str, value: str, entities: Sequence[Any]) -> str:
         return " đã được certified"
     return ""
 
-def _short_negative_answer(intent: QueryIntent, results: Sequence[SearchResult]) -> str | None:
+def _short_negative_answer(intent: QueryIntent, results: Sequence[SearchResult], question: str = "") -> str | None:
+    # If the user asks a composite question (e.g. schema + owner), do not short-circuit with a negative answer!
+    if question and re.search(r"schema|cấu trúc|cau truc|cột|cot|trường|truong|field|lineage|formula|công thức|cong thuc|domain", question, re.I):
+        return None
+
     if intent == QueryIntent.OWNER_LOOKUP and len(results) == 1:
         payload = results[0].payload or {}
         owners = payload.get("owners")
@@ -855,6 +924,8 @@ def _short_negative_answer(intent: QueryIntent, results: Sequence[SearchResult])
             return f"Dataset {results[0].name} hiện không có người sở hữu (owner)."
     if intent == QueryIntent.LINEAGE and len(results) == 1:
         payload = results[0].payload or {}
+        if payload.get("lineage_api_error"):
+            return f"Không thể lấy lineage cho Dataset {results[0].name} do lỗi kết nối với hệ thống DataHub."
         if not payload.get("upstreams") and not payload.get("downstreams"):
             return (
                 f"Dataset {results[0].name} hiện không có lineage "
